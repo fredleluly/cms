@@ -11,11 +11,34 @@
     
     .stats-card {
         background: linear-gradient(135deg, #004AAD, #003880);
-        transition: transform 0.3s ease;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .stats-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+        opacity: 0.1;
     }
     
     .stats-card:hover {
         transform: translateY(-5px);
+    }
+
+    .stats-icon {
+        position: absolute;
+        right: 1.5rem;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 3rem;
+        height: 3rem;
+        opacity: 0.2;
     }
     
     .article-status-draft { background-color: #FEF3C7; color: #92400E; }
@@ -28,12 +51,57 @@
     
     .action-button {
         transition: all 0.2s ease;
+        position: relative;
+        width: 2rem;
+        height: 2rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.5rem;
     }
     
     .action-button:hover {
         transform: translateY(-2px);
+        background-color: #f3f4f6;
     }
-    
+
+    .action-button svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+
+    /* Custom toggle switch */
+    .toggle-switch {
+        width: 2.5rem;
+        height: 1.5rem;
+        background-color: #e5e7eb;
+        border-radius: 999px;
+        position: relative;
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .toggle-switch.active {
+        background-color: #10B981;
+    }
+
+    .toggle-switch::after {
+        content: '';
+        position: absolute;
+        width: 1.25rem;
+        height: 1.25rem;
+        background-color: white;
+        border-radius: 50%;
+        top: 0.125rem;
+        left: 0.125rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .toggle-switch.active::after {
+        transform: translateX(1rem);
+    }
+
     .search-input:focus {
         box-shadow: 0 0 0 3px rgba(0,74,173,0.1);
     }
@@ -54,9 +122,15 @@
 
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="stats-card rounded-xl p-6 text-white">
-                <div class="text-4xl font-bold mb-2">{{ total_articles }}</div>
-                <div class="text-white/80">Total Articles</div>
+            <div class="stats-card rounded-xl p-6 text-white relative">
+                <div class="relative z-10">
+                    <div class="text-4xl font-bold mb-2">{{ total_articles }}</div>
+                    <div class="text-white/80">Total Articles</div>
+                </div>
+                <svg class="stats-icon" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                    <path d="M14 17H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                </svg>
             </div>
             <div class="stats-card rounded-xl p-6 text-white">
                 <div class="text-4xl font-bold mb-2">{{ published_count }}</div>
@@ -141,30 +215,46 @@
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex justify-end space-x-3">
                                     <button onclick="quickUpdate('{{ article.id }}', 'status', '{{ article.status }}')"
-                                            class="action-button text-gray-600 hover:text-gray-800"
+                                            class="action-button"
                                             title="Toggle status">
-                                        <i class="fas fa-toggle-{% if article.status == 'published' %}on text-green-600{% else %}off text-gray-400{% endif %}"></i>
+                                        <svg class="{% if article.status == 'published' %}text-green-600{% else %}text-gray-400{% endif %}" 
+                                             viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
                                     </button>
                                     <button onclick="toggleFeatured('{{ article.id }}', {{ article.is_featured|yesno:'true,false' }})"
-                                            class="action-button text-gray-600 hover:text-gray-800"
+                                            class="action-button"
                                             title="Toggle featured">
-                                        <i class="fas fa-star {% if article.is_featured %}text-yellow-400{% endif %}"></i>
+                                        <svg class="{% if article.is_featured %}text-yellow-400{% else %}text-gray-400{% endif %}" 
+                                             viewBox="0 0 24 24" fill="currentColor">
+                                            <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                                        </svg>
                                     </button>
                                     <a href="{% url 'article_edit' article.id %}" 
-                                       class="action-button text-matana-blue hover:text-blue-800"
+                                       class="action-button"
                                        title="Edit">
-                                        <i class="fas fa-edit"></i>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-matana-blue">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        </svg>
                                     </a>
                                     <button onclick="deleteArticle('{{ article.id }}', '{{ article.title|escapejs }}')"
-                                            class="action-button text-red-600 hover:text-red-800"
+                                            class="action-button"
                                             title="Delete">
-                                        <i class="fas fa-trash-alt"></i>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-red-600">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                        </svg>
                                     </button>
                                     <a href="{{ article.get_absolute_url }}" 
                                        target="_blank"
-                                       class="action-button text-gray-600 hover:text-gray-800"
+                                       class="action-button"
                                        title="View">
-                                        <i class="fas fa-external-link-alt"></i>
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-gray-600">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                        </svg>
                                     </a>
                                 </div>
                             </td>
