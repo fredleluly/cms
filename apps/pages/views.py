@@ -4,6 +4,7 @@ from django.core.cache import cache
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q, Count
 from .models import Page, Article, ArticleCategory
+from django.contrib.admin.views.decorators import staff_member_required
 
 # Create your views here.
 
@@ -130,3 +131,57 @@ def article_detail_view(request, slug):
     }
     
     return render(request, 'pages/article_detail.html', context)
+
+@staff_member_required
+def dashboard_view(request):
+    # Get query parameters
+    category_id = request.GET.get('category')
+    status = request.GET.get('status')
+    search = request.GET.get('search', '').strip()
+    page = request.GET.get('page', 1)
+    
+    # Base queryset
+    articles = Article.objects.select_related('category', 'created_by')
+    
+    # Apply filters
+    if category_id:
+        articles = articles.filter(category_id=category_id)
+    if status:
+        articles = articles.filter(status=status)
+    if search:
+        articles = articles.filter(
+            Q(title__icontains=search) |
+            Q(excerpt__icontains=search)
+        )
+    
+    # Get counts for stats
+    total_articles = Article.objects.count()
+    published_count = Article.objects.filter(status='published').count()
+    draft_count = Article.objects.filter(status='draft').count()
+    
+    # Get categories with counts
+    categories = ArticleCategory.objects.annotate(
+        article_count=Count('articles')
+    )
+    
+    # Pagination
+    paginator = Paginator(articles, 20)
+    try:
+        articles_page = paginator.page(page)
+    except PageNotAnInteger:
+        articles_page = paginator.page(1)
+    except EmptyPage:
+        articles_page = paginator.page(paginator.num_pages)
+    
+    context = {
+        'articles': articles_page,
+        'categories': categories,
+        'total_articles': total_articles,
+        'published_count': published_count,
+        'draft_count': draft_count,
+        'selected_category': category_id,
+        'selected_status': status,
+        'search_query': search,
+    }
+    
+    return render(request, 'admin/dashboard.html', context)
