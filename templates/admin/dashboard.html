@@ -1,451 +1,445 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Admin Dashboard - Matana News{% endblock %}
+{% block title %}Content Dashboard - Matana CMS{% endblock %}
 
 {% block extra_css %}
 <style>
     .dashboard-container {
         max-width: 1400px;
         margin: 0 auto;
+        padding: 2rem;
     }
-    
+
+    /* Modern Stats Cards */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+
     .stats-card {
-        background: linear-gradient(135deg, #004AAD, #003880);
-        transition: all 0.3s ease;
+        background: white;
+        border-radius: 1.5rem;
+        padding: 1.5rem;
         position: relative;
         overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
     }
-    
+
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
     .stats-card::before {
         content: '';
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        bottom: 0;
-        background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-        opacity: 0.1;
-    }
-    
-    .stats-card:hover {
-        transform: translateY(-5px);
+        height: 4px;
     }
 
-    .stats-icon {
-        position: absolute;
-        right: 1.5rem;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 3rem;
-        height: 3rem;
-        opacity: 0.2;
-    }
-    
-    .article-status-draft { background-color: #FEF3C7; color: #92400E; }
-    .article-status-published { background-color: #D1FAE5; color: #065F46; }
-    
-    .table-container {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .action-button {
-        transition: all 0.2s ease;
-        position: relative;
-        width: 2rem;
-        height: 2rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0.5rem;
-    }
-    
-    .action-button:hover {
-        transform: translateY(-2px);
-        background-color: #f3f4f6;
-    }
+    .stats-card.primary::before { background: #4f46e5; }
+    .stats-card.success::before { background: #10b981; }
+    .stats-card.warning::before { background: #f59e0b; }
 
-    .action-button svg {
-        width: 1.25rem;
-        height: 1.25rem;
-    }
-
-    /* Custom toggle switch */
-    .toggle-switch {
-        width: 2.5rem;
-        height: 1.5rem;
-        background-color: #e5e7eb;
-        border-radius: 999px;
-        position: relative;
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-
-    .toggle-switch.active {
-        background-color: #10B981;
-    }
-
-    .toggle-switch::after {
-        content: '';
-        position: absolute;
-        width: 1.25rem;
-        height: 1.25rem;
-        background-color: white;
-        border-radius: 50%;
-        top: 0.125rem;
-        left: 0.125rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
-    .toggle-switch.active::after {
-        transform: translateX(1rem);
-    }
-
-    .search-input:focus {
-        box-shadow: 0 0 0 3px rgba(0,74,173,0.1);
-    }
-
-    /* New styles */
-    .create-button {
-        background: linear-gradient(135deg, #004AAD 0%, #0063FF 100%);
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 74, 173, 0.2);
-    }
-    
-    .create-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 74, 173, 0.3);
-    }
-
-    .floating-action-button {
-        position: fixed;
-        bottom: 2rem;
-        right: 2rem;
-        z-index: 50;
-        animation: bounce 1s infinite;
-    }
-
-    @keyframes bounce {
-        0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-10px); }
-    }
-
-    .quick-actions {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 1rem;
-        margin-bottom: 2rem;
-    }
-
-    .quick-action-card {
+    /* Search & Filter Section */
+    .filter-section {
         background: white;
-        border-radius: 1rem;
+        border-radius: 1.5rem;
         padding: 1.5rem;
-        transition: all 0.3s ease;
+        margin-bottom: 2rem;
         border: 1px solid #e5e7eb;
     }
 
-    .quick-action-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    .search-input {
+        background: #f9fafb;
+        border: 2px solid #e5e7eb;
+        border-radius: 1rem;
+        padding: 0.75rem 1rem;
+        padding-left: 2.5rem;
+        width: 100%;
+        transition: all 0.3s ease;
+    }
+
+    .search-input:focus {
+        background: white;
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+    }
+
+    /* Modern Table Design */
+    .content-table {
+        background: white;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        border: 1px solid #e5e7eb;
+    }
+
+    .table-header {
+        background: #f8fafc;
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+    th {
+        background: #f8fafc;
+        padding: 1rem;
+        font-weight: 600;
+        text-align: left;
+        color: #4b5563;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    td {
+        padding: 1rem;
+        border-bottom: 1px solid #e5e7eb;
+        vertical-align: middle;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background: #f9fafb;
+    }
+
+    /* Status Badges */
+    .status-badge {
+        padding: 0.375rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+
+    .status-draft {
+        background: #fff7ed;
+        color: #9a3412;
+    }
+
+    .status-published {
+        background: #ecfdf5;
+        color: #065f46;
+    }
+
+    /* Action Buttons */
+    .action-button {
+        padding: 0.5rem;
+        border-radius: 0.75rem;
+        transition: all 0.2s ease;
+        color: #6b7280;
+    }
+
+    .action-button:hover {
+        background: #f3f4f6;
+        color: #111827;
+    }
+
+    /* Create Button */
+    .create-button {
+        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 1rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+    }
+
+    .create-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+    }
+
+    /* Pagination */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+    }
+
+    .page-item {
+        min-width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.75rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .page-item:hover {
+        background: #f3f4f6;
+    }
+
+    .page-item.active {
+        background: #4f46e5;
+        color: white;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="dashboard-container px-4">
-        <!-- Header with Welcome Message -->
-        <div class="bg-white rounded-xl p-6 mb-8 shadow-sm">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-900 mb-2">Welcome back, {{ request.user.get_full_name|default:request.user.username }}! 👋</h1>
-                    <p class="text-gray-600">Manage your content and keep your website up to date.</p>
-                </div>
-                <a href="{% url 'article_create' %}" 
-                   class="create-button text-white px-6 py-3 rounded-full font-semibold inline-flex items-center gap-2 hover:bg-blue-700">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Create New Article
-                </a>
+<div class="min-h-screen bg-gray-50">
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <div class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Content Management</h1>
+                <p class="text-gray-600">Manage your articles and content</p>
             </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="quick-actions">
-            <div class="quick-action-card">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">Draft Articles</h3>
-                        <p class="text-sm text-gray-600">{{ draft_count }} articles in draft</p>
-                    </div>
-                </div>
-                <a href="?status=draft" class="text-blue-600 text-sm hover:text-blue-800">View drafts →</a>
-            </div>
-
-            <div class="quick-action-card">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">Published Articles</h3>
-                        <p class="text-sm text-gray-600">{{ published_count }} articles live</p>
-                    </div>
-                </div>
-                <a href="?status=published" class="text-green-600 text-sm hover:text-green-800">View published →</a>
-            </div>
-
-            <div class="quick-action-card">
-                <div class="flex items-center gap-4 mb-4">
-                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-gray-900">Featured Articles</h3>
-                        <p class="text-sm text-gray-600">Manage featured content</p>
-                    </div>
-                </div>
-                <a href="?featured=true" class="text-yellow-600 text-sm hover:text-yellow-800">View featured →</a>
-            </div>
-        </div>
-
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="stats-card rounded-xl p-6 text-white relative">
-                <div class="relative z-10">
-                    <div class="text-4xl font-bold mb-2">{{ total_articles }}</div>
-                    <div class="text-white/80">Total Articles</div>
-                </div>
-                <svg class="stats-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-                    <path d="M14 17H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+            <a href="{% url 'article_create' %}" class="create-button">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
+                Create Article
+            </a>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stats-card primary">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Total Articles</h3>
+                    <span class="text-3xl font-bold text-gray-900">{{ total_articles }}</span>
+                </div>
+                <div class="text-sm text-gray-600">
+                    All articles in your system
+                </div>
             </div>
-            <div class="stats-card rounded-xl p-6 text-white">
-                <div class="text-4xl font-bold mb-2">{{ published_count }}</div>
-                <div class="text-white/80">Published</div>
+
+            <div class="stats-card success">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Published</h3>
+                    <span class="text-3xl font-bold text-gray-900">{{ published_count }}</span>
+                </div>
+                <div class="text-sm text-gray-600">
+                    Live articles on your site
+                </div>
             </div>
-            <div class="stats-card rounded-xl p-6 text-white">
-                <div class="text-4xl font-bold mb-2">{{ draft_count }}</div>
-                <div class="text-white/80">Drafts</div>
+
+            <div class="stats-card warning">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Drafts</h3>
+                    <span class="text-3xl font-bold text-gray-900">{{ draft_count }}</span>
+                </div>
+                <div class="text-sm text-gray-600">
+                    Articles in progress
+                </div>
             </div>
         </div>
 
-        <!-- Filters and Search -->
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="flex items-center space-x-4 w-full md:w-auto">
-                    <select name="category" class="rounded-lg border-gray-300 focus:border-matana-blue focus:ring focus:ring-blue-200">
-                        <option value="">All Categories</option>
-                        {% for category in categories %}
-                        <option value="{{ category.id }}" {% if selected_category == category.id %}selected{% endif %}>
-                            {{ category.name }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                    <select name="status" class="rounded-lg border-gray-300 focus:border-matana-blue focus:ring focus:ring-blue-200">
-                        <option value="">All Status</option>
-                        <option value="published" {% if selected_status == 'published' %}selected{% endif %}>Published</option>
-                        <option value="draft" {% if selected_status == 'draft' %}selected{% endif %}>Draft</option>
-                    </select>
-                </div>
-                <div class="relative w-full md:w-96">
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="grid md:grid-cols-3 gap-4">
+                <div class="relative">
+                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
                     <input type="search" 
                            placeholder="Search articles..." 
-                           class="w-full rounded-lg border-gray-300 pr-10 search-input focus:border-matana-blue focus:ring focus:ring-blue-200"
+                           class="search-input"
                            value="{{ search_query }}">
-                    <button class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                        <i class="fas fa-search"></i>
-                    </button>
                 </div>
+                <select name="category" class="search-input">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                    <option value="{{ category.id }}" 
+                            {% if selected_category == category.id %}selected{% endif %}>
+                        {{ category.name }} ({{ category.article_count }})
+                    </option>
+                    {% endfor %}
+                </select>
+                <select name="status" class="search-input">
+                    <option value="">All Status</option>
+                    <option value="published" {% if selected_status == 'published' %}selected{% endif %}>Published</option>
+                    <option value="draft" {% if selected_status == 'draft' %}selected{% endif %}>Draft</option>
+                </select>
             </div>
         </div>
 
-        <!-- Articles Table -->
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-            <div class="table-container">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+        <!-- Content Table -->
+        <div class="content-table">
+            <div class="table-header">
+                <h2 class="text-lg font-semibold text-gray-900">Articles</h2>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Published</th>
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Author</th>
+                            <th>Last Updated</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody>
                         {% for article in articles %}
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    {% if article.featured_image %}
-                                    <img src="{{ article.featured_image.url }}" alt="" class="h-10 w-10 rounded-lg object-cover mr-3">
+                            <td class="font-medium text-gray-900">
+                                {{ article.title }}
+                                {% if article.is_featured %}
+                                <span class="ml-2 text-xs font-medium text-yellow-600">Featured</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="text-sm text-gray-600">
+                                    {{ article.category.name }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="status-badge {% if article.status == 'published' %}status-published{% else %}status-draft{% endif %}">
+                                    {% if article.status == 'published' %}
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    {% else %}
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+                                    </svg>
                                     {% endif %}
-                                    <div class="text-sm font-medium text-gray-900">{{ article.title }}</div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ article.category.name }}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {% if article.status == 'published' %}article-status-published{% else %}article-status-draft{% endif %}">
                                     {{ article.status|title }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ article.created_by.get_full_name|default:article.created_by.username }}
+                            <td>
+                                <span class="text-sm text-gray-600">
+                                    {{ article.created_by.get_full_name|default:article.created_by.username }}
+                                </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ article.published_at|date:"M j, Y"|default:"-" }}
+                            <td>
+                                <span class="text-sm text-gray-600">
+                                    {{ article.updated_at|date:"M j, Y" }}
+                                </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <div class="flex justify-end space-x-3">
-                                    <button onclick="quickUpdate('{{ article.id }}', 'status', '{{ article.status }}')"
-                                            class="action-button"
-                                            title="Toggle status">
-                                        <svg class="{% if article.status == 'published' %}text-green-600{% else %}text-gray-400{% endif %}" 
-                                             viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                    </button>
-                                    <button onclick="toggleFeatured('{{ article.id }}', {{ article.is_featured|yesno:'true,false' }})"
-                                            class="action-button"
-                                            title="Toggle featured">
-                                        <svg class="{% if article.is_featured %}text-yellow-400{% else %}text-gray-400{% endif %}" 
-                                             viewBox="0 0 24 24" fill="currentColor">
-                                            <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
-                                        </svg>
-                                    </button>
+                            <td>
+                                <div class="flex items-center gap-2">
                                     <a href="{% url 'article_edit' article.id %}" 
-                                       class="action-button"
+                                       class="action-button" 
                                        title="Edit">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-matana-blue">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                  d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                         </svg>
                                     </a>
-                                    <button onclick="deleteArticle('{{ article.id }}', '{{ article.title|escapejs }}')"
+                                    <button onclick="toggleFeatured({{ article.id }}, {{ article.is_featured|lower }})"
                                             class="action-button"
-                                            title="Delete">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-red-600">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                            title="Toggle Featured">
+                                        <svg class="w-5 h-5" fill="{% if article.is_featured %}currentColor{% else %}none{% endif %}" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
                                         </svg>
                                     </button>
-                                    <a href="{{ article.get_absolute_url }}" 
-                                       target="_blank"
-                                       class="action-button"
-                                       title="View">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="text-gray-600">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                                    <button onclick="deleteArticle({{ article.id }}, '{{ article.title|escapejs }}')"
+                                            class="action-button text-red-600 hover:text-red-700"
+                                            title="Delete">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                         </svg>
-                                    </a>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
                         {% empty %}
                         <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">
-                                No articles found
+                            <td colspan="6" class="text-center py-8">
+                                <div class="max-w-sm mx-auto">
+                                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                    <h3 class="text-lg font-medium text-gray-900 mb-1">No articles found</h3>
+                                    <p class="text-gray-600">Get started by creating your first article</p>
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-            
-            <!-- Pagination -->
-            {% if articles.has_other_pages %}
-            <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                <div class="flex-1 flex justify-between sm:hidden">
-                    {% if articles.has_previous %}
-                    <a href="?page={{ articles.previous_page_number }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                        Previous
-                    </a>
-                    {% endif %}
-                    {% if articles.has_next %}
-                    <a href="?page={{ articles.next_page_number }}" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                        Next
-                    </a>
-                    {% endif %}
-                </div>
-                <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                    <div>
-                        <p class="text-sm text-gray-700">
-                            Showing
-                            <span class="font-medium">{{ articles.start_index }}</span>
-                            to
-                            <span class="font-medium">{{ articles.end_index }}</span>
-                            of
-                            <span class="font-medium">{{ articles.paginator.count }}</span>
-                            results
-                        </p>
-                    </div>
-                    <div>
-                        <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
-                            {% if articles.has_previous %}
-                            <a href="?page={{ articles.previous_page_number }}" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Previous</span>
-                                <i class="fas fa-chevron-left"></i>
-                            </a>
-                            {% endif %}
-                            
-                            {% for i in articles.paginator.page_range %}
-                            <a href="?page={{ i }}" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium {% if articles.number == i %}text-matana-blue bg-blue-50{% else %}text-gray-700 hover:bg-gray-50{% endif %}">
-                                {{ i }}
-                            </a>
-                            {% endfor %}
-                            
-                            {% if articles.has_next %}
-                            <a href="?page={{ articles.next_page_number }}" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                <span class="sr-only">Next</span>
-                                <i class="fas fa-chevron-right"></i>
-                            </a>
-                            {% endif %}
-                        </nav>
-                    </div>
-                </div>
-            </div>
-            {% endif %}
         </div>
 
-        <!-- Floating Action Button for Mobile -->
-        <a href="{% url 'article_create' %}" 
-           class="floating-action-button md:hidden bg-blue-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-        </a>
+        <!-- Pagination -->
+        {% if articles.has_other_pages %}
+        <div class="pagination">
+            {% if articles.has_previous %}
+            <a href="?page={{ articles.previous_page_number }}" class="page-item">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </a>
+            {% endif %}
+
+            {% for num in articles.paginator.page_range %}
+                {% if articles.number == num %}
+                    <span class="page-item active">{{ num }}</span>
+                {% elif num > articles.number|add:'-3' and num < articles.number|add:'3' %}
+                    <a href="?page={{ num }}" class="page-item">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+
+            {% if articles.has_next %}
+            <a href="?page={{ articles.next_page_number }}" class="page-item">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    // Filter handling
+    // Filter handling with debounce
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    const searchInput = document.querySelector('input[type="search"]');
     const categorySelect = document.querySelector('select[name="category"]');
     const statusSelect = document.querySelector('select[name="status"]');
-    const searchInput = document.querySelector('input[type="search"]');
-    
-    function updateFilters() {
+
+    const updateFilters = debounce(() => {
         const url = new URL(window.location.href);
+        
+        if (searchInput.value.trim()) {
+            url.searchParams.set('search', searchInput.value.trim());
+        } else {
+            url.searchParams.delete('search');
+        }
         
         if (categorySelect.value) {
             url.searchParams.set('category', categorySelect.value);
@@ -459,32 +453,16 @@
             url.searchParams.delete('status');
         }
         
-        if (searchInput.value.trim()) {
-            url.searchParams.set('search', searchInput.value.trim());
-        } else {
-            url.searchParams.delete('search');
-        }
-        
         url.searchParams.delete('page');
         window.location.href = url.toString();
-    }
-    
+    }, 500);
+
+    searchInput.addEventListener('input', updateFilters);
     categorySelect.addEventListener('change', updateFilters);
     statusSelect.addEventListener('change', updateFilters);
-    
-    // Debounced search
-    let searchTimeout;
-    searchInput.addEventListener('input', () => {
-        clearTimeout(searchTimeout);
-        searchTimeout = setTimeout(updateFilters, 500);
-    });
-    
-    // Quick update functions
-    async function quickUpdate(articleId, field, currentValue) {
-        const newValue = field === 'status' 
-            ? (currentValue === 'published' ? 'draft' : 'published')
-            : !currentValue;
-            
+
+    // Article actions
+    async function toggleFeatured(articleId, currentValue) {
         try {
             const response = await fetch(`/dashboard/content/${articleId}/quick-update/`, {
                 method: 'POST',
@@ -492,7 +470,7 @@
                     'Content-Type': 'application/x-www-form-urlencoded',
                     'X-CSRFToken': '{{ csrf_token }}'
                 },
-                body: `field=${field}&value=${newValue}`
+                body: `field=is_featured&value=${!currentValue}`
             });
             
             if (response.ok) {
@@ -502,11 +480,7 @@
             console.error('Error:', error);
         }
     }
-    
-    async function toggleFeatured(articleId, currentValue) {
-        await quickUpdate(articleId, 'is_featured', currentValue);
-    }
-    
+
     function deleteArticle(articleId, title) {
         if (confirm(`Are you sure you want to delete "${title}"?`)) {
             fetch(`/dashboard/content/${articleId}/delete/`, {

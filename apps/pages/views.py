@@ -17,6 +17,8 @@ import time
 from django.utils.text import slugify
 from django import forms
 from ckeditor.widgets import CKEditorWidget
+import uuid
+import os
 
 # Create your views here.
 
@@ -455,3 +457,21 @@ def category_create_view(request):
     
     # Redirect back to previous page
     return redirect(request.META.get('HTTP_REFERER', 'content_dashboard'))
+
+@staff_member_required
+@require_POST
+def upload_image(request):
+    if 'image' in request.FILES:
+        image = request.FILES['image']
+        # Generate unique filename
+        filename = f"article_images/{timezone.now().strftime('%Y/%m/%d')}/{uuid.uuid4()}{os.path.splitext(image.name)[1]}"
+        
+        # Save file
+        path = default_storage.save(filename, image)
+        
+        # Return URL
+        return JsonResponse({
+            'url': default_storage.url(path)
+        })
+    
+    return JsonResponse({'error': 'No image provided'}, status=400)
