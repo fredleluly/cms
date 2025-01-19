@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Page, ContentBlock, Article, ArticleCategory
+from .models import Page, ContentBlock, Article, ArticleCategory, MaintenanceMode
 
 class ContentBlockInline(admin.StackedInline):
     model = ContentBlock
@@ -91,3 +91,31 @@ class ArticleAdmin(admin.ModelAdmin):
             obj.created_by = request.user
         obj.updated_by = request.user
         super().save_model(request, obj, form, change)
+
+@admin.register(MaintenanceMode)
+class MaintenanceModeAdmin(admin.ModelAdmin):
+    list_display = ('is_active', 'updated_at')
+    readonly_fields = ('created_at', 'updated_at')
+    fieldsets = (
+        (None, {
+            'fields': ('is_active', 'message'),
+            'description': 'Enable or disable maintenance mode for the entire site.'
+        }),
+        ('Advanced Options', {
+            'fields': ('allowed_ips',),
+            'classes': ('collapse',),
+            'description': 'Enter IP addresses that should have access during maintenance (comma-separated)'
+        }),
+        ('Metadata', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+        }),
+    )
+
+    def has_add_permission(self, request):
+        # Only allow one instance
+        return not MaintenanceMode.objects.exists()
+
+    def has_delete_permission(self, request, obj=None):
+        # Prevent deletion of the only instance
+        return False

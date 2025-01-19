@@ -11,6 +11,7 @@ from django.utils.html import strip_tags
 import os
 from django.utils.safestring import mark_safe
 import bleach
+from django.core.cache import cache
 
 User = get_user_model()
 
@@ -223,3 +224,33 @@ class Article(models.Model):
             strip=True
         )
         return mark_safe(cleaned_content)
+
+class MaintenanceMode(models.Model):
+    is_active = models.BooleanField(default=False)
+    message = models.TextField(
+        default="We're currently performing maintenance. Please check back soon.",
+        help_text="Message to display during maintenance"
+    )
+    allowed_ips = models.TextField(
+        blank=True,
+        help_text="Comma-separated list of IPs that can access the site during maintenance"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name = 'Maintenance Mode'
+        verbose_name_plural = 'Maintenance Mode'
+
+    def save(self, *args, **kwargs):
+        # Clear existing instances since we only want one
+        if not self.pk and MaintenanceMode.objects.exists():
+            MaintenanceMode.objects.all().delete()
+            
+        super().save(*args, **kwargs)
+        # Update cache
+        cache.set('maintenance_mode', {
+            'is_active': self.is_active,
+            'message': self.message,
+            'allowed_ips': [ip.strip() for ip in self.allowed_ips.split(',') if ip.strip()]
+        })

@@ -25,7 +25,14 @@ SECRET_KEY = 'django-insecure-u2+$vy@^am#ivmsa92+n*8bovgp!cm=cg1^##)qe@$dtd^ev3y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '192.168.1.8',
+]
+
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -62,6 +69,7 @@ MIDDLEWARE = [
     # Tambahkan middleware keamanan tambahan
     'django.middleware.security.SecurityMiddleware',
     'csp.middleware.CSPMiddleware',  # Content Security Policy
+    'apps.pages.middleware.MaintenanceModeMiddleware',
 ]
 
 # Security Settings
