@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.core.exceptions import PermissionDenied
 from functools import wraps
 import time
+from django.utils.text import slugify
 
 # Create your views here.
 
@@ -268,6 +269,18 @@ def article_edit_view(request, pk):
 @staff_member_required
 @require_POST
 def article_save_view(request):
+    # Handle quick category creation
+    if request.POST.get('action') == 'create_category':
+        name = request.POST.get('new_category')
+        slug = request.POST.get('category_slug') or slugify(name)
+        
+        category = ArticleCategory.objects.create(
+            name=name,
+            slug=slug,
+        )
+        messages.success(request, f'Category "{name}" created successfully.')
+        return redirect(request.path)
+
     article_id = request.POST.get('article_id')
     
     if article_id:
@@ -405,3 +418,26 @@ def ratelimit(key='ip', rate='5/m'):
 def contact_form_view(request):
     # View logic here
     pass
+
+@staff_member_required
+@require_POST
+def category_create_view(request):
+    name = request.POST.get('new_category')
+    if not name:
+        messages.error(request, 'Category name is required')
+        return redirect(request.META.get('HTTP_REFERER', 'content_dashboard'))
+        
+    slug = request.POST.get('category_slug') or slugify(name)
+    
+    try:
+        category = ArticleCategory.objects.create(
+            name=name,
+            slug=slug,
+            created_by=request.user
+        )
+        messages.success(request, f'Category "{name}" created successfully.')
+    except Exception as e:
+        messages.error(request, f'Error creating category: {str(e)}')
+    
+    # Redirect back to previous page
+    return redirect(request.META.get('HTTP_REFERER', 'content_dashboard'))

@@ -105,18 +105,119 @@
     .search-input:focus {
         box-shadow: 0 0 0 3px rgba(0,74,173,0.1);
     }
+
+    /* New styles */
+    .create-button {
+        background: linear-gradient(135deg, #004AAD 0%, #0063FF 100%);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 74, 173, 0.2);
+    }
+    
+    .create-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 74, 173, 0.3);
+    }
+
+    .floating-action-button {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 50;
+        animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .quick-action-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+
+    .quick-action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="min-h-screen bg-gray-50 py-8">
     <div class="dashboard-container px-4">
-        <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-2xl font-bold text-gray-900">Content Management</h1>
-            <div class="flex items-center space-x-4">
-                <span class="text-sm text-gray-500">Welcome, {{ request.user.get_full_name|default:request.user.username }}</span>
-                <a href="{% url 'admin:logout' %}" class="text-sm text-red-600 hover:text-red-800">Logout</a>
+        <!-- Header with Welcome Message -->
+        <div class="bg-white rounded-xl p-6 mb-8 shadow-sm">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 mb-2">Welcome back, {{ request.user.get_full_name|default:request.user.username }}! 👋</h1>
+                    <p class="text-gray-600">Manage your content and keep your website up to date.</p>
+                </div>
+                <a href="{% url 'article_create' %}" 
+                   class="create-button text-white px-6 py-3 rounded-full font-semibold inline-flex items-center gap-2 hover:bg-blue-700">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Create New Article
+                </a>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <div class="quick-action-card">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Draft Articles</h3>
+                        <p class="text-sm text-gray-600">{{ draft_count }} articles in draft</p>
+                    </div>
+                </div>
+                <a href="?status=draft" class="text-blue-600 text-sm hover:text-blue-800">View drafts →</a>
+            </div>
+
+            <div class="quick-action-card">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Published Articles</h3>
+                        <p class="text-sm text-gray-600">{{ published_count }} articles live</p>
+                    </div>
+                </div>
+                <a href="?status=published" class="text-green-600 text-sm hover:text-green-800">View published →</a>
+            </div>
+
+            <div class="quick-action-card">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900">Featured Articles</h3>
+                        <p class="text-sm text-gray-600">Manage featured content</p>
+                    </div>
+                </div>
+                <a href="?featured=true" class="text-yellow-600 text-sm hover:text-yellow-800">View featured →</a>
             </div>
         </div>
 
@@ -324,6 +425,14 @@
             </div>
             {% endif %}
         </div>
+
+        <!-- Floating Action Button for Mobile -->
+        <a href="{% url 'article_create' %}" 
+           class="floating-action-button md:hidden bg-blue-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+        </a>
     </div>
 </div>
 {% endblock %}

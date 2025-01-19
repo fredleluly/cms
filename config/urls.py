@@ -22,7 +22,7 @@ from apps.pages.views import (
     home_view, page_view, news_view, article_detail_view, 
     dashboard_view, article_create_view, article_edit_view,
     article_save_view, article_delete_view, article_quick_update,
-    profile_view
+    profile_view, category_create_view
 )
 from django.contrib.sitemaps.views import sitemap
 from apps.pages.sitemaps import ArticleSitemap, StaticViewSitemap
@@ -48,6 +48,7 @@ urlpatterns = [
     path('dashboard/content/save/', article_save_view, name='article_save'),
     path('dashboard/content/<int:pk>/delete/', article_delete_view, name='article_delete'),
     path('dashboard/content/<int:pk>/quick-update/', article_quick_update, name='article_quick_update'),
+    path('dashboard/content/category/create/', category_create_view, name='category_create'),
     path('matana-news/<slug:slug>/', article_detail_view, name='article_detail'),
     # path('<slug:slug>/', page_view, name='page_view'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

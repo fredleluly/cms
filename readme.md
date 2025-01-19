@@ -57,15 +57,14 @@ cd matana-cms
 2. **Create Virtual Environment**
 ```bash
 # Windows
-python -m venv env
-env\Scripts\activate
-
+python -m venv env2
+source env2/Scripts/activate
 ```
 
 ```bash
 # Linux/Mac
 python3 -m venv env
-source env/bin/activate
+source env/Scripts/activate
 ```
 
 3. **Install Dependencies**
@@ -96,6 +95,21 @@ rm db.sqlite3  # or del db.sqlite3 on Windows
 python manage.py makemigrations
 python manage.py migrate
 python manage.py createsuperuser
+```
+
+5. **Create Superuser** (optional)
+```bash
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
+```
+
+```bash
+python -m venv env2
+source env2/Scripts/activate
+pip install -r requirements.txt
+python manage.py makemigrations
+python manage.py migrate
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
+python manage.py runserver
 ```
 
 6. **Run Development Server**
