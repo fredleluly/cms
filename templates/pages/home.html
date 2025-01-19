@@ -91,7 +91,7 @@
     <div class="swiper-wrapper">
         <!-- Slide 1: Campus Life -->
         <div class="swiper-slide">
-            <img src="https://placehold.co/1920x1080/101d38/FFFFFF?text=Modern+Campus" alt="Modern Campus Life" class="absolute inset-0 w-full h-full object-cover">
+            <img src="https://www.matanauniversity.ac.id/wp-content/uploads/2024/07/matana_univ_PMB_25_26_web_-banner-scaled.jpg" alt="Modern Campus Life" class="absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40">
                 <div class="container mx-auto px-4 h-full flex items-center">
                     <div class="max-w-3xl text-white">
@@ -116,7 +116,7 @@
 
         <!-- Slide 2: Research Excellence -->
         <div class="swiper-slide">
-            <img src="https://placehold.co/1920x1080/ffb140/FFFFFF?text=Research+Excellence" alt="Research Facilities" class="absolute inset-0 w-full h-full object-cover">
+            <img src="https://www.matanauniversity.ac.id/wp-content/uploads/2024/09/aceh_sumut_web_banner_matana_univ1-scaled.jpg" alt="Research Facilities" class="absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40">
                 <div class="container mx-auto px-4 h-full flex items-center">
                     <div class="max-w-3xl text-white">
@@ -135,7 +135,7 @@
 
         <!-- Slide 3: International Collaboration -->
         <div class="swiper-slide">
-            <img src="https://placehold.co/1920x1080/101d38/FFFFFF?text=Global+Network" alt="International Partnerships" class="absolute inset-0 w-full h-full object-cover">
+            <img src="https://www.matanauniversity.ac.id/wp-content/uploads/2024/08/kelas-karyawan-web-desktop@1.25x-scaled.jpg" alt="International Partnerships" class="absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40">
                 <div class="container mx-auto px-4 h-full flex items-center">
                     <div class="max-w-3xl text-white">
@@ -154,7 +154,7 @@
 
         <!-- Slide 4: Student Success -->
         <div class="swiper-slide">
-            <img src="https://placehold.co/1920x1080/ffb140/FFFFFF?text=Student+Success" alt="Student Achievement" class="absolute inset-0 w-full h-full object-cover">
+            <img src="https://www.matanauniversity.ac.id/wp-content/uploads/2024/03/matana_univ_-statistika_akred-scaled.jpg" alt="Student Achievement" class="absolute inset-0 w-full h-full object-cover">
             <div class="absolute inset-0 bg-gradient-to-r from-black/70 to-black/40">
                 <div class="container mx-auto px-4 h-full flex items-center">
                     <div class="max-w-3xl text-white">
@@ -169,6 +169,15 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Slide 5: Full Image Only -->
+        <div class="swiper-slide h-[700px]">
+            <img 
+                src="https://www.matanauniversity.ac.id/wp-content/uploads/2024/03/matana_univ_-statistika_akred-scaled.jpg" 
+                alt="Matana University Campus Life" 
+                class="w-full h-full object-cover"
+            >
         </div>
     </div>
     <div class="swiper-pagination"></div>
@@ -812,13 +821,13 @@
     });
 
     // Optional: Add parallax effect to hero section
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallaxElements = document.querySelectorAll('.hero-slider .swiper-slide img');
-        parallaxElements.forEach(element => {
-            const speed = 0.5;
-            element.style.transform = `translateY(${scrolled * speed}px)`;
-        });
-    });
+    // window.addEventListener('scroll', () => {
+    //     const scrolled = window.pageYOffset;
+    //     const parallaxElements = document.querySelectorAll('.hero-slider .swiper-slide img');
+    //     parallaxElements.forEach(element => {
+    //         const speed = 0.5;
+    //         element.style.transform = `translateY(${scrolled * speed}px)`;
+    //     });
+    // });
 </script>
 {% endblock %}
