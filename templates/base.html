@@ -1,100 +1,663 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %} | Matana University</title>
+    <meta name="description" content="Matana University - World Class Learning Experience">
+    <title>{% block title %}Matana University{% endblock %}</title>
     
-    {% block meta %}
-    <meta name="description" content="{{ meta.description|default:'' }}">
-    <meta name="keywords" content="{{ meta.keywords|default:'' }}">
-    {% endblock %}
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/img/favicon.ico">
     
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --color-primary: #004AAD;  /* Sesuaikan dengan warna brand Matana */
-            --color-primary-dark: #003880;
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        matana: {
+                            blue: '#101d38',
+                            yellow: '#ffb140',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease-in-out',
+                        'fade-out': 'fadeOut 0.3s ease-in-out',
+                        'slide-down': 'slideDown 0.3s ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        fadeOut: {
+                            '0%': { opacity: '1' },
+                            '100%': { opacity: '0' },
+                        },
+                        slideDown: {
+                            '0%': { transform: 'translateY(-10px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                    },
+                }
+            }
         }
-        .bg-primary { background-color: var(--color-primary); }
-        .bg-primary-dark { background-color: var(--color-primary-dark); }
-        .text-primary { color: var(--color-primary); }
-        .text-primary-dark { color: var(--color-primary-dark); }
+    </script>
+
+    <!-- Custom CSS -->
+    <style>
+        /* Mega menu and dropdown styles */
+        .mega-menu {
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: 
+                visibility 0.2s ease-in-out,
+                opacity 0.2s ease-in-out,
+                transform 0.2s ease-in-out;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+            border-top: 3px solid #ffb140;
+        }
+
+        .nav-item:hover .mega-menu {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .mega-menu::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 7px solid #ffb140;
+        }
+
+        /* Faculty sections in mega menu */
+        .faculty-section {
+            position: relative;
+            transition: background-color 0.2s ease;
+        }
+
+        .faculty-section::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 1px;
+            background: #e5e7eb;
+        }
+
+        .faculty-section:last-child::after {
+            display: none;
+        }
+
+        /* Button styles */
+        .btn-primary {
+            background-color: #ffb140;
+            color: #101d38;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            background-color: #ffa727;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(255, 177, 64, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Navigation link hover effect */
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #ffb140;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Mobile menu animations */
+        .mobile-menu-enter {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .mobile-menu-enter-active {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-exit {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-exit-active {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        /* Accessibility focus styles */
+        .focus-ring {
+            outline: none;
+            transition: box-shadow 0.2s ease;
+        }
+
+        .focus-ring:focus-visible {
+            box-shadow: 0 0 0 2px #ffb140, 0 0 0 4px rgba(255, 177, 64, 0.3);
+            border-radius: 4px;
+        }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
-<body class="flex flex-col min-h-screen">
-    <!-- Header -->
-    <header class="bg-white shadow-md">
-        <nav class="container mx-auto px-4 py-4">
+<body class="font-sans antialiased">
+    <!-- Top Bar -->
+    <div class="bg-matana-blue py-2">
+        <div class="container mx-auto px-4">
             <div class="flex justify-between items-center">
-                <a href="/" class="text-2xl font-bold text-primary">Matana University</a>
-                
-                <!-- Mobile menu button -->
-                <button class="md:hidden">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-                
-                <!-- Desktop menu -->
-                <div class="hidden md:flex space-x-8">
-                    <a href="/profil" class="text-gray-600 hover:text-primary">Profil</a>
-                    <a href="/program-studi" class="text-gray-600 hover:text-primary">Program Studi</a>
-                    <a href="/pendaftaran" class="text-gray-600 hover:text-primary">Pendaftaran</a>
-                    <a href="/beasiswa" class="text-gray-600 hover:text-primary">Beasiswa</a>
-                    <a href="/kemahasiswaan" class="text-gray-600 hover:text-primary">Kemahasiswaan</a>
-                    <a href="/media" class="text-gray-600 hover:text-primary">Media</a>
+                <div class="flex items-center space-x-6">
+                    <a href="tel:+62218723999" class="flex items-center space-x-2 text-white hover:text-matana-yellow transition-colors text-sm">
+                        <i class="fas fa-phone text-matana-yellow"></i>
+                        <span>(021) 8723-2999</span>
+                    </a>
+                    <a href="https://wa.me/628128777599" class="flex items-center space-x-2 text-white hover:text-matana-yellow transition-colors text-sm">
+                        <i class="fab fa-whatsapp text-matana-yellow"></i>
+                        <span>0812 8777 5999</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="flex items-center space-x-4">
+                        <a href="#" class="text-white hover:text-matana-yellow transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-matana-yellow transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-white hover:text-matana-yellow transition-colors">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                    <div class="border-l border-white/20 pl-6 flex items-center space-x-4">
+                        <a href="#" class="text-white hover:text-matana-yellow transition-colors text-sm font-medium">ID</a>
+                        <span class="text-white/40">|</span>
+                        <a href="#" class="text-white hover:text-matana-yellow transition-colors text-sm font-medium">EN</a>
+                    </div>
                 </div>
             </div>
-        </nav>
-    </header>
+        </div>
+    </div>
+
+    <!-- Main Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50" x-data="{ mobileMenuOpen: false }">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <a href="/" class="flex items-center">
+                    <img src="{% static 'images/logo-matana-white.png' %}" alt="Matana University" class="h-12">
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex items-center space-x-1">
+                    <!-- Profil -->
+                    <div class="nav-item relative group">
+                        <button class="nav-link text-gray-700 group-hover:text-matana-blue flex items-center space-x-1 px-4 py-2 focus-ring">
+                            <span>Profil</span>
+                            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="mega-menu absolute left-0 w-64 bg-white rounded-lg p-4">
+                            <div class="space-y-2">
+                                <a href="/profil-matana" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                    Profil Matana
+                                </a>
+                                <a href="/manajemen" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                    Manajemen
+                                </a>
+                                <a href="/mitra" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                    Mitra
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Program Studi -->
+                    <div class="nav-item relative group">
+                        <button class="nav-link text-gray-700 group-hover:text-matana-blue flex items-center space-x-1 px-4 py-2 focus-ring">
+                            <span>Program Studi</span>
+                            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <!-- Mega menu - positioned directly below the button -->
+                        <div class="mega-menu absolute top-full left-0 w-[280px] bg-white rounded-lg p-2 mt-1">
+                            <!-- Fakultas List -->
+                            <div class="space-y-1">
+                                <!-- Fakultas Bisnis dan Pariwisata -->
+                                <div class="group/faculty relative">
+                                    <a href="#" class="flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                        <span class="font-medium">Fakultas Bisnis dan Pariwisata</span>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <!-- Sub-menu for programs - positioned to the right of parent -->
+                                    <div class="hidden group-hover/faculty:block absolute top-0 left-full w-[280px] bg-white rounded-lg p-2 shadow-lg ml-1">
+                                        <div class="space-y-1">
+                                            <a href="/program/manajemen-bisnis" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg">S1 Manajemen Bisnis</a>
+                                            <a href="/program/akuntansi" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg">S1 Akuntansi</a>
+                                            <a href="/program/pariwisata" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg">S1 Pariwisata</a>
+                                            <a href="/program/magister-manajemen" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg">Magister Manajemen</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Fakultas Desain, K3, dan Arsitektur -->
+                                <div class="group/faculty relative">
+                                    <a href="#" class="flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                        <span class="font-medium">Fakultas Desain, K3, dan Arsitektur</span>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <div class="hidden group-hover/faculty:block absolute top-0 left-full w-[280px] bg-white rounded-lg p-2 shadow-lg ml-1">
+                                        <div class="space-y-1">
+                                            <a href="/program/dkv" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg">S1 Desain Komunikasi Visual</a>
+                                            <a href="/program/arsitektur" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg">S1 Arsitektur</a>
+                                            <a href="/program/k3" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg">S1 K3</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Fakultas Sains, Komputer, dan Matematika -->
+                                <div class="group/faculty relative">
+                                    <a href="#" class="flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                        <span class="font-medium">Fakultas Sains, Komputer, dan Matematika</span>
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </a>
+                                    <div class="hidden group-hover/faculty:block absolute top-0 left-full w-[280px] bg-white rounded-lg p-2 shadow-lg ml-1">
+                                        <div class="space-y-1">
+                                            <a href="/program/fisika-medis" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg">S1 Fisika Medis</a>
+                                            <a href="/program/statistika" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg">S1 Statistika</a>
+                                            <a href="/program/informatika" class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg">S1 Informatika</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pendaftaran -->
+                    <div class="nav-item">
+                        <a href="/pendaftaran" class="nav-link text-gray-700 hover:text-matana-blue px-4 py-2 focus-ring">
+                            Pendaftaran
+                        </a>
+                    </div>
+
+                    <!-- Beasiswa -->
+                    <div class="nav-item">
+                        <a href="/beasiswa" class="nav-link text-gray-700 hover:text-matana-blue px-4 py-2 focus-ring">
+                            Beasiswa
+                        </a>
+                    </div>
+
+                    <!-- Kemahasiswaan -->
+                    <div class="nav-item relative group">
+                        <button class="nav-link text-gray-700 group-hover:text-matana-blue flex items-center space-x-1 px-4 py-2 focus-ring">
+                            <span>Kemahasiswaan</span>
+                            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="mega-menu absolute right-0 w-64 bg-white rounded-lg p-4">
+                            <div class="space-y-2">
+                                <a href="/ukm" class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                    <i class="fas fa-users text-matana-yellow"></i>
+                                    <span>Unit Kegiatan Mahasiswa</span>
+                                </a>
+                                <a href="/student-exchange" class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                    <i class="fas fa-globe-americas text-matana-yellow"></i>
+                                    <span>Student Exchange</span>
+                                </a>
+                                <a href="/siak" class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                    <i class="fas fa-graduation-cap text-matana-yellow"></i>
+                                    <span>Sistem Informasi Akademik</span>
+                                </a>
+                                <a href="/alumni" class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                    <i class="fas fa-user-graduate text-matana-yellow"></i>
+                                    <span>Alumni</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Media -->
+                    <div class="nav-item relative group">
+                        <button class="nav-link text-gray-700 group-hover:text-matana-blue flex items-center space-x-1 px-4 py-2 focus-ring">
+                            <span>Media</span>
+                            <svg class="w-4 h-4 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="mega-menu absolute right-0 w-64 bg-white rounded-lg p-4">
+                            <div class="space-y-2">
+                                <a href="/matana-news" class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                    <i class="far fa-newspaper text-matana-yellow"></i>
+                                    <span>Matana News</span>
+                                </a>
+                                <a href="/matana-event" class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                    <i class="far fa-calendar-alt text-matana-yellow"></i>
+                                    <span>Matana Event</span>
+                                </a>
+                                <a href="/matana-podcast" class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                    <i class="fas fa-microphone-alt text-matana-yellow"></i>
+                                    <span>Matana Podcast</span>
+                                </a>
+                                <a href="/matana-tv" class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all">
+                                    <i class="fas fa-tv text-matana-yellow"></i>
+                                    <span>Matana TV</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <!-- <div class="ml-4">
+                        <a href="/daftar-sekarang" class="btn-primary inline-flex items-center space-x-2">
+                            <span>Daftar Sekarang</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div> -->
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button 
+                    class="lg:hidden p-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-matana-yellow focus:ring-offset-2"
+                    @click="mobileMenuOpen = !mobileMenuOpen"
+                    aria-label="Toggle mobile menu">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path 
+                            x-show="!mobileMenuOpen"
+                            stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            stroke-width="2" 
+                            d="M4 6h16M4 12h16M4 18h16">
+                        </path>
+                        <path 
+                            x-show="mobileMenuOpen"
+                            stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            stroke-width="2" 
+                            d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div 
+            x-show="mobileMenuOpen" 
+            x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 transform -translate-x-full"
+            x-transition:enter-end="opacity-100 transform translate-x-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 transform translate-x-0"
+            x-transition:leave-end="opacity-0 transform -translate-x-full"
+            class="lg:hidden fixed inset-0 z-50">
+            
+            <!-- Backdrop -->
+            <div class="fixed inset-0 bg-black/50" @click="mobileMenuOpen = false"></div>
+
+            <!-- Menu Content -->
+            <div class="relative bg-white w-4/5 max-w-sm h-full overflow-y-auto">
+                <div class="p-6">
+                    <!-- Mobile Menu Items -->
+                    <nav class="space-y-6">
+                        <!-- Profil Section -->
+                        <div x-data="{ open: false }" class="border-b border-gray-200 pb-6">
+                            <button @click="open = !open" class="flex items-center justify-between w-full">
+                                <span class="text-lg font-semibold text-gray-900">Profil</span>
+                                <svg class="w-5 h-5 transform transition-transform" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div x-show="open" class="mt-4 ml-4 space-y-4">
+                                <a href="/profil-matana" class="block text-gray-600 hover:text-matana-blue">Profil Matana</a>
+                                <a href="/manajemen" class="block text-gray-600 hover:text-matana-blue">Manajemen</a>
+                                <a href="/mitra" class="block text-gray-600 hover:text-matana-blue">Mitra</a>
+                            </div>
+                        </div>
+
+                        <!-- Program Studi Section -->
+                        <div x-data="{ open: false, fakultasOpen: {} }" class="border-b border-gray-200 pb-6">
+                            <button @click="open = !open" class="flex items-center justify-between w-full">
+                                <span class="text-lg font-semibold text-gray-900">Program Studi</span>
+                                <svg class="w-5 h-5 transform transition-transform" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            
+                            <div x-show="open" class="mt-4 space-y-4">
+                                <!-- Fakultas Bisnis dan Pariwisata -->
+                                <div class="ml-4">
+                                    <button @click="fakultasOpen.bisnis = !fakultasOpen.bisnis" class="flex items-center justify-between w-full text-left">
+                                        <span class="font-medium text-gray-900">Fakultas Bisnis dan Pariwisata</span>
+                                        <svg class="w-5 h-5 transform transition-transform" :class="{'rotate-180': fakultasOpen.bisnis}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <div x-show="fakultasOpen.bisnis" class="mt-2 ml-4 space-y-2">
+                                        <a href="/program/manajemen-bisnis" class="block text-gray-600 hover:text-matana-blue py-1">S1 Manajemen Bisnis</a>
+                                        <a href="/program/akuntansi" class="block text-gray-600 hover:text-matana-blue py-1">S1 Akuntansi</a>
+                                        <a href="/program/pariwisata" class="block text-gray-600 hover:text-matana-blue py-1">S1 Pariwisata</a>
+                                        <a href="/program/magister-manajemen" class="block text-gray-600 hover:text-matana-blue py-1">Magister Manajemen</a>
+                                    </div>
+                                </div>
+
+                                <!-- Fakultas Desain, K3, dan Arsitektur -->
+                                <div class="ml-4">
+                                    <button @click="fakultasOpen.desain = !fakultasOpen.desain" class="flex items-center justify-between w-full text-left">
+                                        <span class="font-medium text-gray-900">Fakultas Desain, K3, dan Arsitektur</span>
+                                        <svg class="w-5 h-5 transform transition-transform" :class="{'rotate-180': fakultasOpen.desain}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <div x-show="fakultasOpen.desain" class="mt-2 ml-4 space-y-2">
+                                        <a href="/program/dkv" class="block text-gray-600 hover:text-matana-blue py-1">S1 Desain Komunikasi Visual</a>
+                                        <a href="/program/arsitektur" class="block text-gray-600 hover:text-matana-blue py-1">S1 Arsitektur</a>
+                                        <a href="/program/k3" class="block text-gray-600 hover:text-matana-blue py-1">S1 K3</a>
+                                    </div>
+                                </div>
+
+                                <!-- Fakultas Sains, Komputer, dan Matematika -->
+                                <div class="ml-4">
+                                    <button @click="fakultasOpen.sains = !fakultasOpen.sains" class="flex items-center justify-between w-full text-left">
+                                        <span class="font-medium text-gray-900">Fakultas Sains, Komputer, dan Matematika</span>
+                                        <svg class="w-5 h-5 transform transition-transform" :class="{'rotate-180': fakultasOpen.sains}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>
+                                    <div x-show="fakultasOpen.sains" class="mt-2 ml-4 space-y-2">
+                                        <a href="/program/fisika-medis" class="block text-gray-600 hover:text-matana-blue py-1">S1 Fisika Medis</a>
+                                        <a href="/program/statistika" class="block text-gray-600 hover:text-matana-blue py-1">S1 Statistika</a>
+                                        <a href="/program/informatika" class="block text-gray-600 hover:text-matana-blue py-1">S1 Informatika</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="/pendaftaran" class="block text-lg font-semibold text-gray-900 hover:text-matana-blue">
+                            Pendaftaran
+                        </a>
+
+                        <a href="/beasiswa" class="block text-lg font-semibold text-gray-900 hover:text-matana-blue">
+                            Beasiswa
+                        </a>
+
+                        <!-- Kemahasiswaan Section -->
+                        <div x-data="{ open: false }" class="border-b border-gray-200 pb-6">
+                            <button @click="open = !open" class="flex items-center justify-between w-full">
+                                <span class="text-lg font-semibold text-gray-900">Kemahasiswaan</span>
+                                <svg class="w-5 h-5 transform transition-transform" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div x-show="open" class="mt-4 ml-4 space-y-4">
+                                <a href="/ukm" class="block text-gray-600 hover:text-matana-blue">Unit Kegiatan Mahasiswa</a>
+                                <a href="/student-exchange" class="block text-gray-600 hover:text-matana-blue">Student Exchange</a>
+                                <a href="/siak" class="block text-gray-600 hover:text-matana-blue">Sistem Informasi Akademik</a>
+                                <a href="/alumni" class="block text-gray-600 hover:text-matana-blue">Alumni</a>
+                            </div>
+                        </div>
+
+                        <!-- Media Section -->
+                        <div x-data="{ open: false }" class="border-b border-gray-200 pb-6">
+                            <button @click="open = !open" class="flex items-center justify-between w-full">
+                                <span class="text-lg font-semibold text-gray-900">Media</span>
+                                <svg class="w-5 h-5 transform transition-transform" :class="{'rotate-180': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div x-show="open" class="mt-4 ml-4 space-y-4">
+                                <a href="/matana-news" class="block text-gray-600 hover:text-matana-blue">Matana News</a>
+                                <a href="/matana-event" class="block text-gray-600 hover:text-matana-blue">Matana Event</a>
+                                <a href="/matana-podcast" class="block text-gray-600 hover:text-matana-blue">Matana Podcast</a>
+                                <a href="/matana-tv" class="block text-gray-600 hover:text-matana-blue">Matana TV</a>
+                            </div>
+                        </div>
+
+                        <!-- Mobile CTA -->
+                        <!-- <div class="pt-6">
+                            <a href="/daftar-sekarang" class="btn-primary w-full text-center justify-center">
+                                Daftar Sekarang
+                            </a>
+                        </div> -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <!-- Main Content -->
-    <main class="flex-grow">
+    <main>
         {% block content %}{% endblock %}
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
+    <footer class="bg-matana-blue text-white pt-16 pb-8">
         <div class="container mx-auto px-4">
-            <div class="grid md:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Contact Info -->
                 <div>
-                    <h3 class="text-xl font-bold mb-4">Matana University</h3>
-                    <p class="text-gray-400">Alamat kampus dan informasi kontak</p>
+                    <img src="{% static 'images/logo-matana-white.png' %}" alt="Matana University" class="h-12 mb-6">
+                    <div class="space-y-4">
+                        <p class="flex items-start space-x-3">
+                            <i class="fas fa-map-marker-alt mt-1 text-matana-yellow"></i>
+                            <span>Matana University Tower, Jl. CBD Barat Kav. 1, Gading Serpong, Tangerang, Banten - 15810</span>
+                        </p>
+                        <p class="flex items-center space-x-3">
+                            <i class="fas fa-phone text-matana-yellow"></i>
+                            <span>(021) 8723-2999</span>
+                        </p>
+                        <p class="flex items-center space-x-3">
+                            <i class="fab fa-whatsapp text-matana-yellow"></i>
+                            <span>0812 8777 5999</span>
+                        </p>
+                        <p class="flex items-center space-x-3">
+                            <i class="fas fa-envelope text-matana-yellow"></i>
+                            <span>info@matanauniversity.ac.id</span>
+                        </p>
+                    </div>
                 </div>
+
+                <!-- Quick Links -->
                 <div>
-                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2">
-                        <li><a href="/profil" class="text-gray-400 hover:text-white">Tentang Kami</a></li>
-                        <li><a href="/program-studi" class="text-gray-400 hover:text-white">Program Studi</a></li>
-                        <li><a href="/pendaftaran" class="text-gray-400 hover:text-white">Pendaftaran</a></li>
+                    <h3 class="text-lg font-bold mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/profil-matana" class="hover:text-matana-yellow transition-colors">Profil Matana</a></li>
+                        <li><a href="/program-studi" class="hover:text-matana-yellow transition-colors">Program Studi</a></li>
+                        <li><a href="/pendaftaran" class="hover:text-matana-yellow transition-colors">Pendaftaran</a></li>
+                        <li><a href="/beasiswa" class="hover:text-matana-yellow transition-colors">Beasiswa</a></li>
+                        <li><a href="/ukm" class="hover:text-matana-yellow transition-colors">UKM</a></li>
                     </ul>
                 </div>
+
+                <!-- Resources -->
                 <div>
-                    <h4 class="text-lg font-semibold mb-4">Informasi</h4>
-                    <ul class="space-y-2">
-                        <li><a href="/beasiswa" class="text-gray-400 hover:text-white">Beasiswa</a></li>
-                        <li><a href="/kemahasiswaan" class="text-gray-400 hover:text-white">Kemahasiswaan</a></li>
-                        <li><a href="/media" class="text-gray-400 hover:text-white">Media</a></li>
+                    <h3 class="text-lg font-bold mb-6">Resources</h3>
+                    <ul class="space-y-3">
+                        <li><a href="/matana-news" class="hover:text-matana-yellow transition-colors">Matana News</a></li>
+                        <li><a href="/matana-event" class="hover:text-matana-yellow transition-colors">Matana Event</a></li>
+                        <li><a href="/matana-podcast" class="hover:text-matana-yellow transition-colors">Matana Podcast</a></li>
+                        <li><a href="/matana-tv" class="hover:text-matana-yellow transition-colors">Matana TV</a></li>
+                        <li><a href="/career-center" class="hover:text-matana-yellow transition-colors">Career Center</a></li>
                     </ul>
                 </div>
+
+                <!-- Social Media -->
                 <div>
-                    <h4 class="text-lg font-semibold mb-4">Ikuti Kami</h4>
+                    <h3 class="text-lg font-bold mb-6">Connect With Us</h3>
                     <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white">
-                            <span class="sr-only">Facebook</span>
-                            <!-- Add social media icons here -->
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-matana-yellow transition-colors">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-matana-yellow transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-matana-yellow transition-colors">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-matana-yellow transition-colors">
+                            <i class="fab fa-linkedin-in"></i>
                         </a>
                     </div>
                 </div>
             </div>
-            <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
+
+            <!-- Copyright -->
+            <div class="border-t border-white/10 mt-12 pt-8 text-center">
                 <p>&copy; {% now "Y" %} Matana University. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/your-kit-code.js" crossorigin="anonymous"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     {% block extra_js %}{% endblock %}
 </body>
-</html> 
+</html>
+                                
