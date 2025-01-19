@@ -34,18 +34,6 @@ git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
 ```
 
-### Linux/Mac Setup
-
-1. **Install Python & Git**
-```bash
-# Ubuntu/Debian
-sudo apt update
-sudo apt install python3 python3-pip git
-
-# Mac (using Homebrew)
-brew install python git
-```
-
 ## 📥 Installation Steps
 
 1. **Clone Repository**
@@ -102,6 +90,13 @@ python manage.py createsuperuser
 echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
 ```
 
+6. **Run Development Server**
+```bash
+python manage.py runserver
+```
+
+7. OPTIONAL bulk action automatically:
+
 ```bash
 python -m venv env2
 source env2/Scripts/activate
@@ -112,10 +107,6 @@ echo "from django.contrib.auth import get_user_model; User = get_user_model(); U
 python manage.py runserver
 ```
 
-6. **Run Development Server**
-```bash
-python manage.py runserver
-```
 
 ## 🗂️ Project Structure
 
