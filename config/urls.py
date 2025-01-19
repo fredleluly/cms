@@ -18,12 +18,18 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from apps.pages.views import home_view, page_view, news_view, article_detail_view, dashboard_view, article_create_view, article_edit_view, article_save_view, article_delete_view, article_quick_update
+from apps.pages.views import (
+    home_view, page_view, news_view, article_detail_view, 
+    dashboard_view, article_create_view, article_edit_view,
+    article_save_view, article_delete_view, article_quick_update,
+    profile_view
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
     path('matana-news/', news_view, name='news'),
+    path('profil-matana/', profile_view, name='profile'),
     path('dashboard/content/', dashboard_view, name='content_dashboard'),
     path('dashboard/content/create/', article_create_view, name='article_create'),
     path('dashboard/content/<int:pk>/edit/', article_edit_view, name='article_edit'),

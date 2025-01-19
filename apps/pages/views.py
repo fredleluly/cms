@@ -285,3 +285,30 @@ def article_quick_update(request, pk):
         'status': 'success',
         'published_at': article.published_at.strftime('%b %d, %Y') if article.published_at else '-'
     })
+
+def profile_view(request):
+    context = {
+        'visi': "Menjadi Perguruan Tinggi terpercaya...",  # Add full vision text
+        'misi_list': [
+            "Terbentuknya lulusan yang memiliki jiwa kepemimpinan...",
+            "Terciptanya lulusan yang memiliki kemampuan penelitian...",
+            "Terbentuknya generasi penerus yang memiliki kepedulian..."
+        ],
+        'sejarah': "Universitas Matana mulai beroperasi...",  # Add full history text
+        'keunggulan_list': [
+            {
+                'title': "Kurikulum Siap Kerja",
+                'description': "Menerapkan kurikulum akademik yang mendukung lulusan siap berkompetisi..."
+            },
+            # Add more items
+        ],
+        'facilities': [
+            {
+                'name': "Laboratorium Akuntansi",
+                'description': "Dilengkapi dengan software akuntansi terkini...",
+                'image': "path/to/image"
+            },
+            # Add more facilities
+        ]
+    }
+    return render(request, 'pages/profile.html', context)
