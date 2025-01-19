@@ -3,7 +3,7 @@ from django.http import Http404
 from django.core.cache import cache
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q, Count
-from .models import Page, Article, ArticleCategory
+from .models import Page, Article, ArticleCategory, ContentBlock
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django.shortcuts import redirect
@@ -17,13 +17,61 @@ import time
 
 # Create your views here.
 
+def create_default_homepage():
+    """Create a default homepage if none exists"""
+    homepage = Page.objects.create(
+        title="Welcome to Matana University",
+        slug="home",
+        is_homepage=True,
+        status=Page.PUBLISHED,
+        template='home.html'
+    )
+    
+    # Create default content blocks
+    default_blocks = [
+        {
+            'identifier': 'hero_title',
+            'content_type': 'text',
+            'content': 'Welcome to Matana University'
+        },
+        {
+            'identifier': 'hero_subtitle',
+            'content_type': 'text',
+            'content': 'Perguruan tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme'
+        },
+        {
+            'identifier': 'about_section',
+            'content_type': 'rich_text',
+            'content': '<p>Matana University adalah institusi pendidikan tinggi yang berkomitmen untuk menghasilkan lulusan berkualitas.</p>'
+        }
+    ]
+    
+    for block in default_blocks:
+        ContentBlock.objects.create(
+            page=homepage,
+            identifier=block['identifier'],
+            content_type=block['content_type'],
+            content=block['content']
+        )
+    
+    return homepage
+
 def home_view(request):
     try:
+        # Try to get existing homepage
         page = Page.objects.get(is_homepage=True, status=Page.PUBLISHED)
     except Page.DoesNotExist:
-        page = Page.objects.filter(status=Page.PUBLISHED).first()
-        if not page:
-            raise Http404("No homepage found")
+        try:
+            # Try to get any published page and make it homepage
+            page = Page.objects.filter(status=Page.PUBLISHED).first()
+            if page:
+                page.is_homepage = True
+                page.save()
+            else:
+                # Create default homepage if no pages exist
+                page = create_default_homepage()
+        except Exception as e:
+            raise Http404(f"Could not create homepage: {str(e)}")
     
     # Get cached content or generate new
     cache_key = f'page_content_{page.id}'

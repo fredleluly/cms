@@ -5,6 +5,7 @@
 __pycache__
 db.sqlite3
 media
+migrations
 
 node_modules
 package-lock.json
@@ -140,3 +141,57 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+
+# Python
+*.py[cod]
+__pycache__/
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+bin/
+var/
+sdist/
+develop-eggs/
+.installed.cfg
+lib/
+lib64/
+venv/
+env/
+.env
+
+# Django
+*.log
+*.pot
+*.pyc
+db.sqlite3
+media/
+static/
+
+# Migrations - Ada 2 pendekatan:
+# 1. Ignore semua migrations (untuk development pribadi)
+# */migrations/*
+
+# 2. Keep migrations tapi ignore pycache (recommended untuk team)
+*/migrations/__pycache__/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Local development settings
+local_settings.py
+
+# Coverage reports
+htmlcov/
+.coverage
+.coverage.*
+coverage.xml
+*.cover

@@ -1,7 +1,14 @@
-Django>=4.2,<5.0
-django-ckeditor>=6.5.1
-Pillow>=9.5.0  # for image handling
-redis>=4.5.4   # for caching
-psycopg2-binary>=2.9.6  # for PostgreSQL
-python-dotenv>=1.0.0
-django-cleanup>=7.0.0  # automatically deletes files 
+asgiref==3.8.1
+bleach==6.2.0
+Django==4.2.18
+django-ckeditor==6.7.2
+django-cleanup==9.0.0
+django-js-asset==3.0.1
+django_csp==3.8
+pillow==11.1.0
+psycopg2-binary==2.9.10
+python-dotenv==1.0.1
+redis==5.2.1
+sqlparse==0.5.3
+tzdata==2024.2
+webencodings==0.5.1
