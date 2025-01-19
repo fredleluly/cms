@@ -36,6 +36,12 @@ sitemaps = {
     'static': StaticViewSitemap,
 }
 
+from django.shortcuts import render
+
+def test_404(request):
+    """View untuk testing halaman 404"""
+    return render(request, '404.html', status=200)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
@@ -57,5 +63,14 @@ urlpatterns = [
     path('pendaftaran/', registration_view, name='registration'),
     path('pendaftaran/submit/', registration_submit, name='registration_submit'),
     path('beasiswa/', scholarship_view, name='scholarship'),
+    path('test-404/', test_404, name='test_404'),
     # path('<slug:slug>/', page_view, name='page_view'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Add this after urlpatterns
+if settings.DEBUG:
+    urlpatterns += [
+        path('404/', lambda request: views.custom_404(request, None)),
+    ]
+
+handler404 = 'apps.pages.views.custom_404'

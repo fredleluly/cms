@@ -22,6 +22,13 @@ import os
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
+
+def custom_404(request, exception):
+
+    return render(request, '404.html', status=404)
+
+
+
 # Create your views here.
 
 def create_default_homepage():
