@@ -1,199 +1,331 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ title }} - Matana CMS{% endblock %}
 
 {% block extra_css %}
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <style>
-    .form-container {
-        max-width: 1200px;
-        margin: 0 auto;
+    /* Modern UI Styles */
+    .page-container {
+        background: linear-gradient(135deg, #f6f9fc 0%, #f1f4f9 100%);
+        min-height: 100vh;
     }
-    
+
+    .form-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .header-card {
+        background: white;
+        border-radius: 1.5rem;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .content-card {
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+    }
+
+    .content-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+    }
+
+    .card-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #f1f4f9;
+    }
+
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Modern Form Controls */
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .form-input:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        outline: none;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #374151;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    /* Editor Customization */
+    .ql-container {
+        border-radius: 0 0 1rem 1rem;
+        font-size: 1rem;
+        line-height: 1.8;
+    }
+
+    .ql-toolbar {
+        border-radius: 1rem 1rem 0 0;
+        border-color: #e5e7eb;
+    }
+
+    .ql-editor {
+        min-height: 400px;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Modern Buttons */
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+    }
+
+    .btn-secondary {
+        background: white;
+        border: 2px solid #e5e7eb;
+        color: #374151;
+    }
+
+    .btn-secondary:hover {
+        background: #f9fafb;
+        border-color: #d1d5db;
+    }
+
+    /* Image Upload */
+    .image-drop-zone {
+        border: 2px dashed #e5e7eb;
+        border-radius: 1rem;
+        padding: 2rem;
+        text-align: center;
+        background: #f9fafb;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .image-drop-zone:hover {
+        border-color: #4f46e5;
+        background: rgba(79, 70, 229, 0.05);
+    }
+
     .preview-image {
         max-height: 300px;
         width: 100%;
         object-fit: cover;
         border-radius: 1rem;
     }
-    
-    .ql-editor {
-        min-height: 400px;
-        font-size: 16px;
-        line-height: 1.8;
+
+    /* Category Modal */
+    .modal {
+        background: rgba(0,0,0,0.5);
+        backdrop-filter: blur(4px);
     }
-    
-    .form-section {
+
+    .modal-content {
         background: white;
-        border-radius: 1rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-    }
-    
-    .form-section:hover {
-        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-    
-    .image-drop-zone {
-        border: 2px dashed #e5e7eb;
-        border-radius: 1rem;
-        transition: all 0.3s ease;
-        background: #f8fafc;
-        min-height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        cursor: pointer;
-    }
-    
-    .image-drop-zone:hover {
-        border-color: #004AAD;
-        background: rgba(0,74,173,0.05);
+        border-radius: 1.5rem;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        max-width: 500px;
+        width: 90%;
+        transform: scale(0.95);
+        transition: transform 0.3s ease;
     }
 
-    .save-button {
-        background: linear-gradient(135deg, #004AAD 0%, #0063FF 100%);
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(0, 74, 173, 0.2);
-    }
-    
-    .save-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0, 74, 173, 0.3);
+    .modal.show .modal-content {
+        transform: scale(1);
     }
 
-    .quick-category {
-        max-height: 0;
+    /* CKEditor Customization */
+    .django-ckeditor-widget {
+        width: 100% !important;
+    }
+
+    #cke_id_content {
+        border-radius: 1rem;
         overflow: hidden;
-        transition: max-height 0.3s ease-out;
+        border: 2px solid #e5e7eb !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    .quick-category.show {
-        max-height: 500px;
+    .cke_top {
+        background: #f8fafc !important;
+        border-bottom: 1px solid #e5e7eb !important;
+        padding: 8px !important;
     }
 
-    .form-input {
-        @apply w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200;
+    .cke_bottom {
+        background: #f8fafc !important;
+        border-top: 1px solid #e5e7eb !important;
     }
 
-    .form-label {
-        @apply block text-sm font-medium text-gray-700 mb-1;
+    .cke_chrome {
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .cke_contents {
+        min-height: 400px;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50 py-8">
-    <div class="form-container px-4">
-        <form method="POST" action="{% url 'article_save' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            {% if article %}
-                <input type="hidden" name="article_id" value="{{ article.id }}">
-            {% endif %}
-            
-            <!-- Header -->
-            <div class="flex justify-between items-center mb-8">
+<div class="page-container py-8">
+    <div class="form-container">
+        <!-- Header Section -->
+        <div class="header-card">
+            <div class="flex justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900">{{ title }}</h1>
-                    <p class="text-gray-600 mt-2">Create engaging content for your readers</p>
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ title }}</h1>
+                    <p class="text-gray-600">Create and publish engaging content for your readers</p>
                 </div>
                 <div class="flex items-center gap-4">
-                    <a href="{% url 'content_dashboard' %}" 
-                       class="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors">
+                    <a href="{% url 'content_dashboard' %}" class="btn btn-secondary">
                         Cancel
                     </a>
-                    <button type="submit" name="status" value="draft" 
-                            class="px-6 py-2 rounded-lg border border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors">
+                    <button type="submit" form="articleForm" name="status" value="draft" 
+                            class="btn btn-secondary">
                         Save Draft
                     </button>
-                    <button type="submit" name="status" value="published" 
-                            class="save-button px-6 py-2 rounded-lg text-white hover:bg-blue-700 transition-colors">
+                    <button type="submit" form="articleForm" name="status" value="published" 
+                            class="btn btn-primary">
                         Publish
                     </button>
                 </div>
             </div>
+        </div>
+
+        <form id="articleForm" method="POST" action="{% url 'article_save' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if article %}
+                <input type="hidden" name="article_id" value="{{ article.id }}">
+            {% endif %}
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Main Content -->
+                <!-- Main Content Column -->
                 <div class="lg:col-span-2 space-y-8">
-                    <!-- Title & Excerpt -->
-                    <div class="form-section p-6">
-                        <div class="mb-6">
-                            <label class="form-label">Title</label>
-                            <input type="text" name="title" required
-                                   class="form-input text-xl"
-                                   value="{{ article.title|default:'' }}"
-                                   placeholder="Enter article title...">
+                    <!-- Title & Excerpt Card -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2 class="text-xl font-semibold text-gray-900">Article Details</h2>
                         </div>
-                        <div>
-                            <label class="form-label">Excerpt</label>
-                            <textarea name="excerpt" rows="3" 
-                                      class="form-input"
-                                      placeholder="Brief summary of your article...">{{ article.excerpt|default:'' }}</textarea>
+                        <div class="card-body space-y-6">
+                            <div>
+                                <label class="form-label">Title</label>
+                                <input type="text" name="title" required
+                                       class="form-input text-xl"
+                                       value="{{ article.title|default:'' }}"
+                                       placeholder="Enter a compelling title...">
+                            </div>
+                            <div>
+                                <label class="form-label">Excerpt</label>
+                                <textarea name="excerpt" rows="3" 
+                                          class="form-input"
+                                          placeholder="Write a brief summary...">{{ article.excerpt|default:'' }}</textarea>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Content Editor -->
-                    <div class="form-section p-6">
-                        <label class="form-label mb-4">Content</label>
-                        <div id="editor">{{ article.content|safe|default:'' }}</div>
-                        <input type="hidden" name="content" id="content">
+                    <!-- Content Editor Card -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2 class="text-xl font-semibold text-gray-900">Content</h2>
+                        </div>
+                        <div class="card-body">
+                            {{ form.media }}
+                            {{ form.content }}
+                        </div>
                     </div>
                 </div>
 
-                <!-- Sidebar -->
+                <!-- Sidebar Column -->
                 <div class="space-y-8">
-                    <!-- Category Selection -->
-                    <div class="form-section p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <label class="form-label m-0">Category</label>
-                            <button type="button" 
-                                    onclick="openCategoryModal()"
-                                    class="text-sm text-blue-600 hover:text-blue-800">
-                                + New Category
-                            </button>
+                    <!-- Category Card -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-xl font-semibold text-gray-900">Category</h2>
+                                <button type="button" 
+                                        onclick="openCategoryModal()"
+                                        class="text-indigo-600 hover:text-indigo-800 font-medium">
+                                    + New Category
+                                </button>
+                            </div>
                         </div>
-                        
-                        <!-- Category Select -->
-                        <select name="category" required class="form-input">
-                            <option value="">Select Category</option>
-                            {% for category in categories %}
-                            <option value="{{ category.id }}" 
-                                    {% if article.category_id == category.id %}selected{% endif %}>
-                                {{ category.name }}
-                            </option>
-                            {% endfor %}
-                        </select>
+                        <div class="card-body">
+                            <select name="category" required class="form-input">
+                                <option value="">Select Category</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}" 
+                                        {% if article.category_id == category.id %}selected{% endif %}>
+                                    {{ category.name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
                     </div>
 
-                    <!-- Featured Image -->
-                    <div class="form-section p-6">
-                        <label class="form-label">Featured Image</label>
-                        <div class="image-drop-zone" onclick="document.getElementById('imageInput').click()">
-                            {% if article.featured_image %}
-                                <img src="{{ article.featured_image.url }}" 
-                                     alt="" 
-                                     class="preview-image">
-                            {% else %}
-                                <div class="text-center">
-                                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                    </svg>
-                                    <p class="mt-1 text-sm text-gray-600">Click to upload or drag and drop</p>
-                                    <p class="text-xs text-gray-500">PNG, JPG up to 5MB</p>
-                                </div>
-                            {% endif %}
+                    <!-- Featured Image Card -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2 class="text-xl font-semibold text-gray-900">Featured Image</h2>
                         </div>
-                        <input type="file" id="imageInput" name="featured_image" 
-                               accept="image/*" class="hidden">
+                        <div class="card-body">
+                            <div class="image-drop-zone" onclick="document.getElementById('imageInput').click()">
+                                {% if article.featured_image %}
+                                    <img src="{{ article.featured_image.url }}" 
+                                         alt="" 
+                                         class="preview-image">
+                                {% else %}
+                                    <div class="space-y-4">
+                                        <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                        </svg>
+                                        <div>
+                                            <p class="text-lg font-medium text-gray-900">Upload Image</p>
+                                            <p class="text-sm text-gray-500">Click to browse or drag and drop</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <input type="file" id="imageInput" name="featured_image" 
+                                   accept="image/*" class="hidden">
+                        </div>
                     </div>
 
-                    <!-- SEO Settings -->
-                    <div class="form-section p-6">
-                        <h3 class="font-semibold text-gray-900 mb-4">SEO Settings</h3>
-                        <div class="space-y-4">
+                    <!-- SEO Settings Card -->
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h2 class="text-xl font-semibold text-gray-900">SEO Settings</h2>
+                        </div>
+                        <div class="card-body space-y-6">
                             <div>
                                 <label class="form-label">Meta Description</label>
                                 <textarea name="meta_description" rows="3" 
@@ -209,9 +341,9 @@
                             </div>
                             <div class="flex items-center">
                                 <input type="checkbox" name="is_featured" id="is_featured"
-                                       class="rounded text-blue-600 focus:ring-blue-500"
+                                       class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"
                                        {% if article.is_featured %}checked{% endif %}>
-                                <label for="is_featured" class="ml-2 text-sm text-gray-700">
+                                <label for="is_featured" class="ml-2 text-gray-700">
                                     Feature this article
                                 </label>
                             </div>
@@ -224,10 +356,10 @@
 </div>
 
 <!-- Category Modal -->
-<div id="categoryModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 hidden items-center justify-center">
-    <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
-        <div class="flex justify-between items-center mb-4">
-            <h3 class="text-lg font-semibold">Create New Category</h3>
+<div id="categoryModal" class="modal fixed inset-0 hidden items-center justify-center z-50">
+    <div class="modal-content p-8 mx-4">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-2xl font-bold text-gray-900">Create New Category</h3>
             <button type="button" onclick="closeCategoryModal()" class="text-gray-400 hover:text-gray-500">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -235,75 +367,67 @@
             </button>
         </div>
         
-        <form action="{% url 'category_create' %}" method="POST">
+        <form action="{% url 'category_create' %}" method="POST" class="space-y-6">
             {% csrf_token %}
-            <div class="space-y-4">
-                <div>
-                    <label class="form-label">Category Name</label>
-                    <input type="text" name="new_category" 
-                           class="form-input"
-                           required
-                           placeholder="Enter category name">
-                </div>
-                <div>
-                    <label class="form-label">URL Slug (optional)</label>
-                    <input type="text" name="category_slug" 
-                           class="form-input"
-                           placeholder="category-slug">
-                </div>
-                <button type="submit"
-                        class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    Create Category
-                </button>
+            <div>
+                <label class="form-label">Category Name</label>
+                <input type="text" name="new_category" 
+                       class="form-input"
+                       required
+                       placeholder="Enter category name">
             </div>
+            <div>
+                <label class="form-label">URL Slug (optional)</label>
+                <input type="text" name="category_slug" 
+                       class="form-input"
+                       placeholder="category-slug">
+            </div>
+            <button type="submit"
+                    class="btn btn-primary w-full">
+                Create Category
+            </button>
         </form>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <script>
-    // Initialize Quill editor
-    const quill = new Quill('#editor', {
-        theme: 'snow',
-        modules: {
-            toolbar: [
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'align': [] }],
-                ['link', 'image'],
-                ['clean']
-            ]
-        }
-    });
-    
-    // Handle form submission
-    document.querySelector('form').addEventListener('submit', function() {
-        document.getElementById('content').value = quill.root.innerHTML;
-    });
-    
-    // Image preview
+    // Image preview with animation
     document.getElementById('imageInput').addEventListener('change', function(e) {
         if (this.files && this.files[0]) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const dropZone = document.querySelector('.image-drop-zone');
-                dropZone.innerHTML = `<img src="${e.target.result}" class="preview-image">`;
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'preview-image opacity-0';
+                
+                dropZone.innerHTML = '';
+                dropZone.appendChild(img);
+                
+                // Fade in animation
+                setTimeout(() => img.classList.remove('opacity-0'), 50);
             }
             reader.readAsDataURL(this.files[0]);
         }
     });
 
+    // Modal functions with animations
     function openCategoryModal() {
-        document.getElementById('categoryModal').classList.remove('hidden');
-        document.getElementById('categoryModal').classList.add('flex');
+        const modal = document.getElementById('categoryModal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => modal.classList.add('show'), 50);
     }
 
     function closeCategoryModal() {
-        document.getElementById('categoryModal').classList.add('hidden');
-        document.getElementById('categoryModal').classList.remove('flex');
+        const modal = document.getElementById('categoryModal');
+        modal.classList.remove('show');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }, 300);
     }
 
     // Close modal when clicking outside

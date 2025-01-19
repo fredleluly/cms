@@ -15,6 +15,8 @@ from django.core.exceptions import PermissionDenied
 from functools import wraps
 import time
 from django.utils.text import slugify
+from django import forms
+from ckeditor.widgets import CKEditorWidget
 
 # Create your views here.
 
@@ -244,10 +246,20 @@ def dashboard_view(request):
     
     return render(request, 'admin/dashboard.html', context)
 
+class ArticleForm(forms.ModelForm):
+    content = forms.CharField(widget=CKEditorWidget())
+    
+    class Meta:
+        model = Article
+        fields = ['title', 'excerpt', 'content', 'category', 'featured_image', 
+                 'meta_description', 'meta_keywords', 'is_featured']
+
 @staff_member_required
 def article_create_view(request):
+    form = ArticleForm()
     categories = ArticleCategory.objects.all()
     context = {
+        'form': form,
         'categories': categories,
         'action': 'create',
         'title': 'Create New Article'
@@ -257,8 +269,10 @@ def article_create_view(request):
 @staff_member_required
 def article_edit_view(request, pk):
     article = get_object_or_404(Article, pk=pk)
+    form = ArticleForm(instance=article)
     categories = ArticleCategory.objects.all()
     context = {
+        'form': form,
         'article': article,
         'categories': categories,
         'action': 'edit',
