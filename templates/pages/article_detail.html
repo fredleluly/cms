@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }} - Matana News{% endblock %}
+
+{% block extra_css %}
+<style>
+    .article-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .article-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.5rem;
+        margin: 2rem 0;
+    }
+    
+    .article-content h2 {
+        font-size: 1.875rem;
+        font-weight: bold;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .article-content p {
+        margin-bottom: 1.5rem;
+        line-height: 1.8;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Article Header -->
+<header class="bg-gradient-to-r from-matana-blue to-blue-900 py-20 text-white">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex items-center gap-4 mb-6">
+                <a href="{% url 'news' %}" class="text-white/80 hover:text-white">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Back to News
+                </a>
+                <span class="text-white/30">|</span>
+                <a href="{% url 'news' %}?category={{ article.category.slug }}" 
+                   class="text-matana-yellow hover:text-yellow-400">
+                    {{ article.category.name }}
+                </a>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">{{ article.title }}</h1>
+            <div class="flex items-center gap-6 text-white/80">
+                <span>
+                    <i class="far fa-calendar mr-2"></i>
+                    {{ article.published_at|date:"F j, Y" }}
+                </span>
+                <span>
+                    <i class="far fa-clock mr-2"></i>
+                    {{ article.reading_time }} min read
+                </span>
+                <span>
+                    <i class="far fa-user mr-2"></i>
+                    {{ article.created_by.get_full_name|default:article.created_by.username }}
+                </span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Article Content -->
+<article class="py-16">
+    <div class="container mx-auto px-4">
+        <!-- Featured Image -->
+        <div class="max-w-4xl mx-auto mb-12">
+            <img src="{{ article.featured_image.url }}" 
+                 alt="{{ article.title }}" 
+                 class="w-full h-auto rounded-xl shadow-lg">
+        </div>
+        
+        <!-- Content -->
+        <div class="article-content prose prose-lg">
+            {{ article.content|safe }}
+        </div>
+        
+        <!-- Share Buttons -->
+        <div class="max-w-4xl mx-auto mt-12 pt-12 border-t">
+            <div class="flex items-center justify-between">
+                <div class="text-gray-600">Share this article:</div>
+                <div class="flex gap-4">
+                    <!-- Add your social share buttons here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+
+<!-- Related Articles -->
+{% if related_articles %}
+<section class="py-16 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold mb-8">Related Articles</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            {% for related in related_articles %}
+                {% include "pages/includes/article_card.html" with article=related %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock %} 

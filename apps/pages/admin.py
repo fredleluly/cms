@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Page, ContentBlock
+from .models import Page, ContentBlock, Article, ArticleCategory
 
 class ContentBlockInline(admin.StackedInline):
     model = ContentBlock
@@ -48,6 +48,43 @@ class ContentBlockAdmin(admin.ModelAdmin):
     list_filter = ('content_type', 'page')
     search_fields = ('identifier', 'page__title')
     readonly_fields = ('created_at', 'updated_at', 'created_by', 'updated_by')
+
+    def save_model(self, request, obj, form, change):
+        if not obj.pk:  # New instance
+            obj.created_by = request.user
+        obj.updated_by = request.user
+        super().save_model(request, obj, form, change)
+
+@admin.register(ArticleCategory)
+class ArticleCategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug')
+    prepopulated_fields = {'slug': ('name',)}
+    search_fields = ('name',)
+
+@admin.register(Article)
+class ArticleAdmin(admin.ModelAdmin):
+    list_display = ('title', 'category', 'status', 'is_featured', 'published_at', 'created_by')
+    list_filter = ('status', 'category', 'is_featured', 'created_at')
+    search_fields = ('title', 'excerpt', 'content')
+    prepopulated_fields = {'slug': ('title',)}
+    date_hierarchy = 'created_at'
+    readonly_fields = ('created_at', 'updated_at', 'created_by', 'updated_by')
+    fieldsets = (
+        (None, {
+            'fields': ('title', 'slug', 'category', 'featured_image', 'excerpt', 'content')
+        }),
+        ('Publishing', {
+            'fields': ('status', 'is_featured', 'published_at')
+        }),
+        ('SEO', {
+            'fields': ('meta_description', 'meta_keywords'),
+            'classes': ('collapse',)
+        }),
+        ('Metadata', {
+            'fields': ('created_at', 'updated_at', 'created_by', 'updated_by'),
+            'classes': ('collapse',)
+        }),
+    )
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:  # New instance

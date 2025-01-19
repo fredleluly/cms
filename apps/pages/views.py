@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import Http404
 from django.core.cache import cache
-from .models import Page
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models import Q, Count
+from .models import Page, Article, ArticleCategory
 
 # Create your views here.
 
@@ -54,3 +56,77 @@ def page_view(request, slug):
     }
     
     return render(request, template_name, context)
+
+def news_view(request):
+    # Get query parameters with defaults
+    category_slug = request.GET.get('category', '')
+    search_query = request.GET.get('search', '').strip()
+    page_number = request.GET.get('page', 1)
+    
+    # Base queryset with select_related for performance
+    articles = Article.objects.select_related('category', 'created_by').filter(status='published')
+    
+    # Apply filters
+    if category_slug:
+        articles = articles.filter(category__slug=category_slug)
+    if search_query:
+        articles = articles.filter(
+            Q(title__icontains=search_query) |
+            Q(excerpt__icontains=search_query) |
+            Q(content__icontains=search_query)
+        )
+    
+    # Featured article - only show if no search/filter is active
+    featured_article = None
+    if not (category_slug or search_query):
+        featured_article = articles.filter(is_featured=True).first()
+        if featured_article:
+            articles = articles.exclude(id=featured_article.id)
+    
+    # Get total count before pagination
+    total_count = articles.count()
+    
+    # Pagination
+    paginator = Paginator(articles, 9)  # 9 articles per page
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    
+    # Get all categories with article counts
+    categories = ArticleCategory.objects.annotate(
+        article_count=Count('articles', filter=Q(articles__status='published'))
+    )
+    
+    context = {
+        'featured_article': featured_article,
+        'page_obj': page_obj,
+        'categories': categories,
+        'current_category': category_slug,
+        'search_query': search_query,
+        'total_articles': total_count,
+    }
+    
+    return render(request, 'pages/news.html', context)
+
+def article_detail_view(request, slug):
+    article = get_object_or_404(
+        Article.objects.select_related('category', 'created_by'),
+        slug=slug,
+        status='published'
+    )
+    
+    # Get related articles
+    related_articles = Article.objects.select_related('category').filter(
+        category=article.category,
+        status='published'
+    ).exclude(id=article.id)[:3]
+    
+    context = {
+        'article': article,
+        'related_articles': related_articles,
+    }
+    
+    return render(request, 'pages/article_detail.html', context)

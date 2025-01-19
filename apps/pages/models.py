@@ -4,6 +4,9 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 import json
+from ckeditor.fields import RichTextField
+from django.utils import timezone
+from django.urls import reverse
 
 User = get_user_model()
 
@@ -101,3 +104,83 @@ class ContentBlock(models.Model):
 
     def __str__(self):
         return f"{self.page.title} - {self.identifier}"
+
+class ArticleCategory(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    description = models.TextField(blank=True)
+    
+    class Meta:
+        verbose_name_plural = "Article Categories"
+    
+    def __str__(self):
+        return self.name
+
+class Article(models.Model):
+    STATUS_CHOICES = [
+        ('draft', 'Draft'),
+        ('published', 'Published'),
+    ]
+
+    title = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True)
+    category = models.ForeignKey(ArticleCategory, on_delete=models.PROTECT, related_name='articles')
+    featured_image = models.ImageField(upload_to='articles/%Y/%m/')
+    excerpt = models.TextField(help_text="A short description that will appear in article lists")
+    content = RichTextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+    is_featured = models.BooleanField(default=False)
+    meta_description = models.CharField(max_length=160, blank=True, help_text="SEO meta description")
+    meta_keywords = models.CharField(max_length=200, blank=True, help_text="SEO meta keywords")
+    
+    # Timestamps and author info
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    published_at = models.DateTimeField(null=True, blank=True)
+    created_by = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        related_name='created_articles'
+    )
+    updated_by = models.ForeignKey(
+        User, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        related_name='updated_articles'
+    )
+
+    class Meta:
+        ordering = ['-published_at', '-created_at']
+        indexes = [
+            models.Index(fields=['-published_at', '-created_at']),
+            models.Index(fields=['status', '-published_at']),
+        ]
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        
+        # Set published_at when status changes to published
+        if self.status == 'published' and not self.published_at:
+            self.published_at = timezone.now()
+        
+        # Ensure only one featured article
+        if self.is_featured:
+            Article.objects.filter(is_featured=True).update(is_featured=False)
+            
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('article_detail', kwargs={'slug': self.slug})
+
+    @property
+    def reading_time(self):
+        """Estimates reading time in minutes"""
+        words_per_minute = 200
+        word_count = len(self.content.split())
+        minutes = word_count // words_per_minute
+        return max(1, minutes)  # Minimum 1 minute
