@@ -30,6 +30,32 @@
 </style>
 {% endblock %}
 
+{% block extra_head %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": "{{ article.title }}",
+    "image": "{{ request.scheme }}://{{ request.get_host }}{{ article.featured_image.url }}",
+    "datePublished": "{{ article.published_at|date:'c' }}",
+    "dateModified": "{{ article.updated_at|date:'c' }}",
+    "author": {
+        "@type": "Organization",
+        "name": "Matana University"
+    },
+    "publisher": {
+        "@type": "Organization",
+        "name": "Matana University",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "{{ request.scheme }}://{{ request.get_host }}{% static 'images/logo.png' %}"
+        }
+    },
+    "description": "{{ article.get_meta_description }}"
+}
+</script>
+{% endblock %}
+
 {% block content %}
 <!-- Article Header -->
 <header class="bg-gradient-to-r from-matana-blue to-blue-900 py-20 text-white">

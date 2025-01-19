@@ -37,13 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'django.contrib.sitemaps',
+    'django.contrib.sites',
+
     # Third party apps
     'ckeditor',  # for rich text editing
     
     # Local apps
     'apps.pages.apps.PagesConfig',
 ]
+
+SITE_ID = 1
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,7 +58,80 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+    # Tambahkan middleware keamanan tambahan
+    'django.middleware.security.SecurityMiddleware',
+    'csp.middleware.CSPMiddleware',  # Content Security Policy
 ]
+
+# Security Settings
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_HSTS_SECONDS = 31536000  # 1 tahun
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+if DEBUG:
+    # Disable all security redirects and related features
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_HSTS_SECONDS = 0
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+    SECURE_HSTS_PRELOAD = False
+    SECURE_PROXY_SSL_HEADER = None
+    
+    # Remove SecurityMiddleware in development
+    MIDDLEWARE = [m for m in MIDDLEWARE if m != 'django.middleware.security.SecurityMiddleware']
+else:
+    # Use HTTPS in production
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+
+# Content Security Policy
+CSP_DEFAULT_SRC = ("'self'",)
+
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+    "'unsafe-eval'",
+    "https://cdn.tailwindcss.com",
+    "https://unpkg.com",
+    "https://cdnjs.cloudflare.com",
+    "https://cdn.quilljs.com",
+)
+
+CSP_STYLE_SRC = (
+    "'self'",
+    "'unsafe-inline'",
+    "https://cdn.tailwindcss.com",
+    "https://cdnjs.cloudflare.com",
+    "https://fonts.googleapis.com",
+)
+
+CSP_FONT_SRC = (
+    "'self'",
+    "https://cdnjs.cloudflare.com",
+    "https://fonts.gstatic.com",
+)
+
+CSP_IMG_SRC = (
+    "'self'",
+    "data:",
+    "https:",
+    "blob:",
+)
+
+CSP_CONNECT_SRC = (
+    "'self'",
+    "https:",
+)
+
+# Disable CSP in development
+if DEBUG:
+    MIDDLEWARE = [m for m in MIDDLEWARE if m != 'csp.middleware.CSPMiddleware']
 
 ROOT_URLCONF = 'config.urls'
 

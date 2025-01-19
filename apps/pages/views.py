@@ -11,6 +11,9 @@ from django.utils import timezone
 from django.core.files.storage import default_storage
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
+from django.core.exceptions import PermissionDenied
+from functools import wraps
+import time
 
 # Create your views here.
 
@@ -312,3 +315,45 @@ def profile_view(request):
         ]
     }
     return render(request, 'pages/profile.html', context)
+
+def ratelimit(key='ip', rate='5/m'):
+    def decorator(func):
+        @wraps(func)
+        def wrapped(request, *args, **kwargs):
+            if request.user.is_staff:  # Skip untuk admin
+                return func(request, *args, **kwargs)
+                
+            # Get identifier (IP address atau user ID)
+            if key == 'ip':
+                ident = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR'))
+            else:
+                ident = request.user.id
+                
+            # Parse rate limit
+            count, period = rate.split('/')
+            count = int(count)
+            multiplier = {'s': 1, 'm': 60, 'h': 3600, 'd': 86400}
+            period = int(period[:-1]) * multiplier[period[-1]]
+            
+            # Check cache
+            cache_key = f'ratelimit_{func.__name__}_{ident}'
+            requests = cache.get(cache_key, [])
+            now = time.time()
+            
+            # Clean old requests
+            requests = [req for req in requests if now - req < period]
+            
+            if len(requests) >= count:
+                raise PermissionDenied('Rate limit exceeded')
+                
+            requests.append(now)
+            cache.set(cache_key, requests, period)
+            
+            return func(request, *args, **kwargs)
+        return wrapped
+    return decorator
+
+@ratelimit(rate='3/m')
+def contact_form_view(request):
+    # View logic here
+    pass

@@ -7,6 +7,10 @@ import json
 from ckeditor.fields import RichTextField
 from django.utils import timezone
 from django.urls import reverse
+from django.utils.html import strip_tags
+import os
+from django.utils.safestring import mark_safe
+import bleach
 
 User = get_user_model()
 
@@ -116,6 +120,12 @@ class ArticleCategory(models.Model):
     def __str__(self):
         return self.name
 
+def validate_file_extension(value):
+    ext = os.path.splitext(value.name)[1]
+    valid_extensions = ['.jpg', '.jpeg', '.png', '.gif']
+    if not ext.lower() in valid_extensions:
+        raise ValidationError('Unsupported file extension.')
+
 class Article(models.Model):
     STATUS_CHOICES = [
         ('draft', 'Draft'),
@@ -125,13 +135,16 @@ class Article(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     category = models.ForeignKey(ArticleCategory, on_delete=models.PROTECT, related_name='articles')
-    featured_image = models.ImageField(upload_to='articles/%Y/%m/')
+    featured_image = models.ImageField(
+        upload_to='articles/',
+        validators=[validate_file_extension]
+    )
     excerpt = models.TextField(help_text="A short description that will appear in article lists")
     content = RichTextField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
     is_featured = models.BooleanField(default=False)
     meta_description = models.CharField(max_length=160, blank=True, help_text="SEO meta description")
-    meta_keywords = models.CharField(max_length=200, blank=True, help_text="SEO meta keywords")
+    meta_keywords = models.CharField(max_length=255, blank=True, help_text="SEO keywords (comma-separated)")
     
     # Timestamps and author info
     created_at = models.DateTimeField(auto_now_add=True)
@@ -184,3 +197,29 @@ class Article(models.Model):
         word_count = len(self.content.split())
         minutes = word_count // words_per_minute
         return max(1, minutes)  # Minimum 1 minute
+
+    def get_meta_description(self):
+        if self.meta_description:
+            return self.meta_description
+        return strip_tags(self.excerpt)[:160]
+
+    def clean(self):
+        if self.featured_image and self.featured_image.size > 5*1024*1024:  # 5MB
+            raise ValidationError('File too large')
+
+    def get_safe_content(self):
+        allowed_tags = [
+            'p', 'br', 'strong', 'em', 'u', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+            'img', 'a', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre'
+        ]
+        allowed_attrs = {
+            'a': ['href', 'title', 'rel'],
+            'img': ['src', 'alt', 'title']
+        }
+        cleaned_content = bleach.clean(
+            self.content,
+            tags=allowed_tags,
+            attributes=allowed_attrs,
+            strip=True
+        )
+        return mark_safe(cleaned_content)

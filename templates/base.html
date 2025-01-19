@@ -4,7 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Matana University - World Class Learning Experience">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}Matana University - Perguruan tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}universitas matana, kuliah, pendidikan tinggi, gading serpong, tangerang{% endblock %}">
+    <meta name="author" content="Matana University">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{% block og_title %}{{ self.title }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ self.meta_description }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% static 'images/matana-og.jpg' %}{% endblock %}">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ self.og_title }}">
+    <meta name="twitter:description" content="{{ self.og_description }}">
+    <meta name="twitter:image" content="{{ self.og_image }}">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    
     <title>{% block title %}Matana University{% endblock %}</title>
     
     <!-- Favicon -->

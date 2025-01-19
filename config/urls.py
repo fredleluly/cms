@@ -24,10 +24,22 @@ from apps.pages.views import (
     article_save_view, article_delete_view, article_quick_update,
     profile_view
 )
+from django.contrib.sitemaps.views import sitemap
+from apps.pages.sitemaps import ArticleSitemap, StaticViewSitemap
+from django.views.generic import TemplateView
+from .sitemap import StaticViewSitemap
+
+# Define sitemaps dictionary before using it
+sitemaps = {
+    'articles': ArticleSitemap,
+    'static': StaticViewSitemap,
+}
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),
     path('matana-news/', news_view, name='news'),
     path('profil-matana/', profile_view, name='profile'),
     path('dashboard/content/', dashboard_view, name='content_dashboard'),
