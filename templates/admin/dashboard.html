@@ -1,499 +1,257 @@
-{% extends "base.html" %}
+{% extends "admin/base_admin.html" %}
 {% load static %}
 
-{% block title %}Content Dashboard - Matana CMS{% endblock %}
+{% block title %}Dashboard - Matana CMS{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_subtitle %}Content overview and analytics{% endblock %}
 
 {% block extra_css %}
 <style>
-    .dashboard-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 2rem;
-    }
-
-    /* Modern Stats Cards */
-    .stats-grid {
+    /* Analytics Cards */
+    .analytics-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 1.5rem;
         margin-bottom: 2rem;
     }
 
-    .stats-card {
+    .analytics-card {
         background: white;
         border-radius: 1.5rem;
         padding: 1.5rem;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s ease;
         border: 1px solid #e5e7eb;
+        transition: all 0.3s ease;
     }
 
-    .stats-card:hover {
+    .analytics-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
-    .stats-card::before {
+    /* Activity Timeline */
+    .timeline {
+        position: relative;
+        padding-left: 2rem;
+    }
+
+    .timeline::before {
         content: '';
         position: absolute;
-        top: 0;
         left: 0;
-        right: 0;
-        height: 4px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #e5e7eb;
     }
 
-    .stats-card.primary::before { background: #4f46e5; }
-    .stats-card.success::before { background: #10b981; }
-    .stats-card.warning::before { background: #f59e0b; }
-
-    /* Search & Filter Section */
-    .filter-section {
-        background: white;
-        border-radius: 1.5rem;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
-        border: 1px solid #e5e7eb;
+    .timeline-item {
+        position: relative;
+        padding-bottom: 1.5rem;
     }
 
-    .search-input {
-        background: #f9fafb;
-        border: 2px solid #e5e7eb;
-        border-radius: 1rem;
-        padding: 0.75rem 1rem;
-        padding-left: 2.5rem;
-        width: 100%;
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -2rem;
+        top: 0.25rem;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        border: 2px solid white;
+        background: #4f46e5;
+    }
+
+    /* Quick Actions */
+    .quick-action {
         transition: all 0.3s ease;
     }
 
-    .search-input:focus {
-        background: white;
-        border-color: #4f46e5;
-        box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-    }
-
-    /* Modern Table Design */
-    .content-table {
-        background: white;
-        border-radius: 1.5rem;
-        overflow: hidden;
-        border: 1px solid #e5e7eb;
-    }
-
-    .table-header {
-        background: #f8fafc;
-        padding: 1rem 1.5rem;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-
-    th {
-        background: #f8fafc;
-        padding: 1rem;
-        font-weight: 600;
-        text-align: left;
-        color: #4b5563;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
-    td {
-        padding: 1rem;
-        border-bottom: 1px solid #e5e7eb;
-        vertical-align: middle;
-    }
-
-    tr:last-child td {
-        border-bottom: none;
-    }
-
-    tr:hover td {
-        background: #f9fafb;
-    }
-
-    /* Status Badges */
-    .status-badge {
-        padding: 0.375rem 0.75rem;
-        border-radius: 9999px;
-        font-size: 0.875rem;
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.375rem;
-    }
-
-    .status-draft {
-        background: #fff7ed;
-        color: #9a3412;
-    }
-
-    .status-published {
-        background: #ecfdf5;
-        color: #065f46;
-    }
-
-    /* Action Buttons */
-    .action-button {
-        padding: 0.5rem;
-        border-radius: 0.75rem;
-        transition: all 0.2s ease;
-        color: #6b7280;
-    }
-
-    .action-button:hover {
-        background: #f3f4f6;
-        color: #111827;
-    }
-
-    /* Create Button */
-    .create-button {
-        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-        color: white;
-        padding: 0.75rem 1.5rem;
-        border-radius: 1rem;
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-    }
-
-    .create-button:hover {
+    .quick-action:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
     }
 
-    /* Pagination */
-    .pagination {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-top: 2rem;
-    }
-
-    .page-item {
-        min-width: 2.5rem;
-        height: 2.5rem;
-        border-radius: 0.75rem;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 500;
-        transition: all 0.2s ease;
-    }
-
-    .page-item:hover {
-        background: #f3f4f6;
-    }
-
-    .page-item.active {
+    .quick-action:hover .quick-action-icon {
         background: #4f46e5;
         color: white;
+    }
+
+    .quick-action-icon {
+        transition: all 0.3s ease;
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gray-50">
-    <div class="dashboard-container">
-        <!-- Header Section -->
-        <div class="flex justify-between items-center mb-8">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Content Management</h1>
-                <p class="text-gray-600">Manage your articles and content</p>
+<div class="space-y-8">
+    <!-- Quick Stats -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="bg-white p-6 rounded-xl border border-gray-200">
+            <div class="flex items-center justify-between mb-4">
+                <div class="text-sm font-medium text-gray-500">Total Articles</div>
+                <span class="text-2xl font-bold text-gray-900">{{ total_articles }}</span>
             </div>
-            <a href="{% url 'article_create' %}" class="create-button">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                </svg>
-                Create Article
-            </a>
-        </div>
-
-        <!-- Stats Grid -->
-        <div class="stats-grid">
-            <div class="stats-card primary">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Total Articles</h3>
-                    <span class="text-3xl font-bold text-gray-900">{{ total_articles }}</span>
-                </div>
-                <div class="text-sm text-gray-600">
-                    All articles in your system
-                </div>
-            </div>
-
-            <div class="stats-card success">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Published</h3>
-                    <span class="text-3xl font-bold text-gray-900">{{ published_count }}</span>
-                </div>
-                <div class="text-sm text-gray-600">
-                    Live articles on your site
-                </div>
-            </div>
-
-            <div class="stats-card warning">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-900">Drafts</h3>
-                    <span class="text-3xl font-bold text-gray-900">{{ draft_count }}</span>
-                </div>
-                <div class="text-sm text-gray-600">
-                    Articles in progress
-                </div>
+            <div class="flex items-center justify-between text-sm">
+                <span class="text-green-600">Published: {{ published_count }}</span>
+                <span class="text-orange-600">Drafts: {{ draft_count }}</span>
             </div>
         </div>
 
-        <!-- Filter Section -->
-        <div class="filter-section">
-            <div class="grid md:grid-cols-3 gap-4">
-                <div class="relative">
-                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        <div class="bg-white p-6 rounded-xl border border-gray-200">
+            <div class="flex items-center justify-between mb-4">
+                <div class="text-sm font-medium text-gray-500">Categories</div>
+                <span class="text-2xl font-bold text-gray-900">{{ categories.count }}</span>
+            </div>
+            <div class="text-sm text-gray-600">
+                Active categories with content
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-gray-200">
+            <div class="flex items-center justify-between mb-4">
+                <div class="text-sm font-medium text-gray-500">Recent Views</div>
+                <span class="text-2xl font-bold text-gray-900">2.4K</span>
+            </div>
+            <div class="text-sm text-green-600">
+                ↑ 12% from last week
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-xl border border-gray-200">
+            <div class="flex items-center justify-between mb-4">
+                <div class="text-sm font-medium text-gray-500">Engagement</div>
+                <span class="text-2xl font-bold text-gray-900">85%</span>
+            </div>
+            <div class="text-sm text-green-600">
+                ↑ 7% from last month
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <a href="{% url 'article_create' %}" 
+           class="group bg-white p-6 rounded-xl border border-gray-200 hover:border-indigo-500 transition-all">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center group-hover:bg-indigo-500">
+                    <svg class="w-6 h-6 text-indigo-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
-                    <input type="search" 
-                           placeholder="Search articles..." 
-                           class="search-input"
-                           value="{{ search_query }}">
                 </div>
-                <select name="category" class="search-input">
-                    <option value="">All Categories</option>
-                    {% for category in categories %}
-                    <option value="{{ category.id }}" 
-                            {% if selected_category == category.id %}selected{% endif %}>
-                        {{ category.name }} ({{ category.article_count }})
-                    </option>
-                    {% endfor %}
-                </select>
-                <select name="status" class="search-input">
-                    <option value="">All Status</option>
-                    <option value="published" {% if selected_status == 'published' %}selected{% endif %}>Published</option>
-                    <option value="draft" {% if selected_status == 'draft' %}selected{% endif %}>Draft</option>
-                </select>
+                <div>
+                    <h3 class="font-semibold text-gray-900">New Article</h3>
+                    <p class="text-sm text-gray-500">Create a new article</p>
+                </div>
+            </div>
+        </a>
+
+        <a href="{% url 'article_list' %}" 
+           class="group bg-white p-6 rounded-xl border border-gray-200 hover:border-indigo-500 transition-all">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center group-hover:bg-indigo-500">
+                    <svg class="w-6 h-6 text-indigo-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-900">Manage Articles</h3>
+                    <p class="text-sm text-gray-500">View and edit all articles</p>
+                </div>
+            </div>
+        </a>
+
+        <button onclick="openCategoryModal()" 
+                class="group bg-white p-6 rounded-xl border border-gray-200 hover:border-indigo-500 transition-all text-left">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center group-hover:bg-indigo-500">
+                    <svg class="w-6 h-6 text-indigo-600 group-hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-900">New Category</h3>
+                    <p class="text-sm text-gray-500">Create a new category</p>
+                </div>
+            </div>
+        </button>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Recent Articles -->
+        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="font-semibold text-gray-900">Recent Articles</h3>
+            </div>
+            <div class="divide-y divide-gray-200">
+                {% for article in articles|slice:":5" %}
+                <div class="p-6 flex items-center justify-between hover:bg-gray-50">
+                    <div class="flex items-center gap-4">
+                        {% if article.featured_image %}
+                        <img src="{{ article.featured_image.url }}" alt="" class="w-12 h-12 rounded-lg object-cover">
+                        {% else %}
+                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h4 class="font-medium text-gray-900">{{ article.title }}</h4>
+                            <p class="text-sm text-gray-500">{{ article.created_at|date:"M j, Y" }}</p>
+                        </div>
+                    </div>
+                    <a href="{% url 'article_edit' pk=article.pk %}" 
+                       class="text-indigo-600 hover:text-indigo-800">Edit →</a>
+                </div>
+                {% endfor %}
             </div>
         </div>
 
-        <!-- Content Table -->
-        <div class="content-table">
-            <div class="table-header">
-                <h2 class="text-lg font-semibold text-gray-900">Articles</h2>
+        <!-- Category Overview -->
+        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <h3 class="font-semibold text-gray-900">Categories Overview</h3>
             </div>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Status</th>
-                            <th>Author</th>
-                            <th>Last Updated</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for article in articles %}
-                        <tr>
-                            <td class="font-medium text-gray-900">
-                                {{ article.title }}
-                                {% if article.is_featured %}
-                                <span class="ml-2 text-xs font-medium text-yellow-600">Featured</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <span class="text-sm text-gray-600">
-                                    {{ article.category.name }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="status-badge {% if article.status == 'published' %}status-published{% else %}status-draft{% endif %}">
-                                    {% if article.status == 'published' %}
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    {% else %}
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                                    </svg>
-                                    {% endif %}
-                                    {{ article.status|title }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="text-sm text-gray-600">
-                                    {{ article.created_by.get_full_name|default:article.created_by.username }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="text-sm text-gray-600">
-                                    {{ article.updated_at|date:"M j, Y" }}
-                                </span>
-                            </td>
-                            <td>
-                                <div class="flex items-center gap-2">
-                                    <a href="{% url 'article_edit' article.id %}" 
-                                       class="action-button" 
-                                       title="Edit">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                    </a>
-                                    <button onclick="toggleFeatured({{ article.id }}, {{ article.is_featured|lower }})"
-                                            class="action-button"
-                                            title="Toggle Featured">
-                                        <svg class="w-5 h-5" fill="{% if article.is_featured %}currentColor{% else %}none{% endif %}" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
-                                        </svg>
-                                    </button>
-                                    <button onclick="deleteArticle({{ article.id }}, '{{ article.title|escapejs }}')"
-                                            class="action-button text-red-600 hover:text-red-700"
-                                            title="Delete">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="6" class="text-center py-8">
-                                <div class="max-w-sm mx-auto">
-                                    <svg class="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                    </svg>
-                                    <h3 class="text-lg font-medium text-gray-900 mb-1">No articles found</h3>
-                                    <p class="text-gray-600">Get started by creating your first article</p>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="divide-y divide-gray-200">
+                {% for category in categories|slice:":5" %}
+                <div class="p-6 flex items-center justify-between hover:bg-gray-50">
+                    <div>
+                        <h4 class="font-medium text-gray-900">{{ category.name }}</h4>
+                        <p class="text-sm text-gray-500">{{ category.article_count }} articles</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-0.5 bg-indigo-100 text-indigo-800 rounded-full text-xs font-medium">
+                            {{ category.article_count }} articles
+                        </span>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
-
-        <!-- Pagination -->
-        {% if articles.has_other_pages %}
-        <div class="pagination">
-            {% if articles.has_previous %}
-            <a href="?page={{ articles.previous_page_number }}" class="page-item">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-            </a>
-            {% endif %}
-
-            {% for num in articles.paginator.page_range %}
-                {% if articles.number == num %}
-                    <span class="page-item active">{{ num }}</span>
-                {% elif num > articles.number|add:'-3' and num < articles.number|add:'3' %}
-                    <a href="?page={{ num }}" class="page-item">{{ num }}</a>
-                {% endif %}
-            {% endfor %}
-
-            {% if articles.has_next %}
-            <a href="?page={{ articles.next_page_number }}" class="page-item">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </a>
-            {% endif %}
-        </div>
-        {% endif %}
     </div>
 </div>
+
+<!-- Category Modal -->
+{% include "admin/includes/category_modal.html" %}
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    // Filter handling with debounce
-    function debounce(func, wait) {
-        let timeout;
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
+    function openCategoryModal() {
+        document.getElementById('categoryModal').classList.remove('hidden');
+        document.getElementById('categoryModal').classList.add('flex');
     }
 
-    const searchInput = document.querySelector('input[type="search"]');
-    const categorySelect = document.querySelector('select[name="category"]');
-    const statusSelect = document.querySelector('select[name="status"]');
-
-    const updateFilters = debounce(() => {
-        const url = new URL(window.location.href);
-        
-        if (searchInput.value.trim()) {
-            url.searchParams.set('search', searchInput.value.trim());
-        } else {
-            url.searchParams.delete('search');
-        }
-        
-        if (categorySelect.value) {
-            url.searchParams.set('category', categorySelect.value);
-        } else {
-            url.searchParams.delete('category');
-        }
-        
-        if (statusSelect.value) {
-            url.searchParams.set('status', statusSelect.value);
-        } else {
-            url.searchParams.delete('status');
-        }
-        
-        url.searchParams.delete('page');
-        window.location.href = url.toString();
-    }, 500);
-
-    searchInput.addEventListener('input', updateFilters);
-    categorySelect.addEventListener('change', updateFilters);
-    statusSelect.addEventListener('change', updateFilters);
-
-    // Article actions
-    async function toggleFeatured(articleId, currentValue) {
-        try {
-            const response = await fetch(`/dashboard/content/${articleId}/quick-update/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: `field=is_featured&value=${!currentValue}`
-            });
-            
-            if (response.ok) {
-                window.location.reload();
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
+    function closeCategoryModal() {
+        document.getElementById('categoryModal').classList.add('hidden');
+        document.getElementById('categoryModal').classList.remove('flex');
     }
 
-    function deleteArticle(articleId, title) {
-        if (confirm(`Are you sure you want to delete "${title}"?`)) {
-            fetch(`/dashboard/content/${articleId}/delete/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                }
-            }).then(response => {
-                if (response.ok) {
-                    window.location.reload();
-                }
-            });
+    // Close modal when clicking outside
+    document.getElementById('categoryModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCategoryModal();
         }
-    }
+    });
 </script>
 {% endblock %} 

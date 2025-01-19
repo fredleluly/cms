@@ -1,58 +1,55 @@
-{% extends "base.html" %}
+{% extends "admin/base_admin.html" %}
 {% load static %}
 
 {% block title %}{{ title }} - Matana CMS{% endblock %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block page_subtitle %}Create and publish engaging content{% endblock %}
 
 {% block extra_css %}
 <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 <style>
-    /* Modern UI Styles */
-    .page-container {
-        background: linear-gradient(135deg, #f6f9fc 0%, #f1f4f9 100%);
-        min-height: 100vh;
+    /* Form Layout */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: 2rem;
     }
 
-    .form-container {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 2rem;
+    @media (max-width: 1024px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
     }
 
-    .header-card {
-        background: white;
-        border-radius: 1.5rem;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
-    }
-
+    /* Card Styles */
     .content-card {
         background: white;
-        border-radius: 1.5rem;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        border-radius: 1rem;
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
         transition: all 0.3s ease;
     }
 
     .content-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
 
     .card-header {
-        padding: 1.5rem;
-        border-bottom: 1px solid #f1f4f9;
+        padding: 1.25rem;
+        border-bottom: 1px solid #e5e7eb;
+        background: #f8fafc;
     }
 
     .card-body {
-        padding: 1.5rem;
+        padding: 1.25rem;
     }
 
-    /* Modern Form Controls */
+    /* Form Controls */
     .form-input {
         width: 100%;
         padding: 0.75rem 1rem;
         border: 2px solid #e5e7eb;
-        border-radius: 1rem;
+        border-radius: 0.75rem;
         transition: all 0.3s ease;
         font-size: 1rem;
         line-height: 1.5;
@@ -65,76 +62,39 @@
     }
 
     .form-label {
+        display: block;
         font-weight: 500;
+        font-size: 0.875rem;
         color: #374151;
         margin-bottom: 0.5rem;
-        display: block;
     }
 
     /* Editor Customization */
     .ql-container {
         font-family: 'Inter', sans-serif !important;
-        font-size: 16px !important;
-        height: 400px !important;
-        border-radius: 0 0 1rem 1rem !important;
+        font-size: 1rem !important;
+        border-radius: 0 0 0.75rem 0.75rem !important;
         border-color: #e5e7eb !important;
     }
 
     .ql-toolbar {
-        border-radius: 1rem 1rem 0 0 !important;
+        border-radius: 0.75rem 0.75rem 0 0 !important;
         border-color: #e5e7eb !important;
         background: #f8fafc !important;
     }
 
     .ql-editor {
-        padding: 1.5rem !important;
-        line-height: 1.8 !important;
-    }
-
-    .ql-editor img {
-        max-width: 100%;
-        height: auto;
-        display: block;
-        margin: 1rem auto;
-    }
-
-    /* Modern Buttons */
-    .btn {
-        padding: 0.75rem 1.5rem;
-        border-radius: 1rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
-        color: white;
-        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
-    }
-
-    .btn-secondary {
-        background: white;
-        border: 2px solid #e5e7eb;
-        color: #374151;
-    }
-
-    .btn-secondary:hover {
-        background: #f9fafb;
-        border-color: #d1d5db;
+        min-height: 400px !important;
+        padding: 1.25rem !important;
     }
 
     /* Image Upload */
     .image-drop-zone {
         border: 2px dashed #e5e7eb;
-        border-radius: 1rem;
+        border-radius: 0.75rem;
         padding: 2rem;
         text-align: center;
-        background: #f9fafb;
+        background: #f8fafc;
         cursor: pointer;
         transition: all 0.3s ease;
     }
@@ -145,73 +105,37 @@
     }
 
     .preview-image {
-        max-height: 300px;
+        max-height: 200px;
         width: 100%;
         object-fit: cover;
-        border-radius: 1rem;
+        border-radius: 0.75rem;
     }
 
-    /* Category Modal */
-    .modal {
-        background: rgba(0,0,0,0.5);
-        backdrop-filter: blur(4px);
+    /* Save Button */
+    .save-button {
+        background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.75rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
     }
 
-    .modal-content {
-        background: white;
-        border-radius: 1.5rem;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-        max-width: 500px;
-        width: 90%;
-        transform: scale(0.95);
-        transition: transform 0.3s ease;
+    .save-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
     }
 
-    .modal.show .modal-content {
-        transform: scale(1);
-    }
-
-    /* CKEditor Customization */
-    .django-ckeditor-widget {
-        width: 100% !important;
-    }
-
-    #cke_id_content {
-        border-radius: 1rem;
-        overflow: hidden;
-        border: 2px solid #e5e7eb !important;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    .cke_top {
-        background: #f8fafc !important;
-        border-bottom: 1px solid #e5e7eb !important;
-        padding: 8px !important;
-    }
-
-    .cke_bottom {
-        background: #f8fafc !important;
-        border-top: 1px solid #e5e7eb !important;
-    }
-
-    .cke_chrome {
-        border: none !important;
-        box-shadow: none !important;
-    }
-
-    .cke_contents {
-        min-height: 400px;
-    }
-
-    /* Image Upload Progress */
+    /* Upload Progress */
     .upload-progress {
         position: fixed;
         top: 1rem;
         right: 1rem;
         background: white;
         padding: 1rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
         z-index: 50;
         display: none;
     }
@@ -219,170 +143,172 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-container py-8">
-    <div class="form-container">
-        <!-- Header Section -->
-        <div class="header-card">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ title }}</h1>
-                    <p class="text-gray-600">Create and publish engaging content for your readers</p>
+<form id="articleForm" method="POST" action="{% url 'article_save' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if article %}
+        <input type="hidden" name="article_id" value="{{ article.id }}">
+    {% endif %}
+
+    <div class="form-grid">
+        <!-- Main Content -->
+        <div class="space-y-6">
+            <!-- Title & Excerpt -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="text-lg font-semibold text-gray-900">Article Details</h2>
                 </div>
-                <div class="flex items-center gap-4">
-                    <a href="{% url 'content_dashboard' %}" class="btn btn-secondary">
-                        Cancel
-                    </a>
-                    <button type="submit" form="articleForm" name="status" value="draft" 
-                            class="btn btn-secondary">
-                        Save Draft
-                    </button>
-                    <button type="submit" form="articleForm" name="status" value="published" 
-                            class="btn btn-primary">
-                        Publish
-                    </button>
+                <div class="card-body space-y-6">
+                    <div>
+                        <label class="form-label">Title</label>
+                        <input type="text" name="title" required
+                               class="form-input text-xl"
+                               value="{{ article.title|default:'' }}"
+                               placeholder="Enter article title...">
+                    </div>
+                    <div>
+                        <label class="form-label">Excerpt</label>
+                        <textarea name="excerpt" rows="3" 
+                                  class="form-input"
+                                  placeholder="Write a brief summary...">{{ article.excerpt|default:'' }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Editor -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="text-lg font-semibold text-gray-900">Content</h2>
+                </div>
+                <div class="card-body p-0">
+                    <div id="editor">{{ article.content|safe|default:'' }}</div>
+                    <input type="hidden" name="content" id="content">
                 </div>
             </div>
         </div>
 
-        <form id="articleForm" method="POST" action="{% url 'article_save' %}" enctype="multipart/form-data">
-            {% csrf_token %}
-            {% if article %}
-                <input type="hidden" name="article_id" value="{{ article.id }}">
-            {% endif %}
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Main Content Column -->
-                <div class="lg:col-span-2 space-y-8">
-                    <!-- Title & Excerpt Card -->
-                    <div class="content-card">
-                        <div class="card-header">
-                            <h2 class="text-xl font-semibold text-gray-900">Article Details</h2>
-                        </div>
-                        <div class="card-body space-y-6">
-                            <div>
-                                <label class="form-label">Title</label>
-                                <input type="text" name="title" required
-                                       class="form-input text-xl"
-                                       value="{{ article.title|default:'' }}"
-                                       placeholder="Enter a compelling title...">
-                            </div>
-                            <div>
-                                <label class="form-label">Excerpt</label>
-                                <textarea name="excerpt" rows="3" 
-                                          class="form-input"
-                                          placeholder="Write a brief summary...">{{ article.excerpt|default:'' }}</textarea>
-                            </div>
-                        </div>
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Publish Actions -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="text-lg font-semibold text-gray-900">Publish</h2>
+                </div>
+                <div class="card-body space-y-4">
+                    <div class="flex items-center justify-between">
+                        <button type="submit" name="status" value="draft" 
+                                class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
+                            Save Draft
+                        </button>
+                        <button type="submit" name="status" value="published" 
+                                class="save-button">
+                            Publish
+                        </button>
                     </div>
+                    {% if article %}
+                    <div class="text-sm text-gray-600">
+                        Last updated: {{ article.updated_at|date:"M j, Y H:i" }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
 
-                    <!-- Content Editor Card -->
-                    <div class="content-card">
-                        <div class="card-header">
-                            <h2 class="text-xl font-semibold text-gray-900">Content</h2>
-                        </div>
-                        <div class="card-body p-0">
-                            <div id="editor">{{ article.content|safe|default:'' }}</div>
-                            <input type="hidden" name="content" id="content">
-                        </div>
+            <!-- Category -->
+            <div class="content-card">
+                <div class="card-header">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-lg font-semibold text-gray-900">Category</h2>
+                        <button type="button" 
+                                onclick="openCategoryModal()"
+                                class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                            + New Category
+                        </button>
                     </div>
                 </div>
+                <div class="card-body">
+                    <select name="category" required class="form-input">
+                        <option value="">Select Category</option>
+                        {% for category in categories %}
+                        <option value="{{ category.id }}" 
+                                {% if article.category_id == category.id %}selected{% endif %}>
+                            {{ category.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
 
-                <!-- Sidebar Column -->
-                <div class="space-y-8">
-                    <!-- Category Card -->
-                    <div class="content-card">
-                        <div class="card-header">
-                            <div class="flex justify-between items-center">
-                                <h2 class="text-xl font-semibold text-gray-900">Category</h2>
-                                <button type="button" 
-                                        onclick="openCategoryModal()"
-                                        class="text-indigo-600 hover:text-indigo-800 font-medium">
-                                    + New Category
-                                </button>
+            <!-- Featured Image -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="text-lg font-semibold text-gray-900">Featured Image</h2>
+                </div>
+                <div class="card-body">
+                    <div class="image-drop-zone" onclick="document.getElementById('imageInput').click()">
+                        {% if article.featured_image %}
+                            <img src="{{ article.featured_image.url }}" 
+                                 alt="" 
+                                 class="preview-image">
+                        {% else %}
+                            <div class="space-y-2">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">Upload Image</p>
+                                    <p class="text-xs text-gray-500">Click to browse or drag and drop</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card-body">
-                            <select name="category" required class="form-input">
-                                <option value="">Select Category</option>
-                                {% for category in categories %}
-                                <option value="{{ category.id }}" 
-                                        {% if article.category_id == category.id %}selected{% endif %}>
-                                    {{ category.name }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                        {% endif %}
                     </div>
+                    <input type="file" id="imageInput" name="featured_image" 
+                           accept="image/*" class="hidden">
+                </div>
+            </div>
 
-                    <!-- Featured Image Card -->
-                    <div class="content-card">
-                        <div class="card-header">
-                            <h2 class="text-xl font-semibold text-gray-900">Featured Image</h2>
-                        </div>
-                        <div class="card-body">
-                            <div class="image-drop-zone" onclick="document.getElementById('imageInput').click()">
-                                {% if article.featured_image %}
-                                    <img src="{{ article.featured_image.url }}" 
-                                         alt="" 
-                                         class="preview-image">
-                                {% else %}
-                                    <div class="space-y-4">
-                                        <svg class="mx-auto h-16 w-16 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                        </svg>
-                                        <div>
-                                            <p class="text-lg font-medium text-gray-900">Upload Image</p>
-                                            <p class="text-sm text-gray-500">Click to browse or drag and drop</p>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            </div>
-                            <input type="file" id="imageInput" name="featured_image" 
-                                   accept="image/*" class="hidden">
-                        </div>
+            <!-- SEO Settings -->
+            <div class="content-card">
+                <div class="card-header">
+                    <h2 class="text-lg font-semibold text-gray-900">SEO Settings</h2>
+                </div>
+                <div class="card-body space-y-4">
+                    <div>
+                        <label class="form-label">Meta Description</label>
+                        <textarea name="meta_description" rows="3" 
+                                  class="form-input"
+                                  placeholder="SEO description...">{{ article.meta_description|default:'' }}</textarea>
                     </div>
-
-                    <!-- SEO Settings Card -->
-                    <div class="content-card">
-                        <div class="card-header">
-                            <h2 class="text-xl font-semibold text-gray-900">SEO Settings</h2>
-                        </div>
-                        <div class="card-body space-y-6">
-                            <div>
-                                <label class="form-label">Meta Description</label>
-                                <textarea name="meta_description" rows="3" 
-                                          class="form-input"
-                                          placeholder="SEO description...">{{ article.meta_description|default:'' }}</textarea>
-                            </div>
-                            <div>
-                                <label class="form-label">Meta Keywords</label>
-                                <input type="text" name="meta_keywords" 
-                                       class="form-input"
-                                       value="{{ article.meta_keywords|default:'' }}"
-                                       placeholder="keyword1, keyword2, ...">
-                            </div>
-                            <div class="flex items-center">
-                                <input type="checkbox" name="is_featured" id="is_featured"
-                                       class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"
-                                       {% if article.is_featured %}checked{% endif %}>
-                                <label for="is_featured" class="ml-2 text-gray-700">
-                                    Feature this article
-                                </label>
-                            </div>
-                        </div>
+                    <div>
+                        <label class="form-label">Meta Keywords</label>
+                        <input type="text" name="meta_keywords" 
+                               class="form-input"
+                               value="{{ article.meta_keywords|default:'' }}"
+                               placeholder="keyword1, keyword2, ...">
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" name="is_featured" id="is_featured"
+                               class="w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500"
+                               {% if article.is_featured %}checked{% endif %}>
+                        <label for="is_featured" class="ml-2 text-sm text-gray-700">
+                            Feature this article
+                        </label>
                     </div>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
+</form>
+
+<!-- Upload Progress -->
+<div id="uploadProgress" class="upload-progress">
+    <p class="text-sm">Uploading image...</p>
 </div>
 
 <!-- Category Modal -->
-<div id="categoryModal" class="modal fixed inset-0 hidden items-center justify-center z-50">
-    <div class="modal-content p-8 mx-4">
+<div id="categoryModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
         <div class="flex justify-between items-center mb-6">
-            <h3 class="text-2xl font-bold text-gray-900">Create New Category</h3>
+            <h3 class="text-xl font-bold text-gray-900">Create New Category</h3>
             <button type="button" onclick="closeCategoryModal()" class="text-gray-400 hover:text-gray-500">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -406,16 +332,11 @@
                        placeholder="category-slug">
             </div>
             <button type="submit"
-                    class="btn btn-primary w-full">
+                    class="w-full save-button">
                 Create Category
             </button>
         </form>
     </div>
-</div>
-
-<!-- Add this for image upload progress -->
-<div id="uploadProgress" class="upload-progress">
-    <p class="text-sm">Uploading image...</p>
 </div>
 {% endblock %}
 
@@ -451,9 +372,7 @@
             const file = input.files[0];
             if (file) {
                 try {
-                    // Show upload progress
                     document.getElementById('uploadProgress').style.display = 'block';
-
                     const formData = new FormData();
                     formData.append('image', file);
 
@@ -483,25 +402,35 @@
     });
 
     // Handle form submission
-    document.querySelector('form').addEventListener('submit', function() {
+    document.getElementById('articleForm').addEventListener('submit', function() {
         document.getElementById('content').value = quill.root.innerHTML;
     });
 
-    // Modal functions with animations
+    // Image preview
+    document.getElementById('imageInput').addEventListener('change', function(e) {
+        if (this.files && this.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dropZone = document.querySelector('.image-drop-zone');
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'preview-image';
+                dropZone.innerHTML = '';
+                dropZone.appendChild(img);
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+
+    // Modal functions
     function openCategoryModal() {
-        const modal = document.getElementById('categoryModal');
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        setTimeout(() => modal.classList.add('show'), 50);
+        document.getElementById('categoryModal').classList.remove('hidden');
+        document.getElementById('categoryModal').classList.add('flex');
     }
 
     function closeCategoryModal() {
-        const modal = document.getElementById('categoryModal');
-        modal.classList.remove('show');
-        setTimeout(() => {
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }, 300);
+        document.getElementById('categoryModal').classList.add('hidden');
+        document.getElementById('categoryModal').classList.remove('flex');
     }
 
     // Close modal when clicking outside

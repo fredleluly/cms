@@ -1,0 +1,558 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Pendaftaran - Matana University{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Color Variables */
+    :root {
+        /* Primary Colors */
+        --primary-dark: #1B3168;
+        --primary-main: #2448A1;
+        --primary-light: #4B6FCD;
+        
+        /* Secondary Colors */
+        --secondary-dark: #C17015;
+        --secondary-main: #F08C1B;
+        --secondary-light: #FFAB48;
+        
+        /* Neutral Colors */
+        --neutral-100: #F8FAFC;
+        --neutral-200: #E2E8F0;
+        --neutral-300: #CBD5E1;
+        --neutral-600: #475569;
+        --neutral-800: #1E293B;
+        
+        /* Success/Error Colors */
+        --success: #059669;
+        --error: #DC2626;
+    }
+
+    /* Banner Section - No Crop */
+    .banner-section {
+        position: relative;
+        width: 100%;
+        /* Menggunakan min-height daripada padding-top untuk fleksibilitas */
+        min-height: 300px;
+        max-height: 500px;
+        height: auto;
+        overflow: hidden;
+        background: var(--neutral-100);
+    }
+
+    .banner-image {
+        position: relative; /* Changed from absolute */
+        display: block;
+        width: 100%;
+        height: auto; /* Let image maintain its aspect ratio */
+        max-width: 100%;
+        margin: 0 auto;
+        object-fit: contain; /* Changed from cover to contain */
+    }
+
+    /* Loading state with skeleton */
+    .banner-section.loading {
+        background: linear-gradient(
+            90deg,
+            #f0f0f0 0%,
+            #f7f7f7 50%,
+            #f0f0f0 100%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .banner-section {
+            min-height: 200px;
+        }
+    }
+
+    @media (min-width: 2000px) {
+        .banner-image {
+            max-width: 1920px; /* Limit maximum width on very large screens */
+        }
+    }
+
+    /* Program Cards */
+    .program-card {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid var(--neutral-200);
+    }
+
+    .program-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(27, 49, 104, 0.1);
+        border-color: var(--primary-main);
+    }
+
+    .program-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--primary-main);
+        transform: scaleX(0);
+        transition: transform 0.4s ease;
+        transform-origin: left;
+    }
+
+    .program-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    /* Steps Timeline */
+    .timeline-container {
+        position: relative;
+        padding-left: 3rem;
+    }
+
+    .timeline-container::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 2px;
+        background: linear-gradient(to bottom, 
+            var(--primary-main) 0%,
+            var(--primary-light) 100%);
+    }
+
+    .step-marker {
+        position: absolute;
+        left: -1rem;
+        width: 2rem;
+        height: 2rem;
+        background: white;
+        border: 2px solid var(--primary-main);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: var(--primary-main);
+        transition: all 0.3s ease;
+    }
+
+    .timeline-item:hover .step-marker {
+        background: var(--primary-main);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    /* Form Styling */
+    .form-container {
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 4px 6px rgba(27, 49, 104, 0.05),
+                    0 10px 15px rgba(27, 49, 104, 0.1);
+    }
+
+    .form-section {
+        position: relative;
+        background: linear-gradient(135deg, 
+            rgba(27, 49, 104, 0.02) 0%,
+            rgba(27, 49, 104, 0.05) 100%);
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        border: 2px solid var(--neutral-200);
+        border-radius: 0.75rem;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    .form-input:focus {
+        border-color: var(--primary-main);
+        box-shadow: 0 0 0 4px rgba(27, 49, 104, 0.1);
+        outline: none;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 500;
+        font-size: 0.875rem;
+        color: var(--neutral-800);
+        margin-bottom: 0.5rem;
+    }
+
+    /* Custom Checkbox */
+    .custom-checkbox {
+        position: relative;
+        padding-left: 2rem;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .custom-checkbox input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .checkmark {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 1.25rem;
+        width: 1.25rem;
+        background-color: white;
+        border: 2px solid var(--neutral-300);
+        border-radius: 0.375rem;
+        transition: all 0.2s ease;
+    }
+
+    .custom-checkbox:hover input ~ .checkmark {
+        border-color: var(--primary-main);
+    }
+
+    .custom-checkbox input:checked ~ .checkmark {
+        background-color: var(--primary-main);
+        border-color: var(--primary-main);
+    }
+
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 6px;
+        top: 2px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+
+    .custom-checkbox input:checked ~ .checkmark:after {
+        display: block;
+    }
+
+    /* FAQ Accordion */
+    .faq-item {
+        border: 1px solid var(--neutral-200);
+        border-radius: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .faq-item:hover {
+        border-color: var(--primary-main);
+    }
+
+    .faq-question {
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+
+    .faq-question:hover {
+        color: var(--primary-main);
+    }
+
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .faq-item.active .faq-answer {
+        max-height: 200px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Banner Section - No Crop Implementation -->
+<section class="banner-section loading">
+    <img 
+        src="{% static 'images/Banner-Alur-PMB.jpg' %}" 
+        alt="Matana University Registration Banner"
+        class="banner-image"
+        width="1920"
+        height="600"
+        loading="eager"
+        decoding="async"
+        onload="this.parentElement.classList.remove('loading')"
+    />
+</section>
+
+<!-- Programs Section -->
+<section id="programs" class="py-24 bg-neutral-100">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-neutral-800 mb-4">Program Studi Unggulan</h2>
+            <p class="text-neutral-600 max-w-2xl mx-auto">
+                Matana University menawarkan berbagai program studi yang dirancang untuk mempersiapkan mahasiswa menghadapi tantangan global
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Manajemen -->
+            <div class="program-card bg-white rounded-xl overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-primary-main/10 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-primary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-neutral-800 mb-3">Manajemen</h3>
+                    <p class="text-neutral-600 mb-6">
+                        Program studi yang mempersiapkan lulusan untuk menjadi profesional bisnis dan entrepreneur dengan pemahaman mendalam tentang manajemen modern.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-center text-sm text-neutral-600">
+                            <svg class="w-5 h-5 text-primary-main mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Durasi: 4 tahun (8 semester)
+                        </div>
+                        <div class="flex items-center text-sm text-neutral-600">
+                            <svg class="w-5 h-5 text-primary-main mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Akreditasi: Unggul
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teknik Informatika -->
+            <div class="program-card bg-white rounded-xl overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-primary-main/10 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-primary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-neutral-800 mb-3">Teknik Informatika</h3>
+                    <p class="text-neutral-600 mb-6">
+                        Mempelajari teknologi terkini dengan fokus pada pengembangan software, artificial intelligence, dan cyber security.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-center text-sm text-neutral-600">
+                            <svg class="w-5 h-5 text-primary-main mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Durasi: 4 tahun (8 semester)
+                        </div>
+                        <div class="flex items-center text-sm text-neutral-600">
+                            <svg class="w-5 h-5 text-primary-main mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Akreditasi: Baik Sekali
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sistem Informasi -->
+            <div class="program-card bg-white rounded-xl overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-primary-main/10 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-6 h-6 text-primary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-neutral-800 mb-3">Sistem Informasi</h3>
+                    <p class="text-neutral-600 mb-6">
+                        Memadukan teknologi informasi dengan proses bisnis untuk menghasilkan solusi digital yang inovatif.
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex items-center text-sm text-neutral-600">
+                            <svg class="w-5 h-5 text-primary-main mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Durasi: 4 tahun (8 semester)
+                        </div>
+                        <div class="flex items-center text-sm text-neutral-600">
+                            <svg class="w-5 h-5 text-primary-main mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            Akreditasi: Baik Sekali
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Registration Steps -->
+<section class="py-24">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-neutral-800 mb-4">Alur Pendaftaran</h2>
+            <p class="text-neutral-600 max-w-2xl mx-auto">
+                Ikuti langkah-langkah berikut untuk bergabung dengan Matana University
+            </p>
+        </div>
+
+        <div class="max-w-4xl mx-auto">
+            <div class="timeline-container space-y-12">
+                <!-- Step 1 -->
+                <div class="timeline-item">
+                    <div class="step-marker">1</div>
+                    <div class="ml-8">
+                        <h3 class="text-xl font-bold text-neutral-800 mb-2">
+                            Registrasi Online
+                        </h3>
+                        <p class="text-neutral-600">
+                            Isi formulir pendaftaran online dengan melengkapi data diri dan dokumen yang diperlukan seperti:
+                        </p>
+                        <ul class="mt-2 space-y-1 text-neutral-600">
+                            <li>• Scan Ijazah/SKL</li>
+                            <li>• Scan KTP</li>
+                            <li>• Pas Foto Terbaru</li>
+                            <li>• Transkrip Nilai</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="timeline-item">
+                    <div class="step-marker">2</div>
+                    <div class="ml-8">
+                        <h3 class="text-xl font-bold text-neutral-800 mb-2">
+                            Pembayaran Biaya Pendaftaran
+                        </h3>
+                        <p class="text-neutral-600">
+                            Lakukan pembayaran biaya pendaftaran sebesar Rp 500.000 melalui transfer bank atau virtual account yang tersedia.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="timeline-item">
+                    <div class="step-marker">3</div>
+                    <div class="ml-8">
+                        <h3 class="text-xl font-bold text-neutral-800 mb-2">
+                            Tes Seleksi
+                        </h3>
+                        <p class="text-neutral-600">
+                            Ikuti tes seleksi yang terdiri dari:
+                        </p>
+                        <ul class="mt-2 space-y-1 text-neutral-600">
+                            <li>• Tes Potensi Akademik</li>
+                            <li>• Tes Bahasa Inggris</li>
+                            <li>• Wawancara</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="timeline-item">
+                    <div class="step-marker">4</div>
+                    <div class="ml-8">
+                        <h3 class="text-xl font-bold text-neutral-800 mb-2">
+                            Pengumuman Hasil
+                        </h3>
+                        <p class="text-neutral-600">
+                            Hasil seleksi akan diumumkan maksimal 3 hari kerja setelah tes. Calon mahasiswa yang diterima akan mendapatkan email pemberitahuan dan Nomor Induk Mahasiswa (NIM).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Registration Form -->
+<section id="registration-form" class="form-section py-24">
+    <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto form-container">
+            <!-- Form content... -->
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="py-24 bg-neutral-100">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-neutral-800 mb-4">Pertanyaan Umum</h2>
+            <p class="text-neutral-600 max-w-2xl mx-auto">
+                Temukan jawaban untuk pertanyaan yang sering diajukan seputar pendaftaran
+            </p>
+        </div>
+
+        <div class="max-w-3xl mx-auto space-y-4">
+            <!-- FAQ Item 1 -->
+            <div class="faq-item bg-white p-6">
+                <div class="faq-question flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">Berapa biaya kuliah di Matana University?</h3>
+                    <svg class="w-5 h-5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="faq-answer mt-4 text-neutral-600">
+                    Biaya kuliah bervariasi tergantung program studi. Untuk informasi lebih detail, silakan hubungi bagian admisi kami di (021) 5890 1900 atau email info@matanauniversity.ac.id
+                </div>
+            </div>
+
+            <!-- FAQ Item 2 -->
+            <div class="faq-item bg-white p-6">
+                <div class="faq-question flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">Apakah tersedia beasiswa?</h3>
+                    <svg class="w-5 h-5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="faq-answer mt-4 text-neutral-600">
+                    Ya, Matana University menyediakan berbagai program beasiswa, termasuk beasiswa akademik, beasiswa prestasi, dan kerjasama dengan berbagai institusi.
+                </div>
+            </div>
+
+            <!-- FAQ Item 3 -->
+            <div class="faq-item bg-white p-6">
+                <div class="faq-question flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">Kapan waktu pendaftaran dibuka?</h3>
+                    <svg class="w-5 h-5 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="faq-answer mt-4 text-neutral-600">
+                    Pendaftaran Gelombang I dibuka dari Oktober hingga Desember, Gelombang II dari Januari hingga Maret, dan Gelombang III dari April hingga Juni.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.addEventListener('click', () => {
+            const item = question.closest('.faq-item');
+            item.classList.toggle('active');
+        });
+    });
+</script>
+{% endblock %} 

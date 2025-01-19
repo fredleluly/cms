@@ -19,6 +19,8 @@ from django import forms
 from ckeditor.widgets import CKEditorWidget
 import uuid
 import os
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -441,7 +443,7 @@ def category_create_view(request):
     name = request.POST.get('new_category')
     if not name:
         messages.error(request, 'Category name is required')
-        return redirect(request.META.get('HTTP_REFERER', 'content_dashboard'))
+        return JsonResponse({'error': 'Category name is required'}, status=400)
         
     slug = request.POST.get('category_slug') or slugify(name)
     
@@ -449,14 +451,28 @@ def category_create_view(request):
         category = ArticleCategory.objects.create(
             name=name,
             slug=slug,
-            created_by=request.user
+            # created_by=request.user
         )
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'category': {
+                    'id': category.id,
+                    'name': category.name,
+                    'slug': category.slug
+                }
+            })
+            
         messages.success(request, f'Category "{name}" created successfully.')
+        return redirect(request.META.get('HTTP_REFERER', 'content_dashboard'))
+        
     except Exception as e:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': str(e)}, status=400)
+            
         messages.error(request, f'Error creating category: {str(e)}')
-    
-    # Redirect back to previous page
-    return redirect(request.META.get('HTTP_REFERER', 'content_dashboard'))
+        return redirect(request.META.get('HTTP_REFERER', 'content_dashboard'))
 
 @staff_member_required
 @require_POST
@@ -475,3 +491,220 @@ def upload_image(request):
         })
     
     return JsonResponse({'error': 'No image provided'}, status=400)
+
+@staff_member_required
+def article_list_view(request):
+    """
+    View for listing and managing articles with advanced filtering and bulk actions
+    """
+    # Get query parameters
+    category_id = request.GET.get('category')
+    status = request.GET.get('status')
+    search = request.GET.get('search', '').strip()
+    page = request.GET.get('page', 1)
+    
+    # Base queryset with optimized loading - removed tags
+    articles = Article.objects.select_related(
+        'category', 
+        'created_by',
+        'updated_by'
+    ).order_by('-updated_at')
+    
+    # Apply filters
+    if category_id:
+        articles = articles.filter(category_id=category_id)
+    if status:
+        articles = articles.filter(status=status)
+    if search:
+        articles = articles.filter(
+            Q(title__icontains=search) |
+            Q(excerpt__icontains=search) |
+            Q(content__icontains=search) |
+            Q(meta_keywords__icontains=search)
+        )
+    
+    # Get categories with counts for filter dropdown
+    categories = ArticleCategory.objects.annotate(
+        article_count=Count('articles')
+    ).order_by('-article_count')
+    
+    # Get counts for stats
+    total_articles = Article.objects.count()
+    published_count = Article.objects.filter(status='published').count()
+    draft_count = Article.objects.filter(status='draft').count()
+    featured_count = Article.objects.filter(is_featured=True).count()
+    
+    # Get recent articles for activity feed
+    recent_articles = Article.objects.select_related(
+        'updated_by'
+    ).order_by('-updated_at')[:10]
+    
+    # Pagination
+    paginator = Paginator(articles, 20)
+    try:
+        articles_page = paginator.page(page)
+    except PageNotAnInteger:
+        articles_page = paginator.page(1)
+    except EmptyPage:
+        articles_page = paginator.page(paginator.num_pages)
+    
+    context = {
+        'articles': articles_page,
+        'categories': categories,
+        'total_articles': total_articles,
+        'published_count': published_count,
+        'draft_count': draft_count,
+        'featured_count': featured_count,
+        'recent_articles': recent_articles,
+        'selected_category': category_id,
+        'selected_status': status,
+        'search_query': search,
+    }
+    
+    return render(request, 'admin/article_list.html', context)
+
+@staff_member_required
+@require_POST
+def bulk_action_view(request):
+    """
+    Handle bulk actions on articles
+    """
+    action = request.POST.get('action')
+    article_ids = request.POST.getlist('ids[]')
+    
+    if not article_ids:
+        return JsonResponse({'error': 'No articles selected'}, status=400)
+        
+    articles = Article.objects.filter(id__in=article_ids)
+    
+    try:
+        if action == 'delete':
+            # Delete featured images
+            for article in articles:
+                if article.featured_image:
+                    default_storage.delete(article.featured_image.path)
+            # Delete articles
+            articles.delete()
+            message = f'Successfully deleted {len(article_ids)} articles'
+            
+        elif action == 'publish':
+            articles.update(
+                status='published',
+                published_at=timezone.now(),
+                updated_by=request.user
+            )
+            message = f'Successfully published {len(article_ids)} articles'
+            
+        elif action == 'unpublish':
+            articles.update(
+                status='draft',
+                updated_by=request.user
+            )
+            message = f'Successfully unpublished {len(article_ids)} articles'
+            
+        elif action == 'feature':
+            articles.update(
+                is_featured=True,
+                updated_by=request.user
+            )
+            message = f'Successfully featured {len(article_ids)} articles'
+            
+        elif action == 'unfeature':
+            articles.update(
+                is_featured=False,
+                updated_by=request.user
+            )
+            message = f'Successfully unfeatured {len(article_ids)} articles'
+            
+        else:
+            return JsonResponse({'error': 'Invalid action'}, status=400)
+            
+        return JsonResponse({'message': message})
+        
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+def registration_view(request):
+    return render(request, 'pages/registration.html')
+
+@require_POST
+def registration_submit(request):
+    try:
+        # Get form data
+        data = {
+            'full_name': request.POST.get('full_name'),
+            'email': request.POST.get('email'),
+            'phone': request.POST.get('phone'),
+            'birth_date': request.POST.get('birth_date'),
+            'school': request.POST.get('school'),
+            'major': request.POST.get('major'),
+            'program': request.POST.get('program'),
+            'address': request.POST.get('address'),
+        }
+        
+        # Save to database (implement your model)
+        registration = Registration.objects.create(**data)
+        
+        # Send confirmation email
+        context = {
+            'registration': registration,
+            'program_name': dict(PROGRAM_CHOICES)[data['program']]
+        }
+        
+        email_html = render_to_string('emails/registration_confirmation.html', context)
+        email_text = render_to_string('emails/registration_confirmation.txt', context)
+        
+        send_mail(
+            subject='Pendaftaran Matana University',
+            message=email_text,
+            from_email='noreply@matanauniversity.ac.id',
+            recipient_list=[data['email']],
+            html_message=email_html
+        )
+        
+        messages.success(request, 'Pendaftaran berhasil! Silakan cek email Anda untuk informasi selanjutnya.')
+        return redirect('registration_success')
+        
+    except Exception as e:
+        messages.error(request, 'Terjadi kesalahan. Silakan coba lagi.')
+        return redirect('registration')
+
+def scholarship_view(request):
+    """
+    View for scholarship page
+    """
+    context = {
+        'scholarship_types': [
+            {
+                'name': 'Beasiswa Akademik',
+                'type': 'Unggulan',
+                'description': 'Untuk siswa dengan prestasi akademik luar biasa',
+                'benefits': [
+                    'Potongan biaya kuliah hingga 100%',
+                    'Tunjangan buku per semester',
+                    'Prioritas program pertukaran pelajar'
+                ]
+            },
+            {
+                'name': 'Beasiswa Prestasi',
+                'type': 'Khusus',
+                'description': 'Untuk siswa berprestasi di bidang non-akademik',
+                'benefits': [
+                    'Potongan biaya kuliah hingga 75%',
+                    'Dana pembinaan prestasi',
+                    'Akses ke fasilitas khusus'
+                ]
+            },
+            {
+                'name': 'Beasiswa KIP Kuliah',
+                'type': 'Pemerintah',
+                'description': 'Program beasiswa dari pemerintah untuk mahasiswa kurang mampu',
+                'benefits': [
+                    'Biaya kuliah ditanggung penuh',
+                    'Tunjangan bulanan',
+                    'Bantuan biaya hidup'
+                ]
+            }
+        ]
+    }
+    return render(request, 'pages/scholarship.html', context)

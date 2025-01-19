@@ -22,7 +22,8 @@ from apps.pages.views import (
     home_view, page_view, news_view, article_detail_view, 
     dashboard_view, article_create_view, article_edit_view,
     article_save_view, article_delete_view, article_quick_update,
-    profile_view, category_create_view, upload_image
+    profile_view, category_create_view, upload_image, article_list_view, bulk_action_view,
+    registration_view, registration_submit, scholarship_view
 )
 from django.contrib.sitemaps.views import sitemap
 from apps.pages.sitemaps import ArticleSitemap, StaticViewSitemap
@@ -51,5 +52,10 @@ urlpatterns = [
     path('dashboard/content/category/create/', category_create_view, name='category_create'),
     path('matana-news/<slug:slug>/', article_detail_view, name='article_detail'),
     path('upload/image/', upload_image, name='upload_image'),
+    path('dashboard/content/articles/', article_list_view, name='article_list'),
+    path('dashboard/content/bulk-action/', bulk_action_view, name='bulk_action'),
+    path('pendaftaran/', registration_view, name='registration'),
+    path('pendaftaran/submit/', registration_submit, name='registration_submit'),
+    path('beasiswa/', scholarship_view, name='scholarship'),
     # path('<slug:slug>/', page_view, name='page_view'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
