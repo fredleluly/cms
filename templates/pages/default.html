@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }}{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    {% for identifier, block in content.items %}
+        <div class="content-block mb-8">
+            {% if block.type == 'text' %}
+                <div class="prose">{{ block.content.text|safe }}</div>
+            
+            {% elif block.type == 'rich_text' %}
+                <div class="prose max-w-none">{{ block.content.html|safe }}</div>
+            
+            {% elif block.type == 'image' %}
+                <img src="{{ block.content.url }}" 
+                     alt="{{ block.content.alt }}"
+                     class="max-w-full h-auto">
+            
+            {% elif block.type == 'video' %}
+                <div class="aspect-w-16 aspect-h-9">
+                    {{ block.content.embed_code|safe }}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+{% endblock %} 

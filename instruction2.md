@@ -90,12 +90,12 @@ Build a university website CMS system enabling non-technical staff to manage con
 To keep the project organized yet reduce the total number of files, we propose the following **lean** Django project layout. This layout combines settings into a single file, uses environment variables for sensitive data, and groups each core feature into its own Django app.
 
 ```
-university_cms/
+cms/
 ├── manage.py
 ├── requirements.txt         # Single requirements file
 ├── .env                     # Environment variables (excluded from VCS)
 │
-├── university_cms/          # Main project folder
+├── config/          # Main project folder
 │   ├── __init__.py
 │   ├── settings.py          # Single settings file (use .env for secrets)
 │   ├── urls.py              # Root URL configurations

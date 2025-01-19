@@ -1,0 +1,7 @@
+Django>=4.2,<5.0
+django-ckeditor>=6.5.1
+Pillow>=9.5.0  # for image handling
+redis>=4.5.4   # for caching
+psycopg2-binary>=2.9.6  # for PostgreSQL
+python-dotenv>=1.0.0
+django-cleanup>=7.0.0  # automatically deletes files 
