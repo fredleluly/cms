@@ -1,24 +1,112 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}Maintenance Mode - Matana University{% endblock %}
+{% block title %}Under Maintenance - Matana University{% endblock %}
+
+{% block extra_css %}
+<style>
+    .maintenance-bg {
+        background: linear-gradient(135deg, #004AAD 0%, #003880 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .maintenance-bg::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .maintenance-icon {
+        animation: wrench 2.5s ease infinite;
+    }
+
+    .maintenance-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    @keyframes wrench {
+        0% { transform: rotate(-15deg); }
+        50% { transform: rotate(15deg); }
+        100% { transform: rotate(-15deg); }
+    }
+
+    .pulse {
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: .5; }
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8 text-center">
-        <div>
-            <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
-                Under Maintenance
-            </h2>
-            <div class="mt-8 bg-white p-8 rounded-lg shadow-lg">
-                <div class="animate-pulse flex justify-center mb-6">
+<div class="maintenance-bg min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl w-full space-y-8">
+        <!-- Logo -->
+        <div class="flex justify-center bg-white rounded-full p-2">
+            <img src="{% static 'images/logo-matana-white.png' %}" alt="Matana University" class="h-16">
+        </div>
+
+        <!-- Main Content -->
+        <div class="maintenance-card rounded-2xl p-8 md:p-12 text-center space-y-6">
+            <div class="flex justify-center mb-8">
+                <div class="maintenance-icon bg-blue-100 p-4 rounded-full">
                     <svg class="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                     </svg>
                 </div>
-                <p class="text-gray-600">
-                    {{ maintenance_message }}
-                </p>
             </div>
+
+            <h1 class="text-4xl font-bold text-gray-900 tracking-tight">
+                System Maintenance
+            </h1>
+
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                {{ maintenance_message }}
+            </p>
+
+            <!-- Status Indicator -->
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 text-blue-700">
+                <div class="w-2 h-2 rounded-full bg-blue-600 pulse mr-2"></div>
+                <span class="text-sm font-medium">System is being updated</span>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="grid md:grid-cols-2 gap-6 mt-8 text-left">
+                <div class="bg-gray-50 p-6 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                        What's happening?
+                    </h3>
+                    <p class="text-gray-600">
+                        We're performing scheduled maintenance to improve our systems and provide you with better service.
+                    </p>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-xl">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">
+                        Need assistance?
+                    </h3>
+                    <p class="text-gray-600">
+                        Contact our support team:<br>
+                        <a href="mailto:support@matanauniversity.ac.id" class="text-blue-600 hover:text-blue-800">
+                            support@matanauniversity.ac.id
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-white/80 text-sm">
+            <p>© {% now "Y" %} Matana University. All rights reserved.</p>
         </div>
     </div>
 </div>
