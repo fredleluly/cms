@@ -18,13 +18,18 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from apps.pages.views import home_view, page_view, news_view, article_detail_view, dashboard_view
+from apps.pages.views import home_view, page_view, news_view, article_detail_view, dashboard_view, article_create_view, article_edit_view, article_save_view, article_delete_view, article_quick_update
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
     path('matana-news/', news_view, name='news'),
     path('dashboard/content/', dashboard_view, name='content_dashboard'),
+    path('dashboard/content/create/', article_create_view, name='article_create'),
+    path('dashboard/content/<int:pk>/edit/', article_edit_view, name='article_edit'),
+    path('dashboard/content/save/', article_save_view, name='article_save'),
+    path('dashboard/content/<int:pk>/delete/', article_delete_view, name='article_delete'),
+    path('dashboard/content/<int:pk>/quick-update/', article_quick_update, name='article_quick_update'),
     path('matana-news/<slug:slug>/', article_detail_view, name='article_detail'),
     # path('<slug:slug>/', page_view, name='page_view'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

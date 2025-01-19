@@ -140,13 +140,30 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex justify-end space-x-3">
-                                    <a href="{% url 'admin:pages_article_change' article.id %}" 
-                                       class="action-button text-matana-blue hover:text-blue-800">
+                                    <button onclick="quickUpdate('{{ article.id }}', 'status', '{{ article.status }}')"
+                                            class="action-button text-gray-600 hover:text-gray-800"
+                                            title="Toggle status">
+                                        <i class="fas fa-toggle-{% if article.status == 'published' %}on text-green-600{% else %}off text-gray-400{% endif %}"></i>
+                                    </button>
+                                    <button onclick="toggleFeatured('{{ article.id }}', {{ article.is_featured|yesno:'true,false' }})"
+                                            class="action-button text-gray-600 hover:text-gray-800"
+                                            title="Toggle featured">
+                                        <i class="fas fa-star {% if article.is_featured %}text-yellow-400{% endif %}"></i>
+                                    </button>
+                                    <a href="{% url 'article_edit' article.id %}" 
+                                       class="action-button text-matana-blue hover:text-blue-800"
+                                       title="Edit">
                                         <i class="fas fa-edit"></i>
                                     </a>
+                                    <button onclick="deleteArticle('{{ article.id }}', '{{ article.title|escapejs }}')"
+                                            class="action-button text-red-600 hover:text-red-800"
+                                            title="Delete">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
                                     <a href="{{ article.get_absolute_url }}" 
                                        target="_blank"
-                                       class="action-button text-gray-600 hover:text-gray-800">
+                                       class="action-button text-gray-600 hover:text-gray-800"
+                                       title="View">
                                         <i class="fas fa-external-link-alt"></i>
                                     </a>
                                 </div>
@@ -262,5 +279,48 @@
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(updateFilters, 500);
     });
+    
+    // Quick update functions
+    async function quickUpdate(articleId, field, currentValue) {
+        const newValue = field === 'status' 
+            ? (currentValue === 'published' ? 'draft' : 'published')
+            : !currentValue;
+            
+        try {
+            const response = await fetch(`/dashboard/content/${articleId}/quick-update/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `field=${field}&value=${newValue}`
+            });
+            
+            if (response.ok) {
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    
+    async function toggleFeatured(articleId, currentValue) {
+        await quickUpdate(articleId, 'is_featured', currentValue);
+    }
+    
+    function deleteArticle(articleId, title) {
+        if (confirm(`Are you sure you want to delete "${title}"?`)) {
+            fetch(`/dashboard/content/${articleId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                }
+            }).then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                }
+            });
+        }
+    }
 </script>
 {% endblock %} 

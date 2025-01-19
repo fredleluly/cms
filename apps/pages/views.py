@@ -5,6 +5,12 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q, Count
 from .models import Page, Article, ArticleCategory
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.utils import timezone
+from django.core.files.storage import default_storage
+from django.views.decorators.http import require_POST
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -185,3 +191,97 @@ def dashboard_view(request):
     }
     
     return render(request, 'admin/dashboard.html', context)
+
+@staff_member_required
+def article_create_view(request):
+    categories = ArticleCategory.objects.all()
+    context = {
+        'categories': categories,
+        'action': 'create',
+        'title': 'Create New Article'
+    }
+    return render(request, 'admin/article_form.html', context)
+
+@staff_member_required
+def article_edit_view(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    categories = ArticleCategory.objects.all()
+    context = {
+        'article': article,
+        'categories': categories,
+        'action': 'edit',
+        'title': f'Edit Article: {article.title}'
+    }
+    return render(request, 'admin/article_form.html', context)
+
+@staff_member_required
+@require_POST
+def article_save_view(request):
+    article_id = request.POST.get('article_id')
+    
+    if article_id:
+        article = get_object_or_404(Article, id=article_id)
+    else:
+        article = Article(created_by=request.user)
+    
+    # Handle image upload
+    if 'featured_image' in request.FILES:
+        if article.featured_image:
+            default_storage.delete(article.featured_image.path)
+        article.featured_image = request.FILES['featured_image']
+    
+    # Update fields
+    article.title = request.POST.get('title')
+    article.slug = request.POST.get('slug') or slugify(article.title)
+    article.category_id = request.POST.get('category')
+    article.excerpt = request.POST.get('excerpt')
+    article.content = request.POST.get('content')
+    article.status = request.POST.get('status')
+    article.meta_description = request.POST.get('meta_description')
+    article.meta_keywords = request.POST.get('meta_keywords')
+    article.is_featured = request.POST.get('is_featured') == 'on'
+    
+    if article.status == 'published' and not article.published_at:
+        article.published_at = timezone.now()
+    
+    article.updated_by = request.user
+    article.save()
+    
+    messages.success(request, f'Article "{article.title}" has been saved successfully.')
+    return redirect('content_dashboard')
+
+@staff_member_required
+@require_POST
+def article_delete_view(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    title = article.title
+    
+    # Delete featured image
+    if article.featured_image:
+        default_storage.delete(article.featured_image.path)
+    
+    article.delete()
+    messages.success(request, f'Article "{title}" has been deleted successfully.')
+    return JsonResponse({'status': 'success'})
+
+@staff_member_required
+@require_POST
+def article_quick_update(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    field = request.POST.get('field')
+    value = request.POST.get('value')
+    
+    if field == 'status':
+        article.status = value
+        if value == 'published' and not article.published_at:
+            article.published_at = timezone.now()
+    elif field == 'is_featured':
+        article.is_featured = value == 'true'
+    
+    article.updated_by = request.user
+    article.save()
+    
+    return JsonResponse({
+        'status': 'success',
+        'published_at': article.published_at.strftime('%b %d, %Y') if article.published_at else '-'
+    })
