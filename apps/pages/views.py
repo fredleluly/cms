@@ -205,6 +205,10 @@ def article_detail_view(request, slug):
 
 @staff_member_required
 def dashboard_view(request):
+    print(f"User: {request.user}")
+    print(f"Is staff: {request.user.is_staff}")
+    print(f"Is authenticated: {request.user.is_authenticated}")
+    print(f"User active: {request.user.is_active}")
     # Get query parameters
     category_id = request.GET.get('category')
     status = request.GET.get('status')

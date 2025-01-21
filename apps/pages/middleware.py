@@ -36,19 +36,37 @@ class MaintenanceModeMiddleware:
             except:
                 return self.get_response(request)
 
-        if maintenance_mode and maintenance_mode['is_active']:
-            # Allow staff members
-            if request.user.is_authenticated and request.user.is_staff:
+        if maintenance_mode and maintenance_mode.get('is_active'):
+            # Allow admin access
+            if request.path.startswith('/admin/'):
                 return self.get_response(request)
+                
+            # Allow staff members
+            if request.user.is_staff:
+                # Add maintenance mode banner for staff
+                response = self.get_response(request)
+                if hasattr(response, 'content'):
+                    banner = '''
+                        <div style="position:fixed;top:0;left:0;right:0;background:#DC2626;color:white;text-align:center;padding:10px;z-index:9999;">
+                            Maintenance Mode Active - Only Staff Can View Site
+                            <a href="/admin/maintenance/" style="color:white;text-decoration:underline;margin-left:10px;">
+                                Disable Maintenance Mode
+                            </a>
+                        </div>
+                    '''
+                    response.content = response.content.decode('utf-8').replace('</body>', f'{banner}</body>')
+                return response
 
-            # Check IP address
+            # Check allowed IPs
             client_ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR'))
             if client_ip in maintenance_mode.get('allowed_ips', []):
                 return self.get_response(request)
 
-            # Show maintenance page
             context = {
-                'maintenance_message': maintenance_mode['message']
+                'maintenance_message': maintenance_mode.get('message'),
+                'estimated_duration': maintenance_mode.get('estimated_duration'),
+                'contact_email': maintenance_mode.get('contact_email', 'support@matanauniversity.ac.id'),
+                'start_time': maintenance_mode.get('start_time'),
             }
             return render(request, 'maintenance.html', context, status=503)
 
