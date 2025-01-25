@@ -243,11 +243,28 @@
                     <h2 class="text-lg font-semibold text-gray-900">Featured Image</h2>
                 </div>
                 <div class="card-body">
-                    <div class="image-drop-zone" onclick="document.getElementById('imageInput').click()">
+                    <input type="hidden" id="featured_image" name="featured_image" 
+                           value="{{ article.featured_image.url|default:'' }}">
+                    <div class="image-drop-zone cursor-pointer rounded-xl overflow-hidden">
                         {% if article.featured_image %}
+                            <div class="relative group">
                             <img src="{{ article.featured_image.url }}" 
-                                 alt="" 
+                                     alt="Featured image" 
                                  class="preview-image">
+                                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
+                                            transition-opacity duration-200 flex items-center justify-center gap-3">
+                                    <button type="button" onclick="changeFeaturedImage(event)" 
+                                            class="action-btn bg-white/90 hover:bg-white">
+                                        <i class="fas fa-edit"></i>
+                                        <span>Change</span>
+                                    </button>
+                                    <button type="button" onclick="removeFeaturedImage(event)"
+                                            class="action-btn bg-red-500/90 hover:bg-red-500 text-white">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <span>Remove</span>
+                                    </button>
+                                </div>
+                            </div>
                         {% else %}
                             <div class="space-y-2">
                                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -256,13 +273,11 @@
                                 </svg>
                                 <div>
                                     <p class="text-sm font-medium text-gray-900">Upload Image</p>
-                                    <p class="text-xs text-gray-500">Click to browse or drag and drop</p>
+                                    <p class="text-xs text-gray-500">Click to browse from media library</p>
                                 </div>
                             </div>
                         {% endif %}
                     </div>
-                    <input type="file" id="imageInput" name="featured_image" 
-                           accept="image/*" class="hidden">
                 </div>
             </div>
 
@@ -343,11 +358,32 @@
 {% block extra_js %}
 <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
 <script>
-    // Initialize Quill with image upload handler
+    // Media Library Popup Handler
+    function openMediaLibrary(callback) {
+        const width = Math.min(1200, window.innerWidth * 0.9);
+        const height = Math.min(800, window.innerHeight * 0.9);
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        
+        // Store callback for later use
+        window.handleMediaSelect = function(id, url) {
+            callback(url);
+            mediaPopup.close();
+        };
+        
+        const mediaPopup = window.open(
+            '{% url "media:library" %}?mode=select',
+            'Media Library',
+            `width=${width},height=${height},top=${top},left=${left},scrollbars=yes`
+        );
+    }
+
+    // Initialize Quill with custom image handler
     const quill = new Quill('#editor', {
         theme: 'snow',
         modules: {
-            toolbar: [
+            toolbar: {
+                container: [
                 [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
                 ['bold', 'italic', 'underline', 'strike'],
                 [{ 'color': [] }, { 'background': [] }],
@@ -355,71 +391,103 @@
                 [{ 'align': [] }],
                 ['link', 'image'],
                 ['clean']
-            ]
+                ],
+                handlers: {
+                    // Custom image handler
+                    image: function() {
+                        openMediaLibrary((url) => {
+                            const range = quill.getSelection(true);
+                            quill.insertEmbed(range.index, 'image', url);
+                        });
+                    }
+                }
+            }
         },
         placeholder: 'Start writing your article...'
     });
 
-    // Handle image upload
-    const toolbar = quill.getModule('toolbar');
-    toolbar.addHandler('image', () => {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-        input.click();
-
-        input.onchange = async () => {
-            const file = input.files[0];
-            if (file) {
-                try {
-                    document.getElementById('uploadProgress').style.display = 'block';
-                    const formData = new FormData();
-                    formData.append('image', file);
-
-                    const response = await fetch('/upload/image/', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRFToken': '{{ csrf_token }}'
-                        },
-                        body: formData
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        const range = quill.getSelection(true);
-                        quill.insertEmbed(range.index, 'image', data.url);
-                    } else {
-                        throw new Error('Upload failed');
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('Failed to upload image');
-                } finally {
-                    document.getElementById('uploadProgress').style.display = 'none';
-                }
-            }
-        };
+    // Featured Image Handler
+    document.querySelector('.image-drop-zone').addEventListener('click', function(e) {
+        e.preventDefault();
+        openMediaLibrary((url) => {
+            // Update hidden input
+            document.getElementById('featured_image').value = url;
+            
+            // Update preview
+            const dropZone = document.querySelector('.image-drop-zone');
+            dropZone.innerHTML = `
+                <div class="relative group">
+                    <img src="${url}" alt="Featured image" class="preview-image">
+                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
+                                transition-opacity duration-200 flex items-center justify-center gap-3">
+                        <button type="button" onclick="changeFeaturedImage(event)" 
+                                class="action-btn bg-white/90 hover:bg-white">
+                            <i class="fas fa-edit"></i>
+                            <span>Change</span>
+                        </button>
+                        <button type="button" onclick="removeFeaturedImage(event)"
+                                class="action-btn bg-red-500/90 hover:bg-red-500 text-white">
+                            <i class="fas fa-trash-alt"></i>
+                            <span>Remove</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
     });
+
+    // Featured Image Functions
+    function changeFeaturedImage(e) {
+        e.stopPropagation();
+        openMediaLibrary((url) => {
+            document.getElementById('featured_image').value = url;
+            updateFeaturedImagePreview(url);
+        });
+    }
+
+    function removeFeaturedImage(e) {
+        e.stopPropagation();
+        document.getElementById('featured_image').value = '';
+        const dropZone = document.querySelector('.image-drop-zone');
+        dropZone.innerHTML = `
+            <div class="space-y-2">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <div>
+                    <p class="text-sm font-medium text-gray-900">Upload Image</p>
+                    <p class="text-xs text-gray-500">Click to browse from media library</p>
+                </div>
+            </div>
+        `;
+    }
+
+    function updateFeaturedImagePreview(url) {
+        const dropZone = document.querySelector('.image-drop-zone');
+        dropZone.innerHTML = `
+            <div class="relative group">
+                <img src="${url}" alt="Featured image" class="preview-image">
+                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
+                            transition-opacity duration-200 flex items-center justify-center gap-3">
+                    <button type="button" onclick="changeFeaturedImage(event)" 
+                            class="action-btn bg-white/90 hover:bg-white">
+                        <i class="fas fa-edit"></i>
+                        <span>Change</span>
+                    </button>
+                    <button type="button" onclick="removeFeaturedImage(event)"
+                            class="action-btn bg-red-500/90 hover:bg-red-500 text-white">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>Remove</span>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
 
     // Handle form submission
     document.getElementById('articleForm').addEventListener('submit', function() {
         document.getElementById('content').value = quill.root.innerHTML;
-    });
-
-    // Image preview
-    document.getElementById('imageInput').addEventListener('change', function(e) {
-        if (this.files && this.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const dropZone = document.querySelector('.image-drop-zone');
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.className = 'preview-image';
-                dropZone.innerHTML = '';
-                dropZone.appendChild(img);
-            }
-            reader.readAsDataURL(this.files[0]);
-        }
     });
 
     // Modal functions
