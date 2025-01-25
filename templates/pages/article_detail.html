@@ -96,11 +96,15 @@
 <article class="py-16">
     <div class="container mx-auto px-4">
         <!-- Featured Image -->
+        {% if article.featured_image %}
         <div class="max-w-4xl mx-auto mb-12">
-            <img src="{{ article.featured_image.url }}" 
-                 alt="{{ article.title }}" 
-                 class="w-full h-auto rounded-xl shadow-lg">
+            <div class="article-image">
+                <img src="{{ article.featured_image.url }}" 
+                     alt="{{ article.title }}"
+                     class="w-full h-64 object-cover rounded-lg">
+            </div>
         </div>
+        {% endif %}
         
         <!-- Content -->
         <div class="article-content prose prose-lg">

@@ -1,0 +1,103 @@
+{% extends "admin/base_admin.html" %}
+{% load static %}
+
+{% block content %}
+<div class="p-6">
+    <form method="post" class="max-w-4xl mx-auto">
+        {% csrf_token %}
+        
+        <!-- Title -->
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Title</label>
+            {{ form.title }}
+        </div>
+
+        <!-- Featured Image -->
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Featured Image</label>
+            <div class="flex items-center gap-4">
+                <input type="hidden" name="featured_image" id="featured_image_input" value="{{ form.featured_image.value|default:'' }}">
+                <button type="button" 
+                        onclick="openMediaLibrary()"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    Choose Image
+                </button>
+                <div id="image_preview" class="relative">
+                    {% if form.featured_image.value %}
+                    <img src="{{ form.featured_image.value }}" 
+                         alt="Featured image" 
+                         class="h-20 w-20 object-cover rounded-lg">
+                    <button type="button" 
+                            onclick="removeImage()"
+                            class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Content</label>
+            {{ form.content }}
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end">
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">
+                Save Article
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+function openMediaLibrary() {
+    const width = Math.min(1200, window.innerWidth * 0.9);
+    const height = Math.min(800, window.innerHeight * 0.9);
+    const left = (window.innerWidth - width) / 2;
+    const top = (window.innerHeight - height) / 2;
+    
+    window.open(
+        '{% url "media:library" %}?mode=select',
+        'Media Library',
+        `width=${width},height=${height},top=${top},left=${left}`
+    );
+}
+
+window.handleMediaSelect = function(id, url) {
+    document.getElementById('featured_image_input').value = url;
+    document.getElementById('image_preview').innerHTML = `
+        <div class="relative">
+            <img src="${url}" alt="Featured image" class="h-20 w-20 object-cover rounded-lg">
+            <button type="button" 
+                    onclick="removeImage()"
+                    class="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1 hover:bg-red-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+};
+
+function removeImage() {
+    document.getElementById('featured_image_input').value = '';
+    document.getElementById('image_preview').innerHTML = '';
+}
+
+// Configure CKEditor to use media library
+if (typeof CKEDITOR !== 'undefined') {
+    CKEDITOR.on('dialogDefinition', function(ev) {
+        var dialogName = ev.data.name;
+        var dialogDefinition = ev.data.definition;
+
+        if (dialogName == 'image') {
+            dialogDefinition.onShow = function() {
+                this.hide();
+                openMediaLibrary();
+            };
+        }
+    });
+}
+</script>
+{% endblock %} 

@@ -49,9 +49,12 @@ INSTALLED_APPS = [
 
     # Third party apps
     'ckeditor',  # for rich text editing
-    
+    'apps.media.apps.MediaConfig',
+
+
     # Local apps
     'apps.pages.apps.PagesConfig',
+
 ]
 
 SITE_ID = 1
@@ -222,6 +225,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# Make sure these directories exist
+UPLOAD_ROOT = MEDIA_ROOT / 'uploads'
+THUMBNAIL_ROOT = MEDIA_ROOT / 'thumbnails'
+
 # CKEditor Configuration
 CKEDITOR_CONFIGS = {
     'default': {
@@ -257,6 +264,8 @@ CKEDITOR_CONFIGS = {
             'dialogui',
             'elementspath'
         ]),
+        'filebrowserBrowseUrl': '/media/library/',
+        'filebrowserUploadUrl': '/media/api/media/upload/',
     }
 }
 
@@ -285,3 +294,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# CSRF settings
+CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'

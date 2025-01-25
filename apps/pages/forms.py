@@ -2,6 +2,7 @@ from django import forms
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
 import re
+from apps.media.widgets import MediaLibraryWidget
 
 class ContactForm(forms.Form):
     name = forms.CharField(
@@ -36,3 +37,10 @@ class ContactForm(forms.Form):
         if cleaned_data.get('honeypot'):  # Jika honeypot terisi, berarti bot
             raise ValidationError("Bot detected")
         return cleaned_data 
+
+class ArticleForm(forms.ModelForm):
+    featured_image = forms.CharField(widget=MediaLibraryWidget)
+    
+    class Meta:
+        model = Article
+        fields = ['title', 'content', 'featured_image'] 

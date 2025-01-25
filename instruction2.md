@@ -190,7 +190,6 @@ class Page:
 2. **Media Management**
    - File validation and potentially auto-resizing for images to ensure performance.
    - Organized media library with folder-based structure and usage tracking.
-   - Consider storing media files on a scalable service (S3, etc.) if necessary.
 
 3. **Security Considerations**
    - **Input Sanitization**: Protect against XSS, injection attacks.
@@ -301,3 +300,11 @@ api/
    - Ensures an easily maintainable codebase with consolidated `settings.py` and environment variables in `.env`.
 2. **Example Code & Responses**  
    - The PRD includes references to pseudo-code for data models (`ContentBlock`, `Page`), an example file structure, and sample API endpoints. These are **not** for direct usage but guide how the system might be architected in Django.
+
+
+
+
+
+Media Library/Uploader/media management digunakan untuk mengupload media ke server dan mengelola media yang sudah diupload.
+dan juga bisa juga digunakan oleh user untuk memilih media yang ingin digunakan untuk content, dan juga bisa mengupload media sendiri.
+media ini bersifat public, artinya media ini bisa diakses oleh semua user.

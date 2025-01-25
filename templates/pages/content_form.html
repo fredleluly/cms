@@ -1,0 +1,13 @@
+<div class="mb-4">
+    <label class="block text-gray-700 text-sm font-bold mb-2">
+        Featured Image
+    </label>
+    <div class="flex items-center gap-4">
+        <button type="button" 
+                onclick="window.open('{% url 'media:library' %}', 'Media Library', 'width=800,height=600')"
+                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            Choose from Media Library
+        </button>
+        <div id="selected-image-preview"></div>
+    </div>
+</div> 
