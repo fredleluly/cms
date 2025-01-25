@@ -136,9 +136,11 @@ class Article(models.Model):
     title = models.CharField(max_length=200)
     slug = models.SlugField(max_length=200, unique=True)
     category = models.ForeignKey(ArticleCategory, on_delete=models.PROTECT, related_name='articles')
-    featured_image = models.ImageField(
-        upload_to='articles/',
-        validators=[validate_file_extension]
+    featured_image = models.URLField(
+        max_length=500, 
+        blank=True, 
+        null=True,
+        help_text="URL for featured image from media library"
     )
     excerpt = models.TextField(help_text="A short description that will appear in article lists")
     content = RichTextField()
@@ -204,9 +206,9 @@ class Article(models.Model):
             return self.meta_description
         return strip_tags(self.excerpt)[:160]
 
-    def clean(self):
-        if self.featured_image and self.featured_image.size > 5*1024*1024:  # 5MB
-            raise ValidationError('File too large')
+    # def clean(self):
+    #     if self.featured_image and self.featured_image.size > 5*1024*1024:  # 5MB
+    #         raise ValidationError('File too large')
 
     def get_safe_content(self):
         allowed_tags = [

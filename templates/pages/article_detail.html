@@ -37,7 +37,7 @@
     "@context": "https://schema.org",
     "@type": "Article",
     "headline": "{{ article.title }}",
-    "image": "{{ request.scheme }}://{{ request.get_host }}{{ article.featured_image.url }}",
+    "image": "{{ article.featured_image }}",
     "datePublished": "{{ article.published_at|date:'c' }}",
     "dateModified": "{{ article.updated_at|date:'c' }}",
     "author": {
@@ -99,9 +99,9 @@
         {% if article.featured_image %}
         <div class="max-w-4xl mx-auto mb-12">
             <div class="article-image">
-                <img src="{{ article.featured_image.url }}" 
+                <img src="{{ article.featured_image }}" 
                      alt="{{ article.title }}"
-                     class="w-full h-64 object-cover rounded-lg">
+                     class="w-full  object-cover rounded-lg">
             </div>
         </div>
         {% endif %}
@@ -130,6 +130,16 @@
         <h2 class="text-3xl font-bold mb-8">Related Articles</h2>
         <div class="grid md:grid-cols-3 gap-8">
             {% for related in related_articles %}
+            <article class="bg-white rounded-xl overflow-hidden shadow-lg">
+                {% if related.featured_image %}
+                <div class="image-wrapper">
+                    <img src="{{ related.featured_image }}" 
+                         alt="{{ related.title }}" 
+                         class="w-full h-48 object-cover">
+                </div>
+                {% endif %}
+                <!-- ... rest of the related article card ... -->
+            </article>
             {% endfor %}
         </div>
     </div>

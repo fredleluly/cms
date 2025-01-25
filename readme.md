@@ -99,12 +99,20 @@ python manage.py runserver
 
 ```bash
 python -m venv env2
-source env2/Scripts/activate
+source env/Scripts/activate
 pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
+
 echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
+
 python manage.py runserver
+```
+
+```bash
+python manage.py makemigrations media
+python manage.py migrate media
+python manage.py migrate
 ```
 
 

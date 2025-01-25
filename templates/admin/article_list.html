@@ -228,9 +228,9 @@
                     <td class="px-6 py-4">
                         <div class="flex items-center">
                             {% if article.featured_image %}
-                            <img src="{{ article.featured_image.url }}" 
-                                 alt="" 
-                                 class="w-12 h-12 rounded-lg object-cover mr-3">
+                            <img src="{{ article.featured_image }}" 
+                                 alt="{{ article.title }}" 
+                                 class="h-10 w-10 rounded-full object-cover mr-3">
                             {% endif %}
                             <div>
                                 <div class="font-medium text-gray-900">{{ article.title }}</div>

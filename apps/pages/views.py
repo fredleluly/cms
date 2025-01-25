@@ -21,6 +21,7 @@ import uuid
 import os
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
 
 
 def custom_404(request, exception):
@@ -317,13 +318,16 @@ def article_save_view(request):
     else:
         article = Article(created_by=request.user)
     
-    # Handle image upload
-    if 'featured_image' in request.FILES:
-        if article.featured_image:
-            default_storage.delete(article.featured_image.path)
-        article.featured_image = request.FILES['featured_image']
+    # # Handle image upload
+    # if 'featured_image' in request.FILES:
+    #     if article.featured_image:
+    #         default_storage.delete(article.featured_image.path)
+    #     article.featured_image = request.FILES['featured_image']
     
     # Update fields
+    print(f"Request from save view #######: {request.POST}")
+
+    article.featured_image = request.POST.get('featured_image')
     article.title = request.POST.get('title')
     article.slug = request.POST.get('slug') or slugify(article.title)
     article.category_id = request.POST.get('category')
@@ -348,10 +352,6 @@ def article_save_view(request):
 def article_delete_view(request, pk):
     article = get_object_or_404(Article, pk=pk)
     title = article.title
-    
-    # Delete featured image
-    if article.featured_image:
-        default_storage.delete(article.featured_image.path)
     
     article.delete()
     messages.success(request, f'Article "{title}" has been deleted successfully.')
@@ -590,11 +590,6 @@ def bulk_action_view(request):
     
     try:
         if action == 'delete':
-            # Delete featured images
-            for article in articles:
-                if article.featured_image:
-                    default_storage.delete(article.featured_image.path)
-            # Delete articles
             articles.delete()
             message = f'Successfully deleted {len(article_ids)} articles'
             
@@ -719,3 +714,49 @@ def scholarship_view(request):
         ]
     }
     return render(request, 'pages/scholarship.html', context)
+
+@login_required
+def article_save(request):
+    try:
+        article_id = request.POST.get('article_id')
+        article = Article.objects.get(id=article_id) if article_id else Article()
+        
+        # Log untuk debugging
+        print("Form data received:", request.POST)
+        print("Featured image:", request.POST.get('featured_image'))
+        
+        # Update article fields
+        article.title = request.POST.get('title')
+        article.featured_image = request.POST.get('featured_image')
+        article.excerpt = request.POST.get('excerpt')
+        article.content = request.POST.get('content')
+        article.category_id = request.POST.get('category')
+        article.status = request.POST.get('status', 'draft')
+        article.meta_description = request.POST.get('meta_description', '')
+        article.meta_keywords = request.POST.get('meta_keywords', '')
+        article.is_featured = request.POST.get('is_featured') == 'on'
+        
+        if not article_id:
+            article.created_by = request.user
+        article.updated_by = request.user
+        
+        # Generate slug if needed
+        if not article.slug:
+            article.slug = slugify(article.title)
+        
+        article.save()
+        
+        messages.success(request, 'Article saved successfully!')
+        return redirect('article_edit', pk=article.id)
+        
+    except Exception as e:
+        print("Error saving article:", str(e))
+        messages.error(request, f'Error saving article: {str(e)}')
+        return redirect('article_list')
+
+def article_api_view(request, pk):
+    article = get_object_or_404(Article, pk=pk)
+    return JsonResponse({
+        'title': article.title,
+        'featured_image': article.featured_image,
+    })

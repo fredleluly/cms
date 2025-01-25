@@ -143,11 +143,14 @@
 {% endblock %}
 
 {% block content %}
-<form id="articleForm" method="POST" action="{% url 'article_save' %}" enctype="multipart/form-data">
+<form id="articleForm" method="POST" action="{% url 'article_save' %}">
     {% csrf_token %}
     {% if article %}
         <input type="hidden" name="article_id" value="{{ article.id }}">
     {% endif %}
+    <input type="hidden" id="content" name="content">
+    <input type="hidden" id="featured_image" name="featured_image" 
+           value="{{ article.featured_image|default:'' }}">
 
     <div class="form-grid">
         <!-- Main Content -->
@@ -181,7 +184,6 @@
                 </div>
                 <div class="card-body p-0">
                     <div id="editor">{{ article.content|safe|default:'' }}</div>
-                    <input type="hidden" name="content" id="content">
                 </div>
             </div>
         </div>
@@ -194,12 +196,15 @@
                     <h2 class="text-lg font-semibold text-gray-900">Publish</h2>
                 </div>
                 <div class="card-body space-y-4">
+                    <input type="hidden" name="status" value="draft">
                     <div class="flex items-center justify-between">
-                        <button type="submit" name="status" value="draft" 
+                        <button type="submit" 
+                                onclick="document.querySelector('input[name=status]').value='draft'"
                                 class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50">
                             Save Draft
                         </button>
-                        <button type="submit" name="status" value="published" 
+                        <button type="submit" 
+                                onclick="document.querySelector('input[name=status]').value='published'"
                                 class="save-button">
                             Publish
                         </button>
@@ -243,12 +248,10 @@
                     <h2 class="text-lg font-semibold text-gray-900">Featured Image</h2>
                 </div>
                 <div class="card-body">
-                    <input type="hidden" id="featured_image" name="featured_image" 
-                           value="{{ article.featured_image.url|default:'' }}">
                     <div class="image-drop-zone cursor-pointer rounded-xl overflow-hidden">
                         {% if article.featured_image %}
                             <div class="relative group">
-                            <img src="{{ article.featured_image.url }}" 
+                                <img src="{{ article.featured_image }}" 
                                      alt="Featured image" 
                                  class="preview-image">
                                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
@@ -367,6 +370,7 @@
         
         // Store callback for later use
         window.handleMediaSelect = function(id, url) {
+            console.log('Media selected:', { id, url }); // Debug log
             callback(url);
             mediaPopup.close();
         };
@@ -410,31 +414,40 @@
     document.querySelector('.image-drop-zone').addEventListener('click', function(e) {
         e.preventDefault();
         openMediaLibrary((url) => {
+            console.log('Setting featured image:', url); // Debug log
+            
             // Update hidden input
-            document.getElementById('featured_image').value = url;
+            const featuredImageInput = document.getElementById('featured_image');
+            featuredImageInput.value = url;
+            console.log('Input value updated:', featuredImageInput.value); // Debug log
             
             // Update preview
-            const dropZone = document.querySelector('.image-drop-zone');
-            dropZone.innerHTML = `
-                <div class="relative group">
-                    <img src="${url}" alt="Featured image" class="preview-image">
-                    <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
-                                transition-opacity duration-200 flex items-center justify-center gap-3">
-                        <button type="button" onclick="changeFeaturedImage(event)" 
-                                class="action-btn bg-white/90 hover:bg-white">
-                            <i class="fas fa-edit"></i>
-                            <span>Change</span>
-                        </button>
-                        <button type="button" onclick="removeFeaturedImage(event)"
-                                class="action-btn bg-red-500/90 hover:bg-red-500 text-white">
-                            <i class="fas fa-trash-alt"></i>
-                            <span>Remove</span>
-                        </button>
-                    </div>
-                </div>
-            `;
+            updateFeaturedImagePreview(url);
         });
     });
+
+    function updateFeaturedImagePreview(url) {
+        console.log('Updating preview with:', url); // Debug log
+        const dropZone = document.querySelector('.image-drop-zone');
+        dropZone.innerHTML = `
+            <div class="relative group">
+                <img src="${url}" alt="Featured image" class="preview-image">
+                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
+                            transition-opacity duration-200 flex items-center justify-center gap-3">
+                    <button type="button" onclick="changeFeaturedImage(event)" 
+                            class="action-btn bg-white/90 hover:bg-white">
+                        <i class="fas fa-edit"></i>
+                        <span>Change</span>
+                    </button>
+                    <button type="button" onclick="removeFeaturedImage(event)"
+                            class="action-btn bg-red-500/90 hover:bg-red-500 text-white">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>Remove</span>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
 
     // Featured Image Functions
     function changeFeaturedImage(e) {
@@ -463,31 +476,47 @@
         `;
     }
 
-    function updateFeaturedImagePreview(url) {
-        const dropZone = document.querySelector('.image-drop-zone');
-        dropZone.innerHTML = `
-            <div class="relative group">
-                <img src="${url}" alt="Featured image" class="preview-image">
-                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
-                            transition-opacity duration-200 flex items-center justify-center gap-3">
-                    <button type="button" onclick="changeFeaturedImage(event)" 
-                            class="action-btn bg-white/90 hover:bg-white">
-                        <i class="fas fa-edit"></i>
-                        <span>Change</span>
-                    </button>
-                    <button type="button" onclick="removeFeaturedImage(event)"
-                            class="action-btn bg-red-500/90 hover:bg-red-500 text-white">
-                        <i class="fas fa-trash-alt"></i>
-                        <span>Remove</span>
-                    </button>
-                </div>
-            </div>
-        `;
-    }
-
-    // Handle form submission
-    document.getElementById('articleForm').addEventListener('submit', function() {
+    // Update form submission handler
+    document.getElementById('articleForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Set content dari Quill
         document.getElementById('content').value = quill.root.innerHTML;
+        
+        // Pastikan status terisi
+        if (!this.querySelector('input[name="status"]')) {
+            // Tambahkan hidden input untuk status jika belum ada
+            const statusInput = document.createElement('input');
+            statusInput.type = 'hidden';
+            statusInput.name = 'status';
+            statusInput.value = 'draft'; // Default to draft
+            this.appendChild(statusInput);
+        }
+        
+        // Log form data untuk debugging
+        const formData = new FormData(this);
+        console.log('Submitting form with data:');
+        for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
+        }
+        
+        // Submit form
+        this.submit();
+    });
+
+    // Update publish buttons
+    document.querySelectorAll('button[name="status"]').forEach(button => {
+        button.addEventListener('click', function(e) {
+            // Update hidden status input atau buat baru jika belum ada
+            let statusInput = document.querySelector('input[name="status"]');
+            if (!statusInput) {
+                statusInput = document.createElement('input');
+                statusInput.type = 'hidden';
+                statusInput.name = 'status';
+                document.getElementById('articleForm').appendChild(statusInput);
+            }
+            statusInput.value = this.value;
+        });
     });
 
     // Modal functions
