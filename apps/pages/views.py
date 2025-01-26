@@ -1093,3 +1093,16 @@ def page_edit_view(request, slug):
     }
     
     return render(request, 'admin/page_form.html', context)
+
+@staff_member_required
+def page_list_view(request):
+    """View for listing all pages"""
+    pages = Page.objects.all().order_by('-updated_at')
+    
+    context = {
+        'pages': pages,
+        'title': 'Pages',
+        'subtitle': 'Manage your website pages'
+    }
+    
+    return render(request, 'admin/page_list.html', context)
