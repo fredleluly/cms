@@ -379,31 +379,150 @@ def article_quick_update(request, pk):
         'published_at': article.published_at.strftime('%b %d, %Y') if article.published_at else '-'
     })
 
+def create_default_profile_page():
+    """Create default profile page with predefined content blocks"""
+    # Check if page already exists first
+    if Page.objects.filter(slug='profil-matana').exists():
+        return Page.objects.get(slug='profil-matana')
+        
+    profile_page = Page.objects.create(
+        title="Profil Matana University",
+        slug="profil-matana",
+        template='profile.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Profil Matana University - Perguruan tinggi terpercaya dan terkemuka',
+            'meta_keywords': 'profil matana, visi misi matana, sejarah matana'
+        }
+    )
+    
+    # Define default content blocks
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'content_type': ContentBlock.RICH_TEXT,
+            'content': {
+                'title': 'Profil Matana University gilak',
+                'subtitle': 'World Class Learning Experience',
+                'background_image': '/static/images/campus-aerial.jpg'
+            },
+            'order': 1
+        },
+        {
+            'identifier': 'visi_block',
+            'content_type': ContentBlock.RICH_TEXT,
+            'content': {
+                'text': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional...'
+            },
+            'order': 2
+        },
+        {
+            'identifier': 'misi_block',
+            'content_type': ContentBlock.RICH_TEXT,
+            'content': {
+                'items': [
+                    'Terbentuknya lulusan yang memiliki jiwa kepemimpinan...',
+                    'Terciptanya lulusan yang memiliki kemampuan penelitian...',
+                    'Terbentuknya generasi penerus yang memiliki kepedulian...'
+                ]
+            },
+            'order': 3
+        },
+        {
+            'identifier': 'sejarah_block',
+            'content_type': ContentBlock.RICH_TEXT,
+            'content': {
+                'title': 'Sejarah Matana',
+                'text': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014...'
+            },
+            'order': 4
+        },
+        {
+            'identifier': 'keunggulan_block',
+            'content_type': ContentBlock.RICH_TEXT,
+            'content': {
+                'items': [
+                    {
+                        'title': 'Kurikulum Akademik Unggul',
+                        'description': 'Menerapkan kurikulum akademik yang mendukung...',
+                        'image': '/media/keunggulan/academic.jpg'
+                    },
+                    # ... more items
+                ]
+            },
+            'order': 5
+        },
+        {
+            'identifier': 'fasilitas_block',
+            'content_type': ContentBlock.RICH_TEXT,
+            'content': {
+                'items': [
+                    {
+                        'title': 'Perpustakaan Modern',
+                        'description': 'Koleksi buku lengkap dengan area belajar...',
+                        'image': '/media/fasilitas/library.jpg'
+                    },
+                    # ... more items
+                ]
+            },
+            'order': 6
+        }
+    ]
+    
+    # Create content blocks
+    for block in default_blocks:
+        ContentBlock.objects.create(
+            page=profile_page,
+            identifier=block['identifier'],
+            content_type=block['content_type'],
+            content=block['content'],
+            order=block['order']
+        )
+    
+    return profile_page
+
 def profile_view(request):
+    """View for profile page"""
+    try:
+        # Coba ambil page yang ada
+        profile_page = Page.objects.get(
+            slug='profil-matana',
+            status=Page.PUBLISHED
+        )
+        
+        # Debug: Print untuk cek page
+        print("Found page:", profile_page.title)
+        
+    except Page.DoesNotExist:
+        # Buat page baru jika tidak ada
+        profile_page = create_default_profile_page()
+        print("Created new page:", profile_page.title)
+    
+    # Get content blocks
+    blocks = {}
+    content_blocks = profile_page.content_blocks.all().order_by('order')
+    
+    # Debug: Print untuk cek blocks
+    print("Number of content blocks:", content_blocks.count())
+    
+    for block in content_blocks:
+        blocks[block.identifier] = block.content
+        print(f"Block {block.identifier}:", block.content)  # Debug
+    
     context = {
-        'visi': "Menjadi Perguruan Tinggi terpercaya...",  # Add full vision text
-        'misi_list': [
-            "Terbentuknya lulusan yang memiliki jiwa kepemimpinan...",
-            "Terciptanya lulusan yang memiliki kemampuan penelitian...",
-            "Terbentuknya generasi penerus yang memiliki kepedulian..."
-        ],
-        'sejarah': "Universitas Matana mulai beroperasi...",  # Add full history text
-        'keunggulan_list': [
-            {
-                'title': "Kurikulum Siap Kerja",
-                'description': "Menerapkan kurikulum akademik yang mendukung lulusan siap berkompetisi..."
-            },
-            # Add more items
-        ],
-        'facilities': [
-            {
-                'name': "Laboratorium Akuntansi",
-                'description': "Dilengkapi dengan software akuntansi terkini...",
-                'image': "path/to/image"
-            },
-            # Add more facilities
-        ]
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'hero': blocks.get('hero_section', {}),
+        'visi': blocks.get('visi_block', {}).get('text', ''),
+        'misi': blocks.get('misi_block', {}).get('items', []),
+        'sejarah': blocks.get('sejarah_block', {}),
+        'keunggulan': blocks.get('keunggulan_block', {}).get('items', []),
+        'fasilitas': blocks.get('fasilitas_block', {}).get('items', [])
     }
+    
+    # Debug: Print final context
+    print("Final context:", context)
+    
     return render(request, 'pages/profile.html', context)
 
 def ratelimit(key='ip', rate='5/m'):
