@@ -1,0 +1,95 @@
+{% extends "admin/base_admin.html" %}
+{% load static %}
+
+{% block title %}{{ title }} - Matana CMS{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <form method="POST" class="space-y-6">
+        {% csrf_token %}
+        
+        <!-- Page Info -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <h3 class="text-lg font-semibold mb-4">Page Information</h3>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                    <input type="text" name="title" value="{{ page.title }}"
+                           class="w-full px-4 py-2 border rounded-lg">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
+                    <textarea name="meta_description" rows="2" 
+                              class="w-full px-4 py-2 border rounded-lg">{{ page.metadata.meta_description }}</textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
+                    <input type="text" name="meta_keywords" value="{{ page.metadata.meta_keywords }}"
+                           class="w-full px-4 py-2 border rounded-lg">
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Blocks -->
+        <div class="space-y-6">
+            {% for identifier, content in blocks.items %}
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-semibold mb-4">{{ identifier|title }}</h3>
+                <div class="space-y-4">
+                    {% if content.title %}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                        <input type="text" 
+                               name="blocks[{{ identifier }}][title]" 
+                               value="{{ content.title }}"
+                               class="w-full px-4 py-2 border rounded-lg">
+                    </div>
+                    {% endif %}
+
+                    {% if content.text %}
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Content</label>
+                        <textarea name="blocks[{{ identifier }}][text]" 
+                                  rows="4"
+                                  class="w-full px-4 py-2 border rounded-lg">{{ content.text }}</textarea>
+                    </div>
+                    {% endif %}
+
+                    {% if content.items %}
+                    <div x-data="{ items: {{ content.items|safe }} }">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Items</label>
+                        <template x-for="(item, index) in items" :key="index">
+                            <div class="flex gap-4 mb-2">
+                                <input type="text" x-model="item" 
+                                       class="flex-1 px-4 py-2 border rounded-lg">
+                                <button type="button" @click="items.splice(index, 1)"
+                                        class="px-3 py-2 text-red-600 hover:bg-red-50 rounded-lg">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </template>
+                        <button type="button" @click="items.push('')"
+                                class="mt-2 px-4 py-2 text-sm text-blue-600 hover:bg-blue-50 rounded-lg">
+                            + Add Item
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end gap-4">
+            <button type="button" onclick="history.back()" 
+                    class="px-6 py-2 border rounded-lg hover:bg-gray-50">
+                Cancel
+            </button>
+            <button type="submit" 
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                Save Changes
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %} 

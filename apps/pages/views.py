@@ -22,6 +22,7 @@ import os
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
+import json
 
 
 def custom_404(request, exception):
@@ -1036,3 +1037,54 @@ def article_api_view(request, pk):
         'title': article.title,
         'featured_image': article.featured_image,
     })
+
+@staff_member_required
+def page_edit_view(request, slug):
+    """View for editing pages"""
+    try:
+        page = Page.objects.get(slug=slug)
+    except Page.DoesNotExist:
+        if slug == 'profil-matana':
+            page = create_default_profile_page()
+        elif slug == 'pendaftaran':
+            page = create_default_registration_page()
+        else:
+            messages.error(request, f'Page with slug "{slug}" not found.')
+            return redirect('content_dashboard')
+
+    if request.method == 'POST':
+        # Get content blocks data from form
+        blocks_data = json.loads(request.POST.get('blocks_data', '{}'))
+        
+        # Update page metadata
+        page.title = request.POST.get('title')
+        page.metadata = {
+            'meta_description': request.POST.get('meta_description', ''),
+            'meta_keywords': request.POST.get('meta_keywords', '')
+        }
+        page.save()
+        
+        # Update content blocks
+        for identifier, content in blocks_data.items():
+            ContentBlock.objects.update_or_create(
+                page=page,
+                identifier=identifier,
+                defaults={'content': content}
+            )
+        
+        messages.success(request, 'Page updated successfully!')
+        return redirect('page_edit', slug=slug)
+
+    # Get content blocks
+    blocks = {}
+    for block in page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    context = {
+        'page': page,
+        'blocks': blocks,
+        'title': f'Edit {page.title}',
+        'subtitle': 'Update page content and settings'
+    }
+    
+    return render(request, 'admin/page_form.html', context)

@@ -85,6 +85,9 @@
     </style>
 
     {% block extra_css %}{% endblock %}
+
+    <!-- In the head section -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-gray-50">
     <div class="flex min-h-screen">
@@ -135,6 +138,82 @@
                     </svg>
                     <span>Settings</span>
                 </a>
+
+                <!-- Pages Menu with Dropdown -->
+                <div x-data="{ open: false }" class="space-y-2">
+                    <!-- Pages Header -->
+                    <button @click="open = !open" 
+                            class="nav-item w-full flex items-center justify-between gap-3 px-4 py-3 text-gray-300 hover:text-white">
+                        <div class="flex items-center gap-3">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
+                                </path>
+                            </svg>
+                            <span>Pages</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform" 
+                             :class="{ 'rotate-180': open }"
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div x-show="open" 
+                         x-transition:enter="transition ease-out duration-100"
+                         x-transition:enter-start="transform opacity-0 scale-95"
+                         x-transition:enter-end="transform opacity-100 scale-100"
+                         class="pl-11 space-y-1">
+                        
+                        <!-- Profile Pages -->
+                        <div class="space-y-1">
+                            <span class="text-xs text-gray-500 px-4">Profile</span>
+                            <a href="{% url 'page_edit' slug='profil-matana' %}" 
+                               class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg">
+                                Profile Matana
+                            </a>
+                            <a href="{% url 'page_edit' slug='manajemen' %}" 
+                               class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg">
+                                Manajemen
+                            </a>
+                            <a href="{% url 'page_edit' slug='mitra' %}" 
+                               class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg">
+                                Mitra
+                            </a>
+                        </div>
+
+                        <!-- Program Studi Pages -->
+                        <div class="space-y-1 mt-4">
+                            <span class="text-xs text-gray-500 px-4">Program Studi</span>
+                            <a href="{% url 'page_edit' slug='informatika' %}" 
+                               class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg">
+                                Informatika
+                            </a>
+                            <a href="{% url 'page_edit' slug='akuntansi' %}" 
+                               class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg">
+                                Akuntansi
+                            </a>
+                            <a href="{% url 'page_edit' slug='manajemen-prodi' %}" 
+                               class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg">
+                                Manajemen
+                            </a>
+                        </div>
+
+                        <!-- Other Pages -->
+                        <div class="space-y-1 mt-4">
+                            <span class="text-xs text-gray-500 px-4">Other</span>
+                            <a href="{% url 'page_edit' slug='pendaftaran' %}" 
+                               class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg">
+                                Pendaftaran
+                            </a>
+                            <a href="{% url 'page_edit' slug='beasiswa' %}" 
+                               class="block px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg">
+                                Beasiswa
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </nav>
 
             <!-- User Menu -->
