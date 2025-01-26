@@ -23,6 +23,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 import json
+from apps.media.models import MediaFile
 
 
 def custom_404(request, exception):
@@ -207,60 +208,22 @@ def article_detail_view(request, slug):
 
 @staff_member_required
 def dashboard_view(request):
-    print(f"User: {request.user}")
-    print(f"Is staff: {request.user.is_staff}")
-    print(f"Is authenticated: {request.user.is_authenticated}")
-    print(f"User active: {request.user.is_active}")
-    # Get query parameters
-    category_id = request.GET.get('category')
-    status = request.GET.get('status')
-    search = request.GET.get('search', '').strip()
-    page = request.GET.get('page', 1)
-    
-    # Base queryset
-    articles = Article.objects.select_related('category', 'created_by')
-    
-    # Apply filters
-    if category_id:
-        articles = articles.filter(category_id=category_id)
-    if status:
-        articles = articles.filter(status=status)
-    if search:
-        articles = articles.filter(
-            Q(title__icontains=search) |
-            Q(excerpt__icontains=search)
-        )
-    
-    # Get counts for stats
-    total_articles = Article.objects.count()
-    published_count = Article.objects.filter(status='published').count()
-    draft_count = Article.objects.filter(status='draft').count()
-    
-    # Get categories with counts
-    categories = ArticleCategory.objects.annotate(
-        article_count=Count('articles')
-    )
-    
-    # Pagination
-    paginator = Paginator(articles, 20)
-    try:
-        articles_page = paginator.page(page)
-    except PageNotAnInteger:
-        articles_page = paginator.page(1)
-    except EmptyPage:
-        articles_page = paginator.page(paginator.num_pages)
-    
+    """Dashboard view"""
     context = {
-        'articles': articles_page,
-        'categories': categories,
-        'total_articles': total_articles,
-        'published_count': published_count,
-        'draft_count': draft_count,
-        'selected_category': category_id,
-        'selected_status': status,
-        'search_query': search,
+        'total_articles': Article.objects.count(),
+        'published_count': Article.objects.filter(status='published').count(),
+        'draft_count': Article.objects.filter(status='draft').count(),
+        'articles': Article.objects.all().order_by('-created_at')[:5],
+        'pages': Page.objects.all(),
+        'latest_page_update': Page.objects.order_by('-updated_at').first().updated_at if Page.objects.exists() else None,
+        'categories': ArticleCategory.objects.annotate(article_count=Count('articles')),
+        'most_used_category': ArticleCategory.objects.annotate(
+            article_count=Count('articles')
+        ).order_by('-article_count').first(),
+        'media_count': MediaFile.objects.count(),
+        'storage_used': '2.1 GB',  # You should calculate this
+        'storage_limit': '5 GB',  # Your storage limit
     }
-    
     return render(request, 'admin/dashboard.html', context)
 
 class ArticleForm(forms.ModelForm):
