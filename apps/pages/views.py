@@ -749,8 +749,165 @@ def bulk_action_view(request):
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
 
+def create_default_registration_page():
+    """Create default registration page with predefined content blocks"""
+    registration_page = Page.objects.create(
+        title="Pendaftaran Mahasiswa Baru",
+        slug="pendaftaran",
+        template='registration.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Pendaftaran Mahasiswa Baru Matana University',
+            'meta_keywords': 'pendaftaran matana, daftar kuliah, biaya kuliah'
+        }
+    )
+    
+    # Define default content blocks
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'content_type': ContentBlock.RICH_TEXT,
+            'content': {
+                'title': 'Pendaftaran Mahasiswa Baru',
+                'subtitle': 'Bergabunglah dengan Matana University untuk masa depan yang lebih baik',
+                'background_image': '/static/images/registration-hero.jpg'
+            },
+            'order': 1
+        },
+        {
+            'identifier': 'alur_pendaftaran',
+            'content_type': ContentBlock.RICH_TEXT,
+            'content': {
+                'title': 'Alur Pendaftaran',
+                'steps': [
+                    {
+                        'number': '1',
+                        'title': 'Registrasi Online',
+                        'description': 'Isi formulir pendaftaran online dengan data yang valid'
+                    },
+                    {
+                        'number': '2',
+                        'title': 'Upload Dokumen',
+                        'description': 'Upload dokumen yang diperlukan (Ijazah, Transkrip, dll)'
+                    },
+                    {
+                        'number': '3',
+                        'title': 'Pembayaran Registrasi',
+                        'description': 'Lakukan pembayaran biaya pendaftaran'
+                    },
+                    {
+                        'number': '4',
+                        'title': 'Tes Masuk',
+                        'description': 'Ikuti tes potensi akademik dan wawancara'
+                    }
+                ]
+            },
+            'order': 2
+        },
+        {
+            'identifier': 'biaya_kuliah',
+            'content_type': ContentBlock.RICH_TEXT,
+            'content': {
+                'title': 'Biaya Kuliah',
+                'description': 'Investasi untuk pendidikan berkualitas',
+                'programs': [
+                    {
+                        'name': 'S1 Informatika',
+                        'registration': 'Rp. 2.500.000',
+                        'per_semester': 'Rp. 12.500.000'
+                    },
+                    {
+                        'name': 'S1 Manajemen',
+                        'registration': 'Rp. 2.500.000',
+                        'per_semester': 'Rp. 11.500.000'
+                    }
+                ]
+            },
+            'order': 3
+        },
+        {
+            'identifier': 'dokumen_required',
+            'content_type': ContentBlock.RICH_TEXT,
+            'content': {
+                'title': 'Dokumen yang Diperlukan',
+                'items': [
+                    'Scan Ijazah SMA/SMK/Sederajat',
+                    'Scan Transkrip Nilai',
+                    'Scan KTP',
+                    'Pas Foto Terbaru',
+                    'Surat Keterangan Sehat'
+                ]
+            },
+            'order': 4
+        },
+        {
+            'identifier': 'contact_info',
+            'content_type': ContentBlock.RICH_TEXT,
+            'content': {
+                'title': 'Informasi Kontak',
+                'description': 'Hubungi kami untuk informasi lebih lanjut',
+                'contacts': [
+                    {
+                        'type': 'phone',
+                        'value': '+62 21 1234567',
+                        'icon': 'phone'
+                    },
+                    {
+                        'type': 'whatsapp',
+                        'value': '+62 812 3456 7890',
+                        'icon': 'whatsapp'
+                    },
+                    {
+                        'type': 'email',
+                        'value': 'admissions@matanauniversity.ac.id',
+                        'icon': 'envelope'
+                    }
+                ]
+            },
+            'order': 5
+        }
+    ]
+    
+    # Create content blocks
+    for block in default_blocks:
+        ContentBlock.objects.create(
+            page=registration_page,
+            identifier=block['identifier'],
+            content_type=block['content_type'],
+            content=block['content'],
+            order=block['order']
+        )
+    
+    return registration_page
+
 def registration_view(request):
-    return render(request, 'pages/registration.html')
+    """View for registration page"""
+    try:
+        # Try to get existing registration page
+        registration_page = Page.objects.get(
+            slug='pendaftaran',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        # Create new page if doesn't exist
+        registration_page = create_default_registration_page()
+    
+    # Get content blocks
+    blocks = {}
+    for block in registration_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+    
+    context = {
+        'page': registration_page,
+        'meta': registration_page.metadata,
+        'hero': blocks.get('hero_section', {}),
+        'alur': blocks.get('alur_pendaftaran', {}),
+        'biaya': blocks.get('biaya_kuliah', {}),
+        'dokumen': blocks.get('dokumen_required', {}),
+        'contact': blocks.get('contact_info', {})
+    }
+    
+    return render(request, 'pages/registration.html', context)
 
 @require_POST
 def registration_submit(request):
