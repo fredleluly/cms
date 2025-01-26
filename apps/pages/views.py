@@ -1053,32 +1053,37 @@ def page_edit_view(request, slug):
             return redirect('content_dashboard')
 
     if request.method == 'POST':
-        # Get content blocks data from form
-        blocks_data = json.loads(request.POST.get('blocks_data', '{}'))
-        
-        # Update page metadata
-        page.title = request.POST.get('title')
-        page.metadata = {
-            'meta_description': request.POST.get('meta_description', ''),
-            'meta_keywords': request.POST.get('meta_keywords', '')
-        }
-        page.save()
-        
-        # Update content blocks
-        for identifier, content in blocks_data.items():
-            ContentBlock.objects.update_or_create(
-                page=page,
-                identifier=identifier,
-                defaults={'content': content}
-            )
-        
-        messages.success(request, 'Page updated successfully!')
-        return redirect('page_edit', slug=slug)
+        try:
+            # Update page metadata
+            page.title = request.POST.get('title')
+            page.metadata = {
+                'meta_description': request.POST.get('meta_description', ''),
+                'meta_keywords': request.POST.get('meta_keywords', '')
+            }
+            page.save()
+            
+            # Process each content block
+            for block in page.content_blocks.all():
+                content_str = request.POST.get(f'block_{block.identifier}_content', '{}')
+                try:
+                    content = json.loads(content_str)
+                    block.content = content
+                    block.save()
+                except json.JSONDecodeError as e:
+                    messages.error(request, f'Invalid JSON for {block.identifier}: {str(e)}')
+                    return redirect('page_edit', slug=slug)
+            
+            messages.success(request, 'Page updated successfully!')
+            return redirect('page_edit', slug=slug)
+            
+        except Exception as e:
+            messages.error(request, f'Error saving page: {str(e)}')
+            print("Error:", str(e))  # For debugging
 
     # Get content blocks
     blocks = {}
     for block in page.content_blocks.all().order_by('order'):
-        blocks[block.identifier] = block.content
+        blocks[block.identifier] = json.dumps(block.content)
 
     context = {
         'page': page,
