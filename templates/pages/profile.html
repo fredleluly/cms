@@ -143,22 +143,8 @@
 <!-- Hero Section -->
 <section class="hero-section flex items-center justify-center text-white">
     <div class="container mx-auto px-4 text-center">
-        <!-- Debug: Print raw data -->
-        <!-- {{ hero }} -->
-        <h1 class="text-4xl md:text-6xl font-bold mb-6">
-            {% if hero.title %}
-                {{ hero.title }}
-            {% else %}
-                Default Title
-            {% endif %}
-        </h1>
-        <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto">
-            {% if hero.subtitle %}
-                {{ hero.subtitle }}
-            {% else %}
-                Default Subtitle
-            {% endif %}
-        </p>
+        <h1 class="text-4xl md:text-6xl font-bold mb-6">{{ hero.title }}</h1>
+        <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto">{{ hero.subtitle }}</p>
     </div>
 </section>
 
@@ -170,28 +156,20 @@
         <div class="grid md:grid-cols-2 gap-8 mb-16">
             <div class="vision-card p-8 rounded-2xl text-white">
                 <div class="relative z-10">
-                    <div class="text-2xl font-bold mb-4">Visi</div>
-                    <!-- Debug: Print raw data -->
-                    <!-- {{ visi }} -->
-                    <p class="text-white/90 leading-relaxed">
-                        {% if visi %}
-                            {{ visi }}
-                        {% else %}
-                            Default Vision Text
-                        {% endif %}
-                    </p>
+                    <div class="text-2xl font-bold mb-4">{{ visi_section.title }}</div>
+                    <p class="text-white/90 leading-relaxed">{{ visi_section.description }}</p>
                 </div>
             </div>
             
             <div class="space-y-6">
-                <div class="text-2xl font-bold mb-6">Misi</div>
+                <div class="text-2xl font-bold mb-6">{{ misi_section.title }}</div>
                 <div class="space-y-4">
-                    {% for item in misi %}
+                    {% for item in misi_section.items %}
                     <div class="flex items-start">
                         <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mt-1">
                             <span class="text-matana-blue font-semibold">{{ forloop.counter }}</span>
                         </div>
-                        <p class="ml-4 text-gray-600">{{ item }}</p>
+                        <p class="ml-4 text-gray-600">{{ item.description }}</p>
                     </div>
                     {% endfor %}
                 </div>
@@ -203,10 +181,10 @@
 <!-- Sejarah -->
 <section class="py-20 bg-gray-50">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ sejarah.title }}</h2>
+        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ sejarah_section.title }}</h2>
         <div class="max-w-4xl mx-auto">
             <div class="prose prose-lg mx-auto">
-                <p class="text-gray-600 leading-relaxed">{{ sejarah.text|safe }}</p>
+                <p class="text-gray-600 leading-relaxed">{{ sejarah_section.description|safe }}</p>
             </div>
         </div>
     </div>
@@ -215,9 +193,9 @@
 <!-- Keunggulan -->
 <section class="py-20">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title">Keunggulan Matana</h2>
+        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ keunggulan_section.title }}</h2>
         <div class="grid md:grid-cols-3 gap-8">
-            {% for item in keunggulan %}
+            {% for item in keunggulan_section.items %}
             <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
                 <img src="{{ item.image }}" alt="{{ item.title }}" class="w-full h-48 object-cover rounded-lg mb-6">
                 <h3 class="text-xl font-bold mb-4">{{ item.title }}</h3>

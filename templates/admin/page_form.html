@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="max-w-5xl mx-auto">
-    <form method="POST" class="space-y-6">
+    <form method="POST" class="space-y-8" id="pageForm">
         {% csrf_token %}
         
         <!-- Page Info -->
@@ -14,33 +14,164 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                    <input type="text" name="title" value="{{ page.title }}"
-                           class="w-full px-4 py-2 border rounded-lg">
+                    <input type="text" name="title" value="{{ page.title }}" required
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
                     <textarea name="meta_description" rows="2" 
-                              class="w-full px-4 py-2 border rounded-lg">{{ page.metadata.meta_description }}</textarea>
+                              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">{{ page.metadata.meta_description }}</textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
                     <input type="text" name="meta_keywords" value="{{ page.metadata.meta_keywords }}"
-                           class="w-full px-4 py-2 border rounded-lg">
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
             </div>
         </div>
 
         <!-- Content Blocks -->
-        <div class="space-y-6">
+        <div class="space-y-8">
             {% for identifier, content in blocks.items %}
-            <div class="bg-white rounded-xl shadow-sm p-6">
-                <h3 class="text-lg font-semibold mb-4">{{ identifier|title }}</h3>
-                <div class="space-y-4">
+            <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div class="bg-gray-50 px-6 py-4 border-b flex justify-between items-center">
+                    <h3 class="text-lg font-semibold text-gray-900">{{ identifier|title }}</h3>
+                    <button type="button" onclick="toggleBlock('{{ identifier }}')"
+                            class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-chevron-down" id="icon-{{ identifier }}"></i>
+                    </button>
+                </div>
+                
+                <div id="block-{{ identifier }}" class="p-6 space-y-6">
+                    <!-- Title & Subtitle -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                            <input type="text" name="{{ identifier }}_title" 
+                                   value="{{ content.title }}"
+                                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Subtitle</label>
+                            <input type="text" name="{{ identifier }}_subtitle" 
+                                   value="{{ content.subtitle }}"
+                                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- Description -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Content (JSON)</label>
-                        <textarea name="block_{{ identifier }}_content" 
-                                  rows="10"
-                                  class="w-full px-4 py-2 border rounded-lg font-mono text-sm">{{ content|safe }}</textarea>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                        <textarea name="{{ identifier }}_description" rows="3"
+                                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">{{ content.description }}</textarea>
+                    </div>
+
+                    <!-- Images -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+                            <div class="flex gap-2">
+                                <input type="text" name="{{ identifier }}_image" 
+                                       value="{{ content.image }}"
+                                       class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <button type="button" onclick="openMediaLibrary('{{ identifier }}_image')"
+                                        class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                    <i class="fas fa-image"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Background Image</label>
+                            <div class="flex gap-2">
+                                <input type="text" name="{{ identifier }}_background_image" 
+                                       value="{{ content.background_image }}"
+                                       class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                                <button type="button" onclick="openMediaLibrary('{{ identifier }}_background_image')"
+                                        class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                    <i class="fas fa-image"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Items -->
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <label class="block text-sm font-medium text-gray-700">Items</label>
+                            <button type="button" onclick="addItem('{{ identifier }}')"
+                                    class="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100">
+                                <i class="fas fa-plus mr-1"></i> Add Item
+                            </button>
+                        </div>
+                        <div id="{{ identifier }}_items" class="space-y-4">
+                            {% for item in content.items %}
+                            <div class="bg-gray-50 p-4 rounded-lg relative group">
+                                <button type="button" onclick="removeItem(this)"
+                                        class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 hover:text-red-700">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                
+                                <!-- Main item fields -->
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <input type="text" name="{{ identifier }}_items_title[]" 
+                                           value="{{ item.title }}" placeholder="Title"
+                                           class="w-full px-4 py-2 border rounded-lg">
+                                    <input type="text" name="{{ identifier }}_items_icon[]" 
+                                           value="{{ item.icon }}" placeholder="Icon"
+                                           class="w-full px-4 py-2 border rounded-lg">
+                                </div>
+                                <textarea name="{{ identifier }}_items_description[]" 
+                                          placeholder="Description" rows="2"
+                                          class="mt-2 w-full px-4 py-2 border rounded-lg">{{ item.description }}</textarea>
+                                
+                                <!-- Only show nested items section if this is a nested structure -->
+                                {% if item.items and not item.icon %}
+                                <div class="mt-4 border-t pt-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <label class="text-sm font-medium text-gray-700">Nested Items</label>
+                                        <button type="button" onclick="addNestedItem(this)"
+                                                class="px-2 py-1 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200">
+                                            <i class="fas fa-plus"></i> Add Item
+                                        </button>
+                                    </div>
+                                    <div class="nested-items space-y-2">
+                                        {% for nested_item in item.items %}
+                                        <div class="flex gap-2 items-center">
+                                            <input type="text" 
+                                                   name="{{ identifier }}_items_nested[]" 
+                                                   value="{{ nested_item }}"
+                                                   class="flex-1 px-3 py-2 border rounded-lg">
+                                            <button type="button" onclick="removeNestedItem(this)"
+                                                    class="text-red-500 hover:text-red-700">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Call to Action -->
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <h4 class="font-medium text-gray-900 mb-3">Call to Action</h4>
+                        <div class="grid md:grid-cols-3 gap-4">
+                            <input type="text" name="{{ identifier }}_cta_text" 
+                                   value="{{ content.cta.text }}" placeholder="Button Text"
+                                   class="w-full px-4 py-2 border rounded-lg">
+                            <input type="text" name="{{ identifier }}_cta_url" 
+                                   value="{{ content.cta.url }}" placeholder="URL"
+                                   class="w-full px-4 py-2 border rounded-lg">
+                            <select name="{{ identifier }}_cta_style"
+                                    class="w-full px-4 py-2 border rounded-lg">
+                                <option value="primary" {% if content.cta.style == 'primary' %}selected{% endif %}>Primary</option>
+                                <option value="secondary" {% if content.cta.style == 'secondary' %}selected{% endif %}>Secondary</option>
+                                <option value="outline" {% if content.cta.style == 'outline' %}selected{% endif %}>Outline</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,17 +193,170 @@
 </div>
 
 <script>
-// Format JSON in textareas for better readability
-document.addEventListener('DOMContentLoaded', function() {
-    const textareas = document.querySelectorAll('textarea[name$="_content"]');
-    textareas.forEach(textarea => {
-        try {
-            const content = JSON.parse(textarea.value);
-            textarea.value = JSON.stringify(content, null, 2);
-        } catch (e) {
-            console.error('Invalid JSON:', e);
+function toggleBlock(identifier) {
+    const block = document.getElementById(`block-${identifier}`);
+    const icon = document.getElementById(`icon-${identifier}`);
+    
+    if (block.style.display === 'none') {
+        block.style.display = 'block';
+        icon.classList.remove('fa-chevron-right');
+        icon.classList.add('fa-chevron-down');
+    } else {
+        block.style.display = 'none';
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-right');
+    }
+}
+
+function addItem(identifier) {
+    const container = document.getElementById(`${identifier}_items`);
+    const template = `
+        <div class="bg-gray-50 p-4 rounded-lg relative group">
+            <button type="button" onclick="removeItem(this)"
+                    class="absolute right-2 top-2 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 hover:text-red-700">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="grid md:grid-cols-2 gap-4">
+                <input type="text" name="${identifier}_items_title[]" 
+                       placeholder="Title"
+                       class="w-full px-4 py-2 border rounded-lg">
+                <input type="text" name="${identifier}_items_icon[]" 
+                       placeholder="Icon"
+                       class="w-full px-4 py-2 border rounded-lg">
+            </div>
+            <textarea name="${identifier}_items_description[]" 
+                      placeholder="Description" rows="2"
+                      class="mt-2 w-full px-4 py-2 border rounded-lg"></textarea>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', template);
+}
+
+function removeItem(button) {
+    button.closest('.bg-gray-50').remove();
+}
+
+function openMediaLibrary(inputName) {
+    // Implement media library popup
+    window.open('/admin/media-library?input=' + inputName, 'MediaLibrary', 
+                'width=800,height=600');
+}
+
+function addNestedItem(button) {
+    const container = button.closest('.mt-4').querySelector('.nested-items');
+    const identifier = button.closest('[id$="_items"]').id.replace('_items', '');
+    
+    const template = `
+        <div class="flex gap-2 items-center">
+            <input type="text" 
+                   name="${identifier}_items_nested[]" 
+                   class="flex-1 px-3 py-2 border rounded-lg">
+            <button type="button" onclick="removeNestedItem(this)"
+                    class="text-red-500 hover:text-red-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    container.insertAdjacentHTML('beforeend', template);
+}
+
+function removeNestedItem(button) {
+    button.closest('.flex').remove();
+}
+
+// Update form submission
+document.getElementById('pageForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    try {
+        const formData = new FormData(this);
+        const blocks = {};
+        
+        {% for identifier, content in blocks.items %}
+        const originalContent = {{ content|safe }};
+        console.log(`Processing block: ${identifier}`);
+        
+        // Collect and validate block data
+        const blockData = {
+            title: formData.get(`${identifier}_title`),
+            subtitle: formData.get(`${identifier}_subtitle`),
+            description: formData.get(`${identifier}_description`),
+            image: formData.get(`${identifier}_image`),
+            background_image: formData.get(`${identifier}_background_image`),
+            items: [],
+            cta: {
+                text: formData.get(`${identifier}_cta_text`),
+                url: formData.get(`${identifier}_cta_url`),
+                style: formData.get(`${identifier}_cta_style`)
+            },
+            layout: originalContent.layout || 'default',
+            settings: originalContent.settings || {}
+        };
+        
+        // Process items
+        const itemElements = document.querySelectorAll(`#${identifier}_items > div`);
+        blockData.items = Array.from(itemElements).map((div, index) => {
+            const originalItem = originalContent.items?.[index] || {};
+            
+            // Get nested items if they exist
+            const nestedItemsContainer = div.querySelector('.nested-items');
+            const nestedItems = nestedItemsContainer 
+                ? Array.from(nestedItemsContainer.querySelectorAll('input'))
+                    .map(input => input.value)
+                    .filter(value => value.trim() !== '')
+                : originalItem.items || [];
+            
+            const item = {
+                title: div.querySelector(`[name="${identifier}_items_title[]"]`).value,
+                icon: div.querySelector(`[name="${identifier}_items_icon[]"]`).value || originalItem.icon || '',
+                description: div.querySelector(`[name="${identifier}_items_description[]"]`).value
+            };
+            
+            // Only add items array if it has content
+            if (nestedItems.length > 0) {
+                item.items = nestedItems;
+            }
+            
+            return item;
+        });
+        
+        blocks[identifier] = blockData;
+        console.log(`Block ${identifier} data:`, blockData);
+        {% endfor %}
+        
+        // Validate final data
+        console.log('Final blocks data:', blocks);
+        formData.append('blocks', JSON.stringify(blocks));
+        
+        // Submit with better error handling
+        const response = await fetch(window.location.href, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        });
+        
+        const data = await response.json();
+        console.log('Server response:', data);
+        
+        if (data.success) {
+            const message = document.createElement('div');
+            message.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            message.textContent = 'Page saved successfully!';
+            document.body.appendChild(message);
+            
+            setTimeout(() => {
+                window.location.href = data.redirect_url;
+            }, 1000);
+        } else {
+            throw new Error(data.error || 'Save failed');
         }
-    });
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error saving page: ' + error.message);
+    }
 });
 </script>
 {% endblock %} 

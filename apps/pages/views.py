@@ -24,6 +24,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 import json
 from apps.media.models import MediaFile
+from django.urls import reverse
 
 
 def custom_404(request, exception):
@@ -33,6 +34,31 @@ def custom_404(request, exception):
 
 
 # Create your views here.
+
+def create_standardized_blocks(page, blocks_data):
+    """Helper function to create standardized content blocks"""
+    for block in blocks_data:
+        ContentBlock.objects.create(
+            page=page,
+            identifier=block['identifier'],
+            content_type=ContentBlock.RICH_TEXT,  # Using RICH_TEXT as standard
+            content={
+                'title': block.get('title', ''),
+                'subtitle': block.get('subtitle', ''),
+                'description': block.get('description', ''),
+                'image': block.get('image', ''),
+                'items': block.get('items', []),
+                'background_image': block.get('background_image', ''),
+                'cta': block.get('cta', {
+                    'text': '',
+                    'url': '',
+                    'style': 'primary'
+                }),
+                'layout': block.get('layout', 'default'),
+                'settings': block.get('settings', {})
+            },
+            order=block['order']
+        )
 
 def create_default_homepage():
     """Create a default homepage if none exists"""
@@ -44,33 +70,46 @@ def create_default_homepage():
         template='home.html'
     )
     
-    # Create default content blocks
     default_blocks = [
         {
-            'identifier': 'hero_title',
-            'content_type': 'text',
-            'content': 'Welcome to Matana University'
-        },
-        {
-            'identifier': 'hero_subtitle',
-            'content_type': 'text',
-            'content': 'Perguruan tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme'
+            'identifier': 'hero_section',
+            'title': 'Welcome to Matana University',
+            'subtitle': 'Perguruan tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme',
+            'background_image': '/static/images/hero-bg.jpg',
+            'cta': {
+                'text': 'Learn More',
+                'url': '/about',
+                'style': 'primary'
+            },
+            'order': 1
         },
         {
             'identifier': 'about_section',
-            'content_type': 'rich_text',
-            'content': '<p>Matana University adalah institusi pendidikan tinggi yang berkomitmen untuk menghasilkan lulusan berkualitas.</p>'
+            'title': 'About Matana',
+            'description': 'Matana University adalah institusi pendidikan tinggi yang berkomitmen untuk menghasilkan lulusan berkualitas.',
+            'image': '/static/images/about.jpg',
+            'order': 2
+        },
+        {
+            'identifier': 'features_section',
+            'title': 'Why Choose Matana',
+            'items': [
+                {
+                    'title': 'Academic Excellence',
+                    'description': 'Kurikulum yang komprehensif dan modern',
+                    'icon': 'academic'
+                },
+                {
+                    'title': 'Industry Connection',
+                    'description': 'Kerjasama dengan industri terkemuka',
+                    'icon': 'industry'
+                }
+            ],
+            'order': 3
         }
     ]
     
-    for block in default_blocks:
-        ContentBlock.objects.create(
-            page=homepage,
-            identifier=block['identifier'],
-            content_type=block['content_type'],
-            content=block['content']
-        )
-    
+    create_standardized_blocks(homepage, default_blocks)
     return homepage
 
 def home_view(request):
@@ -344,11 +383,7 @@ def article_quick_update(request, pk):
     })
 
 def create_default_profile_page():
-    """Create default profile page with predefined content blocks"""
-    # Check if page already exists first
-    if Page.objects.filter(slug='profil-matana').exists():
-        return Page.objects.get(slug='profil-matana')
-        
+    """Create default profile page with standardized content blocks"""
     profile_page = Page.objects.create(
         title="Profil Matana University",
         slug="profil-matana",
@@ -360,132 +395,87 @@ def create_default_profile_page():
         }
     )
     
-    # Define default content blocks
     default_blocks = [
         {
             'identifier': 'hero_section',
-            'content_type': ContentBlock.RICH_TEXT,
-            'content': {
-                'title': 'Profil Matana University',
-                'subtitle': 'World Class Learning Experience',
-                'background_image': '/static/images/campus-aerial.jpg'
-            },
+            'title': 'Profil Matana University',
+            'subtitle': 'World Class Learning Experience',
+            'background_image': '/static/images/campus-aerial.jpg',
             'order': 1
         },
         {
-            'identifier': 'visi_block',
-            'content_type': ContentBlock.RICH_TEXT,
-            'content': {
-                'text': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional...'
-            },
+            'identifier': 'visi_section',
+            'title': 'Visi Matana',
+            'description': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional...',
             'order': 2
         },
         {
-            'identifier': 'misi_block',
-            'content_type': ContentBlock.RICH_TEXT,
-            'content': {
-                'items': [
-                    'Terbentuknya lulusan yang memiliki jiwa kepemimpinan...',
-                    'Terciptanya lulusan yang memiliki kemampuan penelitian...',
-                    'Terbentuknya generasi penerus yang memiliki kepedulian...'
-                ]
-            },
+            'identifier': 'misi_section',
+            'title': 'Misi Matana',
+            'items': [
+                {
+                    'title': 'Kepemimpinan',
+                    'description': 'Terbentuknya lulusan yang memiliki jiwa kepemimpinan...'
+                },
+                {
+                    'title': 'Penelitian',
+                    'description': 'Terciptanya lulusan yang memiliki kemampuan penelitian...'
+                },
+                {
+                    'title': 'Kepedulian Sosial',
+                    'description': 'Terbentuknya generasi penerus yang memiliki kepedulian...'
+                }
+            ],
             'order': 3
         },
         {
-            'identifier': 'sejarah_block',
-            'content_type': ContentBlock.RICH_TEXT,
-            'content': {
-                'title': 'Sejarah Matana',
-                'text': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014...'
-            },
+            'identifier': 'sejarah_section',
+            'title': 'Sejarah Matana',
+            'description': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014...',
+            'image': '/static/images/history.jpg',
             'order': 4
         },
         {
-            'identifier': 'keunggulan_block',
-            'content_type': ContentBlock.RICH_TEXT,
-            'content': {
-                'items': [
-                    {
-                        'title': 'Kurikulum Akademik Unggul',
-                        'description': 'Menerapkan kurikulum akademik yang mendukung...',
-                        'image': '/media/keunggulan/academic.jpg'
-                    },
-                    # ... more items
-                ]
-            },
+            'identifier': 'keunggulan_section',
+            'title': 'Keunggulan Matana',
+            'items': [
+                {
+                    'title': 'Kurikulum Akademik Unggul',
+                    'description': 'Menerapkan kurikulum akademik yang mendukung...',
+                    'image': '/media/keunggulan/academic.jpg'
+                }
+            ],
             'order': 5
-        },
-        {
-            'identifier': 'fasilitas_block',
-            'content_type': ContentBlock.RICH_TEXT,
-            'content': {
-                'items': [
-                    {
-                        'title': 'Perpustakaan Modern',
-                        'description': 'Koleksi buku lengkap dengan area belajar...',
-                        'image': '/media/fasilitas/library.jpg'
-                    },
-                    # ... more items
-                ]
-            },
-            'order': 6
         }
     ]
     
-    # Create content blocks
-    for block in default_blocks:
-        ContentBlock.objects.create(
-            page=profile_page,
-            identifier=block['identifier'],
-            content_type=block['content_type'],
-            content=block['content'],
-            order=block['order']
-        )
-    
+    create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
 def profile_view(request):
     """View for profile page"""
     try:
-        # Coba ambil page yang ada
         profile_page = Page.objects.get(
             slug='profil-matana',
             status=Page.PUBLISHED
         )
-        
-        # Debug: Print untuk cek page
-        print("Found page:", profile_page.title)
-        
     except Page.DoesNotExist:
-        # Buat page baru jika tidak ada
         profile_page = create_default_profile_page()
-        print("Created new page:", profile_page.title)
     
     # Get content blocks
     blocks = {}
-    content_blocks = profile_page.content_blocks.all().order_by('order')
-    
-    # Debug: Print untuk cek blocks
-    print("Number of content blocks:", content_blocks.count())
-    
-    for block in content_blocks:
+    for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
-        print(f"Block {block.identifier}:", block.content)  # Debug
     
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
         'hero': blocks.get('hero_section', {}),
-        'visi': blocks.get('visi_block', {}).get('text', ''),
-        'misi': blocks.get('misi_block', {}).get('items', []),
-        'sejarah': blocks.get('sejarah_block', {}),
-        'keunggulan': blocks.get('keunggulan_block', {}).get('items', []),
-        'fasilitas': blocks.get('fasilitas_block', {}).get('items', [])
+        'visi_section': blocks.get('visi_section', {}),
+        'misi_section': blocks.get('misi_section', {}),
+        'sejarah_section': blocks.get('sejarah_section', {}),
+        'keunggulan_section': blocks.get('keunggulan_section', {}),
     }
-    
-    # Debug: Print final context
-    print("Final context:", context)
     
     return render(request, 'pages/profile.html', context)
 
@@ -714,7 +704,7 @@ def bulk_action_view(request):
         return JsonResponse({'error': str(e)}, status=500)
 
 def create_default_registration_page():
-    """Create default registration page with predefined content blocks"""
+    """Create default registration page with standardized content blocks"""
     registration_page = Page.objects.create(
         title="Pendaftaran Mahasiswa Baru",
         slug="pendaftaran",
@@ -726,122 +716,108 @@ def create_default_registration_page():
         }
     )
     
-    # Define default content blocks
     default_blocks = [
         {
             'identifier': 'hero_section',
-            'content_type': ContentBlock.RICH_TEXT,
-            'content': {
-                'title': 'Pendaftaran Mahasiswa Baru',
-                'subtitle': 'Bergabunglah dengan Matana University untuk masa depan yang lebih baik',
-                'background_image': '/static/images/registration-hero.jpg'
-            },
+            'title': 'Pendaftaran Mahasiswa Baru',
+            'subtitle': 'Bergabunglah dengan Matana University untuk masa depan yang lebih baik',
+            'background_image': '/static/images/registration-hero.jpg',
             'order': 1
         },
         {
-            'identifier': 'alur_pendaftaran',
-            'content_type': ContentBlock.RICH_TEXT,
-            'content': {
-                'title': 'Alur Pendaftaran',
-                'steps': [
-                    {
-                        'number': '1',
-                        'title': 'Registrasi Online',
-                        'description': 'Isi formulir pendaftaran online dengan data yang valid'
-                    },
-                    {
-                        'number': '2',
-                        'title': 'Upload Dokumen',
-                        'description': 'Upload dokumen yang diperlukan (Ijazah, Transkrip, dll)'
-                    },
-                    {
-                        'number': '3',
-                        'title': 'Pembayaran Registrasi',
-                        'description': 'Lakukan pembayaran biaya pendaftaran'
-                    },
-                    {
-                        'number': '4',
-                        'title': 'Tes Masuk',
-                        'description': 'Ikuti tes potensi akademik dan wawancara'
-                    }
-                ]
-            },
+            'identifier': 'alur_section',
+            'title': 'Alur Pendaftaran',
+            'items': [
+                {
+                    'title': 'Registrasi Online',
+                    'description': 'Isi formulir pendaftaran online dengan data yang valid',
+                    'icon': 'form'
+                },
+                {
+                    'title': 'Upload Dokumen',
+                    'description': 'Upload dokumen yang diperlukan (Ijazah, Transkrip, dll)',
+                    'icon': 'upload'
+                },
+                {
+                    'title': 'Pembayaran Registrasi',
+                    'description': 'Lakukan pembayaran biaya pendaftaran',
+                    'icon': 'payment'
+                },
+                {
+                    'title': 'Tes Masuk',
+                    'description': 'Ikuti tes potensi akademik dan wawancara',
+                    'icon': 'test'
+                }
+            ],
             'order': 2
         },
         {
-            'identifier': 'biaya_kuliah',
-            'content_type': ContentBlock.RICH_TEXT,
-            'content': {
-                'title': 'Biaya Kuliah',
-                'description': 'Investasi untuk pendidikan berkualitas',
-                'programs': [
-                    {
-                        'name': 'S1 Informatika',
-                        'registration': 'Rp. 2.500.000',
-                        'per_semester': 'Rp. 12.500.000'
-                    },
-                    {
-                        'name': 'S1 Manajemen',
-                        'registration': 'Rp. 2.500.000',
-                        'per_semester': 'Rp. 11.500.000'
-                    }
-                ]
-            },
+            'identifier': 'biaya_section',
+            'title': 'Biaya Kuliah',
+            'description': 'Investasi untuk pendidikan berkualitas',
+            'items': [
+                {
+                    'title': 'S1 Informatika',
+                    'description': 'Program Studi Informatika',
+                    'items': [
+                        'Registrasi: Rp. 2.500.000',
+                        'Per Semester: Rp. 12.500.000'
+                    ]
+                },
+                {
+                    'title': 'S1 Manajemen',
+                    'description': 'Program Studi Manajemen',
+                    'items': [
+                        'Registrasi: Rp. 2.500.000',
+                        'Per Semester: Rp. 11.500.000'
+                    ]
+                }
+            ],
             'order': 3
         },
         {
-            'identifier': 'dokumen_required',
-            'content_type': ContentBlock.RICH_TEXT,
-            'content': {
-                'title': 'Dokumen yang Diperlukan',
-                'items': [
-                    'Scan Ijazah SMA/SMK/Sederajat',
-                    'Scan Transkrip Nilai',
-                    'Scan KTP',
-                    'Pas Foto Terbaru',
-                    'Surat Keterangan Sehat'
-                ]
-            },
+            'identifier': 'dokumen_section',
+            'title': 'Dokumen yang Diperlukan',
+            'items': [
+                {
+                    'title': 'Dokumen Wajib',
+                    'items': [
+                        'Scan Ijazah SMA/SMK/Sederajat',
+                        'Scan Transkrip Nilai',
+                        'Scan KTP',
+                        'Pas Foto Terbaru',
+                        'Surat Keterangan Sehat'
+                    ]
+                }
+            ],
             'order': 4
         },
         {
-            'identifier': 'contact_info',
-            'content_type': ContentBlock.RICH_TEXT,
-            'content': {
-                'title': 'Informasi Kontak',
-                'description': 'Hubungi kami untuk informasi lebih lanjut',
-                'contacts': [
-                    {
-                        'type': 'phone',
-                        'value': '+62 21 1234567',
-                        'icon': 'phone'
-                    },
-                    {
-                        'type': 'whatsapp',
-                        'value': '+62 812 3456 7890',
-                        'icon': 'whatsapp'
-                    },
-                    {
-                        'type': 'email',
-                        'value': 'admissions@matanauniversity.ac.id',
-                        'icon': 'envelope'
-                    }
-                ]
-            },
+            'identifier': 'contact_section',
+            'title': 'Informasi Kontak',
+            'description': 'Hubungi kami untuk informasi lebih lanjut',
+            'items': [
+                {
+                    'title': 'Phone',
+                    'description': '+62 21 1234567',
+                    'icon': 'phone'
+                },
+                {
+                    'title': 'WhatsApp',
+                    'description': '+62 812 3456 7890',
+                    'icon': 'whatsapp'
+                },
+                {
+                    'title': 'Email',
+                    'description': 'admissions@matanauniversity.ac.id',
+                    'icon': 'envelope'
+                }
+            ],
             'order': 5
         }
     ]
     
-    # Create content blocks
-    for block in default_blocks:
-        ContentBlock.objects.create(
-            page=registration_page,
-            identifier=block['identifier'],
-            content_type=block['content_type'],
-            content=block['content'],
-            order=block['order']
-        )
-    
+    create_standardized_blocks(registration_page, default_blocks)
     return registration_page
 
 def registration_view(request):
@@ -865,10 +841,10 @@ def registration_view(request):
         'page': registration_page,
         'meta': registration_page.metadata,
         'hero': blocks.get('hero_section', {}),
-        'alur': blocks.get('alur_pendaftaran', {}),
-        'biaya': blocks.get('biaya_kuliah', {}),
-        'dokumen': blocks.get('dokumen_required', {}),
-        'contact': blocks.get('contact_info', {})
+        'alur': blocks.get('alur_section', {}),
+        'biaya': blocks.get('biaya_section', {}),
+        'dokumen': blocks.get('dokumen_section', {}),
+        'contact': blocks.get('contact_section', {})
     }
     
     return render(request, 'pages/registration.html', context)
@@ -1017,36 +993,51 @@ def page_edit_view(request, slug):
 
     if request.method == 'POST':
         try:
-            # Update page metadata
-            page.title = request.POST.get('title')
-            page.metadata = {
-                'meta_description': request.POST.get('meta_description', ''),
-                'meta_keywords': request.POST.get('meta_keywords', '')
-            }
-            page.save()
+            # Debug: Log received data
+            print("Received POST data:", request.POST)
             
-            # Process each content block
-            for block in page.content_blocks.all():
-                content_str = request.POST.get(f'block_{block.identifier}_content', '{}')
+            blocks_data = json.loads(request.POST.get('blocks', '{}'))
+            print("Parsed blocks data:", blocks_data)
+            
+            for identifier, content in blocks_data.items():
                 try:
-                    content = json.loads(content_str)
+                    block = page.content_blocks.get(identifier=identifier)
+                    print(f"Updating block {identifier}:")
+                    print("Old content:", block.content)
+                    print("New content:", content)
                     block.content = content
                     block.save()
-                except json.JSONDecodeError as e:
-                    messages.error(request, f'Invalid JSON for {block.identifier}: {str(e)}')
-                    return redirect('page_edit', slug=slug)
+                    print("Block saved successfully")
+                except ContentBlock.DoesNotExist:
+                    print(f"Block not found: {identifier}")
+                except Exception as e:
+                    print(f"Error saving block: {str(e)}")
             
             messages.success(request, 'Page updated successfully!')
+            
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': True,
+                    'redirect_url': reverse('page_list')
+                })
+            return redirect('page_list')
+            
+        except json.JSONDecodeError:
+            messages.error(request, 'Invalid JSON data received')
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': 'Invalid JSON data'})
             return redirect('page_edit', slug=slug)
             
         except Exception as e:
             messages.error(request, f'Error saving page: {str(e)}')
-            print("Error:", str(e))  # For debugging
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({'success': False, 'error': str(e)})
+            return redirect('page_edit', slug=slug)
 
-    # Get content blocks
+    # Get content blocks for form
     blocks = {}
     for block in page.content_blocks.all().order_by('order'):
-        blocks[block.identifier] = json.dumps(block.content)
+        blocks[block.identifier] = block.content
 
     context = {
         'page': page,
