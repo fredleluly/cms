@@ -170,6 +170,7 @@ env/
 *.pyc
 db.sqlite3
 media/
+!apps/media/
 env/
 env2
 static/
