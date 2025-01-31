@@ -171,6 +171,7 @@ env/
 db.sqlite3
 media/
 !apps/media/
+!templates/media/
 env/
 env2
 static/

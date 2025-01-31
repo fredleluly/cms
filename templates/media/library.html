@@ -1,0 +1,749 @@
+{% extends "admin/base_admin.html" %}
+{% load static %}
+
+{% block title %}Media Library{% endblock %}
+
+{% block extra_css %}
+<style>
+    .media-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .media-card {
+        @apply bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200 relative group;
+    }
+
+    .media-preview {
+        @apply aspect-square rounded-t-xl overflow-hidden bg-gray-50 relative;
+    }
+
+    .media-preview img {
+        @apply w-full h-full object-cover;
+    }
+
+    .media-preview .document-preview {
+        @apply w-full h-full flex flex-col items-center justify-center p-4 text-gray-500;
+    }
+
+    .media-preview .document-preview i {
+        @apply text-4xl mb-2;
+    }
+
+    .media-actions {
+        @apply absolute inset-0 bg-black/60 flex items-center justify-center gap-3 
+               transition-all duration-200 p-4;
+    }
+
+    .action-btn {
+        @apply px-4 py-2 rounded-lg flex items-center justify-center gap-2 
+               transition-all duration-200 hover:scale-105;
+    }
+
+    .media-info {
+        @apply p-4 border-t border-gray-100;
+    }
+
+    .file-type-badge {
+        @apply absolute top-2 right-2 px-2 py-1 rounded-full text-xs font-medium;
+    }
+
+    .file-type-image { @apply bg-blue-500 text-white; }
+    .file-type-document { @apply bg-yellow-500 text-white; }
+    .file-type-video { @apply bg-purple-500 text-white; }
+    .file-type-audio { @apply bg-green-500 text-white; }
+
+    /* Tooltip */
+    .tooltip {
+        @apply relative;
+    }
+
+    .tooltip:before {
+        @apply content-[attr(data-tip)] absolute px-2 py-1 -top-8 left-1/2 -translate-x-1/2
+               whitespace-nowrap rounded bg-gray-900 text-white text-xs
+               opacity-0 transition-opacity duration-200;
+    }
+
+    .tooltip:hover:before {
+        @apply opacity-100;
+    }
+
+    /* Upload Zone */
+    .upload-zone {
+        @apply border-3 border-dashed border-gray-300 rounded-xl p-8 
+               bg-gray-50 hover:bg-gray-100 cursor-pointer transition-all duration-200;
+    }
+
+    .upload-zone.dragover {
+        @apply border-blue-500 bg-blue-50;
+    }
+
+    /* Loading Animation */
+    .loading-overlay {
+        @apply fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50;
+    }
+
+    .loading-spinner {
+        @apply animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent;
+    }
+
+    /* Stats Cards */
+    .stats-card {
+        @apply bg-white rounded-xl shadow-sm p-6;
+    }
+
+    .stats-icon {
+        @apply w-12 h-12 rounded-full flex items-center justify-center text-2xl mb-4;
+    }
+
+    /* Update filter button styles */
+    .filter-btn {
+        @apply transition-all duration-200 flex items-center;
+    }
+
+    .filter-btn[data-active="true"] {
+        @apply bg-blue-600 text-white border-blue-600;
+    }
+
+    /* Improve media card hover states */
+    .media-card {
+        @apply bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-200;
+    }
+
+    /* Make actions more visible */
+    .media-actions {
+        @apply absolute inset-0 bg-black/60 flex items-center justify-center gap-3 
+               transition-all duration-200 p-4;
+    }
+
+    .action-btn {
+        @apply px-4 py-2 rounded-lg flex items-center justify-center gap-2 
+               transition-all duration-200 hover:scale-105;
+    }
+
+    /* Improve upload zone */
+    .upload-zone {
+        @apply border-3 border-dashed border-gray-300 rounded-xl p-8 
+               bg-gray-50 hover:bg-gray-100 cursor-pointer transition-all duration-200;
+    }
+
+    .upload-zone.dragover {
+        @apply border-blue-500 bg-blue-50;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .media-actions {
+            @apply opacity-100;
+        }
+        
+        .filter-btn {
+            @apply text-sm px-3;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div class="p-6 bg-gray-50 min-h-screen">
+    <!-- Header & Stats -->
+    <div class="mb-8">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">Media Library</h1>
+                <p class="text-gray-600">Manage and organize your media files</p>
+            </div>
+            <div class="flex gap-3">
+                <button id="uploadBtn" 
+                        class="bg-blue-600 text-white px-6 py-2.5 rounded-xl hover:bg-blue-700 
+                               transition-colors flex items-center gap-2">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    Upload Files
+                </button>
+                {% if select_mode %}
+                <button onclick="window.close()" 
+                        class="bg-gray-500 text-white px-6 py-2.5 rounded-xl hover:bg-gray-600 
+                               transition-colors">
+                    Cancel
+                </button>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="stats-card">
+                <div class="stats-icon bg-blue-100 text-blue-600">
+                    <i class="fas fa-image"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900">{{ image_count }}</h3>
+                <p class="text-gray-600">Images</p>
+            </div>
+            <div class="stats-card">
+                <div class="stats-icon bg-purple-100 text-purple-600">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900">{{ document_count }}</h3>
+                <p class="text-gray-600">Documents</p>
+            </div>
+            <div class="stats-card">
+                <div class="stats-icon bg-red-100 text-red-600">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900">{{ video_count }}</h3>
+                <p class="text-gray-600">Videos</p>
+            </div>
+            <div class="stats-card">
+                <div class="stats-icon bg-green-100 text-green-600">
+                    <i class="fas fa-music"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900">{{ audio_count }}</h3>
+                <p class="text-gray-600">Audio</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
+        <div class="flex flex-wrap items-center gap-4">
+            <div class="flex-1">
+                <div class="relative">
+                    <input type="text" 
+                           id="searchInput"
+                           placeholder="Search files..." 
+                           class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 
+                                  focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button class="filter-btn px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 
+                              data-[active=true]:bg-blue-600 data-[active=true]:text-white data-[active=true]:border-blue-600"
+                        data-type="all" data-active="true">
+                    All Files
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50
+                              data-[active=true]:bg-blue-600 data-[active=true]:text-white data-[active=true]:border-blue-600"
+                        data-type="image">
+                    <i class="fas fa-image mr-2"></i>Images
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50
+                              data-[active=true]:bg-blue-600 data-[active=true]:text-white data-[active=true]:border-blue-600"
+                        data-type="document">
+                    <i class="fas fa-file-alt mr-2"></i>Documents
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50
+                              data-[active=true]:bg-blue-600 data-[active=true]:text-white data-[active=true]:border-blue-600"
+                        data-type="video">
+                    <i class="fas fa-video mr-2"></i>Videos
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50
+                              data-[active=true]:bg-blue-600 data-[active=true]:text-white data-[active=true]:border-blue-600"
+                        data-type="audio">
+                    <i class="fas fa-music mr-2"></i>Audio
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Zone (Hidden by default) -->
+    <div id="uploadZone" class="hidden mb-6">
+        <div class="upload-zone">
+            <form enctype="multipart/form-data">
+                <div class="max-w-xl mx-auto text-center">
+                    <i class="fas fa-cloud-upload-alt text-5xl text-blue-600 mb-4"></i>
+                    <h3 class="text-xl font-semibold mb-2">Drag and drop files here</h3>
+                    <p class="text-gray-500 mb-6">or</p>
+                    <label class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg cursor-pointer hover:bg-blue-700 transition-colors">
+                        Browse Files
+                        <input type="file" multiple class="hidden" id="fileInput" accept="image/*,application/pdf,video/*">
+                    </label>
+                    <p class="mt-4 text-sm text-gray-500">
+                        Maximum file size: 10MB
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Media Grid -->
+    <div class="media-grid" id="mediaGrid">
+        {% for media in media_files %}
+        <div class="media-card" 
+             data-type="{{ media.content_type }}" 
+             data-media-id="{{ media.id }}">
+            <div class="media-preview group">
+                {% if media.content_type == 'image' %}
+                    <img src="{{ media.file.url }}" alt="{{ media.title }}" loading="lazy">
+                {% else %}
+                    <div class="document-preview">
+                        {% if media.content_type == 'document' %}
+                            {% if media.file_extension == 'pdf' %}
+                                <i class="fas fa-file-pdf text-red-500"></i>
+                            {% elif media.file_extension == 'doc' or media.file_extension == 'docx' %}
+                                <i class="fas fa-file-word text-blue-500"></i>
+                            {% elif media.file_extension == 'xls' or media.file_extension == 'xlsx' %}
+                                <i class="fas fa-file-excel text-green-500"></i>
+                            {% else %}
+                                <i class="fas fa-file-alt text-gray-500"></i>
+                            {% endif %}
+                        {% elif media.content_type == 'video' %}
+                            <i class="fas fa-file-video text-purple-500"></i>
+                        {% elif media.content_type == 'audio' %}
+                            <i class="fas fa-file-audio text-yellow-500"></i>
+                        {% endif %}
+                        <span class="text-sm font-medium mt-2">{{ media.file_extension|upper }}</span>
+                    </div>
+                {% endif %}
+                
+                <!-- Make actions always visible on mobile, hover on desktop -->
+                <div class="media-actions md:opacity-0 md:group-hover:opacity-100 opacity-100">
+                    {% if select_mode %}
+                    <button onclick="selectMedia('{{ media.id }}', '{{ media.file.url }}')"
+                            class="action-btn bg-blue-600 text-white hover:bg-blue-700 w-full"
+                            data-tip="Select">
+                        <i class="fas fa-check"></i>
+                        <span class="ml-2">Select this file</span>
+                    </button>
+                    {% else %}
+                    <div class="flex flex-col gap-3 w-full items-center">
+                    <button onclick="copyUrl('{{ media.file.url }}')"
+                                class="action-btn bg-white/90 hover:bg-white w-full
+                                       transform hover:scale-105 transition-all duration-300
+                                       flex items-center justify-center"
+                            data-tip="Copy URL">
+                            <i class="fas fa-link text-blue-600 mr-2"></i>
+                            <span class="text-gray-700">Copy URL</span>
+                    </button>
+                        <button onclick="confirmDelete('{{ media.id }}', '{{ media.title }}')"
+                                class="action-btn bg-red-500/90 hover:bg-red-500 w-full text-white
+                                       transform hover:scale-105 transition-all duration-300
+                                       flex items-center justify-center"
+                            data-tip="Delete">
+                            <i class="fas fa-trash-alt mr-2"></i>
+                            <span>Delete</span>
+                    </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="media-info">
+                <p class="font-medium text-gray-900 truncate" title="{{ media.title }}">{{ media.title }}</p>
+                <p class="text-sm text-gray-500 flex items-center gap-2">
+                    <span>{{ media.formatted_file_size }}</span>
+                    <span class="text-gray-300">•</span>
+                    <span>{{ media.uploaded_at|date:"M d, Y" }}</span>
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Empty State -->
+    {% if not media_files %}
+    <div class="text-center py-12">
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+            <i class="fas fa-photo-video text-2xl text-gray-400"></i>
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 mb-2">No media files yet</h3>
+        <p class="text-gray-500 mb-4">Upload some files to get started</p>
+        <button onclick="document.getElementById('uploadBtn').click()" 
+                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+            Upload Now
+        </button>
+    </div>
+    {% endif %}
+
+    <!-- Pagination -->
+    {% if media_files.has_other_pages %}
+    <div class="mt-8 flex justify-center">
+        <nav class="flex items-center gap-2">
+            {% if media_files.has_previous %}
+            <a href="?page={{ media_files.previous_page_number }}" 
+               class="px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            {% endif %}
+
+            {% for num in media_files.paginator.page_range %}
+                {% if media_files.number == num %}
+                <span class="px-4 py-2 rounded-lg bg-blue-600 text-white">{{ num }}</span>
+                {% else %}
+                <a href="?page={{ num }}" 
+                   class="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50">
+                    {{ num }}
+                </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if media_files.has_next %}
+            <a href="?page={{ media_files.next_page_number }}" 
+               class="px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-50">
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay hidden">
+    <div class="text-center">
+        <div class="loading-spinner mb-4"></div>
+        <p class="text-gray-600">Uploading files...</p>
+    </div>
+</div>
+
+<!-- Add Modal Template -->
+<template id="confirmDeleteModal">
+    <div class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0">
+            <div class="p-6">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-exclamation-triangle text-2xl text-red-500"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Confirm Delete</h3>
+                    <p class="text-gray-500" id="deleteModalText"></p>
+                </div>
+                <div class="flex gap-3">
+                    <button onclick="closeDeleteModal()" 
+                            class="flex-1 px-6 py-3 rounded-lg border border-gray-300 text-gray-700 
+                                   hover:bg-gray-50 transition-all duration-200">
+                        Cancel
+                    </button>
+                    <button onclick="executeDelete()" 
+                            class="flex-1 px-6 py-3 rounded-lg bg-red-500 text-white 
+                                   hover:bg-red-600 transition-all duration-200">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Declare variables and functions in global scope
+let deleteMediaData = null;
+
+// Move these functions to global scope
+window.confirmDelete = function(id, title) {
+    console.log('Confirming delete for:', id, title);
+    deleteMediaData = { id, title };
+    
+    // Clone and setup modal
+    const modalTemplate = document.getElementById('confirmDeleteModal');
+    const modal = modalTemplate.content.cloneNode(true);
+    document.body.appendChild(modal);
+
+    // Set modal text
+    document.getElementById('deleteModalText').textContent = 
+        `Are you sure you want to delete "${title}"? This action cannot be undone.`;
+
+    // Animate modal in
+    requestAnimationFrame(() => {
+        const modalContent = document.querySelector('.fixed.inset-0 .bg-white');
+        modalContent.classList.remove('scale-95', 'opacity-0');
+        modalContent.classList.add('scale-100', 'opacity-100');
+    });
+};
+
+window.closeDeleteModal = function() {
+    const modal = document.querySelector('.fixed.inset-0');
+    if (!modal) return;
+    
+    const modalContent = modal.querySelector('.bg-white');
+    
+    // Animate out
+    modalContent.classList.remove('scale-100', 'opacity-100');
+    modalContent.classList.add('scale-95', 'opacity-0');
+    
+    setTimeout(() => modal.remove(), 200);
+    deleteMediaData = null;
+};
+
+window.executeDelete = async function() {
+    if (!deleteMediaData) return;
+    
+    try {
+        // Use the correct URL from urls.py
+        const response = await fetch(`{% url 'media:delete_media' '000' %}`.replace('000', deleteMediaData.id), {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.message || 'Failed to delete file');
+
+        // Remove card with animation
+        const mediaCard = document.querySelector(`[data-media-id="${deleteMediaData.id}"]`);
+        if (mediaCard) {
+            mediaCard.style.transition = 'all 0.3s ease-out';
+            mediaCard.style.transform = 'scale(0.95)';
+            mediaCard.style.opacity = '0';
+            setTimeout(() => {
+                mediaCard.remove();
+                // Update stats count
+                const type = mediaCard.dataset.type;
+                const statsCount = document.querySelector(`.stats-card[data-type="${type}"] h3`);
+                if (statsCount) {
+                    statsCount.textContent = parseInt(statsCount.textContent) - 1;
+                }
+            }, 300);
+        }
+
+        showNotification('File deleted successfully', 'success');
+        closeDeleteModal();
+    } catch (error) {
+        console.error('Delete error:', error);
+        showNotification(error.message || 'Failed to delete file', 'error');
+    }
+};
+
+// Global utility functions
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white z-50 flex items-center gap-2 ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    }`;
+    
+    const icon = document.createElement('i');
+    icon.className = `fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} mr-2`;
+    notification.appendChild(icon);
+    
+    const text = document.createElement('span');
+    text.textContent = message;
+    notification.appendChild(text);
+    
+    document.body.appendChild(notification);
+    
+    // Animate in
+    notification.style.transform = 'translateY(-100%)';
+    notification.style.opacity = '0';
+    
+    setTimeout(() => {
+        notification.style.transform = 'translateY(0)';
+        notification.style.opacity = '1';
+        notification.style.transition = 'all 0.3s ease-out';
+    }, 50);
+    
+    // Animate out and remove
+    setTimeout(() => {
+        notification.style.transform = 'translateY(-100%)';
+        notification.style.opacity = '0';
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Add getCookie utility function at the top level
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+// DOM Ready event listener for initialization
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize variables
+    const uploadBtn = document.getElementById('uploadBtn');
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const mediaGrid = document.getElementById('mediaGrid');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const loadingOverlay = document.querySelector('.loading-overlay');
+    const searchInput = document.getElementById('searchInput');
+
+    // Event listeners
+    uploadBtn.addEventListener('click', () => {
+        uploadZone.classList.toggle('hidden');
+    });
+
+    fileInput.addEventListener('change', handleFileUpload);
+    
+    // Filter functionality
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update active state
+            filterBtns.forEach(b => b.setAttribute('data-active', 'false'));
+            btn.setAttribute('data-active', 'true');
+            
+            // Apply filter
+            filterMedia(btn.dataset.type);
+        });
+    });
+
+    // Search functionality
+    searchInput.addEventListener('input', debounce(handleSearch, 300));
+
+    // File upload handling
+    async function handleFileUpload(event) {
+        const files = event.target.files;
+        if (!files.length) return;
+
+        loadingOverlay.classList.remove('hidden');
+        
+        try {
+            const formData = new FormData();
+            Array.from(files).forEach(file => {
+                formData.append('files[]', file);
+            });
+
+            const csrfToken = getCookie('csrftoken');
+            if (!csrfToken) {
+                throw new Error('CSRF token not found');
+            }
+
+            const response = await fetch('{% url "media:upload_media" %}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': csrfToken
+                }
+            });
+
+            const result = await response.json();
+            
+            if (!response.ok) throw new Error(result.message || 'Upload failed');
+
+            showNotification('Files uploaded successfully');
+            location.reload();
+        } catch (error) {
+            console.error('Upload error:', error);
+            showNotification(error.message || 'Upload failed', 'error');
+        } finally {
+            loadingOverlay.classList.add('hidden');
+            uploadZone.classList.add('hidden');
+            fileInput.value = '';
+        }
+    }
+
+    // Improved Media selection functionality 
+    window.selectMedia = function(id, url) {
+        console.log('1. selectMedia called with:', { id, url });
+        
+        if (!window.opener) {
+            console.error('2. No opener window found');
+            showNotification('Cannot select media - no opener window', 'error');
+            return;
+        }
+        
+        if (window.opener.closed) {
+            console.error('3. Opener window is closed');
+            showNotification('Cannot select media - opener window is closed', 'error');
+            return;
+        }
+        
+        try {
+            console.log('4. Attempting to call handleMediaSelect on opener');
+            window.opener.handleMediaSelect(id, url);
+            console.log('5. handleMediaSelect called successfully');
+            window.close();
+        } catch (err) {
+            console.error('6. Error calling handleMediaSelect:', err);
+            showNotification('Failed to select media', 'error');
+        }
+    };
+
+    // Improved copy URL functionality
+    window.copyUrl = async function(url) {
+        console.log('Copying URL:', url);
+        try {
+            // Pastikan URL lengkap
+            const fullUrl = url.startsWith('http') ? url : `${window.location.origin}${url}`;
+            
+            await navigator.clipboard.writeText(fullUrl);
+            showNotification('URL copied to clipboard!', 'success');
+        } catch (err) {
+            console.error('Copy error:', err);
+            showNotification('Failed to copy URL', 'error');
+        }
+    };
+
+    // Improved filter functionality
+    function filterMedia(type) {
+        const mediaCards = document.querySelectorAll('.media-card');
+        mediaCards.forEach(card => {
+            if (type === 'all' || card.dataset.type === type) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Improved search functionality
+    function handleSearch(event) {
+        const searchTerm = event.target.value.toLowerCase();
+        const mediaCards = document.querySelectorAll('.media-card');
+        
+        mediaCards.forEach(card => {
+            const title = card.querySelector('.media-info p').textContent.toLowerCase();
+            const isVisible = title.includes(searchTerm);
+            card.style.display = isVisible ? 'block' : 'none';
+        });
+    }
+
+    // Add drag and drop support
+    const dropZone = document.querySelector('.upload-zone');
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => {
+            dropZone.classList.add('dragover');
+        });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => {
+            dropZone.classList.remove('dragover');
+        });
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        const files = e.dataTransfer.files;
+        fileInput.files = files;
+        handleFileUpload({ target: { files } });
+    });
+});
+
+// Add debounce utility function
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+</script>
+{% endblock %} 
