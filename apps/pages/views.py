@@ -366,7 +366,7 @@ def create_default_profile_page():
             'identifier': 'hero_section',
             'content_type': ContentBlock.RICH_TEXT,
             'content': {
-                'title': 'Profil Matana University gilak',
+                'title': 'Profil Matana University',
                 'subtitle': 'World Class Learning Experience',
                 'background_image': '/static/images/campus-aerial.jpg'
             },
