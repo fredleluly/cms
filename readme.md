@@ -13,7 +13,35 @@ Before you begin, ensure you have met the following requirements:
 
 ## 🛠️ Development Environment Setup
 
-### Windows Setup
+### Setup (Fast Quick Setup for development only)
+
+
+0. OPTIONAL (Fast Quick Setup):
+
+```bash
+cd ..
+python -m venv env2
+source env/Scripts/activate
+cd cms
+pip install -r requirements.txt
+find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+rm db.sqlite3  # or del db.sqlite3 on Windows
+python manage.py makemigrations
+python manage.py migrate
+
+echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
+
+python manage.py runserver
+```
+
+```bash
+python manage.py makemigrations media
+python manage.py migrate media
+python manage.py migrate
+```
+
+### Setup
+
 
 1. **Install Python**
 ```bash
@@ -43,16 +71,12 @@ cd matana-cms
 ```
 
 2. **Create Virtual Environment**
+avoid make venv in the same directory with the project!!
 ```bash
 # Windows
+cd ..
 python -m venv env2
 source env2/Scripts/activate
-```
-
-```bash
-# Linux/Mac
-python3 -m venv env
-source env/Scripts/activate
 ```
 
 3. **Install Dependencies**
@@ -93,26 +117,6 @@ echo "from django.contrib.auth import get_user_model; User = get_user_model(); U
 6. **Run Development Server**
 ```bash
 python manage.py runserver
-```
-
-7. OPTIONAL bulk action automatically:
-
-```bash
-python -m venv env2
-source env/Scripts/activate
-pip install -r requirements.txt
-python manage.py makemigrations
-python manage.py migrate
-
-echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
-
-python manage.py runserver
-```
-
-```bash
-python manage.py makemigrations media
-python manage.py migrate media
-python manage.py migrate
 ```
 
 
@@ -441,4 +445,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [ ] Search functionality
 - [ ] Cache management UI
 - [ ] Audit logging
-
