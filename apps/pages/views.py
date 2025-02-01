@@ -114,38 +114,35 @@ def create_default_homepage():
 
 def home_view(request):
     try:
-        # Try to get existing homepage
         page = Page.objects.get(is_homepage=True, status=Page.PUBLISHED)
     except Page.DoesNotExist:
         try:
-            # Try to get any published page and make it homepage
             page = Page.objects.filter(status=Page.PUBLISHED).first()
             if page:
                 page.is_homepage = True
                 page.save()
             else:
-                # Create default homepage if no pages exist
                 page = create_default_homepage()
         except Exception as e:
             raise Http404(f"Could not create homepage: {str(e)}")
     
     # Get cached content or generate new
     cache_key = f'page_content_{page.id}'
-    content_blocks = cache.get(cache_key)
+    blocks = cache.get(cache_key)
     
-    if content_blocks is None:
-        content_blocks = {}
-        for block in page.content_blocks.all():
-            content_blocks[block.identifier] = {
+    if blocks is None:
+        blocks = {}
+        for block in page.content_blocks.all().order_by('order'):
+            blocks[block.identifier] = {
                 'type': block.content_type,
                 'content': block.content
             }
-        cache.set(cache_key, content_blocks, timeout=300)  # Cache for 5 minutes
+        cache.set(cache_key, blocks, timeout=300)  # Cache for 5 minutes
     
     context = {
         'page': page,
-        'content': content_blocks,
-        'meta': page.metadata
+        'meta': page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
     }
     
     return render(request, f'pages/{page.template}', context)
@@ -153,23 +150,30 @@ def home_view(request):
 def page_view(request, slug):
     page = get_object_or_404(Page, slug=slug, status=Page.PUBLISHED)
     
-    # Convert content blocks to a dictionary for easy access in templates
-    content_blocks = {}
-    for block in page.content_blocks.all():
-        content_blocks[block.identifier] = {
-            'type': block.content_type,
-            'content': block.content
+    try:
+        # Get content blocks with error handling
+        blocks = {}
+        for block in page.content_blocks.all().order_by('order'):
+            try:
+                blocks[block.identifier] = block.content
+            except Exception as e:
+                # Log error but continue processing other blocks
+                print(f"Error processing block {block.identifier}: {str(e)}")
+                continue
+        
+        context = {
+            'page': page,
+            'meta': page.metadata,
+            'blocks': blocks  # Simplified - just send all blocks
         }
-    
-    template_name = f"pages/{page.template}.html"
-    
-    context = {
-        'page': page,
-        'content': content_blocks,
-        'meta': page.metadata
-    }
-    
-    return render(request, template_name, context)
+        
+        template_name = f"pages/{page.template}.html"
+        return render(request, template_name, context)
+        
+    except Exception as e:
+        # Log the error and return a 500 error
+        print(f"Error rendering page {slug}: {str(e)}")
+        raise Http404("Page could not be rendered")
 
 def news_view(request):
     # Get query parameters with defaults
@@ -470,11 +474,7 @@ def profile_view(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'hero': blocks.get('hero_section', {}),
-        'visi_section': blocks.get('visi_section', {}),
-        'misi_section': blocks.get('misi_section', {}),
-        'sejarah_section': blocks.get('sejarah_section', {}),
-        'keunggulan_section': blocks.get('keunggulan_section', {}),
+        'blocks': blocks  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/profile.html', context)
@@ -823,13 +823,11 @@ def create_default_registration_page():
 def registration_view(request):
     """View for registration page"""
     try:
-        # Try to get existing registration page
         registration_page = Page.objects.get(
             slug='pendaftaran',
             status=Page.PUBLISHED
         )
     except Page.DoesNotExist:
-        # Create new page if doesn't exist
         registration_page = create_default_registration_page()
     
     # Get content blocks
@@ -840,11 +838,7 @@ def registration_view(request):
     context = {
         'page': registration_page,
         'meta': registration_page.metadata,
-        'hero': blocks.get('hero_section', {}),
-        'alur': blocks.get('alur_section', {}),
-        'biaya': blocks.get('biaya_section', {}),
-        'dokumen': blocks.get('dokumen_section', {}),
-        'contact': blocks.get('contact_section', {})
+        'blocks': blocks  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/registration.html', context)
