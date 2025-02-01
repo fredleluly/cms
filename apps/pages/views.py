@@ -25,7 +25,10 @@ from django.contrib.auth.decorators import login_required
 import json
 from apps.media.models import MediaFile
 from django.urls import reverse
+import logging
 
+# Get logger for this file
+logger = logging.getLogger(__name__)
 
 def custom_404(request, exception):
 
@@ -885,12 +888,64 @@ def registration_submit(request):
         messages.error(request, 'Terjadi kesalahan. Silakan coba lagi.')
         return redirect('registration')
 
-def scholarship_view(request):
-    """
-    View for scholarship page
-    """
-    context = {
-        'scholarship_types': [
+def create_default_scholarship_page():
+    """Create default scholarship page with standardized content blocks"""
+    scholarship_page = Page.objects.create(
+        title="Program Beasiswa",
+        slug="beasiswa",
+        template='scholarship.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Program Beasiswa Matana University - Wujudkan impian kuliah berkualitas',
+            'meta_keywords': 'beasiswa matana, beasiswa kuliah, program beasiswa'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'Wujudkan Impian',
+            'subtitle': 'Kuliah di Matana',
+            'description': 'Raih kesempatan mendapatkan beasiswa pendidikan di Matana University. Kami berkomitmen untuk mendukung mahasiswa berprestasi dalam menggapai masa depan yang lebih baik.',
+            'badge_text': '🎓 Program Beasiswa 2024',
+            'cta': [
+                {
+                    'text': 'Lihat Program Beasiswa',
+                    'url': '#scholarship-programs',
+                    'style': 'primary'
+                },
+                {
+                    'text': 'Daftar Sekarang',
+                    'url': '/pendaftaran',
+                    'style': 'secondary'
+                }
+            ],
+            'order': 1
+        },
+        {
+            'identifier': 'stats_section',
+            'items': [
+                {
+                    'number': '500+',
+                    'label': 'Penerima Beasiswa Aktif'
+                },
+                {
+                    'number': '12M+',
+                    'label': 'Total Dana Beasiswa'
+                },
+                {
+                    'number': '95%',
+                    'label': 'Tingkat Kelulusan'
+                }
+            ],
+            'order': 2
+        },
+        {
+            'identifier': 'programs_section',
+            'title': 'Pilihan Program Beasiswa',
+            'subtitle': 'Program Beasiswa',
+            'description': 'Kami menyediakan berbagai program beasiswa yang disesuaikan dengan prestasi dan kebutuhan mahasiswa',
+            'items': [
             {
                 'name': 'Beasiswa Akademik',
                 'type': 'Unggulan',
@@ -921,8 +976,117 @@ def scholarship_view(request):
                     'Bantuan biaya hidup'
                 ]
             }
-        ]
-    }
+            ],
+            'order': 3
+        },
+        {
+            'identifier': 'requirements_section',
+            'title': 'Persyaratan Umum Beasiswa',
+            'subtitle': 'Persyaratan Program',
+            'description': 'Pastikan Anda memenuhi semua persyaratan berikut sebelum mengajukan permohonan beasiswa',
+            'categories': [
+                {
+                    'title': 'Persyaratan Akademik',
+                    'icon': 'academic',
+                    'items': [
+                        'Nilai rata-rata rapor minimal 8.0',
+                        'Peringkat 10 besar di kelas',
+                        'Aktif dalam kegiatan ekstrakurikuler'
+                    ]
+                },
+                {
+                    'title': 'Dokumen Pendukung',
+                    'icon': 'document',
+                    'items': [
+                        'Surat rekomendasi dari sekolah',
+                        'Sertifikat prestasi akademik/non-akademik',
+                        'Essay motivasi (500-1000 kata)'
+                    ]
+                },
+                {
+                    'title': 'Dokumen Finansial',
+                    'icon': 'financial',
+                    'items': [
+                        'Slip gaji / penghasilan orang tua',
+                        'Kartu Keluarga terbaru',
+                        'Rekening listrik 3 bulan terakhir'
+                    ]
+                }
+            ],
+            'order': 4
+        },
+        {
+            'identifier': 'timeline_section',
+            'title': 'Proses Seleksi',
+            'items': [
+                {
+                    'title': 'Pendaftaran Online',
+                    'description': 'Isi formulir pendaftaran dan unggah dokumen yang diperlukan'
+                },
+                {
+                    'title': 'Seleksi Berkas',
+                    'description': 'Tim akan menyeleksi kelengkapan dan kesesuaian dokumen'
+                },
+                {
+                    'title': 'Wawancara',
+                    'description': 'Kandidat terpilih akan diundang untuk sesi wawancara'
+                },
+                {
+                    'title': 'Pengumuman',
+                    'description': 'Hasil seleksi akan diumumkan melalui email dan website'
+                }
+            ],
+            'order': 5
+        },
+        {
+            'identifier': 'cta_section',
+            'title': 'Siap Untuk Mendaftar?',
+            'description': 'Jangan lewatkan kesempatan untuk mendapatkan beasiswa di Matana University. Daftar sekarang dan wujudkan impianmu!',
+            'cta': {
+                'text': 'Daftar Beasiswa',
+                'url': '/pendaftaran',
+                'style': 'primary'
+            },
+            'order': 6
+        }
+    ]
+    
+    create_standardized_blocks(scholarship_page, default_blocks)
+    return scholarship_page
+
+def scholarship_view(request):
+    """View for scholarship page"""
+    try:
+        logger.debug(f"Fetching scholarship page for request: {request.path}")
+        scholarship_page = Page.objects.get(
+            slug='beasiswa',
+            status=Page.PUBLISHED
+        )
+        logger.info(f"Found existing scholarship page with ID: {scholarship_page.id}")
+    except Page.DoesNotExist:
+        logger.warning("Scholarship page not found, creating default page")
+        scholarship_page = create_default_scholarship_page()
+    
+    try:
+        # Get content blocks with error handling
+        blocks = {}
+        for block in scholarship_page.content_blocks.all().order_by('order'):
+            try:
+                blocks[block.identifier] = block.content
+            except Exception as e:
+                print(f"Error processing block {block.identifier}: {str(e)}")
+                continue
+        
+        context = {
+            'page': scholarship_page,
+            'meta': scholarship_page.metadata,
+            'blocks': blocks
+        }
+        
+        
+    except Exception as e:
+        print(f"Error rendering scholarship page: {str(e)}")
+        raise Http404("Page could not be rendered")
     return render(request, 'pages/scholarship.html', context)
 
 @login_required

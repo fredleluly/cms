@@ -162,6 +162,7 @@ lib/
 lib64/
 venv/
 env/
+logs/
 .env
 
 # Django
@@ -199,3 +200,7 @@ htmlcov/
 .coverage.*
 coverage.xml
 *.cover
+
+# Logs
+logs/
+*.log

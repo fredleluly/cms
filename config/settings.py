@@ -10,7 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from datetime import datetime
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -54,6 +57,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'apps.pages.apps.PagesConfig',
+    'axes',
 
 ]
 
@@ -73,17 +77,55 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'csp.middleware.CSPMiddleware',  # Content Security Policy
     'apps.pages.middleware.MaintenanceModeMiddleware',
+
+    'axes.middleware.AxesMiddleware',
 ]
 
+AUTHENTICATION_BACKENDS = [
+    'axes.backends.AxesBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+
+IS_PRODUCTION = False
+# Deteksi environment secara otomatis
+# you have to set DJANGO_ENV=production in your environment variable, dengan cara export DJANGO_ENV=production di terminal
+IS_PRODUCTION = os.environ.get('DJANGO_ENV') == 'production' 
+
+STATIC_URL = '/static/'
+
+if IS_PRODUCTION:
+    STATIC_ROOT = '/home/django/www-data/example.com/static/'
+else:
+    STATICFILES_DIRS = [
+        BASE_DIR / 'static'
+    ]
+
+# Media files configuration
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Make sure these directories exist
+UPLOAD_ROOT = MEDIA_ROOT / 'uploads'
+THUMBNAIL_ROOT = MEDIA_ROOT / 'thumbnails'
+
+
 # Security Settings
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'
+
+AXES_FAILURE_LIMIT = 1
+AXES_COOLOFF_TIME = 300
+AXES_LOCKOUT_TEMPLATE = 'pages/lockout.html'
+AXES_LOCK_OUT_AT_FAILURE = True  # Lock out after failure limit is reached
+AXES_RESET_ON_SUCCESS = True 
+
 SECURE_HSTS_SECONDS = 31536000  # 1 tahun
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_HSTS_PRELOAD = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
 
-if DEBUG:
+if not IS_PRODUCTION:
     # Disable all security redirects and related features
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False
@@ -95,11 +137,16 @@ if DEBUG:
     
     # Remove SecurityMiddleware in development
     MIDDLEWARE = [m for m in MIDDLEWARE if m != 'django.middleware.security.SecurityMiddleware']
+    # Disable CSP in development
+    MIDDLEWARE = [m for m in MIDDLEWARE if m != 'csp.middleware.CSPMiddleware']
 else:
     # Use HTTPS in production
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = True
+    
+
 
 # Content Security Policy
 CSP_DEFAULT_SRC = ("'self'",)
@@ -140,9 +187,12 @@ CSP_CONNECT_SRC = (
     "https:",
 )
 
-# Disable CSP in development
-if DEBUG:
-    MIDDLEWARE = [m for m in MIDDLEWARE if m != 'csp.middleware.CSPMiddleware']
+# Cache timeout in seconds (5 minutes)
+CACHE_TIMEOUT = 300
+
+# CSRF settings
+CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
 
 ROOT_URLCONF = 'config.urls'
 
@@ -210,24 +260,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     BASE_DIR / 'static'
+# ]
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Media files configuration
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
 
-# Make sure these directories exist
-UPLOAD_ROOT = MEDIA_ROOT / 'uploads'
-THUMBNAIL_ROOT = MEDIA_ROOT / 'thumbnails'
+# # Static files configuration
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     BASE_DIR / 'static'
+# ]
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # CKEditor Configuration
 CKEDITOR_CONFIGS = {
@@ -269,6 +320,7 @@ CKEDITOR_CONFIGS = {
     }
 }
 
+
 # Comment out or remove the Redis cache configuration
 # CACHES = {
 #     "default": {
@@ -285,16 +337,87 @@ CACHES = {
     }
 }
 
-# Cache timeout in seconds (5 minutes)
-CACHE_TIMEOUT = 300
+# Logging Configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+        'standard': {
+            'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S'
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'standard',
+        },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join('logs', f'matana_{datetime.now().strftime("%Y-%m-%d")}.log'),
+            'maxBytes': 1024*1024*5,  # 5 MB
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+        'error_file': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join('logs', 'error.log'),
+            'maxBytes': 1024*1024*5,  # 5 MB
+            'backupCount': 5,
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['mail_admins', 'error_file'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'apps': {  # Your application logger
+            'handlers': ['console', 'file', 'error_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'axes': {
+            'handlers': ['console', 'file', 'error_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    }
+}
 
-# Static files configuration
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    BASE_DIR / 'static'
-]
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-
-# CSRF settings
-CSRF_COOKIE_NAME = 'csrftoken'
-CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
+# Create logs directory if it doesn't exist
+LOGS_DIR = os.path.join(BASE_DIR, 'logs')
+if not os.path.exists(LOGS_DIR):
+    os.makedirs(LOGS_DIR)
