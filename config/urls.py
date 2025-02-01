@@ -43,7 +43,7 @@ def test_404(request):
     return render(request, '404.html', status=200)
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path(settings.SECRET_KEY_LOGIN+"_"+'admin/', admin.site.urls),
     path('', home_view, name='home'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', TemplateView.as_view(template_name="robots.txt", content_type="text/plain")),

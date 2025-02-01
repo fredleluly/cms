@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 from datetime import datetime
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,10 +26,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-u2+$vy@^am#ivmsa92+n*8bovgp!cm=cg1^##)qe@$dtd^ev3y'
+SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY_LOGIN = os.getenv('SECRET_KEY_LOGIN')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -76,9 +80,11 @@ MIDDLEWARE = [
     # Tambahkan middleware keamanan tambahan
     'django.middleware.security.SecurityMiddleware',
     'csp.middleware.CSPMiddleware',  # Content Security Policy
-    'apps.pages.middleware.MaintenanceModeMiddleware',
+    'apps.pages.middleware.maintenance.MaintenanceModeMiddleware',
 
     'axes.middleware.AxesMiddleware',
+    # 'django.contrib.admin.middleware.LogEntryMiddleware',
+
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -90,7 +96,7 @@ AUTHENTICATION_BACKENDS = [
 IS_PRODUCTION = False
 # Deteksi environment secara otomatis
 # you have to set DJANGO_ENV=production in your environment variable, dengan cara export DJANGO_ENV=production di terminal
-IS_PRODUCTION = os.environ.get('DJANGO_ENV') == 'production' 
+IS_PRODUCTION = os.getenv('DJANGO_ENV') == 'production' 
 
 STATIC_URL = '/static/'
 
@@ -145,6 +151,8 @@ else:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     CSRF_COOKIE_HTTPONLY = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    
     
 
 
@@ -362,6 +370,7 @@ LOGGING = {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse',
         },
+     
     },
     'handlers': {
         'console': {
@@ -414,6 +423,7 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
         },
+
     }
 }
 
@@ -421,3 +431,30 @@ LOGGING = {
 LOGS_DIR = os.path.join(BASE_DIR, 'logs')
 if not os.path.exists(LOGS_DIR):
     os.makedirs(LOGS_DIR)
+
+# SECURE_REFERRER_POLICY = 'same-origin'
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SESSION_COOKIE_HTTPONLY = True
+# CSRF_COOKIE_HTTPONLY = True
+# CSRF_COOKIE_SAMESITE = 'Strict'
+# SESSION_COOKIE_SAMESITE = 'Strict'
+
+# # Add Content Security Policy
+# CSP_INCLUDE_NONCE_IN = ['script-src']
+# CSP_UPGRADE_INSECURE_REQUESTS = True
+
+# # Add these settings
+# PASSWORD_HASHERS = [
+#     'django.contrib.auth.hashers.Argon2PasswordHasher',
+#     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+# ]
+
+# Session Security
+SESSION_COOKIE_AGE = 3600  # 1 hour
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
+
+# # Add audit logging
+# MIDDLEWARE += [
+#     'django.contrib.admin.middleware.LogEntryMiddleware',
+# ]
