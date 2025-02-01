@@ -979,7 +979,7 @@ def article_api_view(request, pk):
 
 @staff_member_required
 def page_edit_view(request, slug):
-    """View for editing pages"""
+    """API-based view for editing pages"""
     try:
         page = Page.objects.get(slug=slug)
     except Page.DoesNotExist:
@@ -988,60 +988,110 @@ def page_edit_view(request, slug):
         elif slug == 'pendaftaran':
             page = create_default_registration_page()
         else:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'error': f'Page with slug "{slug}" not found.'
+                }, status=404)
             messages.error(request, f'Page with slug "{slug}" not found.')
             return redirect('content_dashboard')
 
     if request.method == 'POST':
         try:
-            # Debug: Log received data
-            print("Received POST data:", request.POST)
-            
-            blocks_data = json.loads(request.POST.get('blocks', '{}'))
-            print("Parsed blocks data:", blocks_data)
-            
+            # Validate and process the data
+            if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Invalid request method'
+                }, status=400)
+
+            # Parse and validate blocks data
+            try:
+                blocks_data = json.loads(request.POST.get('blocks', '{}'))
+                if not isinstance(blocks_data, dict):
+                    raise ValueError('Blocks data must be a dictionary')
+            except json.JSONDecodeError:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Invalid JSON data for blocks'
+                }, status=400)
+
+            # Parse and validate metadata
+            try:
+                metadata = json.loads(request.POST.get('metadata', '{}'))
+                if not isinstance(metadata, dict):
+                    raise ValueError('Metadata must be a dictionary')
+            except json.JSONDecodeError:
+                return JsonResponse({
+                    'success': False,
+                    'error': 'Invalid JSON data for metadata'
+                }, status=400)
+
+            # Update page metadata
+            page.title = request.POST.get('title', page.title)
+            page.metadata = metadata
+            page.updated_at = timezone.now()
+            page.save()
+
+            # Update content blocks
             for identifier, content in blocks_data.items():
                 try:
                     block = page.content_blocks.get(identifier=identifier)
-                    print(f"Updating block {identifier}:")
-                    print("Old content:", block.content)
-                    print("New content:", content)
+                    
+                    # Validate content structure
+                    required_fields = ['title', 'description']
+                    for field in required_fields:
+                        if field not in content and field in block.content:
+                            content[field] = block.content[field]
+                    
+                    # Ensure items is a list if present
+                    if 'items' in content and not isinstance(content['items'], list):
+                        content['items'] = []
+                    
+                    # Validate CTA structure
+                    if 'cta' in content:
+                        if not isinstance(content['cta'], dict):
+                            content['cta'] = {}
+                        for field in ['text', 'url', 'style']:
+                            if field not in content['cta']:
+                                content['cta'][field] = ''
+                    
                     block.content = content
                     block.save()
-                    print("Block saved successfully")
+                    
                 except ContentBlock.DoesNotExist:
-                    print(f"Block not found: {identifier}")
+                    # Create new block if it doesn't exist
+                    page.content_blocks.create(
+                        identifier=identifier,
+                        content_type=ContentBlock.RICH_TEXT,
+                        content=content
+                    )
                 except Exception as e:
-                    print(f"Error saving block: {str(e)}")
-            
-            messages.success(request, 'Page updated successfully!')
-            
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({
-                    'success': True,
-                    'redirect_url': reverse('page_list')
-                })
-            return redirect('page_list')
-            
-        except json.JSONDecodeError:
-            messages.error(request, 'Invalid JSON data received')
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({'success': False, 'error': 'Invalid JSON data'})
-            return redirect('page_edit', slug=slug)
-            
-        except Exception as e:
-            messages.error(request, f'Error saving page: {str(e)}')
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-                return JsonResponse({'success': False, 'error': str(e)})
-            return redirect('page_edit', slug=slug)
+                    return JsonResponse({
+                        'success': False,
+                        'error': f'Error processing block {identifier}: {str(e)}'
+                    }, status=400)
 
-    # Get content blocks for form
+            return JsonResponse({
+                'success': True,
+                'redirect_url': reverse('page_list'),
+                'message': 'Page updated successfully!'
+            })
+
+        except Exception as e:
+            return JsonResponse({
+                'success': False,
+                'error': f'Error saving page: {str(e)}'
+            }, status=500)
+
+    # Get content blocks for initial form data
     blocks = {}
     for block in page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
     context = {
         'page': page,
-        'blocks': blocks,
+        'blocks': json.dumps(blocks),
         'title': f'Edit {page.title}',
         'subtitle': 'Update page content and settings'
     }
