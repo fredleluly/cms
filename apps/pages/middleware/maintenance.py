@@ -59,6 +59,7 @@ class MaintenanceModeMiddleware:
 
             # Check allowed IPs
             client_ip = request.META.get('HTTP_X_FORWARDED_FOR', request.META.get('REMOTE_ADDR'))
+            # print(client_ip)
             if client_ip in maintenance_mode.get('allowed_ips', []):
                 return self.get_response(request)
 
