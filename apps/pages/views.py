@@ -87,29 +87,105 @@ def create_default_homepage():
             'order': 1
         },
         {
-            'identifier': 'about_section',
-            'title': 'About Matana',
-            'description': 'Matana University adalah institusi pendidikan tinggi yang berkomitmen untuk menghasilkan lulusan berkualitas.',
-            'image': '/static/images/about.jpg',
+            'identifier': 'section1',
+            'title': 'banner section',
+            'subtitle': '',
+            'items': [
+                {
+                    'title': 'banner1',
+                    'image': '/static/images/banner.jpg',
+                },
+                {
+                    'title': 'banner2',
+                    'image': '/static/images/banner2.jpg',
+                },
+                {
+                    'title': 'banner3',
+                    'image': '/static/images/banner3.jpg',
+                },
+                {
+                    'title': 'banner4',
+                    'image': '/static/images/banner4.jpg',
+                },
+            ],
+         
+            'order': 1
+        },
+        {
+            'identifier': 'section2',
+            'title': '',
+            'items': [
+                {
+                    'title': 'Menerapkan kurikulum akademik yang mendukung lulusan siap berkompetisi di dunia kerja.',
+                },
+                {
+                    'title': 'Dosen yang profesional, praktisi, dan berprestasi di dalam dan luar negeri.',
+                },
+                {
+                    'title': 'Memiliki fasilitas yang mendukung praktik dari teori pembelajaran setiap program.',
+                },
+                {
+                    'title': 'Kesempatan magang dan berkarir di Paramount Group & Mitra Bisnis lainnya, serta menjadi Entrepreneur',
+                },
+                {
+                    'title': 'Memiliki program Student Exchange (pertukaran mahasiswa) ke universitas ternama di Asia dan Eropa.',
+                },
+            ],
             'order': 2
         },
         {
-            'identifier': 'features_section',
-            'title': 'Why Choose Matana',
+            'identifier': 'section3',
+            'title': 'Penerimaan Mahasiswa Baru',
             'items': [
                 {
-                    'title': 'Academic Excellence',
-                    'description': 'Kurikulum yang komprehensif dan modern',
-                    'icon': 'academic'
+                    'title': '',
+                    'description': 'Tahun Akademik 2025/2026',
                 },
                 {
-                    'title': 'Industry Connection',
-                    'description': 'Kerjasama dengan industri terkemuka',
-                    'icon': 'industry'
+                    'title': '',
+                    'description': 'Matana University menyelenggarakan berbagai lokakarya berbasis dunia usaha, program magang di berbagai industri, ruang inkubator di kampus, dan kompetisi rencana bisnis tahunan dengan penghargaan untuk mahasiswa wirausaha yang terbaik.',
+                },
+                {
+                    'title': '',
+                    'description': 'https://matanauniversity.siakadcloud.com/spmbfront/',
                 }
             ],
             'order': 3
+        },
+        {
+            'identifier': 'section4',
+            'title': '',
+            'description': 'https://www.youtube.com/watch?v=AMLKY6NBjz0',
+            'order': 4
+        },
+        {
+            'identifier': 'section5',
+            'title': 'Virtual Tour 360 Matana University',
+             'background_image': '/static/images/hero-bg.jpg',
+            'description': 'http://360.matanauniversity.ac.id/',
+            'order': 5
+        },
+        {
+            'identifier': 'section6',
+            'title': 'Follow Instagram Kami',
+            'description': 'https://www.instagram.com/matanauniversityofficial/',
+            'items': [
+                {
+                    'title': 'https://www.instagram.com/p/DFchJtQsUua/',
+                },
+                {
+                    'title': 'https://www.instagram.com/p/DFZOdJ9yFTc/',
+                },
+                {
+                    'title': 'https://www.instagram.com/p/DFT1BvYSDB2/',
+                },
+                {
+                    'title': 'https://www.instagram.com/p/DFO5HGrPN-S/',
+                }
+            ],
+            'order': 6
         }
+
     ]
     
     create_standardized_blocks(homepage, default_blocks)
@@ -130,18 +206,22 @@ def home_view(request):
             raise Http404(f"Could not create homepage: {str(e)}")
     
     # Get cached content or generate new
-    cache_key = f'page_content_{page.id}'
-    blocks = cache.get(cache_key)
+    # cache_key = f'page_content_{page.id}'
+    # blocks = cache.get(cache_key)
     
-    if blocks is None:
-        blocks = {}
-        for block in page.content_blocks.all().order_by('order'):
-            blocks[block.identifier] = {
-                'type': block.content_type,
-                'content': block.content
-            }
-        cache.set(cache_key, blocks, timeout=300)  # Cache for 5 minutes
+    # if blocks is None:
+    #     blocks = {}
+    #     for block in page.content_blocks.all().order_by('order'):
+    #         blocks[block.identifier] = {
+    #             'type': block.content_type,
+    #             'content': block.content
+    #         }
+    #     cache.set(cache_key, blocks, timeout=300)  # Cache for 5 minutes
     
+    blocks = {}
+    for block in page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
     context = {
         'page': page,
         'meta': page.metadata,
