@@ -6,7 +6,6 @@
 {% block page_subtitle %}Create and publish engaging content{% endblock %}
 
 {% block extra_css %}
-<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
 <style>
     /* Form Layout */
     .form-grid {
@@ -69,23 +68,9 @@
         margin-bottom: 0.5rem;
     }
 
-    /* Editor Customization */
-    .ql-container {
-        font-family: 'Inter', sans-serif !important;
-        font-size: 1rem !important;
-        border-radius: 0 0 0.75rem 0.75rem !important;
-        border-color: #e5e7eb !important;
-    }
-
-    .ql-toolbar {
-        border-radius: 0.75rem 0.75rem 0 0 !important;
-        border-color: #e5e7eb !important;
-        background: #f8fafc !important;
-    }
-
-    .ql-editor {
-        min-height: 400px !important;
-        padding: 1.25rem !important;
+    /* CKEditor Customization */
+    .django-ckeditor-widget {
+        width: 100% !important;
     }
 
     /* Image Upload */
@@ -148,9 +133,6 @@
     {% if article %}
         <input type="hidden" name="article_id" value="{{ article.id }}">
     {% endif %}
-    <input type="hidden" id="content" name="content">
-    <input type="hidden" id="featured_image" name="featured_image" 
-           value="{{ article.featured_image|default:'' }}">
 
     <div class="form-grid">
         <!-- Main Content -->
@@ -182,8 +164,8 @@
                 <div class="card-header">
                     <h2 class="text-lg font-semibold text-gray-900">Content</h2>
                 </div>
-                <div class="card-body p-0">
-                    <div id="editor">{{ article.content|safe|default:'' }}</div>
+                <div class="card-body">
+                    {{ form.content }}
                 </div>
             </div>
         </div>
@@ -253,7 +235,7 @@
                             <div class="relative group">
                                 <img src="{{ article.featured_image }}" 
                                      alt="Featured image" 
-                                 class="preview-image">
+                                     class="preview-image">
                                 <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
                                             transition-opacity duration-200 flex items-center justify-center gap-3">
                                     <button type="button" onclick="changeFeaturedImage(event)" 
@@ -359,175 +341,8 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+{{ form.media }}
 <script>
-    // Media Library Popup Handler
-    function openMediaLibrary(callback) {
-        const width = Math.min(1200, window.innerWidth * 0.9);
-        const height = Math.min(800, window.innerHeight * 0.9);
-        const left = (window.innerWidth - width) / 2;
-        const top = (window.innerHeight - height) / 2;
-        
-        // Store callback for later use
-        window.handleMediaSelect = function(mediaData) {
-            console.log('Media selected:', mediaData); // Debug log
-            
-            // Handle both old and new response format
-            const url = mediaData.url || mediaData;
-            callback(url);
-        };
-        
-        const mediaPopup = window.open(
-            '{% url "media:library" %}?mode=select',
-            'Media Library',
-            `width=${width},height=${height},top=${top},left=${left},scrollbars=yes`
-        );
-
-        // Add error handling for popup blocker
-        if (!mediaPopup || mediaPopup.closed || typeof mediaPopup.closed === 'undefined') {
-            console.error('Popup blocked or failed to open');
-            showNotification('Please allow popups for the media library', 'error');
-        }
-    }
-
-    // Initialize Quill with custom image handler
-    const quill = new Quill('#editor', {
-        theme: 'snow',
-        modules: {
-            toolbar: {
-                container: [
-                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                ['bold', 'italic', 'underline', 'strike'],
-                [{ 'color': [] }, { 'background': [] }],
-                [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                [{ 'align': [] }],
-                ['link', 'image'],
-                ['clean']
-                ],
-                handlers: {
-                    // Custom image handler
-                    image: function() {
-                        openMediaLibrary((url) => {
-                            const range = quill.getSelection(true);
-                            quill.insertEmbed(range.index, 'image', url);
-                        });
-                    }
-                }
-            }
-        },
-        placeholder: 'Start writing your article...'
-    });
-
-    // Featured Image Handler
-    document.querySelector('.image-drop-zone').addEventListener('click', function(e) {
-        e.preventDefault();
-        openMediaLibrary((url) => {
-            console.log('Setting featured image:', url); 
-            
-            // Update hidden input
-            const featuredImageInput = document.getElementById('featured_image');
-            featuredImageInput.value = url;
-            console.log('Input value updated:', featuredImageInput.value);
-            
-            // Update preview
-            updateFeaturedImagePreview(url);
-        });
-    });
-
-    function updateFeaturedImagePreview(url) {
-        console.log('Updating preview with:', url); // Debug log
-        const dropZone = document.querySelector('.image-drop-zone');
-        dropZone.innerHTML = `
-            <div class="relative group">
-                <img src="${url}" alt="Featured image" class="preview-image">
-                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
-                            transition-opacity duration-200 flex items-center justify-center gap-3">
-                    <button type="button" onclick="changeFeaturedImage(event)" 
-                            class="action-btn bg-white/90 hover:bg-white">
-                        <i class="fas fa-edit"></i>
-                        <span>Change</span>
-                    </button>
-                    <button type="button" onclick="removeFeaturedImage(event)"
-                            class="action-btn bg-red-500/90 hover:bg-red-500 text-white">
-                        <i class="fas fa-trash-alt"></i>
-                        <span>Remove</span>
-                    </button>
-                </div>
-            </div>
-        `;
-    }
-
-    // Featured Image Functions
-    function changeFeaturedImage(e) {
-        e.stopPropagation();
-        openMediaLibrary((url) => {
-            document.getElementById('featured_image').value = url;
-            updateFeaturedImagePreview(url);
-        });
-    }
-
-    function removeFeaturedImage(e) {
-        e.stopPropagation();
-        document.getElementById('featured_image').value = '';
-        const dropZone = document.querySelector('.image-drop-zone');
-        dropZone.innerHTML = `
-            <div class="space-y-2">
-                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                </svg>
-                <div>
-                    <p class="text-sm font-medium text-gray-900">Upload Image</p>
-                    <p class="text-xs text-gray-500">Click to browse from media library</p>
-                </div>
-            </div>
-        `;
-    }
-
-    // Update form submission handler
-    document.getElementById('articleForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Set content dari Quill
-        document.getElementById('content').value = quill.root.innerHTML;
-        
-        // Pastikan status terisi
-        if (!this.querySelector('input[name="status"]')) {
-            // Tambahkan hidden input untuk status jika belum ada
-            const statusInput = document.createElement('input');
-            statusInput.type = 'hidden';
-            statusInput.name = 'status';
-            statusInput.value = 'draft'; // Default to draft
-            this.appendChild(statusInput);
-        }
-        
-        // Log form data untuk debugging
-        const formData = new FormData(this);
-        console.log('Submitting form with data:');
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
-        
-        // Submit form
-        this.submit();
-    });
-
-    // Update publish buttons
-    document.querySelectorAll('button[name="status"]').forEach(button => {
-        button.addEventListener('click', function(e) {
-            // Update hidden status input atau buat baru jika belum ada
-            let statusInput = document.querySelector('input[name="status"]');
-            if (!statusInput) {
-                statusInput = document.createElement('input');
-                statusInput.type = 'hidden';
-                statusInput.name = 'status';
-                document.getElementById('articleForm').appendChild(statusInput);
-            }
-            statusInput.value = this.value;
-        });
-    });
-
-    // Modal functions
     function openCategoryModal() {
         document.getElementById('categoryModal').classList.remove('hidden');
         document.getElementById('categoryModal').classList.add('flex');
@@ -538,26 +353,16 @@
         document.getElementById('categoryModal').classList.remove('flex');
     }
 
-    // Close modal when clicking outside
-    document.getElementById('categoryModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeCategoryModal();
-        }
-    });
+    function changeFeaturedImage(event) {
+        event.preventDefault();
+        // Implement media library integration
+    }
 
-    // Add notification function
-    function showNotification(message, type = 'success') {
-        const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg ${
-            type === 'success' ? 'bg-green-500' : 'bg-red-500'
-        } text-white`;
-        notification.textContent = message;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.remove();
-        }, 3000);
+    function removeFeaturedImage(event) {
+        event.preventDefault();
+        document.getElementById('featured_image_input').value = '';
+        const previewContainer = document.getElementById('image_preview');
+        previewContainer.innerHTML = '';
     }
 </script>
 {% endblock %} 

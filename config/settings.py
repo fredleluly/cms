@@ -108,6 +108,9 @@ else:
     STATICFILES_DIRS = [
         BASE_DIR / 'static'
     ]
+    # PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+    # STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+    # STATIC_ROOT = BASE_DIR / 'static'
 
 # Media files configuration
 MEDIA_URL = '/media/'
@@ -314,11 +317,12 @@ CKEDITOR_CONFIGS = {
             ['Source', '-', 'Bold', 'Italic']
         ],
         'toolbar_Full': [
-            ['Styles', 'Format', 'Bold', 'Italic', 'Underline', 'Strike', 'SpellChecker', 'Undo', 'Redo'],
-            ['Link', 'Unlink', 'Anchor'],
-            ['Image', 'Flash', 'Table', 'HorizontalRule'],
-            ['TextColor', 'BGColor'],
-            ['Smiley', 'SpecialChar'], ['Source'],
+            ['Styles', 'Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', 'RemoveFormat', 'SpellChecker', 'Undo', 'Redo'],
+            ['Link', 'Unlink', 'Anchor', 'Image', 'Table', 'HorizontalRule', 'SpecialChar', 'PageBreak'],
+            ['NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', 'CreateDiv', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['TextColor', 'BGColor', 'Find', 'Replace', 'SelectAll', 'ShowBlocks'],
+            ['Maximize', 'Source', 'Preview', 'Print', 'Templates', 'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord'],
+            ['Scayt', 'About', 'Youtube', 'MediaEmbed', 'CodeSnippet', 'Iframe'],
         ],
         'toolbar': 'Full',
         'height': 500,
