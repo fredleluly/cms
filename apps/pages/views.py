@@ -136,7 +136,7 @@ def create_default_homepage():
         {
             'identifier': 'section3',
             'title': 'Penerimaan Mahasiswa Baru',
-            'background_image': '/static/images/hero-bg.jpg',
+            'background_image': '/static/images/section3.jpg',
             'items': [
                 {
                     'title': '',
@@ -155,14 +155,16 @@ def create_default_homepage():
         },
         {
             'identifier': 'section4',
-            'title': '',
-            'description': 'https://www.youtube.com/watch?v=AMLKY6NBjz0',
+            'title': 'Berita Dan Acara',
+            'subtitle': 'Stay updated with the latest news and events from Matana University',
+            'description': 'https://www.youtube.com/embed/u2lqeWCrtL0?si=NVxrT45j0kzH0mk0',
+            # 'description': 'https://www.youtube.com/embed/AMLKY6NBjz0',
             'order': 4
         },
         {
             'identifier': 'section5',
             'title': 'Virtual Tour 360 Matana University',
-             'background_image': '/static/images/hero-bg.jpg',
+             'background_image': '/static/images/section5.jpg',
             'description': 'http://360.matanauniversity.ac.id/',
             'order': 5
         },
@@ -173,15 +175,19 @@ def create_default_homepage():
             'items': [
                 {
                     'title': 'https://www.instagram.com/p/DFchJtQsUua/',
+                    'image': '/static/images/instagram1.jpg',
                 },
                 {
                     'title': 'https://www.instagram.com/p/DFZOdJ9yFTc/',
+                    'image': '/static/images/instagram2.jpg',
                 },
                 {
                     'title': 'https://www.instagram.com/p/DFT1BvYSDB2/',
+                    'image': '/static/images/instagram3.jpg',
                 },
                 {
                     'title': 'https://www.instagram.com/p/DFO5HGrPN-S/',
+                    'image': '/static/images/instagram4.jpg',
                 }
             ],
             'order': 6

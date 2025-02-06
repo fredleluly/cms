@@ -4,6 +4,7 @@ from apps.pages.models import Article, ArticleCategory
 from django.utils.text import slugify
 import random
 from datetime import timedelta
+import time
 
 class Command(BaseCommand):
     help = 'Generates sample academic articles with relevant content'
@@ -72,19 +73,30 @@ class Command(BaseCommand):
         for i in range(count):
             title = random.choice(academic_titles)
             excerpt = random.choice(excerpts)
+            timestamp = int(time.time())
             
-            # Create article with relevant content
-            article = Article.objects.create(
-                title=title,
-                slug=slugify(title),
-                excerpt=excerpt,
-                content=content_template.format(excerpt=excerpt),
-                status='published',
-                category=random.choice(categories),
-                created_at=timezone.now() - timedelta(days=random.randint(0, 30)),
-                featured_image='articles/default-article-image.jpg'
-            )
+            # Create unique slug by adding timestamp
+            unique_slug = f"{slugify(title)}-{timestamp}"
             
-            self.stdout.write(
-                self.style.SUCCESS(f'Successfully created article: "{title}"')
-            )
+            try:
+                article = Article.objects.create(
+                    title=title,
+                    slug=unique_slug,
+                    excerpt=excerpt,
+                    content=content_template.format(excerpt=excerpt),
+                    status='published',
+                    category=random.choice(categories),
+                    created_at=timezone.now() - timedelta(days=random.randint(0, 30)),
+                    featured_image='static/images/article2.jpg'
+                )
+                
+                self.stdout.write(
+                    self.style.SUCCESS(f'Successfully created article: "{title}"')
+                )
+            except Exception as e:
+                self.stdout.write(
+                    self.style.ERROR(f'Failed to create article: "{title}". Error: {str(e)}')
+                )
+            
+            # Tambahkan jeda kecil untuk memastikan timestamp berbeda
+            time.sleep(0.1)

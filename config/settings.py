@@ -170,6 +170,7 @@ CSP_SCRIPT_SRC = (
     "https://cdnjs.cloudflare.com",
     "https://cdn.quilljs.com",
     "https://www.youtube.com",
+    "https://www.instagram.com",
 )
 
 CSP_STYLE_SRC = (
@@ -178,6 +179,7 @@ CSP_STYLE_SRC = (
     "https://cdn.tailwindcss.com",
     "https://cdnjs.cloudflare.com",
     "https://fonts.googleapis.com",
+    "https://www.instagram.com",
 )
 
 CSP_FONT_SRC = (
@@ -192,6 +194,7 @@ CSP_IMG_SRC = (
     "https:",
     "*.ytimg.com",
     "*.googlevideo.com",
+    "https://www.instagram.com",
 )
 
 CSP_CONNECT_SRC = (
@@ -204,6 +207,7 @@ CSP_FRAME_SRC = (
     "https://www.youtube.com",
     "https://youtube.com",
     "https://www.youtube-nocookie.com",
+    "https://www.instagram.com",
 )
 
 # Cache timeout in seconds (5 minutes)
