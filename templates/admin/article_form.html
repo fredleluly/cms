@@ -488,9 +488,8 @@
     document.getElementById('articleForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // Get meta description and keywords
-        const metaDescription = document.querySelector('textarea[name="meta_description"]').value;
-        const metaKeywords = document.querySelector('input[name="meta_keywords"]').value;
+        // Set content dari Quill
+        document.getElementById('content').value = quill.root.innerHTML;
         
         // Pastikan status terisi
         if (!this.querySelector('input[name="status"]')) {

@@ -341,8 +341,8 @@ CKEDITOR_CONFIGS = {
             'dialogui',
             'elementspath'
         ]),
-        'filebrowserBrowseUrl': '/media/library/',
-        'filebrowserUploadUrl': '/media/api/media/upload/',
+        'filebrowserBrowseUrl': '/lib/library/',
+        'filebrowserUploadUrl': '/lib/upload/',
     }
 }
 
