@@ -249,8 +249,10 @@
                     <td class="px-6 py-4">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-sm font-medium text-gray-600">
+                                {{ article.created_by.get_full_name|default:article.created_by.username|make_list|first|upper }}
                             </div>
                             <span class="text-sm text-gray-600">
+                                {{ article.created_by.get_full_name|default:article.created_by.username }}
                             </span>
                         </div>
                     </td>

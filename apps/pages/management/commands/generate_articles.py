@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from apps.pages.models import Article, ArticleCategory
 from django.utils.text import slugify
+from django.contrib.auth import get_user_model
 import random
 from datetime import timedelta
 import time
@@ -14,6 +15,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         count = kwargs['count']
+        
+        # Get admin user
+        User = get_user_model()
+        try:
+            admin_user = User.objects.get(username='admin')
+        except User.DoesNotExist:
+            self.stdout.write(
+                self.style.ERROR('Admin user not found. Please create a user with username "admin" first.')
+            )
+            return
         
         # Buat atau dapatkan kategori
         categories_data = ['Akademik', 'Beasiswa', 'Prestasi', 'Event', 'Penelitian']
@@ -74,6 +85,7 @@ class Command(BaseCommand):
             title = random.choice(academic_titles)
             excerpt = random.choice(excerpts)
             timestamp = int(time.time())
+            created_date = timezone.now() - timedelta(days=random.randint(0, 30))
             
             # Create unique slug by adding timestamp
             unique_slug = f"{slugify(title)}-{timestamp}"
@@ -86,7 +98,11 @@ class Command(BaseCommand):
                     content=content_template.format(excerpt=excerpt),
                     status='published',
                     category=random.choice(categories),
-                    created_at=timezone.now() - timedelta(days=random.randint(0, 30)),
+                    created_at=created_date,
+                    updated_at=created_date,
+                    published_at=created_date,
+                    created_by=admin_user,
+                    updated_by=admin_user,
                     featured_image='static/images/article2.jpg'
                 )
                 

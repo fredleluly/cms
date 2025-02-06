@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{% block meta_description %}Matana University - Perguruan tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional{% endblock %}">
-    <meta name="keywords" content="{% block meta_keywords %}universitas matana, kuliah, pendidikan tinggi, gading serpong, tangerang{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% if article.meta_description %}{{ article.meta_description }}{% else %}Matana University - Perguruan tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional{% endif %}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}{% if article.meta_keywords %}{{ article.meta_keywords }}{% else %}universitas matana, kuliah, pendidikan tinggi, gading serpong, tangerang{% endif %}{% endblock %}">
     <meta name="author" content="Matana University">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    <meta property="og:title" content="{% block og_title %}{{ self.title }}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}{{ self.meta_description }}{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}{% static 'images/matana-og.jpg' %}{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}{% if article.title %}{{ article.title }}{% else %}{{ self.title }}{% endif %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% if article.meta_description %}{{ article.meta_description }}{% else %}{{ self.meta_description }}{% endif %}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% if article.featured_image %}{{ article.featured_image }}{% else %}{% static 'images/matana-og.jpg' %}{% endif %}{% endblock %}">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
@@ -199,10 +199,10 @@
 </head>
 <body class="font-sans antialiased">
     <!-- Top Bar -->
-    <div class="bg-matana-blue py-2">
+    <div class="bg-matana-blue py-2 hidden md:block">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-6">
+                <div class="flex items-center space-x-6 opacity-0 ">
                     <a href="tel:+62218723999" class="flex items-center space-x-2 text-white hover:text-matana-yellow transition-colors text-sm">
                         <i class="fas fa-phone text-matana-yellow"></i>
                         <span>(021) 8723-2999</span>
@@ -227,7 +227,7 @@
                     <div class="border-l border-white/20 pl-6 flex items-center space-x-4">
                         <a href="#" class="text-white hover:text-matana-yellow transition-colors text-sm font-medium">ID</a>
                         <span class="text-white/40">|</span>
-                        <a href="#" class="text-white hover:text-matana-yellow transition-colors text-sm font-medium">EN</a>
+                        <!-- <a href="#" class="text-white hover:text-matana-yellow transition-colors text-sm font-medium">EN</a> -->
                     </div>
                 </div>
             </div>
@@ -680,6 +680,15 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     {% block extra_js %}{% endblock %}
+
+    <!-- Tambahan SEO tags -->
+    {% if article %}
+    <meta property="article:published_time" content="{{ article.created_at|date:'c' }}">
+    <meta property="article:modified_time" content="{{ article.updated_at|date:'c' }}">
+    {% if article.author %}
+    <meta property="article:author" content="{{ article.author }}">
+    {% endif %}
+    {% endif %}
 </body>
 </html>
                                 

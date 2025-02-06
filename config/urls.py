@@ -67,6 +67,7 @@ urlpatterns = [
     path('lib/', include('apps.media.urls')),
     path('dashboard/pages/<slug:slug>/edit/', page_edit_view, name='page_edit'),
     path('dashboard/pages/', page_list_view, name='page_list'),
+        path("django-check-seo/", include("django_check_seo.urls")),
     # path('<slug:slug>/', page_view, name='page_view'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

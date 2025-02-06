@@ -157,8 +157,8 @@ def create_default_homepage():
             'identifier': 'section4',
             'title': 'Berita Dan Acara',
             'subtitle': 'Stay updated with the latest news and events from Matana University',
-            'description': 'https://www.youtube.com/embed/u2lqeWCrtL0?si=NVxrT45j0kzH0mk0',
-            # 'description': 'https://www.youtube.com/embed/AMLKY6NBjz0',
+            # 'description': 'https://www.youtube.com/embed/u2lqeWCrtL0?si=NVxrT45j0kzH0mk0',
+            'description': 'https://www.youtube.com/embed/AMLKY6NBjz0',
             'order': 4
         },
         {

@@ -5,10 +5,181 @@
 {% block extra_css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.0.0/swiper-bundle.min.css">
 <style>
+    /* Responsive Base Settings */
+    :root {
+        --container-padding: clamp(1rem, 5vw, 2rem);
+        --heading-size: clamp(1.5rem, 4vw, 2.5rem);
+        --text-base: clamp(0.875rem, 2vw, 1rem);
+    }
+
+    /* Hero Section */
     .hero-slider .swiper-slide {
         position: relative;
-        height: 85vh;
-        min-height: 600px;
+        height: clamp(400px, 85vh, 800px);
+        min-height: min(600px, 90vh);
+    }
+
+    /* Responsive Grid Layouts */
+    .responsive-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+        gap: clamp(1rem, 3vw, 2rem);
+    }
+
+    .responsive-grid-lg {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+        gap: clamp(1.5rem, 4vw, 3rem);
+    }
+
+    /* Responsive Text */
+    .responsive-text {
+        font-size: var(--text-base);
+        line-height: 1.6;
+    }
+
+    .responsive-heading {
+        font-size: var(--heading-size);
+        line-height: 1.2;
+    }
+
+    /* Responsive Spacing */
+    .section-padding {
+        padding-block: clamp(3rem, 8vh, 6rem);
+    }
+
+    .section-margin {
+        margin-block: clamp(2rem, 5vh, 4rem);
+    }
+
+    /* Responsive Images */
+    .responsive-image {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16/9;
+        object-fit: cover;
+    }
+
+    .responsive-square-image {
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+    }
+
+    /* Responsive Cards */
+    .news-card {
+        @apply bg-white rounded-xl shadow-sm overflow-hidden transition-all duration-300;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .news-card-image {
+        aspect-ratio: 16/9;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    /* Responsive Navigation */
+    .mobile-nav {
+        @apply lg:hidden;
+    }
+
+    .desktop-nav {
+        @apply hidden lg:flex;
+    }
+
+    /* Responsive Containers */
+    .content-container {
+        width: min(100% - 2rem, 1200px);
+        margin-inline: auto;
+        padding-inline: var(--container-padding);
+    }
+
+    /* Responsive YouTube Embed */
+    .video-container {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+        height: 0;
+        overflow: hidden;
+        max-width: 100%;
+    }
+
+    .video-container iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Responsive Instagram Feed */
+    .instagram-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+        gap: 1rem;
+    }
+
+    .instagram-item {
+        aspect-ratio: 1;
+        overflow: hidden;
+        border-radius: 0.5rem;
+    }
+
+    /* Responsive Stats */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+        gap: clamp(1rem, 3vw, 2rem);
+        text-align: center;
+    }
+
+    /* Media Queries for Fine-tuning */
+    @media (max-width: 640px) {
+        .hero-slider .swiper-slide {
+            min-height: 450px;
+        }
+
+        .section-padding {
+            padding-block: 2rem;
+        }
+
+        .responsive-heading {
+            font-size: clamp(1.25rem, 5vw, 1.5rem);
+        }
+    }
+
+    @media (min-width: 768px) {
+        .news-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .news-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    /* Utility Classes for Responsive Design */
+    .flex-responsive {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    @media (min-width: 768px) {
+        .flex-responsive {
+            flex-direction: row;
+        }
+    }
+
+    .text-responsive {
+        font-size: clamp(0.875rem, 2vw, 1rem);
+    }
+
+    .heading-responsive {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
     }
 
     .hero-slider .swiper-pagination-bullet {
@@ -40,10 +211,6 @@
     .stats-counter.visible {
         opacity: 1;
         transform: translateY(0);
-    }
-
-    .news-card {
-        transition: all 0.3s ease;
     }
 
     .news-card:hover {
@@ -228,16 +395,20 @@
     <div class="swiper-wrapper">
         
 
-        <div class="swiper-slide h-[700px]">
+        <!-- <div class="swiper-slide h-[700px]">
             <img 
                 src="https://www.matanauniversity.ac.id/wp-content/uploads/2024/07/matana_univ_PMB_25_26_web_-banner-scaled.jpg" 
                 alt="Matana University Campus Life" 
                 class="w-full  object-contain"
             >
-        </div>
+        </div> -->
         {% for block in blocks.section1.items %}
         <div class="swiper-slide h-[700px]">
-            <img src="{{ block.image }}" alt="{{ block.title }}" class="w-full object-contain">
+            {% if request.user_agent.is_mobile %}
+                <img src="{{ block.image_mobile|default:block.image }}" alt="{{ block.title }}" class="w-full h-full object-contain">
+            {% else %}
+                <img src="{{ block.image }}" alt="{{ block.title }}" class="w-full h-full object-cover md:object-contain">
+            {% endif %}
         </div>
         {% endfor %}
     </div>
@@ -247,14 +418,14 @@
 </div>
 
 <!-- section 2 -->
-<div class="container mx-auto px-4 flex flex-col items-center justify-center ">
+<div class="container mx-auto px-4 flex flex-col items-center justify-center my-12">
     <div class="flex flex-col items-center justify-center">
         <h2 class="text-4xl font-bold text-matana-blue mb-4">Why Choose Matana University?</h2>
     </div>
     <ul>
         {% for item in blocks.section2.items %}
         <div class="mb-2">
-            <span class="text-matana-yellow">✓</span> {{ item.title }}
+            <span class="text-matana-yellow ml-2">✓</span> {{ item.title }}
         </div>
         {% endfor %}
     </ul>

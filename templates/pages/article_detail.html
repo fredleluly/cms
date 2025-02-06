@@ -117,6 +117,34 @@
                 <div class="text-gray-600">Share this article:</div>
                 <div class="flex gap-4">
                     <!-- Add your social share buttons here -->
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" 
+                       target="_blank"
+                       class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    
+                    <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ article.title|urlencode }}"
+                       target="_blank" 
+                       class="flex items-center justify-center w-10 h-10 rounded-full bg-sky-500 hover:bg-sky-600 text-white transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    
+                    <a href="https://wa.me/?text={{ article.title|urlencode }}%20{{ request.build_absolute_uri|urlencode }}"
+                       target="_blank"
+                       class="flex items-center justify-center w-10 h-10 rounded-full bg-green-600 hover:bg-green-700 text-white transition-colors">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    
+                    <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ article.title|urlencode }}"
+                       target="_blank"
+                       class="flex items-center justify-center w-10 h-10 rounded-full bg-blue-700 hover:bg-blue-800 text-white transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    
+                    <button onclick="copyToClipboard('{{ request.build_absolute_uri }}')"
+                            class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-600 hover:bg-gray-700 text-white transition-colors">
+                        <i class="far fa-copy"></i>
+                    </button>
                 </div>
             </div>
         </div>
@@ -127,18 +155,34 @@
 {% if related_articles %}
 <section class="py-16 bg-gray-50">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold mb-8">Related Articles</h2>
+        <h2 class="text-3xl font-bold mb-8 text-gray-800">Artikel Terkait</h2>
         <div class="grid md:grid-cols-3 gap-8">
             {% for related in related_articles %}
-            <article class="bg-white rounded-xl overflow-hidden shadow-lg">
+            <article class="bg-white rounded-lg overflow-hidden shadow-md transition-shadow hover:shadow-lg">
                 {% if related.featured_image %}
-                <div class="image-wrapper">
+                <div class="aspect-w-16 aspect-h-9">
                     <img src="{{ related.featured_image }}" 
                          alt="{{ related.title }}" 
                          class="w-full h-48 object-cover">
                 </div>
                 {% endif %}
-                <!-- ... rest of the related article card ... -->
+                <div class="p-6">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2 line-clamp-2">
+                        {{ related.title }}
+                    </h3>
+                    <p class="text-gray-600 mb-4 line-clamp-3">
+                        {{ related.excerpt }}
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-500">
+                            {{ related.published_at|date:"d F Y" }}
+                        </span>
+                        <a href="{% url 'article_detail' related.slug %}" 
+                           class="text-blue-600 hover:text-blue-700 font-medium text-sm">
+                            Baca Selengkapnya
+                        </a>
+                    </div>
+                </div>
             </article>
             {% endfor %}
         </div>
