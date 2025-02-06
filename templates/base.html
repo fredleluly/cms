@@ -15,7 +15,7 @@
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <meta property="og:title" content="{% block og_title %}{% if article.title %}{{ article.title }}{% else %}{{ self.title }}{% endif %}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{% if article.meta_description %}{{ article.meta_description }}{% else %}{{ self.meta_description }}{% endif %}{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}{% if article.featured_image %}{{ article.featured_image }}{% else %}{% static 'images/matana-og.jpg' %}{% endif %}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{% if article.featured_image %}{{ article.featured_image }}{% else %}{% static 'images/logo-matana-white.png' %}{% endif %}{% endblock %}">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
