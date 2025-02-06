@@ -217,7 +217,7 @@ CACHE_TIMEOUT = 300
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
 
-CSRF_TRUSTED_ORIGINS = ["*"]
+CSRF_TRUSTED_ORIGINS = ['https://cms-2sn7d.kinsta.app/', 'https://cms-2sn7d.kinsta.app/', 'https://*.kinsta.app','https://*.127.0.0.1']
 
 ROOT_URLCONF = 'config.urls'
 
