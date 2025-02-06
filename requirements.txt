@@ -16,3 +16,4 @@ django-axes==7.0.1
 python-dotenv==1.0.1
 whitenoise==6.8.2
 django-check-seo==1.0.1
+django-dbbackup==4.2.1
