@@ -1,8 +1,13 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Page, ContentBlock, Article, ArticleCategory, MaintenanceMode
+from unfold.admin import ModelAdmin, StackedInline
 
-class ContentBlockInline(admin.StackedInline):
+admin.site.site_header = 'Matana CMS'
+admin.site.site_title = 'Matana CMS'
+admin.site.index_title = 'Matana CMS'
+
+class ContentBlockInline(StackedInline):
     model = ContentBlock
     extra = 0
     fieldsets = (
@@ -12,7 +17,7 @@ class ContentBlockInline(admin.StackedInline):
     )
 
 @admin.register(Page)
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(ModelAdmin):
     list_display = ('title', 'slug', 'template', 'status', 'updated_at', 'view_page_link')
     list_filter = ('status', 'template', 'created_at')
     search_fields = ('title', 'slug')
@@ -43,7 +48,7 @@ class PageAdmin(admin.ModelAdmin):
     view_page_link.short_description = 'View'
 
 @admin.register(ContentBlock)
-class ContentBlockAdmin(admin.ModelAdmin):
+class ContentBlockAdmin(ModelAdmin):
     list_display = ('identifier', 'page', 'content_type', 'order', 'updated_at')
     list_filter = ('content_type', 'page')
     search_fields = ('identifier', 'page__title')
@@ -56,13 +61,13 @@ class ContentBlockAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 @admin.register(ArticleCategory)
-class ArticleCategoryAdmin(admin.ModelAdmin):
+class ArticleCategoryAdmin(ModelAdmin):
     list_display = ('name', 'slug')
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name',)
 
 @admin.register(Article)
-class ArticleAdmin(admin.ModelAdmin):
+class ArticleAdmin(ModelAdmin):
     list_display = ('title', 'category', 'status', 'is_featured', 'published_at', 'created_by')
     list_filter = ('status', 'category', 'is_featured', 'created_at')
     search_fields = ('title', 'excerpt', 'content')
@@ -93,7 +98,7 @@ class ArticleAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 @admin.register(MaintenanceMode)
-class MaintenanceModeAdmin(admin.ModelAdmin):
+class MaintenanceModeAdmin(ModelAdmin):
     list_display = ('is_active', 'updated_at')
     readonly_fields = ('created_at', 'updated_at')
     fieldsets = (
