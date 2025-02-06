@@ -136,6 +136,7 @@ def create_default_homepage():
         {
             'identifier': 'section3',
             'title': 'Penerimaan Mahasiswa Baru',
+            'background_image': '/static/images/hero-bg.jpg',
             'items': [
                 {
                     'title': '',
@@ -221,6 +222,10 @@ def home_view(request):
     blocks = {}
     for block in page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
+
+    # tambahakn 4 berita terbaru
+    berita_terbaru = Article.objects.filter(status='published').order_by('-created_at')[:4]
+    blocks['berita_terbaru'] = berita_terbaru
 
     context = {
         'page': page,

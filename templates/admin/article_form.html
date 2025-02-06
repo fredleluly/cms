@@ -369,10 +369,12 @@
         const top = (window.innerHeight - height) / 2;
         
         // Store callback for later use
-        window.handleMediaSelect = function(id, url) {
-            console.log('Media selected:', { id, url }); // Debug log
+        window.handleMediaSelect = function(mediaData) {
+            console.log('Media selected:', mediaData); // Debug log
+            
+            // Handle both old and new response format
+            const url = mediaData.url || mediaData;
             callback(url);
-            mediaPopup.close();
         };
         
         const mediaPopup = window.open(
@@ -380,6 +382,12 @@
             'Media Library',
             `width=${width},height=${height},top=${top},left=${left},scrollbars=yes`
         );
+
+        // Add error handling for popup blocker
+        if (!mediaPopup || mediaPopup.closed || typeof mediaPopup.closed === 'undefined') {
+            console.error('Popup blocked or failed to open');
+            showNotification('Please allow popups for the media library', 'error');
+        }
     }
 
     // Initialize Quill with custom image handler
@@ -414,12 +422,12 @@
     document.querySelector('.image-drop-zone').addEventListener('click', function(e) {
         e.preventDefault();
         openMediaLibrary((url) => {
-            console.log('Setting featured image:', url); // Debug log
+            console.log('Setting featured image:', url); 
             
             // Update hidden input
             const featuredImageInput = document.getElementById('featured_image');
             featuredImageInput.value = url;
-            console.log('Input value updated:', featuredImageInput.value); // Debug log
+            console.log('Input value updated:', featuredImageInput.value);
             
             // Update preview
             updateFeaturedImagePreview(url);
@@ -536,5 +544,20 @@
             closeCategoryModal();
         }
     });
+
+    // Add notification function
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg ${
+            type === 'success' ? 'bg-green-500' : 'bg-red-500'
+        } text-white`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
 </script>
 {% endblock %} 

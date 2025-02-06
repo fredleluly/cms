@@ -159,6 +159,7 @@ else:
 
 # Content Security Policy
 CSP_DEFAULT_SRC = ("'self'",)
+CSP_REPORT_ONLY = False
 
 CSP_SCRIPT_SRC = (
     "'self'",
@@ -168,6 +169,7 @@ CSP_SCRIPT_SRC = (
     "https://unpkg.com",
     "https://cdnjs.cloudflare.com",
     "https://cdn.quilljs.com",
+    "https://www.youtube.com",
 )
 
 CSP_STYLE_SRC = (
@@ -188,12 +190,20 @@ CSP_IMG_SRC = (
     "'self'",
     "data:",
     "https:",
-    "blob:",
+    "*.ytimg.com",
+    "*.googlevideo.com",
 )
 
 CSP_CONNECT_SRC = (
     "'self'",
     "https:",
+)
+
+CSP_FRAME_SRC = (
+    "'self'",
+    "https://www.youtube.com",
+    "https://youtube.com",
+    "https://www.youtube-nocookie.com",
 )
 
 # Cache timeout in seconds (5 minutes)

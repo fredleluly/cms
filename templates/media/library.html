@@ -638,27 +638,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Improved Media selection functionality 
     window.selectMedia = function(id, url) {
-        console.log('1. selectMedia called with:', { id, url });
+        console.log('Selecting media:', { id, url });
         
-        if (!window.opener) {
-            console.error('2. No opener window found');
-            showNotification('Cannot select media - no opener window', 'error');
-            return;
-        }
-        
-        if (window.opener.closed) {
-            console.error('3. Opener window is closed');
-            showNotification('Cannot select media - opener window is closed', 'error');
+        if (!window.opener || window.opener.closed) {
+            showNotification('Cannot select media - window error', 'error');
             return;
         }
         
         try {
-            console.log('4. Attempting to call handleMediaSelect on opener');
-            window.opener.handleMediaSelect(id, url);
-            console.log('5. handleMediaSelect called successfully');
+            // Send both the full URL and the media data
+            const mediaData = {
+                id: id,
+                url: url.startsWith('http') ? url : window.location.origin + url
+            };
+            
+            window.opener.handleMediaSelect(mediaData);
             window.close();
         } catch (err) {
-            console.error('6. Error calling handleMediaSelect:', err);
+            console.error('Media selection error:', err);
             showNotification('Failed to select media', 'error');
         }
     };

@@ -109,10 +109,14 @@
                                                 <div class="flex gap-2">
                                                     <input type="text" v-model="item[key]"
                                                            class="w-full px-4 py-2 border rounded-lg">
-                                                    <button type="button" @click="openMediaLibrary(identifier, 'image', index)"
+                                                    <button type="button" @click="openMediaLibrary(identifier, key, index)"
                                                             class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
                                                         <i class="fas fa-image"></i>
                                                     </button>
+                                                </div>
+                                                <!-- Preview if image exists -->
+                                                <div v-if="item[key]" class="mt-2">
+                                                    <img :src="item[key]" class="h-20 w-auto rounded-lg">
                                                 </div>
                                             </template>
                                             
@@ -212,7 +216,7 @@ new Vue({
             }
             this.blocks[identifier].items.push({
                 title: '',
-                icon: '',
+                image: '',
                 description: ''
             });
         },
@@ -232,36 +236,59 @@ new Vue({
             this.blocks[identifier].items[itemIndex].items.splice(nestedIndex, 1);
         },
         
-        openMediaLibrary(identifier, field) {
-            // Update to match the existing library callback name
-            const callback = (data) => {
-                // Handle both object and string responses
-                const url = typeof data === 'object' ? data.url : data;
+        openMediaLibrary(identifier, field, itemIndex = null) {
+            console.log('Opening media library:', { identifier, field, itemIndex });
+            
+            // Create callback function before opening window
+            window.handleMediaSelect = (mediaData) => {
+                console.log('Media selected:', mediaData);
                 
-                // Update the correct field in the blocks data
-                if (this.blocks[identifier]) {
-                    if (field === 'image') {
-                        this.$set(this.blocks[identifier], 'image', url);
-                    } else if (field === 'background_image') {
-                        this.$set(this.blocks[identifier], 'background_image', url);
+                try {
+                    if (itemIndex !== null) {
+                        // Updating item in array
+                        console.log('Updating item:', itemIndex, 'in', identifier);
+                        if (!this.blocks[identifier].items) {
+                            this.$set(this.blocks[identifier], 'items', []);
+                        }
+                        this.$set(this.blocks[identifier].items[itemIndex], field, mediaData.url);
+                    } else {
+                        // Updating block directly
+                        console.log('Updating block:', identifier);
+                        this.$set(this.blocks[identifier], field, mediaData.url);
                     }
+                    
+                    // Show success notification
+                    this.showNotification('Image updated successfully', 'success');
+                } catch (error) {
+                    console.error('Error updating image:', error);
+                    this.error = 'Failed to update image';
                 }
             };
 
-            // Store callback with the correct name that library expects
-            window.handleMediaSelect = callback;
-
-            // Open media library in popup with select mode
+            // Open media library window
             const w = 800;
             const h = 600;
             const left = (screen.width/2)-(w/2);
             const top = (screen.height/2)-(h/2);
             
-            window.open(
+            const libraryWindow = window.open(
                 `/lib/library/?mode=select`, 
                 'MediaLibrary',
                 `width=${w},height=${h},top=${top},left=${left},scrollbars=yes`
             );
+
+            // Add error handling for popup blocker
+            if (!libraryWindow || libraryWindow.closed || typeof libraryWindow.closed === 'undefined') {
+                this.error = 'Please allow popups for the media library';
+            }
+        },
+        
+        showNotification(message, type = 'success') {
+            const notification = type === 'success' ? 'successMessage' : 'error';
+            this[notification] = message;
+            setTimeout(() => {
+                this[notification] = null;
+            }, 3000);
         },
         
         async savePage() {
@@ -303,6 +330,14 @@ new Vue({
         
         cancel() {
             history.back();
+        }
+    },
+    watch: {
+        blocks: {
+            handler(newVal) {
+                console.log('Blocks updated:', newVal);
+            },
+            deep: true
         }
     }
 });
