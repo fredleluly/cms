@@ -12,6 +12,7 @@ package-lock.json
 package.json
 
 static/images
+backup/
 
 # Backup files # 
 *.bak 
