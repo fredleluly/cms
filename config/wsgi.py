@@ -14,9 +14,9 @@ from django.core.management import call_command
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 
 # Run startup command before application starts
-try:
-    call_command('startup')
-except Exception as e:
-    print(f"Error during startup, 9999999999999999999: {e}")
+# try:
+#     call_command('startup')
+# except Exception as e:
+#     print(f"Error during startup, 9999999999999999999: {e}")
 
 application = get_wsgi_application()

@@ -335,6 +335,8 @@ def article_detail_view(request, slug):
         category=article.category,
         status='published'
     ).exclude(id=article.id)[:3]
+
+    print(article.content)
     
     context = {
         'article': article,

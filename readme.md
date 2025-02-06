@@ -27,6 +27,7 @@ pip install -r requirements.txt
 find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 rm db.sqlite3  # or del db.sqlite3 on Windows
 python manage.py makemigrations
+python manage.py makemigrations media
 python manage.py migrate
 
 echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell
@@ -35,9 +36,10 @@ python manage.py runserver
 ```
 
 ```bash
-python manage.py makemigrations media
-python manage.py migrate media
-python manage.py migrate
+. /opt/venv/bin/activate; python manage.py makemigrations; python manage.py makemigrations media; python manage.py migrate; echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell; python manage.py generate_articles 10
+```
+```bash
+ find . -path "*/migrations/*.py" -not -name "__init__.py" -delete; rm db.sqlite3; python manage.py makemigrations; python manage.py makemigrations media; python manage.py migrate; echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', 'admin@example.com', 'admin')" | python manage.py shell; python manage.py generate_articles 10; python manage.py runserver  
 ```
 
 ### Setup
