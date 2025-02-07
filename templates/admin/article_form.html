@@ -133,6 +133,7 @@
     {% if article %}
         <input type="hidden" name="article_id" value="{{ article.id }}">
     {% endif %}
+    <input type="hidden" id="featured_image_input" name="featured_image" value="{{ article.featured_image|default:'' }}">
 
     <div class="form-grid">
         <!-- Main Content -->
@@ -343,6 +344,108 @@
 {% block extra_js %}
 {{ form.media }}
 <script>
+    // Media Library Popup Handler
+    function openMediaLibrary(callback) {
+        const width = Math.min(1200, window.innerWidth * 0.9);
+        const height = Math.min(800, window.innerHeight * 0.9);
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+        
+        // Store callback for later use
+        window.handleMediaSelect = function(mediaData) {
+            console.log('Media selected:', mediaData); // Debug log
+            
+            // Handle both old and new response format
+            const url = mediaData.url || mediaData;
+            callback(url);
+        };
+        
+        const mediaPopup = window.open(
+            '{% url "media:library" %}?mode=select',
+            'Media Library',
+            `width=${width},height=${height},top=${top},left=${left},scrollbars=yes`
+        );
+
+        // Add error handling for popup blocker
+        if (!mediaPopup || mediaPopup.closed || typeof mediaPopup.closed === 'undefined') {
+            console.error('Popup blocked or failed to open');
+            showNotification('Please allow popups for the media library', 'error');
+        }
+    }
+
+    // Featured Image Functions
+    function changeFeaturedImage(event) {
+        event.preventDefault();
+        openMediaLibrary((url) => {
+            document.getElementById('featured_image_input').value = url;
+            updateFeaturedImagePreview(url);
+        });
+    }
+
+    function updateFeaturedImagePreview(url) {
+        console.log('Updating preview with:', url); // Debug log
+        const dropZone = document.querySelector('.image-drop-zone');
+        dropZone.innerHTML = `
+            <div class="relative group">
+                <img src="${url}" alt="Featured image" class="preview-image">
+                <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
+                            transition-opacity duration-200 flex items-center justify-center gap-3">
+                    <button type="button" onclick="changeFeaturedImage(event)" 
+                            class="action-btn bg-white/90 hover:bg-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-edit"></i>
+                        <span>Change</span>
+                    </button>
+                    <button type="button" onclick="removeFeaturedImage(event)"
+                            class="action-btn bg-red-500/90 hover:bg-red-500 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>Remove</span>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
+
+    function removeFeaturedImage(event) {
+        event.preventDefault();
+        document.getElementById('featured_image_input').value = '';
+        const dropZone = document.querySelector('.image-drop-zone');
+        dropZone.innerHTML = `
+            <div class="space-y-2">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+                <div>
+                    <p class="text-sm font-medium text-gray-900">Upload Image</p>
+                    <p class="text-xs text-gray-500">Click to browse from media library</p>
+                </div>
+            </div>
+        `;
+    }
+
+    // Add click handler for image drop zone
+    document.querySelector('.image-drop-zone').addEventListener('click', function(e) {
+        if (!e.target.closest('button')) { // Only trigger if not clicking buttons
+            changeFeaturedImage(e);
+        }
+    });
+
+    // Notification function
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg ${
+            type === 'success' ? 'bg-green-500' : 'bg-red-500'
+        } text-white z-50`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            notification.remove();
+        }, 3000);
+    }
+
+    // Modal functions
     function openCategoryModal() {
         document.getElementById('categoryModal').classList.remove('hidden');
         document.getElementById('categoryModal').classList.add('flex');
@@ -353,16 +456,11 @@
         document.getElementById('categoryModal').classList.remove('flex');
     }
 
-    function changeFeaturedImage(event) {
-        event.preventDefault();
-        // Implement media library integration
-    }
-
-    function removeFeaturedImage(event) {
-        event.preventDefault();
-        document.getElementById('featured_image_input').value = '';
-        const previewContainer = document.getElementById('image_preview');
-        previewContainer.innerHTML = '';
-    }
+    // Close modal when clicking outside
+    document.getElementById('categoryModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCategoryModal();
+        }
+    });
 </script>
 {% endblock %} 
