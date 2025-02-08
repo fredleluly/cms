@@ -769,6 +769,8 @@ def profile_view(request):
     blocks = {}
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
+
+    print(f"Blocks: ", profile_page.metadata)
     
     context = {
         'page': profile_page,
