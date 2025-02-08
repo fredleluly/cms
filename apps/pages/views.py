@@ -27,6 +27,7 @@ from apps.media.models import MediaFile
 from django.urls import reverse
 import logging
 
+
 # Get logger for this file
 logger = logging.getLogger(__name__)
 
@@ -106,6 +107,31 @@ def create_default_homepage():
                 {
                     'title': 'banner4',
                     'image': '/static/images/banner4.jpg',
+                },
+            ],
+         
+            'order': 1
+        },
+        {
+            'identifier': 'section1_mobile',
+            'title': 'banner section',
+            'subtitle': '',
+            'items': [
+                {
+                    'title': 'banner1',
+                    'image': '/static/images/banner_mob.jpg',
+                },
+                {
+                    'title': 'banner2',
+                    'image': '/static/images/banner_mob2.jpg',
+                },
+                {
+                    'title': 'banner3',
+                    'image': '/static/images/banner_mob3.jpg',
+                },
+                {
+                    'title': 'banner4',
+                    'image': '/static/images/banner_mob4.jpg',
                 },
             ],
          
@@ -1568,10 +1594,10 @@ def create_default_management_page():
                     'image': '/static/images/dekan1.jpg',
                 },
                 {
-                    'image': '/static/images/dekan1.jpg',
+                    'image': '/static/images/dekan2.jpg',
                 },
                 {
-                    'image': '/static/images/dekan1.jpg',
+                    'image': '/static/images/dekan3.jpg',
                 }
             ],
             'order': 2
@@ -1584,13 +1610,13 @@ def create_default_management_page():
                     'image': '/static/images/dekan1.jpg',
                 },
                 {
-                    'image': '/static/images/dekan1.jpg',
+                    'image': '/static/images/dekan2.jpg',
                 },
                 {
                     'image': '/static/images/dekan1.jpg',
                 },
                 {
-                    'image': '/static/images/dekan1.jpg',
+                    'image': '/static/images/dekan3.jpg',
                 }
             ],
             'order': 3
@@ -1787,16 +1813,22 @@ def create_default_exchange_page():
             'description': 'Universitas mitra kami di kawasan Asia',
             'items': [
                 {
-                    'image': '/static/images/univ-asia1.jpg',
+                    'image': '/static/images/ex1.jpg',
                 },
                 {
-                    'image': '/static/images/univ-asia2.jpg',
+                    'image': '/static/images/ex2.jpg',
                 },
                 {
-                    'image': '/static/images/univ-asia3.jpg',
+                    'image': '/static/images/ex4.jpg',
                 },
                 {
-                    'image': '/static/images/univ-asia4.jpg',
+                    'image': '/static/images/ex3.jpg',
+                },
+                {
+                    'image': '/static/images/ex1.jpg',
+                },
+                {
+                    'image': '/static/images/ex4.jpg',
                 }
             ],
             'order': 2
@@ -1841,13 +1873,13 @@ def create_default_exchange_page():
             'description': 'Kisah sukses alumni program pertukaran pelajar',
             'items': [
                 {
-                    'image': '/static/images/alumni1.jpg',
+                    'image': '/static/images/exa1.jpg',
                 },
                 {
-                    'image': '/static/images/alumni2.jpg',
+                    'image': '/static/images/exa2.jpg',
                 },
                 {
-                    'image': '/static/images/alumni3.jpg',
+                    'image': '/static/images/exa3.jpg',
                 }
             ],
             'order': 5

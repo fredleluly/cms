@@ -391,7 +391,7 @@
 -->
 
 <!-- Hero Slider -->
-<div class="swiper hero-slider">
+<div class="swiper hero-slider hidden md:block">
     <div class="swiper-wrapper">
         
 
@@ -402,15 +402,29 @@
                 class="w-full  object-contain"
             >
         </div> -->
+        
         {% for block in blocks.section1.items %}
         <div class="swiper-slide h-[700px]">
-            {% if request.user_agent.is_mobile %}
-                <img src="{{ block.image_mobile|default:block.image }}" alt="{{ block.title }}" class="w-full h-full object-contain">
-            {% else %}
-                <img src="{{ block.image }}" alt="{{ block.title }}" class="w-full h-full object-cover md:object-contain">
-            {% endif %}
+            <img src="{{ block.image }}" alt="{{ block.title }}" class="w-full h-full object-cover md:object-contain">
         </div>
         {% endfor %}
+     
+    </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+</div>
+<div class="swiper hero-slider block md:hidden">
+    <div class="swiper-wrapper">
+        
+
+        
+        {% for block in blocks.section1_mobile.items %}
+        <div class="swiper-slide h-[700px]">
+            <img src="{{ block.image }}" alt="{{ block.title }}" class="w-full h-full object-cover md:object-contain ">
+        </div>
+        {% endfor %}
+     
     </div>
     <div class="swiper-pagination"></div>
     <div class="swiper-button-prev"></div>
@@ -572,7 +586,7 @@ blocks['berita_terbaru'] = berita_terbaru -->
                         <div class="aspect-video relative">
                             <iframe 
                                 class="w-full h-full"
-                                src="{{blocks.section4.description}}" 
+                                src="{{blocks.section4.description}}?autoplay=1" 
                                 allowfullscreen
                                 title="Matana University: Shaping Future Leaders Through Academic Excellence"
                             ></iframe>
