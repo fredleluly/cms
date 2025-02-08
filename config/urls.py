@@ -24,7 +24,7 @@ from apps.pages.views import (
     article_save_view, article_delete_view, article_quick_update,
     profile_view, category_create_view, upload_image, article_list_view, bulk_action_view,
     registration_view, registration_submit, scholarship_view, page_edit_view, page_list_view,
-    mitra_view, management_view
+    mitra_view, management_view, ukm_view, exchange_view
 )
 # from apps.pages.views import *
 from django.contrib.sitemaps.views import sitemap
@@ -72,6 +72,8 @@ urlpatterns = [
         path("django-check-seo/", include("django_check_seo.urls")),
     path('mitra/', mitra_view, name='mitra'),
     path('manajemen/', management_view, name='management'),
+    path('ukm/', ukm_view, name='ukm'),
+    path('student-exchange/', exchange_view, name='exchange'),
     # path('<slug:slug>/', page_view, name='page_view'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

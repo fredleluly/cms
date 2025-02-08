@@ -1622,3 +1622,260 @@ def management_view(request):
     }
     
     return render(request, 'pages/management.html', context)
+
+def create_default_ukm_page():
+    """Create default UKM page with standardized content blocks"""
+    ukm_page = Page.objects.create(
+        title="Unit Kegiatan Mahasiswa",
+        slug="ukm",
+        template='ukm.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Unit Kegiatan Mahasiswa (UKM) Matana University',
+            'meta_keywords': 'ukm matana, kegiatan mahasiswa, organisasi mahasiswa'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'Unit Kegiatan Mahasiswa',
+            'subtitle': 'Mengembangkan Bakat dan Potensi Mahasiswa Melalui Berbagai Kegiatan',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'olahraga_section',
+            'title': 'UKM Olahraga',
+            'description': 'Mengembangkan prestasi di bidang olahraga',
+            'items': [
+                {
+                    'title': 'Basket',
+                    'image': '/static/images/ukm1.jpg',
+                },
+                {
+                    'title': 'Futsal',
+                    'image': '/static/images/ukm2.jpg',
+                },
+                {
+                    'title': 'Badminton',
+                    'image': '/static/images/ukm3.jpg',
+                }
+            ],
+            'order': 2
+        },
+        {
+            'identifier': 'seni_section',
+            'title': 'UKM Seni & Budaya',
+            'description': 'Melestarikan dan mengembangkan seni budaya',
+            'items': [
+                {
+                    'title': 'Paduan Suara',
+                    'image': '/static/images/ukm3.jpg',
+                },
+                {
+                    'title': 'Tari Tradisional',
+                    'image': '/static/images/ukm2.jpg',
+                },
+                {
+                    'title': 'Paduan Suara',
+                    'image': '/static/images/ukm3.jpg',
+                },
+                {
+                    'title': 'Tari Tradisional',
+                    'image': '/static/images/ukm2.jpg',
+                },
+                {
+                    'title': 'Modern Dance',
+                    'image': '/static/images/ukm1.jpg',
+                }
+            ],
+            'order': 3
+        },
+        {
+            'identifier': 'akademik_section',
+            'title': 'UKM Akademik & Profesional',
+            'description': 'Meningkatkan kemampuan akademik dan profesional',
+            'items': [
+                {
+                    'title': 'English Club',
+                    'image': '/static/images/ukm2.jpg',
+                },
+                {
+                    'title': 'Programming Club',
+                    'image': '/static/images/ukm1.jpg',
+                },
+                {
+                    'title': 'Entrepreneurship Club',
+                    'image': '/static/images/ukm2.jpg',
+                }
+            ],
+            'order': 4
+        },
+        {
+            'identifier': 'minat_section',
+            'title': 'UKM Minat Khusus',
+            'description': 'Mengembangkan minat dan bakat khusus',
+            'items': [
+                {
+                    'title': 'Photography Club',
+                    'image': '/static/images/ukm1.jpg',
+                },
+                {
+                    'title': 'Jurnalistik',
+                    'image': '/static/images/ukm1.jpg',
+                },
+                {
+                    'title': 'Pecinta Alam',
+                    'image': '/static/images/ukm1.jpg',
+                }
+            ],
+            'order': 5
+        }
+    ]
+    
+    create_standardized_blocks(ukm_page, default_blocks)
+    return ukm_page
+
+def ukm_view(request):
+    """View for UKM page"""
+    try:
+        ukm_page = Page.objects.get(
+            slug='ukm',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        ukm_page = create_default_ukm_page()
+    
+    # Get content blocks
+    blocks = {}
+    for block in ukm_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+    
+    context = {
+        'page': ukm_page,
+        'meta': ukm_page.metadata,
+        'blocks': blocks
+    }
+    
+    return render(request, 'pages/ukm.html', context)
+
+def create_default_exchange_page():
+    """Create default Student Exchange page with standardized content blocks"""
+    exchange_page = Page.objects.create(
+        title="Student Exchange",
+        slug="student-exchange",
+        template='exchange.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Program Student Exchange Matana University - Pengalaman Belajar Internasional',
+            'meta_keywords': 'student exchange matana, pertukaran pelajar, studi internasional'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'Student Exchange Program',
+            'subtitle': 'Perluas Wawasan Global Anda Melalui Program Pertukaran Pelajar',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'asia_section',
+            'title': 'Partner Universities in Asia',
+            'description': 'Universitas mitra kami di kawasan Asia',
+            'items': [
+                {
+                    'image': '/static/images/univ-asia1.jpg',
+                },
+                {
+                    'image': '/static/images/univ-asia2.jpg',
+                },
+                {
+                    'image': '/static/images/univ-asia3.jpg',
+                },
+                {
+                    'image': '/static/images/univ-asia4.jpg',
+                }
+            ],
+            'order': 2
+        },
+        {
+            'identifier': 'europe_section',
+            'title': 'Partner Universities in Europe',
+            'description': 'Universitas mitra kami di kawasan Eropa',
+            'items': [
+                {
+                    'image': '/static/images/univ-europe1.jpg',
+                },
+                {
+                    'image': '/static/images/univ-europe2.jpg',
+                },
+                {
+                    'image': '/static/images/univ-europe3.jpg',
+                }
+            ],
+            'order': 3
+        },
+        {
+            'identifier': 'program_section',
+            'title': 'Program Unggulan',
+            'description': 'Program pertukaran pelajar yang tersedia',
+            'items': [
+                {
+                    'image': '/static/images/exchange1.jpg',
+                },
+                {
+                    'image': '/static/images/exchange2.jpg',
+                },
+                {
+                    'image': '/static/images/exchange3.jpg',
+                }
+            ],
+            'order': 4
+        },
+        {
+            'identifier': 'testimonial_section',
+            'title': 'Alumni Exchange',
+            'description': 'Kisah sukses alumni program pertukaran pelajar',
+            'items': [
+                {
+                    'image': '/static/images/alumni1.jpg',
+                },
+                {
+                    'image': '/static/images/alumni2.jpg',
+                },
+                {
+                    'image': '/static/images/alumni3.jpg',
+                }
+            ],
+            'order': 5
+        }
+    ]
+    
+    create_standardized_blocks(exchange_page, default_blocks)
+    return exchange_page
+
+def exchange_view(request):
+    """View for Student Exchange page"""
+    try:
+        exchange_page = Page.objects.get(
+            slug='student-exchange',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        exchange_page = create_default_exchange_page()
+    
+    # Get content blocks
+    blocks = {}
+    for block in exchange_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+    
+    context = {
+        'page': exchange_page,
+        'meta': exchange_page.metadata,
+        'blocks': blocks
+    }
+    
+    return render(request, 'pages/exchange.html', context)
