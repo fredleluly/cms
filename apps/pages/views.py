@@ -232,7 +232,7 @@ def home_view(request):
     # tambahakn 4 berita terbaru
     berita_terbaru = Article.objects.filter(status='published').order_by('-created_at')[:4]
     blocks['berita_terbaru'] = berita_terbaru
-
+    
     context = {
         'page': page,
         'meta': page.metadata,
@@ -268,6 +268,155 @@ def page_view(request, slug):
         # Log the error and return a 500 error
         print(f"Error rendering page {slug}: {str(e)}")
         raise Http404("Page could not be rendered")
+
+def create_default_mitra_page():
+    """Create default mitra page if it doesn't exist"""
+    mitra_page = Page.objects.create(
+        title="Mitra Kerja Sama",
+        slug="mitra",
+        template='mitra.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Mitra Kerja Sama Matana University',
+            'meta_keywords': 'mitra, matana university, universitas matana'
+        }
+    )
+
+     
+    default_blocks = [
+        {
+            'identifier': 'hospital_section',
+            'title': 'Hospital',
+                 'items': [
+                {
+                    'title': 'Rumah Sakit PUSB',
+                    'image': '/static/images/mitra1.png',
+                },
+                {
+                    'title': 'BETHSAIDA',
+                    'image': '/static/images/mitra2.png',
+                },
+                {
+                    'title': 'SERAPIMA',
+                    'image': '/static/images/mitra3.png',
+                },
+                {
+                    'title': 'RSUD',
+                    'image': '/static/images/mitra1.png',
+                },
+            ],
+            'order': 1
+        },
+        {
+            'identifier': 'hotel_section',
+            'title': 'Hotel',
+            'items': [
+                {
+                    'title': 'The Rits-Carliton',
+                    'image': '/static/images/mitra1.png',
+                },
+                {
+                    'title': 'Hotel Santika',
+                    'image': '/static/images/mitra1.png',
+                },
+                {
+                    'title': 'The Rits-Carliton',
+                    'image': '/static/images/mitra1.png',
+                },
+                {
+                    'title': 'Hotel Santika',
+                    'image': '/static/images/mitra1.png',
+                },
+                {
+                    'title': 'The Rits-Carliton',
+                    'image': '/static/images/mitra1.png',
+                },
+                {
+                    'title': 'Hotel Santika',
+                    'image': '/static/images/mitra1.png',
+                },
+                {
+                    'title': 'Shangri-LA',
+                    'image': '/static/images/mitra2.png',
+                }
+            ],
+            'order': 2
+        },{
+            'identifier': 'institusi_section',
+            'title': 'Institusi & Perusahaan',
+            'items': [
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra1.png',
+                }
+            ],
+            'order': 3
+        },{
+            'identifier': 'universitas_section',
+            'title': 'Universitas',
+            'items': [
+                {
+                    'title': 'Universitas Indonesia',
+                    'image': '/static/images/mitra1.png',
+                },
+                {
+                    'title': 'Universitas Majada',
+                    'image': '/static/images/mitra2.png',
+                },
+                {
+                    'title': 'Universitas JIU',
+                    'image': '/static/images/mitra3.png',
+                }
+            ],
+            'order': 4
+        },{
+            'identifier': 'bank_section',
+            'title': 'Bank',
+            'items': [
+                {
+                    'title': 'BANK BNI',
+                    'image': '/static/images/mitra1.png',
+                },
+                {
+                    'title': 'BANK SOFT',
+                    'image': '/static/images/mitra3.png',
+                },
+                {
+                    'title': 'BANK IDX',
+                    'image': '/static/images/mitra2.png',
+                }
+            ],
+            'order': 5
+        }
+    ]
+    
+    create_standardized_blocks(mitra_page, default_blocks)
+    return mitra_page
+
+def mitra_view(request):
+    """View for mitra page"""
+    try:
+        mitra_page = Page.objects.get(
+            slug='mitra',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        mitra_page = create_default_mitra_page()
+    
+    # Get content blocks
+    blocks = {}
+    for block in mitra_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+    
+    context = {
+        'page': mitra_page,
+        'meta': mitra_page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
+    }
+    
+    return render(request, 'pages/mitra.html', context)
+
+
 
 def news_view(request):
     # Get query parameters with defaults
@@ -504,35 +653,24 @@ def create_default_profile_page():
             'order': 1
         },
         {
-            'identifier': 'visi_section',
-            'title': 'Visi Matana',
-            'description': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional...',
+            'identifier': 'visi_misi_section',
+            'title': 'Visi & Misi',
+            'items': [
+                {
+                    'title': 'Visi',
+                    'description': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.'
+                },
+                {
+                    'title': 'Misi',
+                    'description': "a. Terbentuknya lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih;\nb.Terciptanya lulusan yang memiliki kemampuan penelitian, kreativitas, inovasi, dan berjiwa kewirausahaan;\nc. Terbentuknya generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan."
+                }
+            ],
             'order': 2
         },
         {
-            'identifier': 'misi_section',
-            'title': 'Misi Matana',
-            'items': [
-                {
-                    'title': 'Kepemimpinan',
-                    'description': 'Terbentuknya lulusan yang memiliki jiwa kepemimpinan...'
-                },
-                {
-                    'title': 'Penelitian',
-                    'description': 'Terciptanya lulusan yang memiliki kemampuan penelitian...'
-                },
-                {
-                    'title': 'Kepedulian Sosial',
-                    'description': 'Terbentuknya generasi penerus yang memiliki kepedulian...'
-                }
-            ],
-            'order': 3
-        },
-        {
             'identifier': 'sejarah_section',
-            'title': 'Sejarah Matana',
-            'description': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014...',
-            'image': '/static/images/history.jpg',
+            'title': 'Sejarah',
+            'description': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuansoft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.\n\nKarena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan, spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiiki budaya research dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan.\n\nProses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis-penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan bukan menghafal konten buku-teks. Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat mereka pergunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera saat mereka lulus.\n\nProses dalam mengintegrasikan tridharma Perguruan Tinggi mampu dilakukan, karena ditopang secara integratif oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat serta Pusat Pendidikan Vokasi.\n\nDalam proses pembelajaran apabila mahasiswa belum mampu mencapai prestasi yang diharapkan setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk dibantu, dibimbing dan diarahkan agar mahasiswa mampu mengatasi kendala yang mengganggu capaian pembelajarannya, serta penguatan motivasi mahasiswa sehingga dapat mengejar ketertinggalannya.\n\nBagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan di dorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia dan kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang special dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan anda. Kami menyambut anda dalam keluarga besar Universitas Matana',
             'order': 4
         },
         {
@@ -540,13 +678,52 @@ def create_default_profile_page():
             'title': 'Keunggulan Matana',
             'items': [
                 {
-                    'title': 'Kurikulum Akademik Unggul',
-                    'description': 'Menerapkan kurikulum akademik yang mendukung...',
-                    'image': '/media/keunggulan/academic.jpg'
-                }
+                    'title': 'Menerapkan kurikulum akademik yang mendukung lulusan siap berkompetisi di dunia kerja',
+                },
+                {
+                    'title': 'Dosen yang profesional dan berprestasi di dalam dan luar negeri',
+                },
+                {
+                    'title': 'Unit Kegiatan Mahasiswa (UKM) yang berprestasi di nasional dan internasional',
+                },
+                {
+                    'title': 'Memiliki fasilitas yang mendkung praktik setiap program studi',
+                },
+                {
+                    'title': 'Memiliki program Student Exchange (pertukaran mahasiswa) ke universitas ternama di Asia dan Eropa',
+                },
+                {
+                    'title': 'Kesempatan berkarir di jajaran mitra bisnis Matana University',
+                },
+                {
+                    'title': 'Lokasi kampus strategis, berlokasi di sentra bisnis Gading Serpong',
+                },
             ],
             'order': 5
-        }
+        },   {
+            'identifier': 'fasilitas_section',
+            'title': 'Fasilitas Matana',
+            'items': [
+                {
+                    'title': 'Lab Akutansi',
+                    'image': '/static/images/fas1.jpg',
+                },
+                {
+                    'title': 'Lab iMac',
+                    'image': '/static/images/fas2.jpg',
+                },
+                {
+                    'title': 'Lab Mobile Game',
+                    'image': '/static/images/fas3.jpg',
+                },
+                {
+                    'title': 'Lab Statistiak',
+                    'image': '/static/images/fas1.jpg',
+                },
+            ],
+         
+            'order': 6
+        },
     ]
     
     create_standardized_blocks(profile_page, default_blocks)
@@ -1361,3 +1538,87 @@ def page_list_view(request):
     }
     
     return render(request, 'admin/page_list.html', context)
+
+def create_default_management_page():
+    """Create default management page with standardized content blocks"""
+    management_page = Page.objects.create(
+        title="Manajemen",
+        slug="manajemen",
+        template='management.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Manajemen Matana University - Rektorat dan Dekan',
+            'meta_keywords': 'manajemen matana, rektorat matana, dekan matana'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'Manajemen Matana University',
+            'subtitle': 'Kepemimpinan yang Berdedikasi untuk Pendidikan Berkualitas',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'rektorat_section',
+            'title': 'Rektorat & Ketua Lembaga',
+            'items': [
+                {
+                    'image': '/static/images/dekan1.jpg',
+                },
+                {
+                    'image': '/static/images/dekan1.jpg',
+                },
+                {
+                    'image': '/static/images/dekan1.jpg',
+                }
+            ],
+            'order': 2
+        },
+        {
+            'identifier': 'dekan_section',
+            'title': 'Dekan & Ketua Program Studi',
+            'items': [
+                {
+                    'image': '/static/images/dekan1.jpg',
+                },
+                {
+                    'image': '/static/images/dekan1.jpg',
+                },
+                {
+                    'image': '/static/images/dekan1.jpg',
+                },
+                {
+                    'image': '/static/images/dekan1.jpg',
+                }
+            ],
+            'order': 3
+        }
+    ]
+    
+    create_standardized_blocks(management_page, default_blocks)
+    return management_page
+
+def management_view(request):
+    """View for management page"""
+    try:
+        management_page = Page.objects.get(
+            slug='manajemen',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        management_page = create_default_management_page()
+    
+    # Get content blocks
+    blocks = {}
+    for block in management_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+    
+    context = {
+        'page': management_page,
+        'meta': management_page.metadata,
+        'blocks': blocks
+    }
+    
+    return render(request, 'pages/management.html', context)

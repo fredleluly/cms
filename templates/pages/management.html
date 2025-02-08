@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block title %}Manajemen - Matana University{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Base Styles */
+    :root {
+        --primary-color: #004AAD;
+        --secondary-color: #FFB140;
+        --text-dark: #1a1a1a;
+        --text-light: #666666;
+        --mobile-padding: clamp(1rem, 5vw, 2rem);
+    }
+
+    /* Enhanced Responsive Typography */
+    @media (max-width: 768px) {
+        h1 { 
+            font-size: clamp(1.75rem, 4vw, 2.5rem); 
+            line-height: 1.2;
+        }
+        h2 { 
+            font-size: clamp(1.35rem, 3.5vw, 2rem);
+            line-height: 1.3;
+        }
+    }
+
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(rgba(0, 74, 173, 0.9), rgba(0, 74, 173, 0.9)),
+                    url('{% static "images/campus-aerial.jpg" %}') center/cover;
+        padding: clamp(4rem, 15vh, 8rem) 0;
+        text-align: center;
+        color: white;
+        margin-bottom: 3rem;
+    }
+
+    .hero-title {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1rem, 2.5vw, 1.25rem);
+        opacity: 0.9;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* Section Styles */
+    .section-title {
+        position: relative;
+        margin-bottom: clamp(2.5rem, 8vw, 4rem);
+        text-align: center;
+        color: var(--text-dark);
+        font-weight: 600;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--secondary-color);
+        border-radius: 2px;
+    }
+
+    /* Management Grid */
+    .management-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: clamp(1.5rem, 4vw, 3rem);
+        padding: 1rem;
+    }
+
+    /* Management Card */
+    .management-card {
+        position: relative;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        aspect-ratio: 3/4;
+    }
+
+    .management-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .management-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .management-card:hover .management-image {
+        transform: scale(1.05);
+    }
+
+    /* Section Container */
+    .section-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 var(--mobile-padding);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .management-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        section {
+            padding: clamp(3rem, 8vw, 5rem) 0;
+        }
+    }
+
+    /* Print Styles */
+    @media print {
+        .management-card {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .hero-section {
+            background: white !important;
+            color: black !important;
+            padding: 2rem 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="section-container">
+        <h1 class="hero-title">{{ blocks.hero_section.title }}</h1>
+        <p class="hero-subtitle">{{ blocks.hero_section.subtitle }}</p>
+    </div>
+</section>
+
+<!-- Rektorat Section -->
+<section class="py-16">
+    <div class="section-container">
+        <h2 class="section-title">{{ blocks.rektorat_section.title }}</h2>
+        <div class="management-grid">
+            {% for item in blocks.rektorat_section.items %}
+            <div class="management-card">
+                <img 
+                    src="{{ item.image }}" 
+                    alt="Rektorat Matana University" 
+                    class="management-image"
+                    loading="lazy"
+                >
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Dekan Section -->
+<section class="py-16 bg-gray-50">
+    <div class="section-container">
+        <h2 class="section-title">{{ blocks.dekan_section.title }}</h2>
+        <div class="management-grid">
+            {% for item in blocks.dekan_section.items %}
+            <div class="management-card">
+                <img 
+                    src="{{ item.image }}" 
+                    alt="Dekan Matana University" 
+                    class="management-image"
+                    loading="lazy"
+                >
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %} 
