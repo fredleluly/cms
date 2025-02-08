@@ -1198,6 +1198,7 @@ def create_default_scholarship_page():
             'meta_keywords': 'beasiswa matana, beasiswa kuliah, program beasiswa'
         }
     )
+
     
     default_blocks = [
         {
@@ -1221,131 +1222,84 @@ def create_default_scholarship_page():
             'order': 1
         },
         {
-            'identifier': 'stats_section',
+            'identifier': 'scholarship_programs1',
+            'title': 'GELOMBANG 2 TAHUN AKADEMIK 2025/2026',
+            'description': 'Program Beasiswa untuk mahasiswa yang memiliki potensi dan kemampuan untuk menjadi pemimpin masa depan.',
             'items': [
-                {
-                    'number': '500+',
-                    'label': 'Penerima Beasiswa Aktif'
-                },
-                {
-                    'number': '12M+',
-                    'label': 'Total Dana Beasiswa'
-                },
-                {
-                    'number': '95%',
-                    'label': 'Tingkat Kelulusan'
-                }
+               {    
+                'title': 'Benefit',
+               },
+               {
+                'description': 'Potongan Uang Gedung 90%\nKuliah 8 Semester, Bayar 7 Semester (GRATIS 1 Semester)\nPotongan Uang Kuliah hingga 70% selama 7 Semester',
+               },
+               {
+                'title': 'Persyaratan',
+               },
+               {
+                'description': 'Melampirkan fotokopi rapor kelas 10 dan 11\nBerlaku untuk pendaftaran kuliah Agustus 2025',
+               }
             ],
             'order': 2
         },
         {
-            'identifier': 'programs_section',
-            'title': 'Pilihan Program Beasiswa',
-            'subtitle': 'Program Beasiswa',
-            'description': 'Kami menyediakan berbagai program beasiswa yang disesuaikan dengan prestasi dan kebutuhan mahasiswa',
+            'identifier': 'scholarship_programs2',
+            'title': 'BEASISWA FUTURE LEADER',
+            'description': 'Program Beasiswa untuk mahasiswa yang memiliki potensi dan kemampuan untuk menjadi pemimpin masa depan.',
             'items': [
-            {
-                'name': 'Beasiswa Akademik',
-                'type': 'Unggulan',
-                'description': 'Untuk siswa dengan prestasi akademik luar biasa',
-                'benefits': [
-                    'Potongan biaya kuliah hingga 100%',
-                    'Tunjangan buku per semester',
-                    'Prioritas program pertukaran pelajar'
-                ]
-            },
-            {
-                'name': 'Beasiswa Prestasi',
-                'type': 'Khusus',
-                'description': 'Untuk siswa berprestasi di bidang non-akademik',
-                'benefits': [
-                    'Potongan biaya kuliah hingga 75%',
-                    'Dana pembinaan prestasi',
-                    'Akses ke fasilitas khusus'
-                ]
-            },
-            {
-                'name': 'Beasiswa KIP Kuliah',
-                'type': 'Pemerintah',
-                'description': 'Program beasiswa dari pemerintah untuk mahasiswa kurang mampu',
-                'benefits': [
-                    'Biaya kuliah ditanggung penuh',
-                    'Tunjangan bulanan',
-                    'Bantuan biaya hidup'
-                ]
-            }
-            ],
-            'order': 3
+                {
+                        'title': 'Benefit',
+                },
+                {
+                    'description': 'Pendaftaran kuliah bersama 3-5 orang\nCashback berupa potongan uang kuliah semester 2\nMelampirkan fotokopi rapor kelas 10 dan 11',
+                },
+                {
+                    'title': 'Persyaratan',
+                },
+                {
+                    'description': 'Merupakan leader/anggota dari komunitas (OSIS, keagamaan, atau komunitas lainnya)\nMelampirkan surat rekomendasi dari sekolah/komunitas',
+                }
+                ],
+            'order': 3  
         },
         {
-            'identifier': 'requirements_section',
-            'title': 'Persyaratan Umum Beasiswa',
-            'subtitle': 'Persyaratan Program',
-            'description': 'Pastikan Anda memenuhi semua persyaratan berikut sebelum mengajukan permohonan beasiswa',
-            'categories': [
+            'identifier': 'scholarship_programs3',
+            'title': 'BEASISWA INFLUENCER',
+            'description': 'Program Beasiswa untuk mahasiswa yang memiliki potensi dan kemampuan untuk menjadi pemimpin masa depan.',
+            'items': [
                 {
-                    'title': 'Persyaratan Akademik',
-                    'icon': 'academic',
-                    'items': [
-                        'Nilai rata-rata rapor minimal 8.0',
-                        'Peringkat 10 besar di kelas',
-                        'Aktif dalam kegiatan ekstrakurikuler'
-                    ]
+                    'title': 'Benefit',
                 },
                 {
-                    'title': 'Dokumen Pendukung',
-                    'icon': 'document',
-                    'items': [
-                        'Surat rekomendasi dari sekolah',
-                        'Sertifikat prestasi akademik/non-akademik',
-                        'Essay motivasi (500-1000 kata)'
-                    ]
+                    'description': 'Bebas Uang Gedung 100%\nKuliah 8 Semester, Bayar 7 Semester (Semester 8 GRATIS)\nPotongan Uang Kuliah 50% selama 7 Semester',
                 },
                 {
-                    'title': 'Dokumen Finansial',
-                    'icon': 'financial',
-                    'items': [
-                        'Slip gaji / penghasilan orang tua',
-                        'Kartu Keluarga terbaru',
-                        'Rekening listrik 3 bulan terakhir'
-                    ]
+                    'title': 'Persyaratan',
+                },
+                {
+                    'description': 'Merupakan leader/anggota dari komunitas (OSIS, keagamaan, atau komunitas lainnya)\nMelampirkan surat rekomendasi dari sekolah/komunitas',
                 }
             ],
             'order': 4
         },
         {
-            'identifier': 'timeline_section',
-            'title': 'Proses Seleksi',
+            'identifier': 'scholarship_programs4',
+            'title': 'BEASISWA ATLET',
+            'description': 'Program Beasiswa untuk mahasiswa yang memiliki potensi dan kemampuan untuk menjadi pemimpin masa depan.',
             'items': [
                 {
-                    'title': 'Pendaftaran Online',
-                    'description': 'Isi formulir pendaftaran dan unggah dokumen yang diperlukan'
+                    'title': 'Benefit',
                 },
                 {
-                    'title': 'Seleksi Berkas',
-                    'description': 'Tim akan menyeleksi kelengkapan dan kesesuaian dokumen'
+                    'description': 'Potongan Uang Gedung 90%\nKuliah 8 Semester, Bayar 7 Semester (Semester 8 GRATIS)\nPotongan Uang Kuliah 50%-80% selama 7 Semester',
                 },
                 {
-                    'title': 'Wawancara',
-                    'description': 'Kandidat terpilih akan diundang untuk sesi wawancara'
+                    'title': 'Persyaratan',
                 },
                 {
-                    'title': 'Pengumuman',
-                    'description': 'Hasil seleksi akan diumumkan melalui email dan website'
+                    'description': 'Aktif dalam perlombaan dan UKM yang akan dipantau oleh Departemen Kemahasiswaan\nMemenuhi syarat dan ketentuan yang ditetapkan oleh Departemen Kemahasiswaan',
                 }
             ],
             'order': 5
-        },
-        {
-            'identifier': 'cta_section',
-            'title': 'Siap Untuk Mendaftar?',
-            'description': 'Jangan lewatkan kesempatan untuk mendapatkan beasiswa di Matana University. Daftar sekarang dan wujudkan impianmu!',
-            'cta': {
-                'text': 'Daftar Beasiswa',
-                'url': '/pendaftaran',
-                'style': 'primary'
-            },
-            'order': 6
         }
     ]
     

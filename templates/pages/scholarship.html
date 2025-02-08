@@ -1,216 +1,160 @@
 {% extends "base.html" %}
 {% load static %}
+{% load scholarship_filters %}
 
 {% block title %}Program Beasiswa - Matana University{% endblock %}
 
 {% block extra_css %}
 <style>
-    /* Color Variables */
+    /* Base Styles */
     :root {
-        --primary-dark: #1B3168;
-        --primary-main: #2448A1;
-        --primary-light: #4B6FCD;
-        --secondary-main: #F08C1B;
-        --secondary-light: #FFAB48;
-        --gradient-blue: linear-gradient(135deg, var(--primary-dark), var(--primary-main));
-        --gradient-orange: linear-gradient(135deg, var(--secondary-main), var(--secondary-light));
+        --primary-color: #004AAD;
+        --secondary-color: #FFB140;
+        --text-dark: #1a1a1a;
+        --text-light: #666666;
+        --mobile-padding: clamp(1rem, 5vw, 2rem);
     }
 
-    /* Hero Section with Animated Background */
-    .hero-section {
-        background: var(--gradient-blue);
-        position: relative;
-        overflow: hidden;
-        padding: 8rem 0;
-    }
-
-    .hero-pattern {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    }
-
-    .floating {
-        animation: float 6s ease-in-out infinite;
-    }
-
-    @keyframes float {
-        0% { transform: translateY(0px); }
-        50% { transform: translateY(-20px); }
-        100% { transform: translateY(0px); }
-    }
-
-    /* Scholarship Cards with Blob */
-    .scholarship-card {
-        background: white;
-        border-radius: 1.5rem;
-        overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        z-index: 1;
-    }
-
-    .scholarship-card::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(
-            circle at center,
-            rgba(75, 111, 205, 0.1) 0%,
-            rgba(36, 72, 161, 0.05) 30%,
-            transparent 70%
-        );
-        z-index: -1;
-        transition: all 0.6s ease;
-        transform: translate(100%, 100%);
-        opacity: 0;
-    }
-
-    .scholarship-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 25px 50px -12px rgba(27, 49, 104, 0.25);
-    }
-
-    .scholarship-card:hover::before {
-        transform: translate(0, 0);
-        opacity: 1;
-    }
-
-    .scholarship-header {
-        background: var(--gradient-blue);
-        padding: 2.5rem;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .scholarship-header::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100%;
-        height: 100%;
-        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
-        opacity: 0.1;
-    }
-
-    .scholarship-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.5rem 1.25rem;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(4px);
-        border-radius: 9999px;
-        font-size: 0.875rem;
-        margin-bottom: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .benefit-item {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem 1.25rem;
-        border-radius: 0.75rem;
-        background: rgba(75, 111, 205, 0.05);
-        margin-bottom: 0.75rem;
-        transition: all 0.3s ease;
-        border: 1px solid transparent;
-    }
-
-    .benefit-item:hover {
-        background: rgba(75, 111, 205, 0.1);
-        border-color: rgba(75, 111, 205, 0.2);
-        transform: translateX(8px);
-    }
-
-    /* Requirements Section with Animated Numbers */
-    .requirement-item {
-        position: relative;
-        padding-left: 4rem;
-        margin-bottom: 2rem;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.6s ease forwards;
-    }
-
-    .requirement-item::before {
-        counter-increment: requirement;
-        content: counter(requirement);
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 3rem;
-        height: 3rem;
-        background: var(--gradient-blue);
-        color: white;
-        border-radius: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-size: 1.25rem;
-        box-shadow: 0 10px 20px rgba(27, 49, 104, 0.2);
-    }
-
-    @keyframes fadeInUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
+    /* Enhanced Responsive Typography */
+    @media (max-width: 768px) {
+        h1 { 
+            font-size: clamp(1.75rem, 4vw, 2.5rem); 
+            line-height: 1.2;
+        }
+        h2 { 
+            font-size: clamp(1.35rem, 3.5vw, 2rem);
+            line-height: 1.3;
+        }
+        h3 { 
+            font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+            line-height: 1.4;
         }
     }
 
-    /* Timeline with Animated Progress */
-    .timeline {
-        position: relative;
-        padding-left: 3rem;
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(rgba(0, 74, 173, 0.9), rgba(0, 74, 173, 0.9)),
+                    url('{% static "images/campus-aerial.jpg" %}') center/cover;
+        padding: clamp(4rem, 15vh, 8rem) 0;
+        text-align: center;
+        color: white;
+        margin-bottom: 3rem;
     }
 
-    .timeline::before {
+    .hero-title {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1rem, 2.5vw, 1.25rem);
+        opacity: 0.9;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* Section Styles */
+    .section-title {
+        position: relative;
+        margin-bottom: clamp(2.5rem, 8vw, 4rem);
+        text-align: center;
+        color: var(--text-dark);
+        font-weight: 600;
+    }
+
+    .section-description {
+        text-align: center;
+        max-width: 800px;
+        margin: -2rem auto 3rem;
+        color: var(--text-light);
+        font-size: clamp(1rem, 2vw, 1.125rem);
+    }
+
+    .section-title::after {
         content: '';
         position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 4px;
-        background: linear-gradient(to bottom, var(--primary-main) 50%, #e2e8f0 50%);
-        background-size: 100% 40px;
-        animation: progressLine 2s linear infinite;
+        bottom: -1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 4px;
+        background: var(--secondary-color);
+        border-radius: 2px;
     }
 
-    @keyframes progressLine {
-        0% { background-position: 0 0; }
-        100% { background-position: 0 40px; }
-    }
-
-    /* CTA Section with Animated Background */
-    .cta-section {
-        background: var(--gradient-blue);
-        border-radius: 2rem;
+    /* Scholarship Card */
+    .scholarship-card {
+        background: white;
+        border-radius: 1rem;
         overflow: hidden;
-        position: relative;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        height: 100%;
     }
 
-    .cta-blob {
-        position: absolute;
-        width: 600px;
-        height: 600px;
-        background: var(--gradient-orange);
-        filter: blur(80px);
-        opacity: 0.1;
-        animation: blobAnimation 10s ease-in-out infinite;
+    .scholarship-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
     }
 
-    @keyframes blobAnimation {
-        0%, 100% { transform: translate(0, 0) scale(1); }
-        33% { transform: translate(100px, -50px) scale(1.1); }
-        66% { transform: translate(-50px, 50px) scale(0.9); }
+    .scholarship-header {
+        background: linear-gradient(135deg, var(--primary-color), #003880);
+        padding: 2rem;
+        color: white;
+    }
+
+    .scholarship-content {
+        padding: 2rem;
+    }
+
+    .benefit-list, .requirement-list {
+        margin-top: 1rem;
+    }
+
+    .benefit-item, .requirement-item {
+        display: flex;
+        align-items: start;
+        gap: 1rem;
+        padding: 0.75rem;
+        margin-bottom: 0.5rem;
+        background: rgba(0, 74, 173, 0.05);
+        border-radius: 0.5rem;
+        transition: all 0.3s ease;
+    }
+
+    .benefit-item:hover, .requirement-item:hover {
+        background: rgba(0, 74, 173, 0.1);
+        transform: translateX(0.5rem);
+    }
+
+    /* Section Container */
+    .section-container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 0 var(--mobile-padding);
+    }
+
+    /* Responsive Grid */
+    .scholarship-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        padding: 1rem;
+    }
+
+    /* Print Styles */
+    @media print {
+        .scholarship-card {
+            break-inside: avoid;
+            page-break-inside: avoid;
+        }
+
+        .hero-section {
+            background: white !important;
+            color: black !important;
+            padding: 2rem 0;
+        }
     }
 </style>
 {% endblock %}
@@ -218,254 +162,139 @@
 {% block content %}
 <!-- Hero Section -->
 <section class="hero-section">
-    <div class="hero-pattern"></div>
-    <div class="container mx-auto px-4 relative">
-        <div class="max-w-4xl">
-            <span class="inline-block px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white/90 text-sm mb-6">
-                🎓 Program Beasiswa 2024
-            </span>
-            <h1 class="text-6xl font-bold text-white mb-6 leading-tight">
-                Wujudkan Impian<br>
-                <span class="text-secondary-light">Kuliah di Matana</span>
-            </h1>
-            <p class="text-xl text-white/90 mb-8 max-w-2xl">
-                Raih kesempatan mendapatkan beasiswa pendidikan di Matana University. Kami berkomitmen untuk mendukung mahasiswa berprestasi dalam menggapai masa depan yang lebih baik.
-            </p>
-            <div class="flex flex-wrap gap-4">
-                <a href="#scholarship-programs" class="px-8 py-4 bg-white text-primary-dark font-semibold rounded-xl hover:bg-gray-50 transition-all transform hover:scale-105">
-                    Lihat Program Beasiswa
+    <div class="section-container">
+        <span class="inline-block px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm text-white/90 text-sm mb-6">
+            {{ blocks.hero_section.badge_text }}
+        </span>
+        <h1 class="hero-title">{{ blocks.hero_section.title }}</h1>
+        <p class="hero-subtitle">{{ blocks.hero_section.description }}</p>
+        <div class="flex flex-wrap gap-4 justify-center mt-8">
+            {% for cta in blocks.hero_section.cta %}
+                <a href="{{ cta.url }}" 
+                   class="{% if cta.style == 'primary' %}bg-gradient-to-r from-blue-500 to-indigo-600 text-white hover:from-blue-600 hover:to-indigo-700{% else %}bg-white/20 backdrop-blur-sm text-white hover:bg-white/30{% endif %}
+                          px-8 py-4 rounded-2xl font-bold shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl flex items-center gap-2">
+                    {{ cta.text }}
                 </a>
-                <a href="{% url 'registration' %}" class="px-8 py-4 bg-secondary-main text-white font-semibold rounded-xl hover:bg-secondary-dark transition-all transform hover:scale-105">
-                    Daftar Sekarang
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Stats Section -->
-<section class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="text-center p-6">
-                <div class="text-4xl font-bold text-primary-dark mb-2">500+</div>
-                <p class="text-gray-600">Penerima Beasiswa Aktif</p>
-            </div>
-            <div class="text-center p-6">
-                <div class="text-4xl font-bold text-primary-dark mb-2">12M+</div>
-                <p class="text-gray-600">Total Dana Beasiswa</p>
-            </div>
-            <div class="text-center p-6">
-                <div class="text-4xl font-bold text-primary-dark mb-2">95%</div>
-                <p class="text-gray-600">Tingkat Kelulusan</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Scholarship Programs -->
-<section id="scholarship-programs" class="py-24">
-    <div class="container mx-auto px-4">
-        <div class="text-center mb-16">
-            <span class="inline-block px-4 py-2 rounded-full bg-primary-main/10 text-primary-main text-sm font-medium mb-4">
-                Program Beasiswa
-            </span>
-            <h2 class="text-4xl font-bold text-gray-900 mb-4">Pilihan Program Beasiswa</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">
-                Kami menyediakan berbagai program beasiswa yang disesuaikan dengan prestasi dan kebutuhan mahasiswa
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for scholarship in scholarship_types %}
-            <div class="scholarship-card">
-                <div class="scholarship-header">
-                    <span class="scholarship-badge">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
-                        </svg>
-                        {{ scholarship.type }}
-                    </span>
-                    <h3 class="text-2xl font-bold text-white mb-3">{{ scholarship.name }}</h3>
-                    <p class="text-white/90">{{ scholarship.description }}</p>
-                </div>
-                <div class="p-8">
-                    <div class="mb-8">
-                        <h4 class="font-semibold text-gray-900 mb-4">Benefit yang Diperoleh:</h4>
-                        <div class="space-y-3">
-                            {% for benefit in scholarship.benefits %}
-                            <div class="benefit-item">
-                                <svg class="w-5 h-5 text-primary-main flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                                <span class="text-gray-700">{{ benefit }}</span>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <a href="{% url 'registration' %}" class="block text-center py-4 px-6 bg-primary-main text-white rounded-xl hover:bg-primary-dark transition-all transform hover:scale-105 hover:shadow-lg">
-                        Daftar Sekarang
-                    </a>
-                </div>
-            </div>
             {% endfor %}
         </div>
     </div>
 </section>
 
-<!-- Requirements Section -->
-<section class="py-24 bg-gradient-to-br from-gray-50 to-gray-100">
-    <div class="container mx-auto px-4">
-        <div class="max-w-6xl mx-auto">
-            <div class="text-center mb-16">
-                <span class="inline-block px-4 py-2 rounded-full bg-primary-main/10 text-primary-main text-sm font-medium mb-4">
-                    Persyaratan Program
-                </span>
-                <h2 class="text-4xl font-bold text-gray-900 mb-4">Persyaratan Umum Beasiswa</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">
-                    Pastikan Anda memenuhi semua persyaratan berikut sebelum mengajukan permohonan beasiswa
-                </p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Akademik Card -->
-                <div class="requirement-item bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                    <div class="flex items-center justify-center w-16 h-16 bg-primary-main/10 rounded-xl mb-6">
-                        <svg class="w-8 h-8 text-primary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0L3 9m9 5v6m9-6v6"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Persyaratan Akademik</h3>
-                    <ul class="space-y-3 text-gray-600">
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Nilai rata-rata rapor minimal 8.0
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Peringkat 10 besar di kelas
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Aktif dalam kegiatan ekstrakurikuler
-                        </li>
-                    </ul>
+<!-- Scholarship Programs -->
+<section class="py-16">
+    <div class="section-container">
+        <div class="scholarship-grid">
+            <!-- Program 1 -->
+            <div class="scholarship-card">
+                <div class="scholarship-header">
+                    <h3 class="text-xl font-bold mb-2">{{ blocks.scholarship_programs1.title }}</h3>
+                    <p class="text-white/90">{{ blocks.scholarship_programs1.description }}</p>
                 </div>
-
-                <!-- Dokumen Card -->
-                <div class="requirement-item bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                    <div class="flex items-center justify-center w-16 h-16 bg-secondary-main/10 rounded-xl mb-6">
-                        <svg class="w-8 h-8 text-secondary-main" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Dokumen Pendukung</h3>
-                    <ul class="space-y-3 text-gray-600">
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Surat rekomendasi dari sekolah
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Sertifikat prestasi akademik/non-akademik
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Essay motivasi (500-1000 kata)
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Finansial Card -->
-                <div class="requirement-item bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all">
-                    <div class="flex items-center justify-center w-16 h-16 bg-primary-light/10 rounded-xl mb-6">
-                        <svg class="w-8 h-8 text-primary-light" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-gray-900 mb-4">Dokumen Finansial</h3>
-                    <ul class="space-y-3 text-gray-600">
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Slip gaji / penghasilan orang tua
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Kartu Keluarga terbaru
-                        </li>
-                        <li class="flex items-start">
-                            <svg class="w-5 h-5 text-green-500 mr-3 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Rekening listrik 3 bulan terakhir
-                        </li>
-                    </ul>
+                <div class="scholarship-content">
+                    {% for item in blocks.scholarship_programs1.items %}
+                        {% if item.title %}
+                            <h4 class="font-semibold text-lg mt-4 text-gray-900">{{ item.title }}</h4>
+                        {% endif %}
+                        {% if item.description %}
+                            <div class="{% if item.title == 'Benefit' %}benefit-list{% else %}requirement-list{% endif %}">
+                               {% for point in item.description|split_lines %}
+                                    <div class="{% if item.title == 'Benefit' %}benefit-item{% else %}requirement-item{% endif %}">
+                                        <svg class="w-5 h-5 text-primary-color flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="text-gray-700">{{ point }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
 
-            <div class="mt-12 text-center">
-                <p class="text-gray-500 mb-6">Memenuhi semua persyaratan di atas? Segera daftarkan diri Anda!</p>
-                <a href="#" class="inline-flex items-center px-6 py-3 bg-primary-main text-white font-semibold rounded-xl hover:bg-primary-dark transition-colors">
-                    Mulai Pendaftaran
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                    </svg>
-                </a>
+            <!-- Program 2 -->
+            <div class="scholarship-card">
+                <div class="scholarship-header">
+                    <h3 class="text-xl font-bold mb-2">{{ blocks.scholarship_programs2.title }}</h3>
+                    <p class="text-white/90">{{ blocks.scholarship_programs2.description }}</p>
+                </div>
+                <div class="scholarship-content">
+                    {% for item in blocks.scholarship_programs2.items %}
+                        {% if item.title %}
+                            <h4 class="font-semibold text-lg mt-4 text-gray-900">{{ item.title }}</h4>
+                        {% endif %}
+                        {% if item.description %}
+                            <div class="{% if item.title == 'Benefit' %}benefit-list{% else %}requirement-list{% endif %}">
+                                {% with descriptions=item.description %}
+                                {% for point in descriptions|split_lines %}
+                                    <div class="{% if item.title == 'Benefit' %}benefit-item{% else %}requirement-item{% endif %}">
+                                        <svg class="w-5 h-5 text-primary-color flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="text-gray-700">{{ point }}</span>
+                                    </div>
+                                {% endfor %}
+                                {% endwith %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </div>
-        </div>
-    </div>
-</section>
 
-<!-- Timeline Section -->
-<section class="py-24">
-    <div class="container mx-auto px-4">
-        <div class="max-w-4xl mx-auto">
-            <h2 class="text-4xl font-bold text-gray-900 mb-12 text-center">Proses Seleksi</h2>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Pendaftaran Online</h3>
-                    <p class="text-gray-600">
-                        Isi formulir pendaftaran dan unggah dokumen yang diperlukan
-                    </p>
+            <!-- Program 3 -->
+            <div class="scholarship-card">
+                <div class="scholarship-header">
+                    <h3 class="text-xl font-bold mb-2">{{ blocks.scholarship_programs3.title }}</h3>
+                    <p class="text-white/90">{{ blocks.scholarship_programs3.description }}</p>
                 </div>
-
-                <div class="timeline-item">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Seleksi Berkas</h3>
-                    <p class="text-gray-600">
-                        Tim akan menyeleksi kelengkapan dan kesesuaian dokumen
-                    </p>
+                <div class="scholarship-content">
+                    {% for item in blocks.scholarship_programs3.items %}
+                        {% if item.title %}
+                            <h4 class="font-semibold text-lg mt-4 text-gray-900">{{ item.title }}</h4>
+                        {% endif %}
+                        {% if item.description %}
+                            <div class="{% if item.title == 'Benefit' %}benefit-list{% else %}requirement-list{% endif %}">
+                                {% with descriptions=item.description|split_lines %}
+                                {% for point in descriptions %}
+                                    <div class="{% if item.title == 'Benefit' %}benefit-item{% else %}requirement-item{% endif %}">
+                                        <svg class="w-5 h-5 text-primary-color flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="text-gray-700">{{ point }}</span>
+                                    </div>
+                                {% endfor %}
+                                {% endwith %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
+            </div>
 
-                <div class="timeline-item">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Wawancara</h3>
-                    <p class="text-gray-600">
-                        Kandidat terpilih akan diundang untuk sesi wawancara
-                    </p>
+            <!-- Program 4 -->
+            <div class="scholarship-card">
+                <div class="scholarship-header">
+                    <h3 class="text-xl font-bold mb-2">{{ blocks.scholarship_programs4.title }}</h3>
+                    <p class="text-white/90">{{ blocks.scholarship_programs4.description }}</p>
                 </div>
-
-                <div class="timeline-item">
-                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Pengumuman</h3>
-                    <p class="text-gray-600">
-                        Hasil seleksi akan diumumkan melalui email dan website
-                    </p>
+                <div class="scholarship-content">
+                    {% for item in blocks.scholarship_programs4.items %}
+                        {% if item.title %}
+                            <h4 class="font-semibold text-lg mt-4 text-gray-900">{{ item.title }}</h4>
+                        {% endif %}
+                        {% if item.description %}
+                            <div class="{% if item.title == 'Benefit' %}benefit-list{% else %}requirement-list{% endif %}">
+                                {% with descriptions=item.description|split_lines %}
+                                {% for point in descriptions %}
+                                    <div class="{% if item.title == 'Benefit' %}benefit-item{% else %}requirement-item{% endif %}">
+                                        <svg class="w-5 h-5 text-primary-color flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                        </svg>
+                                        <span class="text-gray-700">{{ point }}</span>
+                                    </div>
+                                {% endfor %}
+                                {% endwith %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -473,19 +302,17 @@
 </section>
 
 <!-- CTA Section -->
-<section class="py-24">
-    <div class="container mx-auto px-4">
-        <div class="cta-section p-12">
-            <div class="cta-blob"></div>
-            <div class="relative z-10 text-center">
-                <h2 class="text-3xl font-bold mb-6">Siap Untuk Mendaftar?</h2>
-                <p class="text-gray-200 mb-8 max-w-2xl mx-auto">
-                    Jangan lewatkan kesempatan untuk mendapatkan beasiswa di Matana University. Daftar sekarang dan wujudkan impianmu!
-                </p>
-                <a href="#" class="inline-block px-8 py-4 bg-white text-primary-dark font-semibold rounded-lg hover:bg-gray-100 transition-colors">
-                    Daftar Beasiswa
-                </a>
-            </div>
+<section class="py-16 bg-gray-50">
+    <div class="section-container">
+        <div class="text-center max-w-3xl mx-auto">
+            <h2 class="text-3xl font-bold mb-6">Daftar Sekarang</h2>
+            <p class="text-gray-600 mb-8">
+                Jangan lewatkan kesempatan untuk mendapatkan beasiswa pendidikan di Matana University. 
+                Daftar sekarang dan wujudkan impianmu!
+            </p>
+            <a href="{% url 'registration' %}" class="inline-block px-8 py-4 bg-primary-color text-white font-semibold rounded-xl hover:bg-opacity-90 transition-all transform hover:scale-105">
+                Mulai Pendaftaran
+            </a>
         </div>
     </div>
 </section>
@@ -493,19 +320,12 @@
 
 {% block extra_js %}
 <script>
-    // Intersection Observer for animations
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate');
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-
-    document.querySelectorAll('.requirement-item').forEach((item) => {
-        observer.observe(item);
-    });
+    // Custom split filter for newlines
+    String.prototype.split = function(separator) {
+        if (typeof this === 'string') {
+            return this.toString().split(separator);
+        }
+        return [];
+    };
 </script>
-{% endblock %} 
+{% endblock %}
