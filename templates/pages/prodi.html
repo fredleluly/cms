@@ -209,13 +209,6 @@
         gap: 1rem;
     }
 
-    .karir-card:hover {
-        transform: translateX(0.5rem);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        background: var(--primary-color);
-        color: white;
-    }
-
     .karir-icon {
         width: 40px;
         height: 40px;
@@ -225,10 +218,6 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-    }
-
-    .karir-card:hover .karir-icon {
-        background: white;
     }
 
     /* Section Container */
@@ -369,7 +358,7 @@
         <div class="text-center max-w-3xl mx-auto">
             <h2 class="text-3xl font-bold mb-6">Mulai Perjalanan Akademikmu</h2>
             <p class="text-gray-600 mb-8">
-                Bergabunglah dengan Program Studi Manajemen Matana University dan raih masa depan cemerlangmu. 
+                Bergabunglah dengan Program Studi {{blocks.hero_section.title}} Matana University dan raih masa depan cemerlangmu. 
                 Daftar sekarang dan wujudkan impianmu!
             </p>
             <a href="{% url 'registration' %}" class="inline-block px-8 py-4 bg-primary-color text-white font-semibold rounded-xl hover:bg-opacity-90 transition-all transform hover:scale-105">
