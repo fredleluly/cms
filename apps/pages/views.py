@@ -1215,6 +1215,150 @@ def profile_view_hospitality(request):
     return render(request, 'pages/prodi.html', context)
 
 # Prodi FSKOM
+# Fisika Medis
+def create_default_profile_page_fisika_medis():
+    """Create default profile page with standardized content blocks for Fisika Medis"""
+    profile_page = Page.objects.create(
+        title="S1 FISIKA MEDIS",
+        slug="prodi-fisika-medis",
+        template='prodi.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Program Studi S1 Fisika Medis Matana University - Unggul dalam bidang fisika dan aplikasinya untuk sektor medis',
+            'meta_keywords': 'fisika medis, matana university, radiodiagnostik, radioterapi, kedokteran nuklir'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'S1 FISIKA MEDIS',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'description_section',
+            'title': 'Program Studi Fisika Medis',
+            'description': 'Program S1 Fisika Matana University memiliki konsentrasi Fisika Medis yang mempersiapkan para lulusan untuk menjadi Fisikawan Medik, yaitu tenaga kesehatan profesional yang dilindungi oleh undang-undang untuk mempraktikkan ilmu Fisika Medis. Fisikawan medik bekerja di institusi fasilitas pelayanan kesehatan, akademik, penelitian, dan perusahaan di bidang medis sebagai penguji alat kesehatan. Kurikulum yang digunakan di prodi S1 Fisika Matana University telah mengikuti standar yang ditetapkan oleh Himpunan Fisika Indonesia (HFI) dan Aliansi Institusi Pendidikan Fisika Medis Indonesia (AIPFMI).',
+            'order': 2
+        },
+        {
+            'identifier': 'visi_misi_section',
+            'title': 'Visi & Misi',
+            'items': [
+                {
+                    'title': 'Visi',
+                    'description': 'Menjadi program studi yang terpercaya dan terkemuka dalam bidang fisika dan aplikasinya untuk sektor medis yang berwawasan nasional dan internasional serta berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.'
+                },
+                {
+                    'title': 'Misi',
+                    'description': '1. Membentuk lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.\n2. Membentuk lulusan yang memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang fisika dan aplikasinya untuk sektor medis serta berjiwa wirausaha.\n3. Membentuk lulusan yang memiliki kepedulian untuk kehidupan berkelanjutan.'
+                }
+            ],
+            'order': 3
+        },
+        {
+            'identifier': 'tujuan_section',
+            'title': 'Tujuan',
+            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+            'order': 4
+        },
+        {
+            'identifier': 'konsentrasi_section',
+            'title': 'Konsentrasi',
+            'items': [
+                {'title': 'Fisika Medis'},
+            ],
+            'order': 5
+        },
+        {
+            'identifier': 'kurikulum_section',
+            'title': 'Kurikulum',
+            'items': [
+                {'title': 'Fisika Klasik'},
+                {'title': 'Fisika Modern'},
+                {'title': 'Fisika Radiologi'},
+                {'title': 'Dosimetri'},
+                {'title': 'Radioterapi'},
+                {'title': 'Pencitraan Medis'},
+                {'title': 'Anatomi dan Fisiologi'},
+                {'title': 'Fisika Nuklir'},
+                {'title': 'Proteksi Radiasi'},
+            ],
+            'order': 6
+        },
+        {
+            'identifier': 'peluang_karir_section',
+            'title': 'Peluang Karir',
+            'items': [
+                {'title': 'Badan Riset dan Inovasi Nasional (BRIN)'},
+                {'title': 'Badan Pengkajian dan Penerapan Teknologi (BPPT)'},
+                {'title': 'Badan Pengawas Tenaga Nuklir'},
+                {'title': 'Peneliti'},
+                {'title': 'Fisikawan Medik di Rumah Sakit'},
+                {'title': 'Petugas Proteksi Radiasi'},
+                {'title': 'Lembaga Ilmu Pengetahuan Indonesia (LIPI)'},
+            ],
+            'order': 7
+        },
+    ]
+    
+    create_standardized_blocks(profile_page, default_blocks)
+    return profile_page
+
+def profile_view_fisika_medis(request):
+    """View for Fisika Medis profile page"""
+    try:
+        profile_page = Page.objects.get(
+            slug='prodi-fisika-medis',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        profile_page = create_default_profile_page_fisika_medis()
+    
+    # Get content blocks
+    blocks = {}
+    for block in profile_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    print(f"Blocks: ", profile_page.metadata)
+    
+    context = {
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
+    }
+    
+    return render(request, 'pages/prodi.html', context)
+
+def profile_view_fisika_medis(request):
+    """View for Fisika Medis profile page"""
+    try:
+        profile_page = Page.objects.get(
+            slug='prodi-fisika-medis',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        profile_page = create_default_profile_page_fisika_medis()
+    
+    # Get content blocks
+    blocks = {}
+    for block in profile_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    print(f"Blocks: ", profile_page.metadata)
+    
+    context = {
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
+    }
+    
+    return render(request, 'pages/prodi.html', context)
+
+# Prodi FSDH
+# Prodi FKK
+
 # Prodi FSDH
 # Prodi FKK
 
