@@ -756,6 +756,7 @@ def create_default_profile_page():
     return profile_page
 
 # Prodi FEBIS
+# Manajemen
 def create_default_profile_page_manajemen():
     """Create default profile page with standardized content blocks"""
     profile_page = Page.objects.create(
@@ -938,6 +939,265 @@ def profile_view_manajemen(request):
         )
     except Page.DoesNotExist:
         profile_page = create_default_profile_page_manajemen()
+    
+    # Get content blocks
+    blocks = {}
+    for block in profile_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    print(f"Blocks: ", profile_page.metadata)
+    
+    context = {
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
+    }
+    
+    return render(request, 'pages/prodi.html', context)
+
+# Akuntansi
+def create_default_profile_page_akuntansi():
+    """Create default profile page with standardized content blocks for Akuntansi"""
+    profile_page = Page.objects.create(
+        title="Akuntansi",
+        slug="prodi-akuntansi",
+        template='prodi.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Program Studi Akuntansi Matana University - Terpercaya dan terkemuka dalam bidang audit, perpajakan, dan digital akuntansi',
+            'meta_keywords': 'akuntansi matana, audit, perpajakan, digital akuntansi'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'S1 AKUNTANSI',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'description_section',
+            'title': 'Program Studi Akuntansi',
+            'description': 'Program Studi Akuntansi Matana University dirancang bagi mahasiswa untuk mampu mengkomunikasikan informasi keuangan dan operasional kepada para pengambil keputusan, baik pada organisasi bisnis, organisasi pemerintah, maupun organisasi nirlaba. Informasi keuangan ini akan membantu para pengambil keputusan untuk kepentingan pengendalian operasi bisnis, perencanaan dan pengendalian pajak, penganggaran bisnis maupun penganggaran pemerintah, serta analisis kinerja dan pelaporan keuangan kepada para pemangku kepentingan(stakeholders).',
+            'order': 2
+        },
+        {
+            'identifier': 'visi_misi_section',
+            'title': 'Visi & Misi',
+            'items': [
+                {
+                    'title': 'Visi',
+                    'description': 'Menjadi Program Studi Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang terpercaya dan terkemuka dalam bidang akademik dan profesional serta berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan Karunia Hikmat Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang berkelanjutan.'
+                },
+                {
+                    'title': 'Misi',
+                    'description': "1. Terbentuknya Sarjana Akuntansi yang berkualitas dan memiliki kemampuan akademik secara profesional dalam bidang audit, perpajakan, dan digital akuntansi, serta berwawasan nasional maupun internasional.\n2. Terbentuknya Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang memiliki nilai-nilai Integritas (Integrity) – Penatalayanan (Stewardship) – Respek (Respect), yang berlandaskan iman kepercayaan.\n3. Terbentuknya Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.\n4. Terciptanya Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang memiliki kompetensi penelitian, kreativitas, inovasi dan menguasai teknologi akuntansi.\n5. Terbentuknya generasi penerus menjadi Sarjana Akuntansi yang ahli dalam bidang audit, perpajakan, dan digital akuntansi yang berjiwa entrepreneur serta memiliki kepedulian untuk kehidupan berkelanjutan di masyarakat."
+                }
+            ],
+            'order': 3
+        },
+        {
+            'identifier': 'tujuan_section',
+            'title': 'Tujuan',
+            'description': '1. Menghasilkan Sarjana Akuntansi yang memiliki kompetensi dalam bidang keahlian: audit, perpajakan, dan digital akuntansi yang penuh kasih, berintegritas, profesional, inovatif, berjiwa enterpreuner dan mampu bersaing serta berkiprah dalam dunia bisnis nasional dan internasional.\n2. Menghasilkan Sarjana Akuntansi yang mampu dan terlatih dalam melaksanakan penelitian serta implementasi melalui publikasi untuk kemajuan ilmu pengetahuan dan teknologi di bidang audit, perpajakan, dan digital akuntansi dalam meningkatkan kualitas kehidupan masyarakat.\n3. Menghasilkan Sarjana Akuntansi yang mampu menerapkan pengabdian kepada masyarakat sebagai aktualisasi dan penerapan ilmu pengetahuan dalam bidang audit, perpajakan, dan digital akuntansi sebagai bentuk kepedulian atas kehidupan masyarakat yang berkelanjutan.\n4. Menghasilkan lulusan Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang berjiwa entrepreneur dan mampu mengintegrasikan kesadaran akan Ketuhanan, kemanusiaan, kenegarawanan, dan lingkungan.\n5. Memperkuat dan menyebarluaskan karya ilmiah akuntansi kepada masyarakat dalam bidang audit, perpajakan, dan digital akuntansi yang bercirikan nilai lokal, nasional dan internasional.',
+            'order': 4
+        },
+        {
+            'identifier': 'konsentrasi_section',
+            'title': 'Konsentrasi',
+            'items': [
+                {'title': 'Taxation'},
+                {'title': 'Auditing'},
+                {'title': 'Digital Accounting'},
+            ],
+            'order': 5
+        },
+        {
+            'identifier': 'kurikulum_section',
+            'title': 'Kurikulum',
+            'items': [
+                {'title': 'Basic Accounting'},
+                {'title': 'Basic Tax'},
+                {'title': 'Cost Accounting'},
+                {'title': 'Data Based System'},
+                {'title': 'Religion'},
+                {'title': 'English'},
+                {'title': 'Indonesian'},
+                {'title': 'Entrepreneurship'},
+                {'title': 'Financial Accounting'},
+                {'title': 'Intermediate Financial Accounting'},
+                {'title': 'Accounting Information System & Internal Control'},
+                {'title': 'Auditing Management Accounting'},
+                {'title': 'Accounting Theory'},
+                {'title': 'Enterprise Resource Planning (ERP)'},
+                {'title': 'Accounting Research Methodology'},
+                {'title': 'Advance Financial Accounting'},
+                {'title': 'International Financial Reporting Standard'},
+                {'title': 'Analysis and Design of Information Accounting System'},
+                {'title': 'Business Statistics'},
+                {'title': 'Financial Institution and Money Market'},
+                {'title': 'Strategic Management'},
+                {'title': 'Financial Management'},
+                {'title': 'Economics Theory'},
+            ],
+            'order': 6
+        },
+        {
+            'identifier': 'peluang_karir_section',
+            'title': 'Peluang Karir',
+            'items': [
+                {'title': 'Auditor internal dan eksternal di perusahaan, BUMN, perbankan, dll'},
+                {'title': 'Auditor Pajak di semua sektor industri'},
+                {'title': 'Manajer Akuntansi'},
+                {'title': 'Konsultan Pajak'},
+                {'title': 'Akuntan'},
+                {'title': 'Akuntan Manajemen'},
+                {'title': 'Akuntan Pendidik'},
+            ],
+            'order': 7
+        },
+    ]
+    
+    create_standardized_blocks(profile_page, default_blocks)
+    return profile_page
+
+
+def profile_view_akuntansi(request):
+    """View for profile page"""
+    try:
+        profile_page = Page.objects.get(
+            slug='prodi-akuntansi',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        profile_page = create_default_profile_page_akuntansi()
+    
+    # Get content blocks
+    blocks = {}
+    for block in profile_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    print(f"Blocks: ", profile_page.metadata)
+    
+    context = {
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
+    }
+    
+    return render(request, 'pages/prodi.html', context)
+
+# Hospitality & Pariwisata
+def create_default_profile_page_hospitality():
+    """Create default profile page with standardized content blocks for Hospitality & Tourism"""
+    profile_page = Page.objects.create(
+        title="Hospitaliti & Pariwisata",
+        slug="prodi-hospar",
+        template='prodi.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Program Studi Hospitaliti dan Pariwisata Matana University - Unggul dalam bidang hotel management, event management, food production management, dan pariwisata',
+            'meta_keywords': 'hospitaliti matana, pariwisata matana, hotel management, event management, food production management'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'S1 HOSPITALITI & PARIWISATA',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'description_section',
+            'title': 'Program Studi Hospitaliti dan Pariwisata',
+            'description': 'Program Studi Hospitaliti dan Pariwisata Matana University dirancang bagi mahasiswa untuk mengembangkan pemahaman dan keterampilan mendasar pada bidang-bidang utama dari aspek manajemen dan operasional di industri Hospitaliti dan Pariwisata. Dengan bergabung dalam program ini, mahasiswa akan diperkenalkan dengan jenis dan keunikan bisnis Hospitaliti dan Pariwisata serta mendapatkan keterampilan manajerial dan operasional yang dibutuhkan dalam bisnis penginapan, restoran, serta dalam sebuah event. Mahasiswa program Hospitaliti dan Pariwisata berkesempatan magang di jajaran mitra bisnis hotel Matana University yang tergabung di Parador Hotel & Resort dan mitra perusahaan bidang Hospitaliti dan Pariwisata lainnya di Tangerang, Jakarta, dan Bali. Mahasiswa program Hospitaliti dan Pariwisata Matana University telah meraih prestasi di lebih dari 30 kompetisi bidang sejenis se-Indonesia.',
+            'order': 2
+        },
+        {
+            'identifier': 'visi_misi_section',
+            'title': 'Visi & Misi',
+            'items': [
+                {
+                    'title': 'Visi',
+                    'description': 'Program studi Hospitaliti dan Pariwisata Menjadi Program Studi Hospitaliti dan Pariwisata yang diakui unggul dalam bidang hotel management, event management, food production management, dan pariwisata yang berwawasan nasional dan internasional, serta berjiwa entrepreneur untuk meningkatkan kualitas ilmu dan pengetahuan yang merupakan Karunia Tuhan untuk kesejahteraan umat manusia dengan berorientasi pada industri.'
+                },
+                {
+                    'title': 'Misi',
+                    'description': 'Terbentuknya sarjana Hospitaliti dan Pariwisata dalam bidang hotel management, event management, food production management, dan pariwisata yang kompeten dan memiliki jiwa entrepreneur, kepemimpinan, serta berperilaku sesuai dengan normanorma di masyarakat, bertanggung jawab dengan layanan penuh kasih.'
+                }
+            ],
+            'order': 3
+        },
+        {
+            'identifier': 'tujuan_section',
+            'title': 'Tujuan',
+            'description': 'Mendidik dan mempersiapkan lulusan program studi hospitaliti dan pariwisata yang penuh kasih, berintegritas, profesional, dan ahli di bidangnya, berjiwa enterpreneur dan mampu bersaing dan berkiprah dalam dunia bisnis nasional dan internasional. Melaksanakan penelitian dan pengabdian kepada masyarakat melalui publikasi untuk kemajuan ilmu pengetahuan di bidang hotel management, event management, food production management, dan pariwisata dalam memajukan kualitas kehidupan sebagai bentuk kepedulian dalam masyarakat yang berkelanjutan.',
+            'order': 4
+        },
+        {
+            'identifier': 'konsentrasi_section',
+            'title': 'Konsentrasi',
+            'items': [
+                {'title': 'Culinary Arts'},
+                {'title': 'Hotel Management'},
+                {'title': 'Mice & Tourism'},
+            ],
+            'order': 5
+        },
+        {
+            'identifier': 'kurikulum_section',
+            'title': 'Kurikulum',
+            'items': [
+                {'title': 'Front Office Operation'},
+                {'title': 'Housekeeping Operation'},
+                {'title': 'Basic English for Room Division Operation'},
+                {'title': 'Restaurant Operations'},
+                {'title': 'Beverage Service'},
+                {'title': 'Food Production'},
+                {'title': 'Bakery & Pastry'},
+                {'title': 'Event Management'},
+                {'title': 'Basic English for Food and Beverage Operation'},
+                {'title': 'Business English for Hospitality'},
+                {'title': 'Research Methodology'},
+                {'title': 'Seni Kuliner'},
+                {'title': 'Tourism Economy'},
+                {'title': 'Eco Tourism'},
+                {'title': 'Hotel Asset management'},
+                {'title': 'Managing Festival & Special Event'},
+                {'title': 'Consumer Behaviour'},
+                {'title': 'Supervisory'},
+            ],
+            'order': 6
+        },
+        {
+            'identifier': 'peluang_karir_section',
+            'title': 'Peluang Karir',
+            'items': [
+                {'title': 'Chef'},
+                {'title': 'Hotel & Restaurant Operation Management'},
+                {'title': 'Event Organizer Management'},
+                {'title': 'Entrepreneur'},
+                {'title': 'Lecturer'},
+                {'title': 'Airlines Crew'},
+            ],
+            'order': 7
+        },
+    ]
+    
+    create_standardized_blocks(profile_page, default_blocks)
+    return profile_page
+
+def profile_view_hospitality(request):
+    """View for Hospitality & Tourism profile page"""
+    try:
+        profile_page = Page.objects.get(
+            slug='prodi-hospar',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        profile_page = create_default_profile_page_hospitality()
     
     # Get content blocks
     blocks = {}

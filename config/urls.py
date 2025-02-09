@@ -24,7 +24,7 @@ from apps.pages.views import (
     article_save_view, article_delete_view, article_quick_update,
     profile_view, category_create_view, upload_image, article_list_view, bulk_action_view,
     registration_view, registration_submit, scholarship_view, page_edit_view, page_list_view,
-    mitra_view, management_view, ukm_view, exchange_view,profile_view_manajemen
+    mitra_view, management_view, ukm_view, exchange_view,profile_view_manajemen,profile_view_akuntansi,profile_view_hospitality
 )
 # from apps.pages.views import *
 from django.contrib.sitemaps.views import sitemap
@@ -74,6 +74,8 @@ urlpatterns = [
     path('manajemen/', management_view, name='management'),
     path('ukm/', ukm_view, name='ukm'),
     path('prodi/manajemen/', profile_view_manajemen, name='manajemen'),
+    path('prodi/akuntansi/', profile_view_akuntansi, name='akuntansi'),
+    path('prodi/hospar/', profile_view_hospitality, name='hospar'),
     path('student-exchange/', exchange_view, name='exchange'),
     # path('<slug:slug>/', page_view, name='page_view'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
