@@ -47,73 +47,13 @@
                 {% for item in blocks.alur_section.items %}
                 <div class="text-center">
                     <div class="w-16 h-16 bg-matana-blue/10 rounded-full flex items-center justify-center text-2xl font-bold text-matana-blue mx-auto mb-4">
-                        <i class="fas fa-{{ item.icon }}"></i>
+                        <i class="fa-solid fa-{{ item.icon }}"></i>
                     </div>
                     <h3 class="text-lg font-bold mb-2">{{ item.title }}</h3>
                     <p class="text-gray-600">{{ item.description }}</p>
                 </div>
                 {% endfor %}
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- Biaya Kuliah -->
-<section class="py-20 bg-gray-50">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-4">{{ blocks.biaya_section.title }}</h2>
-        <p class="text-center text-gray-600 mb-12">{{ blocks.biaya_section.description }}</p>
-        
-        <div class="max-w-5xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {% for program in blocks.biaya_section.items %}
-            <div class="bg-white p-8 rounded-xl shadow-lg">
-                <h3 class="text-xl font-bold mb-6">{{ program.title }}</h3>
-                <div class="space-y-4">
-                    {% for item in program.items %}
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-600">{{ item }}</span>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- Dokumen Required -->
-<section class="py-20">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-12">{{ blocks.dokumen_section.title }}</h2>
-
-        <div class="max-w-3xl mx-auto">
-            <ul class="space-y-4">
-                {% for item in blocks.dokumen_section.items.0.items %}
-                <li class="flex items-center bg-white p-4 rounded-lg shadow-sm">
-                    <i class="fas fa-check-circle text-green-500 mr-4"></i>
-                    <span>{{ item }}</span>
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-    </div>
-</section>
-
-<!-- Contact Info -->
-<section class="py-20 bg-gray-50">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-4">{{ blocks.contact_section.title }}</h2>
-        <p class="text-center text-gray-600 mb-12">{{ blocks.contact_section.description }}</p>
-        
-        <div class="max-w-4xl mx-auto grid md:grid-cols-3 gap-8">
-            {% for item in blocks.contact_section.items %}
-            <div class="text-center">
-                <div class="w-16 h-16 bg-matana-blue/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <i class="fas fa-{{ item.icon }} text-2xl text-matana-blue"></i>
-                </div>
-                <p class="font-semibold">{{ item.description }}</p>
-            </div>
-            {% endfor %}
         </div>
     </div>
 </section>

@@ -1302,7 +1302,6 @@ def create_default_profile_page_fisika_medis():
             'order': 7
         },
     ]
-    
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
@@ -2221,7 +2220,7 @@ def create_default_registration_page():
                 {
                     'title': 'Tes Masuk',
                     'description': 'Ikuti tes potensi akademik dan wawancara',
-                    'icon': 'test'
+                    'icon': 'pen'
                 }
             ],
             'order': 2
