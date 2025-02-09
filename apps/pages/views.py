@@ -1810,8 +1810,124 @@ def profile_view_arsitektur(request):
     
     return render(request, 'pages/prodi.html', context)
 
-
 # Prodi FKK
+
+# K3
+def create_default_profile_page_k3():
+    """Create default profile page with standardized content blocks for K3"""
+    profile_page = Page.objects.create(
+        title="S1 Keselamatan & Kesehatan Kerja(K3)",
+        slug="prodi-k3",
+        template='prodi.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Program Studi K3 Matana University - Program S1 K3 dengan paradigma think globally, act locally',
+            'meta_keywords': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at venenatis lorem. Maecenas in urna nec tortor sollicitudin porttitor non et magna. Aliquam at suscipit mauris, id suscipit elit. Mauris non pharetra neque. Maecenas molestie elit tortor, pellentesque ultricies tellus venenatis id. Cras gravida ligula scelerisque, gravida erat ac, blandit leo. Donec interdum id libero eu sodales. Morbi accumsan diam nec nisl cursus lacinia. Nunc id malesuada neque. Suspendisse ac pulvinar massa, et tincidunt leo. Sed congue porta commodo. Quisque vehicula arcu arcu, ac dignissim purus egestas non. Praesent a ultrices nunc. Duis malesuada finibus nibh quis tincidunt. Duis sit amet varius justo. Maecenas blandit, tortor nec bibendum ornare, odio leo mattis tortor, vel aliquam risus dolor ac lectus.'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'S1 Keselamatan & Kesehatan Kerja(K3)',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'description_section',
+            'title': 'Program Studi K3',
+            'description': 'Program Studi K3 mempelajari cara pencegahan dan pengelolaan risiko kecelakaan kerja dan penyakit akibat kelalaian; demi meningkatkan motivasi dan efisiensi produktivitas kerja, serta terciptanya lingkungan kerja yang sehat dan aman. Program studi ini memiliki dosen akademisi dan praktisi berpengalaman di bidang K3, serta sarana laboratorium yang lengkap untuk menghasilkan lulusan K3 (dengan gelar S.KKK) yang kompeten dan mumpuni sesuai kebutuhan diberbagai industri antara lain manufaktur, konstruksi, pertambangan, minyak dan gas bumi, serta bidang kesehatan.',
+            'order': 2
+        },
+        {
+            'identifier': 'visi_misi_section',
+            'title': 'Visi & Misi',
+            'items': [
+                {
+                    'title': 'Visi',
+                    'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                },
+                {
+                    'title': 'Misi',
+                    'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                }
+            ],
+            'order': 3
+        },
+        {
+            'identifier': 'tujuan_section',
+            'title': 'Tujuan',
+            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'order': 4
+        },
+        {
+            'identifier': 'konsentrasi_section',
+            'title': 'Konsentrasi',
+            'items': [
+                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+            ],
+            'order': 5
+        },
+        {
+            'identifier': 'kurikulum_section',
+            'title': 'Kurikulum',
+            'items': [
+                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+            ],
+            'order': 6
+        },
+        {
+            'identifier': 'peluang_karir_section',
+            'title': 'Peluang Karir',
+            'items': [
+  {"title": "Environmental Specialist"},
+  {"title": "Analist Quality Control"},
+  {"title": "Health and Safety Engineer"},
+  {"title": "Pengawas Konstruksi Bangunan"},
+  {"title": "Advisor dan Auditor K3"},
+  {"title": "Ahli Ergonomi"},
+  {"title": "Ahli K3 Rumah Sakit"},
+  {"title": "Corporate Safety"},
+  {"title": "Spesialis Kebakaran"},
+  {"title": "Industrial Hygiene"},
+  {"title": "Permit to Work Coordinator"}
+
+            ],
+            'order': 7
+        },
+    ]
+    
+    create_standardized_blocks(profile_page, default_blocks)
+    return profile_page
+
+def profile_view_k3(request):
+    """View for Arsitektur profile page"""
+    try:
+        profile_page = Page.objects.get(
+            slug='prodi-k3',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        profile_page = create_default_profile_page_k3()
+    
+    # Get content blocks
+    blocks = {}
+    for block in profile_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    context = {
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
+    }
+    
+    return render(request, 'pages/prodi.html', context)
 
 def profile_view(request):
     """View for profile page"""
