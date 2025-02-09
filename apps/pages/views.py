@@ -1700,6 +1700,116 @@ def profile_view_dkv(request):
     
     return render(request, 'pages/prodi.html', context)
 
+# Arsitektur
+def create_default_profile_page_arsitektur():
+    """Create default profile page with standardized content blocks for Arsitektur"""
+    profile_page = Page.objects.create(
+        title="S1 ARSITEKTUR",
+        slug="prodi-arsitektur",
+        template='prodi.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Program Studi Arsitektur Matana University - Program S1 Arsitektur dengan paradigma think globally, act locally',
+            'meta_keywords': 'arsitektur, matana university, green architecture, smart design, TOD, teknologi industri 5.0'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'S1 ARSITEKTUR',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'description_section',
+            'title': 'Program Studi Arsitektur',
+            'description': 'Program S1 Arsitektur Matana University didesain untuk menghasilkan lulusan dengan paradigma \'think globally, act locally\', dimana mahasiswa dibekali konsep global dalam merancang bangunan, permukiman dan sebuah kawasan dengan pendekatan desain cerdas (smart), yang berbasis Green, TOD (Transit Oriented Development) dan Teknologi (industri 5.0), namun begitu, dalam eksekusinya tetap berpijak pada konteks (iklim, budaya, estetika, sejarah, hukum, etika, dll) dan lokalitas yang melingkupinya.',
+            'order': 2
+        },
+        {
+            'identifier': 'visi_misi_section',
+            'title': 'Visi & Misi',
+            'items': [
+                {
+                    'title': 'Visi',
+                    'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                },
+                {
+                    'title': 'Misi',
+                    'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                }
+            ],
+            'order': 3
+        },
+        {
+            'identifier': 'tujuan_section',
+            'title': 'Tujuan',
+            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'order': 4
+        },
+        {
+            'identifier': 'konsentrasi_section',
+            'title': 'Konsentrasi',
+            'items': [
+                {'title': 'Perancangan Arsitektur Bangunan'},
+                {'title': 'Perancangan Pemukiman dan Kawasan'},
+            ],
+            'order': 5
+        },
+        {
+            'identifier': 'kurikulum_section',
+            'title': 'Kurikulum',
+            'items': [
+                {'title': 'Studio Perancangan Arsitektur'},
+                {'title': 'Studio Struktur & Konstruksi'},
+                {'title': 'Komputasi dalam Arsitektur'},
+                {'title': 'Manajemen Konstruksi'},
+                {'title': 'Studio Perancangan Pemukiman'},
+                {'title': 'Studio Perancangan Kawasan'},
+                {'title': 'Pengembangan Kawasan'},
+                {'title': 'Metode Perencanaan dan Perancangan'},
+            ],
+            'order': 6
+        },
+        {
+            'identifier': 'peluang_karir_section',
+            'title': 'Peluang Karir',
+            'items': [
+                {'title': 'Lorem ipsum dolor sit amet'},
+                {'title': 'Consectetur adipiscing elit'},
+                {'title': 'Sed do eiusmod tempor'},
+            ],
+            'order': 7
+        },
+    ]
+    
+    create_standardized_blocks(profile_page, default_blocks)
+    return profile_page
+
+def profile_view_arsitektur(request):
+    """View for Arsitektur profile page"""
+    try:
+        profile_page = Page.objects.get(
+            slug='prodi-arsitektur',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        profile_page = create_default_profile_page_arsitektur()
+    
+    # Get content blocks
+    blocks = {}
+    for block in profile_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    context = {
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
+    }
+    
+    return render(request, 'pages/prodi.html', context)
+
 
 # Prodi FKK
 

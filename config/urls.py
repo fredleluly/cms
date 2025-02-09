@@ -26,7 +26,7 @@ from apps.pages.views import (
     registration_view, registration_submit, scholarship_view, page_edit_view, page_list_view,
     mitra_view, management_view, ukm_view, exchange_view,profile_view_manajemen,profile_view_akuntansi,
     profile_view_hospitality,profile_view_fisika_medis,profile_view_teknik_informatika,profile_view_statistika,
-    profile_view_dkv
+    profile_view_dkv,profile_view_arsitektur
 )
 # from apps.pages.views import *
 from django.contrib.sitemaps.views import sitemap
@@ -82,6 +82,7 @@ urlpatterns = [
     path('prodi/teknik-informatika/', profile_view_teknik_informatika, name='teknik-informatika'),
     path('prodi/statistika/', profile_view_statistika, name='statistika'),
     path('prodi/dkv/', profile_view_dkv, name='dkv'),
+    path('prodi/arsitektur/', profile_view_arsitektur, name='arsitektur'),
     path('student-exchange/', exchange_view, name='exchange'),
     # path('<slug:slug>/', page_view, name='page_view'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
