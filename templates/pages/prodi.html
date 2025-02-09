@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block title %}Profil - Matana University{% endblock %}
+
+
+{% block content %}
+
+<!-- Hero Section -->
+<section class="hero-section flex items-center justify-center text-white">
+  <div class="container mx-auto px-4 text-center">
+    <h1 class="text-4xl md:text-6xl font-bold mb-6">
+      {{ blocks.hero_section.title }}
+    </h1>
+    <p class="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto">
+      {{ blocks.hero_section.subtitle }}
+    </p>
+  </div>
+</section>
+
+<!-- Vision & Mission Section -->
+<section class="py-20">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-16 section-title">
+      {{ blocks.visi_misi_section.title }}
+    </h2>
+
+    <div class="grid md:grid-cols-2 gap-8 mb-16">
+      <div class="vision-card p-8 rounded-2xl text-white">
+        <div class="relative z-10">
+          <div class="text-2xl font-bold mb-4">
+            {{ blocks.visi_misi_section.items.0.title }}
+          </div>
+          <p class="text-white/90 leading-relaxed">
+            {{ blocks.visi_misi_section.items.0.description }}
+          </p>
+        </div>
+      </div>
+      <div class="space-y-6">
+        <div class="text-2xl font-bold mb-6">
+          {{ blocks.visi_misi_section.items.1.title }}
+        </div>
+        <p class="text-gray-600">
+          {{ blocks.visi_misi_section.items.1.description|linebreaksbr }}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Sejarah Section -->
+<section class="py-20 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-16 section-title">
+      {{ blocks.sejarah_section.title }}
+    </h2>
+    <div class="max-w-4xl mx-auto">
+      <p class="text-gray-600 leading-relaxed">
+        {{ blocks.sejarah_section.description|linebreaksbr }}
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Keunggulan Section -->
+<section class="py-20">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-16 section-title">
+      {{ blocks.keunggulan_section.title }}
+    </h2>
+    <div class="grid md:grid-cols-2 gap-8">
+      {% for item in blocks.keunggulan_section.items %}
+      <div
+        class="bg-white p-8 rounded-lg shadow hover:shadow-lg transition duration-300"
+      >
+        <h3 class="text-xl font-bold mb-4">{{ item.title }}</h3>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Fasilitas Section -->
+<section class="py-20 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-16 section-title">
+      {{ blocks.fasilitas_section.title }}
+    </h2>
+    <div class="grid md:grid-cols-3 gap-8">
+      {% for item in blocks.fasilitas_section.items %}
+      <div class="bg-white rounded-lg shadow overflow-hidden">
+        <img
+          src="{{ item.image }}"
+          alt="{{ item.title }}"
+          class="w-full h-48 object-cover"
+        />
+        <div class="p-4">
+          <h3 class="text-lg font-bold">{{ item.title }}</h3>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

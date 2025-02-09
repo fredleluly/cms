@@ -755,6 +755,209 @@ def create_default_profile_page():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
+# Prodi FEBIS
+def create_default_profile_page_manajemen():
+    """Create default profile page with standardized content blocks"""
+    profile_page = Page.objects.create(
+        title="Manajemen",
+        slug="manajemen",
+        template='prodi.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Profil Matana University - Perguruan tinggi terpercaya dan terkemuka',
+            'meta_keywords': 'profil matana, visi misi matana, sejarah matana'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'S1 MANAJEMEN',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'visi_misi_section',
+            'title': 'Visi & Misi',
+            'items': [
+                {
+                    'title': 'Visi',
+                    'description': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.'
+                },
+                {
+                    'title': 'Misi',
+                    'description': "- Terbentuknya Sarjana Manajemen yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.\n- Terciptanya Sarjana Manajemen yang memiliki kemampuan penelitian, kreativitas, inovasi, dan berjiwa kewirausahaan.\n- Terbentuknya generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan."
+                }
+            ],
+            'order': 2
+        },
+        {
+            'identifier': 'tujuan_section',
+            'title': 'Tujuan',
+            'description': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuansoft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.\n\nKarena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan, spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiiki budaya research dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan.\n\nProses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis-penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan bukan menghafal konten buku-teks. Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat mereka pergunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera saat mereka lulus.\n\nProses dalam mengintegrasikan tridharma Perguruan Tinggi mampu dilakukan, karena ditopang secara integratif oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat serta Pusat Pendidikan Vokasi.\n\nDalam proses pembelajaran apabila mahasiswa belum mampu mencapai prestasi yang diharapkan setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk dibantu, dibimbing dan diarahkan agar mahasiswa mampu mengatasi kendala yang mengganggu capaian pembelajarannya, serta penguatan motivasi mahasiswa sehingga dapat mengejar ketertinggalannya.\n\nBagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan di dorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia dan kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang special dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan anda. Kami menyambut anda dalam keluarga besar Universitas Matana',
+            'order': 4
+        },
+        {
+            'identifier': 'konsentrasi_section',
+            'title': 'Konsentrasi',
+            'items': [
+                {
+                    'title': 'Digital Marketing',
+                },
+                {
+                    'title': 'Human Capital',
+                },
+                {
+                    'title': 'Investment',
+                },
+            ],
+            'order': 5
+        },
+        {
+            'identifier': 'kurikulum_section',
+            'title': 'Kurikulum',
+            'items': [
+                {
+                    'title': 'Religion'
+                },
+                {
+                    'title': 'English'
+                },
+                {
+                    'title': 'Indonesian'
+                },
+                {
+                    'title': 'Academic Writing'
+                },
+                {
+                    'title': 'Critical Thinking'
+                },
+                {
+                    'title': 'Economics'
+                },
+                {
+                    'title': 'Business Mathematics'
+                },
+                {
+                    'title': 'Business Technology'
+                },
+                {
+                    'title': 'Basic Accounting'
+                },
+                {
+                    'title': 'Statistics'
+                },
+                {
+                    'title': 'Finance'
+                },
+                {
+                    'title': 'Marketing'
+                },
+                {
+                    'title': 'Human Resource Management'
+                },
+                {
+                    'title': 'Strategic Management'
+                },
+                {
+                    'title': 'Research Method'
+                },
+                {
+                    'title': 'Innovation'
+                },
+                {
+                    'title': 'Decision Making Theory'
+                },
+                {
+                    'title': 'International Business'
+                },
+                {
+                    'title': 'Taxation'
+                },
+                {
+                    'title': 'Entrepreneurship'
+                },
+                {
+                    'title': 'Leadership'
+                },
+                {
+                    'title': 'Financial Institutions'
+                },
+                {
+                    'title': 'Consumer Behavior'
+                },
+                {
+                    'title': 'Business Communication'
+                }
+            ],
+         
+            'order': 6
+        },
+        {
+            'identifier': 'peluang_karir_section',
+            'title': 'Peluang Karir',
+            'items': [
+                {
+                'title': 'Digital Marketing Specialist'
+                },
+                {
+                    'title': 'Marketing Communication Specialist'
+                },
+                {
+                    'title': 'Organizational Development Specialist'
+                },
+                {
+                    'title': 'Financial Analyst'
+                },
+                {
+                    'title': 'Content/Creative Creator'
+                },
+                {
+                    'title': 'Risk Management Associate'
+                },
+                {
+                    'title': 'Human Capital Specialist'
+                },
+                {
+                    'title': 'S1 Manajemen'
+                }
+            ],
+            'order': 7
+        },
+    ]
+    
+    create_standardized_blocks(profile_page, default_blocks)
+    return profile_page
+
+def profile_view_manajemen(request):
+    """View for profile page"""
+    try:
+        profile_page = Page.objects.get(
+            slug='prodi-manajemen',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        profile_page = create_default_profile_page_manajemen()
+    
+    # Get content blocks
+    blocks = {}
+    for block in profile_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    print(f"Blocks: ", profile_page.metadata)
+    
+    context = {
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
+    }
+    
+    return render(request, 'pages/prodi.html', context)
+
+# Prodi FSKOM
+# Prodi FSDH
+# Prodi FKK
+
 def profile_view(request):
     """View for profile page"""
     try:
