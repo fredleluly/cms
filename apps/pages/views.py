@@ -1576,6 +1576,131 @@ def profile_view_statistika(request):
     return render(request, 'pages/prodi.html', context)
 
 # Prodi FSDH
+# DKV
+def create_default_profile_page_dkv():
+    """Create default profile page with standardized content blocks for Desain Komunikasi Visual"""
+    profile_page = Page.objects.create(
+        title="S1 DESAIN KOMUNIKASI VISUAL",
+        slug="prodi-dkv",
+        template='prodi.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Program Studi Desain Komunikasi Visual Universitas Matana - Mengusung integritas kurikulum yang menyeimbangkan teknik tradisional dan digital',
+            'meta_keywords': 'desain komunikasi visual, matana university, desain grafis, ilustrasi, fotografi, videografi'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'S1 DESAIN KOMUNIKASI VISUAL',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'description_section',
+            'title': 'Program Studi Desain Komunikasi Visual',
+            'description': 'Program Studi Desain Komunikasi Visual Universitas Matana mendorong agar lulusannya mampu bekerja dengan baik di ranah profesi yang sudah ada, serta mampu menciptakan peluang dan inovasi dalam bidang Seni Rupa dan Desain.',
+            'order': 2
+        },
+        {
+            'identifier': 'visi_misi_section',
+            'title': 'Visi & Misi',
+            'items': [
+                {
+                    'title': 'Visi',
+                    'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                },
+                {
+                    'title': 'Misi',
+                    'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                }
+            ],
+            'order': 3
+        },
+        {
+            'identifier': 'tujuan_section',
+            'title': 'Tujuan',
+            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'order': 4
+        },
+        {
+            'identifier': 'konsentrasi_section',
+            'title': 'Konsentrasi',
+            'items': [
+                {'title': 'Desain Grafis'},
+                {'title': 'Ilustrasi'},
+                {'title': 'Fotografi & Videografi'},
+            ],
+            'order': 5
+        },
+        {
+            'identifier': 'kurikulum_section',
+            'title': 'Kurikulum',
+            'items': [
+                {'title': 'Design Basics'},
+                {'title': 'Lettering & Type'},
+                {'title': 'History of Art & Design'},
+                {'title': 'Drawing'},
+                {'title': 'Digital Media Communication'},
+                {'title': 'Creative Art Methodology'},
+                {'title': 'Visual Thinking & Perception'},
+                {'title': 'Photography & Videography'},
+                {'title': 'Contextual Design'},
+            ],
+            'order': 6
+        },
+        {
+            'identifier': 'peluang_karir_section',
+            'title': 'Peluang Karir',
+            'items': [
+                {'title': 'Graphic Designer'},
+                {'title': 'Web Designer'},
+                {'title': 'Packaging Designer'},
+                {'title': 'Brand Consultant'},
+                {'title': 'UI/UX Designer'},
+                {'title': 'Visual Identity Designer'},
+                {'title': 'Illustrator'},
+                {'title': 'Character Designer'},
+                {'title': 'Art Curator'},
+                {'title': 'Art Journalist / Critics'},
+                {'title': 'Art Director'},
+                {'title': 'Creative Director'},
+                {'title': 'Photographer'},
+                {'title': 'Videographer'},
+                {'title': 'Content Creator'},
+            ],
+            'order': 7
+        },
+    ]
+    
+    create_standardized_blocks(profile_page, default_blocks)
+    return profile_page
+
+def profile_view_dkv(request):
+    """View for Desain Komunikasi Visual profile page"""
+    try:
+        profile_page = Page.objects.get(
+            slug='prodi-dkv',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        profile_page = create_default_profile_page_dkv()
+    
+    # Get content blocks
+    blocks = {}
+    for block in profile_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    context = {
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
+    }
+    
+    return render(request, 'pages/prodi.html', context)
+
+
 # Prodi FKK
 
 def profile_view(request):
