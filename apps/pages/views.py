@@ -1453,6 +1453,128 @@ def profile_view_teknik_informatika(request):
     
     return render(request, 'pages/prodi.html', context)
 
+# Teknik Informatika
+def create_default_profile_page_statistika():
+    """Create default profile page with standardized content blocks for Statistika (Data Science)"""
+    profile_page = Page.objects.create(
+        title="S1 STATISTIKA (DATA SCIENCE)",
+        slug="prodi-statistika",
+        template='prodi.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Program Studi Statistika Matana University - Unggul dalam bidang Sains Data untuk sektor kesehatan, sosial, bisnis, dan finansial',
+            'meta_keywords': 'statistika, matana university, sains data, aktuaria, machine learning'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'S1 STATISTIKA (DATA SCIENCE)',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'description_section',
+            'title': 'Program Studi Statistika',
+            'description': 'Program studi Statistika Universitas Matana adalah salah satu jurusan yang paling dibutuhkan di Era Digital (Big Data) seperti sekarang ini. Mahasiswa/i dibekali dengan kemampuan analisis data yang mempuni untuk dapat diterapkan dalam bidang bisnis, aktuaria dan sains data.',
+            'order': 2
+        },
+        {
+            'identifier': 'visi_misi_section',
+            'title': 'Visi & Misi',
+            'items': [
+                {
+                    'title': 'Visi',
+                    'description': '“Menjadi program studi yang terpercaya dan terkemuka dalam bidang sains data untuk sektor kesehatan, sosial, bisnis dan finansial, yang berwawasan nasional dan internasional serta berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi yang merupakan karunia Tuhan untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan”'
+                },
+                {
+                    'title': 'Misi',
+                    'description': 'Membentuk lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih. Membentuk lulusan yang memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang sains data untuk sektor kesehatan, sosial, bisnis dan finansial serta berjiwa wirausaha. Membentuk lulusan yang memiliki kepedulian untuk kehidupan berkelanjutan.'
+                }
+            ],
+            'order': 3
+        },
+        {
+            'identifier': 'tujuan_section',
+            'title': 'Tujuan',
+            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'order': 4
+        },
+        {
+            'identifier': 'konsentrasi_section',
+            'title': 'Konsentrasi',
+            'items': [
+                {'title': 'Sains Data'},
+                {'title': 'Aktuaria'},
+            ],
+            'order': 5
+        },
+        {
+            'identifier': 'kurikulum_section',
+            'title': 'Kurikulum',
+            'items': [
+                {'title': 'Akuntansi'},
+                {'title': 'Ekonomi'},
+                {'title': 'Ekonometrika'},
+                {'title': 'Manajemen Resiko'},
+                {'title': 'Manajemen Aktuaria'},
+                {'title': 'Matematika Keuangan'},
+                {'title': 'Matematika Asuransi'},
+                {'title': 'Sains Data'},
+                {'title': 'Komputasi Statistika'},
+                {'title': 'Modern Prediction & Machine Learning'},
+            ],
+            'order': 6
+        },
+        {
+            'identifier': 'peluang_karir_section',
+            'title': 'Peluang Karir',
+            'items': [
+                {'title': 'Pendidik'},
+                {'title': 'PNS'},
+                {'title': 'Peneliti'},
+                {'title': 'Data Analyst'},
+                {'title': 'Data Scientist'},
+                {'title': 'Aktuaris'},
+                {'title': 'Electronic Data Processing'},
+                {'title': 'Konsultan Data'},
+                {'title': 'Investasi dan Dana Pensiun'},
+                {'title': 'Perbankan'},
+                {'title': 'Konsultan Aktuaria'},
+            ],
+            'order': 7
+        },
+    ]
+    
+    create_standardized_blocks(profile_page, default_blocks)
+    return profile_page
+
+def profile_view_statistika(request):
+    """View for Statistika profile page"""
+    try:
+        profile_page = Page.objects.get(
+            slug='prodi-statistika',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        profile_page = create_default_profile_page_statistika()
+    
+    # Get content blocks
+    blocks = {}
+    for block in profile_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    print(f"Blocks: ", profile_page.metadata)
+    
+    context = {
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
+    }
+    
+    return render(request, 'pages/prodi.html', context)
+
 # Prodi FSDH
 # Prodi FKK
 
