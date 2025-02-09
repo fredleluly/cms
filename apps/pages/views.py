@@ -1331,15 +1331,112 @@ def profile_view_fisika_medis(request):
     
     return render(request, 'pages/prodi.html', context)
 
-def profile_view_fisika_medis(request):
-    """View for Fisika Medis profile page"""
+# Teknik Informatika
+def create_default_profile_page_teknik_informatika():
+    """Create default profile page with standardized content blocks for Teknik Informatika"""
+    profile_page = Page.objects.create(
+        title="S1 TEKNIK INFORMATIKA",
+        slug="prodi-teknik-informatika",
+        template='prodi.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Program Studi Teknik Informatika Matana University - Unggul dalam bidang Human Computer Interaction, dan Graphics and Visual Computing',
+            'meta_keywords': 'teknik informatika, matana university, human computer interaction, graphics and visual computing'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'S1 TEKNIK INFORMATIKA',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'description_section',
+            'title': 'Program Studi Teknik Informatika',
+            'description': 'Program Studi Teknik Informatika Matana University berfokus untuk menghasilkan lulusan yang mampu mengimplementasikan algoritma pada aplikasi yang dirancangbangun baik berbasis web, mobile maupun desktop dengan memanfaatkan basis data dan menambahkan fitur Artificial Intelligence. Dengan Sertifikasi Internasional (MTCNA/Android/Microsoft) dan Sertifikasi Nasional (BNSP), para mahasiswa Teknik Informatika Matana University berkesempatan menjalani program magang dan penyaluran kerja dengan perusahaan-perusahaan IT yang telah bermitra dengan Matana University.',
+            'order': 2
+        },
+        {
+            'identifier': 'visi_misi_section',
+            'title': 'Visi & Misi',
+            'items': [
+                {
+                    'title': 'Visi',
+                    'description': '“Menjadi Program Studi Teknik Informatika yang terpercaya dan terkemuka dalam bidang Human Computer Interaction, dan Graphics and Visual Computing pada sektor kesehatan di provinsi Banten pada tahun 2032”' or 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                },
+                {
+                    'title': 'Misi',
+                    'description': 'Membentuk lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih. Membentuk lulusan yang memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang sains data untuk sektor kesehatan serta berjiwa wirausaha. Membentuk lulusan yang memiliki kepedulian untuk kehidupan berkelanjutan.' or 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                }
+            ],
+            'order': 3
+        },
+        {
+            'identifier': 'tujuan_section',
+            'title': 'Tujuan',
+            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'order': 4
+        },
+        {
+            'identifier': 'konsentrasi_section',
+            'title': 'Konsentrasi',
+            'items': [
+                {'title': 'Artificial Intelligence Engineering'},
+                {'title': 'Digital Entrepreneurship'},
+                {'title': 'Software Engineering'},
+            ],
+            'order': 5
+        },
+        {
+            'identifier': 'kurikulum_section',
+            'title': 'Kurikulum',
+            'items': [
+                {'title': 'Artificial Intelligence'},
+                {'title': 'Database System'},
+                {'title': 'Computer Science'},
+                {'title': 'Software Engineering'},
+                {'title': 'Computer Systems and Networks'},
+                {'title': 'Computer Security'},
+                {'title': 'Human-Computer Interaction'},
+                {'title': 'Information Management and Analytics'},
+                {'title': 'Game Development'},
+            ],
+            'order': 6
+        },
+        {
+            'identifier': 'peluang_karir_section',
+            'title': 'Peluang Karir',
+            'items': [
+                {'title': 'Front End Developer (UI/UX)'},
+                {'title': 'Back End Developer'},
+                {'title': 'Full Stack Developer (Front End & Back End)'},
+                {'title': 'Software Engineer'},
+                {'title': 'Technology Support'},
+                {'title': 'System Analyst'},
+                {'title': 'Network Engineer'},
+                {'title': 'Data Scientist'},
+                {'title': 'Artificial Intelligence Specialist'},
+                {'title': 'Mobile apps developer'},
+                {'title': 'Game Developer'},
+            ],
+            'order': 7
+        },
+    ]
+    
+    create_standardized_blocks(profile_page, default_blocks)
+    return profile_page
+
+def profile_view_teknik_informatika(request):
+    """View for Teknik Informatika profile page"""
     try:
         profile_page = Page.objects.get(
-            slug='prodi-fisika-medis',
+            slug='prodi-teknik-informatika',
             status=Page.PUBLISHED
         )
     except Page.DoesNotExist:
-        profile_page = create_default_profile_page_fisika_medis()
+        profile_page = create_default_profile_page_teknik_informatika()
     
     # Get content blocks
     blocks = {}
@@ -1355,9 +1452,6 @@ def profile_view_fisika_medis(request):
     }
     
     return render(request, 'pages/prodi.html', context)
-
-# Prodi FSDH
-# Prodi FKK
 
 # Prodi FSDH
 # Prodi FKK
