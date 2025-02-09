@@ -760,7 +760,7 @@ def create_default_profile_page_manajemen():
     """Create default profile page with standardized content blocks"""
     profile_page = Page.objects.create(
         title="Manajemen",
-        slug="manajemen",
+        slug="prodi-manajemen",
         template='prodi.html',
         status=Page.PUBLISHED,
         metadata={
@@ -773,7 +773,7 @@ def create_default_profile_page_manajemen():
         {
             'identifier': 'hero_section',
             'title': 'S1 MANAJEMEN',
-            'background_image': '/static/images/campus-aerial.jpg',
+            'background_image': '/static/images/prodi1.jpg',
             'order': 1
         },
         {
