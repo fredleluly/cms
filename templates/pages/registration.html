@@ -1,16 +1,41 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ page.title }} - Matana University{% endblock %}
 
 {% block content %}
+
+<section class="banner-section loading hidden md:block">
+    <img 
+        src="{% static 'images/Banner-Alur-PMB.jpg' %}" 
+        alt="Matana University Registration Banner"
+        class="banner-image"
+        width="1920"
+        height="600"
+        loading="eager"
+        decoding="async"
+        onload="this.parentElement.classList.remove('loading')"
+    />
+</section>
+
 <!-- Hero Section -->
-<section class="bg-gradient-to-r from-matana-blue to-blue-900 py-20">
+<section class="bg-gradient-to-r from-matana-blue to-blue-900 py-20 block md:hidden">
     <div class="container mx-auto px-4">
         <div class="max-w-4xl mx-auto text-center text-white">
             <h1 class="text-4xl md:text-5xl font-bold mb-6">{{ blocks.hero_section.title }}</h1>
             <p class="text-xl text-white/80">{{ blocks.hero_section.subtitle }}</p>
         </div>
     </div>
+</section>
+<section class="banner-section loading ">
+    <img 
+        src="{% static 'images/pmb2.jpg' %}" 
+        alt="Matana University Registration Banner"
+        class="banner-image"
+        loading="eager"
+        decoding="async"
+        onload="this.parentElement.classList.remove('loading')"
+    />
 </section>
 
 <!-- Alur Pendaftaran -->
