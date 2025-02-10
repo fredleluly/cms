@@ -40,6 +40,7 @@ ALLOWED_HOSTS = [
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
+    print("HELLLL NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO######################## DJANGO_ENV === production ===", os.getenv('DJANGO_ENV') == 'production' )
 
 
 # Application definition
@@ -103,7 +104,7 @@ IS_PRODUCTION = os.getenv('DJANGO_ENV') == 'production'
 STATIC_URL = '/static/'
 
 if IS_PRODUCTION:
-    STATIC_ROOT = '/home/django/www-data/example.com/static/'
+    STATIC_ROOT = BASE_DIR / 'static'
 else:
     STATICFILES_DIRS = [
         BASE_DIR / 'static'
