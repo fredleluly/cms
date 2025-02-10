@@ -1,7 +1,12 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User, Group
 from django.utils.html import format_html
-from .models import Page, ContentBlock, Article, ArticleCategory, MaintenanceMode
-from unfold.admin import ModelAdmin, StackedInline
+from .models import Page, ContentBlock, Article, ArticleCategory, MaintenanceMode, ProgramStudi, ProdiAdmin
+# from unfold.admin import ModelAdmin, StackedInline
+from django.db import transaction
+from django.contrib.admin import ModelAdmin, StackedInline
+
 
 admin.site.site_header = 'Matana CMS'
 admin.site.site_title = 'Matana CMS'
@@ -18,8 +23,8 @@ class ContentBlockInline(StackedInline):
 
 @admin.register(Page)
 class PageAdmin(ModelAdmin):
-    list_display = ('title', 'slug', 'template', 'status', 'updated_at', 'view_page_link')
-    list_filter = ('status', 'template', 'created_at')
+    list_display = ('title', 'slug', 'program_studi', 'status', 'updated_at', 'view_page_link')
+    list_filter = ('status', 'program_studi')
     search_fields = ('title', 'slug')
     prepopulated_fields = {'slug': ('title',)}
     inlines = [ContentBlockInline]
@@ -46,6 +51,41 @@ class PageAdmin(ModelAdmin):
             f'/{obj.slug}/'
         )
     view_page_link.short_description = 'View'
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        if request.user.groups.filter(name='prodi_admin').exists():
+            try:
+                prodi_admin = ProdiAdmin.objects.get(user=request.user)
+                return qs.filter(program_studi=prodi_admin.program_studi)
+            except ProdiAdmin.DoesNotExist:
+                return qs.none()
+        return qs.none()
+
+    def has_change_permission(self, request, obj=None):
+        if request.user.is_superuser:
+            return True
+        if obj is None:
+            return True
+        if request.user.groups.filter(name='prodi_admin').exists():
+            try:
+                prodi_admin = ProdiAdmin.objects.get(user=request.user)
+                return obj.program_studi == prodi_admin.program_studi
+            except ProdiAdmin.DoesNotExist:
+                return False
+        return False
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "program_studi" and not request.user.is_superuser:
+            if request.user.groups.filter(name='prodi_admin').exists():
+                try:
+                    prodi_admin = ProdiAdmin.objects.get(user=request.user)
+                    kwargs["queryset"] = ProgramStudi.objects.filter(id=prodi_admin.program_studi.id)
+                except ProdiAdmin.DoesNotExist:
+                    kwargs["queryset"] = ProgramStudi.objects.none()
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 @admin.register(ContentBlock)
 class ContentBlockAdmin(ModelAdmin):
@@ -124,3 +164,51 @@ class MaintenanceModeAdmin(ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         # Prevent deletion of the only instance
         return False
+
+@admin.register(ProgramStudi)
+class ProgramStudiAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'created_at', 'updated_at')
+    search_fields = ('name', 'slug')
+    prepopulated_fields = {'slug': ('name',)}
+
+@admin.register(ProdiAdmin)
+class ProdiAdminAdmin(admin.ModelAdmin):
+    list_display = ('user', 'get_program_studi', 'is_active', 'created_at')
+    list_filter = ('program_studi', 'is_active')
+    search_fields = ('user__username', 'program_studi__name')
+    
+    def get_program_studi(self, obj):
+        return ", ".join([p.name for p in obj.program_studi.all()])
+    get_program_studi.short_description = 'Program Studi'
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "user":
+            kwargs["queryset"] = User.objects.filter(is_staff=True)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        # Ensure user is staff
+        obj.user.is_staff = True
+        obj.user.save()
+        
+        # Add user to prodi_admin group
+        prodi_admin_group = Group.objects.get(name='prodi_admin')
+        obj.user.groups.add(prodi_admin_group)
+        
+        super().save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.user.is_superuser:
+            return qs
+        return qs.none()
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_add_permission(self, request):
+        return request.user.is_superuser
+

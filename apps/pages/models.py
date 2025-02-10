@@ -12,6 +12,7 @@ import os
 from django.utils.safestring import mark_safe
 import bleach
 from django.core.cache import cache
+from django.contrib.auth.models import User, Group
 
 User = get_user_model()
 
@@ -53,6 +54,13 @@ class Page(models.Model):
         User, on_delete=models.SET_NULL, 
         null=True, related_name='updated_pages'
     )
+    program_studi = models.ForeignKey(
+        'ProgramStudi', 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        help_text="If this page belongs to a specific program studi"
+    )
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -64,6 +72,14 @@ class Page(models.Model):
 
     def __str__(self):
         return self.title
+
+    def clean(self):
+        # Validate that program_studi is set for prodi pages
+        if self.slug and self.slug.startswith('prodi-') and not self.program_studi:
+            raise ValidationError({
+                'program_studi': 'Program Studi harus diisi untuk halaman prodi'
+            })
+        super().clean()
 
     class Meta:
         verbose_name = 'Page'
@@ -256,3 +272,87 @@ class MaintenanceMode(models.Model):
             'message': self.message,
             'allowed_ips': [ip.strip() for ip in self.allowed_ips.split(',') if ip.strip()]
         })
+
+class ProgramStudi(models.Model):
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Program Studi"
+        verbose_name_plural = "Program Studi"
+
+class ProdiAdmin(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    program_studi = models.ManyToManyField(
+        ProgramStudi,
+        related_name='prodi_admins',
+        help_text="Program studi yang dapat dikelola oleh admin ini"
+    )
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        # Ensure user is in prodi_admin group
+        prodi_admin_group, _ = Group.objects.get_or_create(name='prodi_admin')
+        self.user.groups.add(prodi_admin_group)
+        
+        # Ensure user is staff
+        if not self.user.is_staff:
+            self.user.is_staff = True
+            self.user.save(update_fields=['is_staff'])
+            
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        # Basic validation
+        if not self.user_id:
+            raise ValidationError({'user': 'User is required'})
+            
+        # Check if user is not superuser
+        if self.user.is_superuser:
+            raise ValidationError({'user': 'Superuser cannot be assigned as program admin'})
+
+    def has_prodi_permission(self, prodi_slug):
+        """
+        Check if admin has permission for a specific program studi
+        """
+        return (
+            self.is_active and 
+            self.program_studi.filter(slug=prodi_slug).exists()
+        )
+
+    def get_managed_programs(self):
+        """
+        Get list of program studi managed by this admin
+        """
+        return self.program_studi.all() if self.is_active else ProgramStudi.objects.none()
+
+    def __str__(self):
+        program_names = ", ".join([p.name for p in self.program_studi.all()])
+        return f"{self.user.username} - {program_names}"
+
+    class Meta:
+        verbose_name = "Admin Prodi"
+        verbose_name_plural = "Admin Prodi"
+        
+    @classmethod
+    def get_prodi_admin_for_user(cls, user):
+        """
+        Get ProdiAdmin instance for a user with proper error handling
+        """
+        try:
+            return cls.objects.prefetch_related('program_studi').get(user=user)
+        except cls.DoesNotExist:
+            return None

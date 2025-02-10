@@ -26,6 +26,10 @@ import json
 from apps.media.models import MediaFile
 from django.urls import reverse
 import logging
+from django.db import transaction
+from .models import ProdiAdmin, ProgramStudi
+from django.contrib.auth import logout
+
 
 
 # Get logger for this file
@@ -550,6 +554,21 @@ class ArticleForm(forms.ModelForm):
 
 @staff_member_required
 def article_create_view(request):
+    """
+    View for creating new articles. Only accessible by superusers and article program admins.
+    """
+    # Check if user has article program studi permission
+    if not request.user.is_superuser:
+        try:
+            prodi_admin = ProdiAdmin.objects.get(user=request.user)
+            is_article_admin = prodi_admin.program_studi.filter(slug='article').exists()
+            if not is_article_admin:
+                messages.error(request, 'Anda tidak memiliki izin untuk membuat artikel.')
+                return redirect('content_dashboard')
+        except ProdiAdmin.DoesNotExist:
+            messages.error(request, 'Anda tidak memiliki izin untuk membuat artikel.')
+            return redirect('content_dashboard')
+    
     form = ArticleForm()
     categories = ArticleCategory.objects.all()
     context = {
@@ -562,6 +581,20 @@ def article_create_view(request):
 
 @staff_member_required
 def article_edit_view(request, pk):
+
+    # Check if user has article program studi permission
+    if not request.user.is_superuser:
+        try:
+            prodi_admin = ProdiAdmin.objects.get(user=request.user)
+            is_article_admin = prodi_admin.program_studi.filter(slug='article').exists()
+            if not is_article_admin:
+                messages.error(request, 'Anda tidak memiliki izin untuk mengedit artikel.')
+                return redirect('content_dashboard')
+        except ProdiAdmin.DoesNotExist:
+            messages.error(request, 'Anda tidak memiliki izin untuk mengedit artikel.')
+            return redirect('content_dashboard')
+        
+
     article = get_object_or_404(Article, pk=pk)
     form = ArticleForm(instance=article)
     categories = ArticleCategory.objects.all()
@@ -759,11 +792,17 @@ def create_default_profile_page():
 # Manajemen
 def create_default_profile_page_manajemen():
     """Create default profile page with standardized content blocks"""
+    try:
+        prodi = ProgramStudi.objects.get(slug='manajemen')
+    except ProgramStudi.DoesNotExist:
+        return None
+        
     profile_page = Page.objects.create(
         title="Manajemen",
         slug="prodi-manajemen",
         template='prodi.html',
         status=Page.PUBLISHED,
+        program_studi=prodi,
         metadata={
             'meta_description': 'Profil Matana University - Perguruan tinggi terpercaya dan terkemuka',
             'meta_keywords': 'profil matana, visi misi matana, sejarah matana'
@@ -958,11 +997,17 @@ def profile_view_manajemen(request):
 # Akuntansi
 def create_default_profile_page_akuntansi():
     """Create default profile page with standardized content blocks for Akuntansi"""
+    try:
+        prodi = ProgramStudi.objects.get(slug='akutansi')
+    except ProgramStudi.DoesNotExist:
+        return None
+        
     profile_page = Page.objects.create(
         title="Akuntansi",
         slug="prodi-akuntansi",
         template='prodi.html',
         status=Page.PUBLISHED,
+        program_studi=prodi,
         metadata={
             'meta_description': 'Program Studi Akuntansi Matana University - Terpercaya dan terkemuka dalam bidang audit, perpajakan, dan digital akuntansi',
             'meta_keywords': 'akuntansi matana, audit, perpajakan, digital akuntansi'
@@ -1090,15 +1135,21 @@ def profile_view_akuntansi(request):
 
 # Hospitality & Pariwisata
 def create_default_profile_page_hospitality():
-    """Create default profile page with standardized content blocks for Hospitality & Tourism"""
+    """Create default profile page with standardized content blocks for Hospitality"""
+    try:
+        prodi = ProgramStudi.objects.get(slug='hospitality')
+    except ProgramStudi.DoesNotExist:
+        return None
+        
     profile_page = Page.objects.create(
-        title="Hospitaliti & Pariwisata",
+        title="Hospitality & Tourism",
         slug="prodi-hospar",
         template='prodi.html',
         status=Page.PUBLISHED,
+        program_studi=prodi,
         metadata={
-            'meta_description': 'Program Studi Hospitaliti dan Pariwisata Matana University - Unggul dalam bidang hotel management, event management, food production management, dan pariwisata',
-            'meta_keywords': 'hospitaliti matana, pariwisata matana, hotel management, event management, food production management'
+            'meta_description': 'Program Studi Hospitality & Tourism Matana University',
+            'meta_keywords': 'hospitality matana, tourism matana'
         }
     )
     
@@ -1218,11 +1269,17 @@ def profile_view_hospitality(request):
 # Fisika Medis
 def create_default_profile_page_fisika_medis():
     """Create default profile page with standardized content blocks for Fisika Medis"""
+    try:
+        prodi = ProgramStudi.objects.get(slug='fisika_medis')
+    except ProgramStudi.DoesNotExist:
+        return None
+        
     profile_page = Page.objects.create(
         title="S1 FISIKA MEDIS",
         slug="prodi-fisika-medis",
         template='prodi.html',
         status=Page.PUBLISHED,
+        program_studi=prodi,
         metadata={
             'meta_description': 'Program Studi S1 Fisika Medis Matana University - Unggul dalam bidang fisika dan aplikasinya untuk sektor medis',
             'meta_keywords': 'fisika medis, matana university, radiodiagnostik, radioterapi, kedokteran nuklir'
@@ -1320,8 +1377,6 @@ def profile_view_fisika_medis(request):
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
-    print(f"Blocks: ", profile_page.metadata)
-    
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
@@ -1333,14 +1388,20 @@ def profile_view_fisika_medis(request):
 # Teknik Informatika
 def create_default_profile_page_teknik_informatika():
     """Create default profile page with standardized content blocks for Teknik Informatika"""
+    try:
+        prodi = ProgramStudi.objects.get(slug='informatika')
+    except ProgramStudi.DoesNotExist:
+        return None
+        
     profile_page = Page.objects.create(
         title="S1 TEKNIK INFORMATIKA",
         slug="prodi-teknik-informatika",
         template='prodi.html',
         status=Page.PUBLISHED,
+        program_studi=prodi,
         metadata={
-            'meta_description': 'Program Studi Teknik Informatika Matana University - Unggul dalam bidang Human Computer Interaction, dan Graphics and Visual Computing',
-            'meta_keywords': 'teknik informatika, matana university, human computer interaction, graphics and visual computing'
+            'meta_description': 'Program Studi Teknik Informatika Matana University',
+            'meta_keywords': 'teknik informatika matana'
         }
     )
     
@@ -1363,7 +1424,7 @@ def create_default_profile_page_teknik_informatika():
             'items': [
                 {
                     'title': 'Visi',
-                    'description': '“Menjadi Program Studi Teknik Informatika yang terpercaya dan terkemuka dalam bidang Human Computer Interaction, dan Graphics and Visual Computing pada sektor kesehatan di provinsi Banten pada tahun 2032”' or 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                    'description': '"Menjadi Program Studi Teknik Informatika yang terpercaya dan terkemuka dalam bidang Human Computer Interaction, dan Graphics and Visual Computing pada sektor kesehatan di provinsi Banten pada tahun 2032" or Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
                 },
                 {
                     'title': 'Misi',
@@ -1455,11 +1516,17 @@ def profile_view_teknik_informatika(request):
 # Teknik Informatika
 def create_default_profile_page_statistika():
     """Create default profile page with standardized content blocks for Statistika (Data Science)"""
+    try:
+        prodi = ProgramStudi.objects.get(slug='statistika')
+    except ProgramStudi.DoesNotExist:
+        return None
+        
     profile_page = Page.objects.create(
         title="S1 STATISTIKA (DATA SCIENCE)",
         slug="prodi-statistika",
         template='prodi.html',
         status=Page.PUBLISHED,
+        program_studi=prodi,
         metadata={
             'meta_description': 'Program Studi Statistika Matana University - Unggul dalam bidang Sains Data untuk sektor kesehatan, sosial, bisnis, dan finansial',
             'meta_keywords': 'statistika, matana university, sains data, aktuaria, machine learning'
@@ -1485,7 +1552,7 @@ def create_default_profile_page_statistika():
             'items': [
                 {
                     'title': 'Visi',
-                    'description': '“Menjadi program studi yang terpercaya dan terkemuka dalam bidang sains data untuk sektor kesehatan, sosial, bisnis dan finansial, yang berwawasan nasional dan internasional serta berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi yang merupakan karunia Tuhan untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan”'
+                    'description': '"Menjadi program studi yang terpercaya dan terkemuka dalam bidang sains data untuk sektor kesehatan, sosial, bisnis dan finansial, yang berwawasan nasional dan internasional serta berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi yang merupakan karunia Tuhan untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan"'
                 },
                 {
                     'title': 'Misi',
@@ -1578,11 +1645,17 @@ def profile_view_statistika(request):
 # DKV
 def create_default_profile_page_dkv():
     """Create default profile page with standardized content blocks for Desain Komunikasi Visual"""
+    try:
+        prodi = ProgramStudi.objects.get(slug='dkv')
+    except ProgramStudi.DoesNotExist:
+        return None
+        
     profile_page = Page.objects.create(
         title="S1 DESAIN KOMUNIKASI VISUAL",
         slug="prodi-dkv",
         template='prodi.html',
         status=Page.PUBLISHED,
+        program_studi=prodi,
         metadata={
             'meta_description': 'Program Studi Desain Komunikasi Visual Universitas Matana - Mengusung integritas kurikulum yang menyeimbangkan teknik tradisional dan digital',
             'meta_keywords': 'desain komunikasi visual, matana university, desain grafis, ilustrasi, fotografi, videografi'
@@ -1702,14 +1775,20 @@ def profile_view_dkv(request):
 # Arsitektur
 def create_default_profile_page_arsitektur():
     """Create default profile page with standardized content blocks for Arsitektur"""
+    try:
+        prodi = ProgramStudi.objects.get(slug='arsitektur')
+    except ProgramStudi.DoesNotExist:
+        return None
+        
     profile_page = Page.objects.create(
         title="S1 ARSITEKTUR",
         slug="prodi-arsitektur",
         template='prodi.html',
         status=Page.PUBLISHED,
+        program_studi=prodi,
         metadata={
-            'meta_description': 'Program Studi Arsitektur Matana University - Program S1 Arsitektur dengan paradigma think globally, act locally',
-            'meta_keywords': 'arsitektur, matana university, green architecture, smart design, TOD, teknologi industri 5.0'
+            'meta_description': 'Program Studi Arsitektur Matana University',
+            'meta_keywords': 'arsitektur matana'
         }
     )
     
@@ -1814,14 +1893,20 @@ def profile_view_arsitektur(request):
 # K3
 def create_default_profile_page_k3():
     """Create default profile page with standardized content blocks for K3"""
+    try:
+        prodi = ProgramStudi.objects.get(slug='k3')
+    except ProgramStudi.DoesNotExist:
+        return None
+        
     profile_page = Page.objects.create(
         title="S1 Keselamatan & Kesehatan Kerja(K3)",
         slug="prodi-k3",
         template='prodi.html',
         status=Page.PUBLISHED,
+        program_studi=prodi,
         metadata={
             'meta_description': 'Program Studi K3 Matana University - Program S1 K3 dengan paradigma think globally, act locally',
-            'meta_keywords': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam at venenatis lorem. Maecenas in urna nec tortor sollicitudin porttitor non et magna. Aliquam at suscipit mauris, id suscipit elit. Mauris non pharetra neque. Maecenas molestie elit tortor, pellentesque ultricies tellus venenatis id. Cras gravida ligula scelerisque, gravida erat ac, blandit leo. Donec interdum id libero eu sodales. Morbi accumsan diam nec nisl cursus lacinia. Nunc id malesuada neque. Suspendisse ac pulvinar massa, et tincidunt leo. Sed congue porta commodo. Quisque vehicula arcu arcu, ac dignissim purus egestas non. Praesent a ultrices nunc. Duis malesuada finibus nibh quis tincidunt. Duis sit amet varius justo. Maecenas blandit, tortor nec bibendum ornare, odio leo mattis tortor, vel aliquam risus dolor ac lectus.'
+            'meta_keywords': 'k3 matana, kesehatan kerja, keselamatan kerja'
         }
     )
     
@@ -2055,6 +2140,34 @@ def article_list_view(request):
     """
     View for listing and managing articles with advanced filtering and bulk actions
     """
+    # Check if user is superuser or has article program studi permission
+    is_article_admin = False
+    if not request.user.is_superuser:
+        try:
+            prodi_admin = ProdiAdmin.objects.get(user=request.user)
+            is_article_admin = prodi_admin.program_studi.filter(slug='article').exists()
+        except ProdiAdmin.DoesNotExist:
+            return render(request, 'admin/article_list.html', {
+                'articles': [],
+                'categories': [],
+                'total_articles': 0,
+                'published_count': 0,
+                'draft_count': 0,
+                'featured_count': 0,
+                'recent_articles': []
+            })
+
+    if not (request.user.is_superuser or is_article_admin):
+        return render(request, 'admin/article_list.html', {
+            'articles': [],
+            'categories': [],
+            'total_articles': 0,
+            'published_count': 0,
+            'draft_count': 0,
+            'featured_count': 0,
+            'recent_articles': []
+        })
+
     # Get query parameters
     category_id = request.GET.get('category')
     status = request.GET.get('status')
@@ -2681,13 +2794,27 @@ def page_edit_view(request, slug):
     
     return render(request, 'admin/page_form.html', context)
 
-@staff_member_required
+@login_required
 def page_list_view(request):
     """View for listing all pages"""
-    pages = Page.objects.all().order_by('-updated_at')
-    
+    if request.user.is_superuser:
+        pages = Page.objects.all()
+    elif request.user.groups.filter(name='prodi_admin').exists():
+        try:
+            prodi_admin = ProdiAdmin.objects.get(user=request.user)
+            if prodi_admin.is_active:
+                # Get all pages for all program studi managed by this admin
+                pages = Page.objects.filter(program_studi__in=prodi_admin.program_studi.all())
+            else:
+                pages = Page.objects.none()
+        except ProdiAdmin.DoesNotExist:
+            pages = Page.objects.none()
+    else:
+        # raise PermissionDenied("You don't have permission to view pages")
+        pages = Page.objects.none()
+
     context = {
-        'pages': pages,
+        'pages': pages.order_by('-updated_at'),
         'title': 'Pages',
         'subtitle': 'Manage your website pages'
     }
@@ -3040,3 +3167,51 @@ def exchange_view(request):
     }
     
     return render(request, 'pages/exchange.html', context)
+
+@login_required
+def user_profile_view(request):
+    """View for user profile page"""
+    if request.method == 'POST':
+        # Handle profile update
+        user = request.user
+        user.first_name = request.POST.get('first_name', user.first_name)
+        user.last_name = request.POST.get('last_name', user.last_name)
+        user.email = request.POST.get('email', user.email)
+        user.save()
+        
+        messages.success(request, 'Profile updated successfully.')
+        return redirect('user_profile')
+
+    context = {
+        'title': 'User Profile',
+        'subtitle': 'Manage your account settings'
+    }
+    return render(request, 'admin/user_profile.html', context)
+
+def logout_view(request):
+    """View for handling logout"""
+    logout(request)
+    return redirect('home')
+
+def profile_view_informatika(request):
+    """View for Teknik Informatika profile page"""
+    try:
+        profile_page = Page.objects.get(
+            slug='prodi-informatika',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        profile_page = create_default_profile_page_teknik_informatika()
+    
+    # Get content blocks
+    blocks = {}
+    for block in profile_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    context = {
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'blocks': blocks  # Simplified - just send all blocks
+    }
+    
+    return render(request, 'pages/prodi.html', context)

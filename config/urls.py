@@ -24,11 +24,10 @@ from apps.pages.views import (
     article_save_view, article_delete_view, article_quick_update,
     profile_view, category_create_view, upload_image, article_list_view, bulk_action_view,
     registration_view, registration_submit, scholarship_view, page_edit_view, page_list_view,
-    mitra_view, management_view, ukm_view, exchange_view,profile_view_manajemen,profile_view_akuntansi,
-    profile_view_hospitality,profile_view_fisika_medis,profile_view_teknik_informatika,profile_view_statistika,
-    profile_view_dkv,profile_view_arsitektur,profile_view_k3
+    mitra_view, management_view, ukm_view, exchange_view, profile_view_manajemen,
+    user_profile_view, logout_view
 )
-# from apps.pages.views import *
+from apps.pages.views import *
 from django.contrib.sitemaps.views import sitemap
 from apps.pages.sitemaps import ArticleSitemap, StaticViewSitemap
 from django.views.generic import TemplateView
@@ -75,16 +74,19 @@ urlpatterns = [
     path('mitra/', mitra_view, name='mitra'),
     path('manajemen/', management_view, name='management'),
     path('ukm/', ukm_view, name='ukm'),
+  
     path('prodi/manajemen/', profile_view_manajemen, name='manajemen'),
     path('prodi/akuntansi/', profile_view_akuntansi, name='akuntansi'),
     path('prodi/hospar/', profile_view_hospitality, name='hospar'),
-    path('prodi/fisika-medis/', profile_view_fisika_medis, name='fisika-medis'),
-    path('prodi/teknik-informatika/', profile_view_teknik_informatika, name='teknik-informatika'),
-    path('prodi/statistika/', profile_view_statistika, name='statistika'),
     path('prodi/dkv/', profile_view_dkv, name='dkv'),
     path('prodi/arsitektur/', profile_view_arsitektur, name='arsitektur'),
-    path('prodi/k3/', profile_view_k3, name='K3'),
+    path('prodi/k3/', profile_view_k3, name='k3'),
+    path('prodi/fisika-medis/', profile_view_fisika_medis, name='fisika_medis'),
+    path('prodi/statistika/', profile_view_statistika, name='statistika'),
+    path('prodi/informatika/', profile_view_informatika, name='informatika'),
     path('student-exchange/', exchange_view, name='exchange'),
+    path('dashboard/profile/', user_profile_view, name='user_profile'),
+    path('logout/', logout_view, name='logout'),
     # path('<slug:slug>/', page_view, name='page_view'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

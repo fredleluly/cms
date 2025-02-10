@@ -10,11 +10,27 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
 from django.db.models import Q
+from apps.pages.models import ProdiAdmin
+from django.contrib import messages
+from django.shortcuts import redirect
 
 # Create your views here.
 
 @login_required
 def media_library(request):
+
+    # Check if user has media program studi permission
+    if not request.user.is_superuser:
+        try:
+            prodi_admin = ProdiAdmin.objects.get(user=request.user)
+            is_media_admin = prodi_admin.program_studi.filter(slug='media').exists()
+            if not is_media_admin:
+                messages.error(request, 'Anda tidak memiliki izin untuk mengedit media.')
+                return redirect('content_dashboard')
+        except ProdiAdmin.DoesNotExist:
+            messages.error(request, 'Anda tidak memiliki izin untuk mengedit media.')
+            return redirect('content_dashboard')
+
     select_mode = request.GET.get('mode') == 'select'
     print(f"Select mode: {select_mode}")  # Debug log
     media_files = MediaFile.objects.all().order_by('-uploaded_at')

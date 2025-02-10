@@ -1,11 +1,14 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from apps.pages.models import Article, ArticleCategory
+from apps.pages.models import Article, ArticleCategory, ProgramStudi, ProdiAdmin
 from django.utils.text import slugify
 from django.contrib.auth import get_user_model
 import random
 from datetime import timedelta
 import time
+from django.contrib.auth.models import Group
+
+User = get_user_model()
 
 class Command(BaseCommand):
     help = 'Generates sample academic articles with relevant content'
@@ -13,11 +16,136 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('count', type=int, help='Number of articles to generate')
 
+    
+    def create_prodi_admin_group(self):
+        # Create admin group
+        prodi_group, created = Group.objects.get_or_create(name='prodi_admin')
+        
+        # Create default Program Studi entries
+        default_prodi = [
+            {
+                'nama': 'Artikel',
+                'slug': 'article',
+                'description': 'Program Studi Artikel'
+            },
+            {
+                'nama': 'Desain Komunikasi Visual',
+                'slug': 'dkv',
+                'description': 'Program Studi Desain Komunikasi Visual'
+            },
+            {
+                'nama': 'Akutansi', 
+                'slug': 'akutansi',
+                'description': 'Program Studi Akutansi'
+            },
+            {
+                'nama': 'Arsitektur',
+                'slug': 'arsitektur',
+                'description': 'Program Studi Arsitektur'
+            },
+            {
+                'nama': 'Hospitality',
+                'slug': 'hospitality',
+                'description': 'Program Studi Hospitality'
+            },
+            {
+                'nama': 'Magister Manajemen',
+                'slug': 'magister_manajemen',   
+                'description': 'Program Studi Magister Manajemen'
+            },
+            {
+                'nama': 'K3',
+                'slug': 'k3',
+                'description': 'Program Studi K3'
+            },
+            {
+                'nama': 'Fisika Medis',
+                'slug': 'fisika_medis',
+                'description': 'Program Studi Fisika Medis'
+            },
+            {
+                'nama': 'Statistika',
+                'slug': 'statistika',
+                'description': 'Program Studi Statistika'
+            },
+            {
+                'nama': 'Informatika',
+                'slug': 'informatika',
+                'description': 'Program Studi Informatika'
+            },
+            {
+                'nama': 'Media',
+                'slug': 'media',
+                'description': 'Program Studi Media'
+            },
+            {
+                'nama': 'Manajemen',
+                'slug': 'manajemen',
+                'description': 'Program Studi Manajemen'
+            }
+        ]
+        
+        # First, create all Program Studi
+        created_prodis = {}
+        for prodi_data in default_prodi:
+            prodi, created = ProgramStudi.objects.get_or_create(
+                slug=prodi_data['slug'],
+                defaults={
+                    'name': prodi_data['nama'],
+                    'description': prodi_data['description']
+                }
+            )
+            created_prodis[prodi_data['slug']] = prodi
+
+        # Get the media prodi for default access
+        media_prodi = created_prodis['media']
+        article_prodi = created_prodis['article']
+        
+        # Now create users and assign them to their prodi plus media access
+        for prodi_data in default_prodi:
+            if prodi_data['slug'] == 'media':  # Skip creating separate admin for article/media
+                continue
+            if prodi_data['slug'] == 'article':  # Skip creating separate admin for article/media
+                continue
+                
+            prodi = created_prodis[prodi_data['slug']]
+            username = f"admin_{prodi_data['slug']}"
+            email = f"{username}@matanauniversity.ac.id"
+            password = "Matana2024!"  # Default password
+            
+            try:
+                user = User.objects.get(username=username)
+            except User.DoesNotExist:
+                user = User.objects.create_user(
+                    username=username,
+                    email=email,
+                    password=password,
+                    first_name=prodi_data['nama'],
+                    is_staff=True
+                )
+                user.groups.add(prodi_group)
+                
+                # Create ProdiAdmin entry
+                prodi_admin, created = ProdiAdmin.objects.get_or_create(
+                    user=user,
+                    defaults={'is_active': True}
+                )
+                # Add both their own prodi and media prodi
+                prodi_admin.program_studi.add(prodi)
+                prodi_admin.program_studi.add(media_prodi)
+                # prodi_admin.program_studi.add(article_prodi)
+                
+                print(f"Created admin user for {prodi_data['nama']}")
+                print(f"Username: {username}")
+                print(f"Password: {password}")
+                print(f"Access to: {prodi_data['nama']} and Media")
+                print("---")
+
     def handle(self, *args, **kwargs):
         count = kwargs['count']
-        
+        self.create_prodi_admin_group()
+        # return
         # Get admin user
-        User = get_user_model()
         try:
             admin_user = User.objects.get(username='admin')
         except User.DoesNotExist:
