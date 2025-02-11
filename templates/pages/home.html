@@ -1,10 +1,12 @@
 {% extends "base.html" %}
 {% load image_optimizer %}
+{% load static %}
+
 
 {% block title %}Matana University - Excellence in Higher Education{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.0.0/swiper-bundle.min.css">
+<link rel="stylesheet" href="{% static 'css/swiper-bundle.min.css' %}">
 <style>
     /* Responsive Base Settings */
     :root {
@@ -345,7 +347,7 @@
 {% block content %}
 
 <!-- Hero Slider -->
-<div class="swiper hero-slider hidden md:block">
+<div class="!hidden md:!block swiper hero-slider">
     <div class="swiper-wrapper">
         {% for block in blocks.section1.items %}
         <div class="swiper-slide h-[700px]">
@@ -372,7 +374,7 @@
     <div class="swiper-button-next"></div>
 </div>
 
-<div class="swiper hero-slider block md:hidden">
+<div class="!block md:!hidden swiper hero-slider ">
     <div class="swiper-wrapper">
         {% for block in blocks.section1_mobile.items %}
         <div class="swiper-slide h-[700px]">
@@ -1315,7 +1317,7 @@ blocks['berita_terbaru'] = berita_terbaru -->
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.0.0/swiper-bundle.min.js"></script>
+<script src="{% static 'js/swiper-bundle.min.js' %}"></script>
 <script>
     // Initialize Swiper with optimized settings
     document.addEventListener('DOMContentLoaded', () => {

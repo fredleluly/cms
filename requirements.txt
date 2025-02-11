@@ -19,3 +19,4 @@ django-check-seo==1.0.1
 django-dbbackup==4.2.1
 django-unfold==0.46.0
 gunicorn==23.0.0
+pillow==11.1.0

@@ -1,5 +1,6 @@
 {% load static %}
 {% load image_optimizer %}
+{% load static tailwind_tags %}
 <!DOCTYPE html>
 <html lang="id">
   <head>
@@ -53,42 +54,11 @@
 
 
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    {% tailwind_css %}
     <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script>
-      tailwind.config = {
-          theme: {
-              extend: {
-                  colors: {
-                      matana: {
-                          blue: '#101d38',
-                          yellow: '#ffb140',
-                      }
-                  },
-                  animation: {
-                      'fade-in': 'fadeIn 0.3s ease-in-out',
-                      'fade-out': 'fadeOut 0.3s ease-in-out',
-                      'slide-down': 'slideDown 0.3s ease-in-out',
-                  },
-                  keyframes: {
-                      fadeIn: {
-                          '0%': { opacity: '0' },
-                          '100%': { opacity: '1' },
-                      },
-                      fadeOut: {
-                          '0%': { opacity: '1' },
-                          '100%': { opacity: '0' },
-                      },
-                      slideDown: {
-                          '0%': { transform: 'translateY(-10px)', opacity: '0' },
-                          '100%': { transform: 'translateY(0)', opacity: '1' },
-                      },
-                  },
-              }
-          }
-      }
-    </script>
+    
 
     <!-- Custom CSS -->
     <style>

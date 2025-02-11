@@ -70,8 +70,15 @@ INSTALLED_APPS = [
     # Local apps
     'apps.pages.apps.PagesConfig',
     'axes',
-
+    'tailwind',
+    'theme',
+    #  'django_browser_reload'
 ]
+TAILWIND_APP_NAME = 'theme'
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+NPM_BIN_PATH = 'npm.cmd'
 
 SITE_ID = 1
 
@@ -93,6 +100,8 @@ MIDDLEWARE = [
 
     'axes.middleware.AxesMiddleware',
     # 'django.contrib.admin.middleware.LogEntryMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
+    #   "django_browser_reload.middleware.BrowserReloadMiddleware",
 
 ]
 
@@ -113,7 +122,8 @@ if IS_PRODUCTION:
     STATIC_ROOT = BASE_DIR / 'static'
 else:
     STATICFILES_DIRS = [
-        BASE_DIR / 'static'
+        BASE_DIR / 'static',
+        BASE_DIR / 'theme/static'
     ]
     # PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
     # STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
@@ -356,6 +366,8 @@ CKEDITOR_CONFIGS = {
         'filebrowserUploadUrl': '/lib/upload/',
     }
 }
+
+
 
 
 # Comment out or remove the Redis cache configuration

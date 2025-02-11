@@ -87,6 +87,7 @@ urlpatterns = [
     path('student-exchange/', exchange_view, name='exchange'),
     path('dashboard/profile/', user_profile_view, name='user_profile'),
     path('logout/', logout_view, name='logout'),
+    # path("__reload__/", include("django_browser_reload.urls")),
     # path('<slug:slug>/', page_view, name='page_view'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
