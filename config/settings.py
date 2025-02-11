@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     '192.168.1.8',
+    '103.86.153.71',
 ]
 
 if DEBUG:
@@ -216,7 +217,7 @@ CSP_FRAME_SRC = (
 )
 
 # Cache timeout in seconds (5 minutes)
-CACHE_TIMEOUT = 300
+CACHE_TIMEOUT = 3000
 
 # CSRF settings
 CSRF_COOKIE_NAME = 'csrftoken'
