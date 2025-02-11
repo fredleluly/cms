@@ -250,6 +250,65 @@
     .marquee-container:hover .animate-marquee-reverse {
         animation-play-state: paused;
     }
+
+    /* Video Player */
+    .youtube-embed {
+        --button-size: 4rem;
+        position: relative;
+        color: #fff;
+        background: #000;
+        border-radius: 0.5rem;
+        overflow: hidden;
+    }
+
+    .youtube-embed button {
+        all: unset;
+        box-sizing: border-box;
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.1);
+        transition: background 0.3s ease;
+    }
+
+    .youtube-embed button:hover {
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .youtube-embed button * {
+        pointer-events: none;
+    }
+
+    .youtube-embed .play-icon {
+        height: var(--button-size);
+        width: var(--button-size);
+        position: absolute;
+        top: calc(50% - (var(--button-size) / 2));
+        left: calc(50% - (var(--button-size) / 2));
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+        transition: transform 0.3s ease;
+    }
+
+    .youtube-embed button:hover .play-icon {
+        transform: scale(1.1);
+    }
+
+    .youtube-embed img,
+    .youtube-embed iframe {
+        aspect-ratio: 16 / 9;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .youtube-embed .thumbnail {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
 </style>
 {% endblock %}
 
@@ -450,12 +509,33 @@ blocks['berita_terbaru'] = berita_terbaru -->
                     <!-- Video Player -->
                     <div class="relative rounded overflow-hidden">
                         <div class="aspect-video relative">
-                            <iframe 
-                                class="w-full h-full"
-                                src="{{blocks.section4.description}}?autoplay=1" 
-                                allowfullscreen
-                                title="Matana University: Shaping Future Leaders Through Academic Excellence"
-                            ></iframe>
+                            <div class="youtube-embed w-full h-full">
+                                <button title="Play Video" aria-label="Play Video">
+                                    <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                        <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm-56 296V168l144 88z" fill="currentColor" />
+                                    </svg>
+                                    <img 
+                                        width="1280" 
+                                        height="720" 
+                                        loading="lazy" 
+                                        decoding="async" 
+                                        class="thumbnail" 
+                                        alt="Matana University Campus Video" 
+                                        src="https://i3.ytimg.com/vi/{{blocks.section4.description|slice:'30:41'|default:''}}/maxresdefault.jpg"
+                                    >
+                                </button>
+                                <iframe 
+                                    class="hidden"
+                                    title="Matana University Campus Video"
+                                    width="1280"
+                                    height="720"
+                                    loading="lazy"
+                                    src="about:blank" 
+                                    data-src="{{blocks.section4.description}}?autoplay=1&rel=0&modestbranding=1" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
                         </div>
                     </div>
                     
@@ -1275,5 +1355,39 @@ blocks['berita_terbaru'] = berita_terbaru -->
     //         element.style.transform = `translateY(${scrolled * speed}px)`;
     //     });
     // });
+
+    function initYoutubeEmbed(el) {
+        const playButton = el.querySelector('button');
+        const iframe = el.querySelector('iframe');
+        const thumbnail = el.querySelector('img');
+
+        playButton.addEventListener('click', () => {
+            iframe.src = iframe.dataset.src;
+            iframe.classList.remove('hidden');
+            playButton.style.display = 'none';
+            thumbnail.style.display = 'none';
+
+            // Track video play event if analytics is available
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'play_video', {
+                    'event_category': 'Video',
+                    'event_label': iframe.dataset.src
+                });
+            }
+        });
+
+        // Add error handling for thumbnail
+        thumbnail.addEventListener('error', () => {
+            thumbnail.src = 'https://img.youtube.com/vi/{{blocks.section4.description|slice:'32:'|default:''}}/hqdefault.jpg';
+        });
+    }
+
+    // Initialize all YouTube embeds
+    document.addEventListener('DOMContentLoaded', () => {
+        const youtubeEmbeds = document.querySelectorAll('.youtube-embed');
+        youtubeEmbeds.forEach(embed => {
+            initYoutubeEmbed(embed);
+        });
+    });
 </script>
 {% endblock %}
