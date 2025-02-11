@@ -3,9 +3,9 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User, Group
 from django.utils.html import format_html
 from .models import Page, ContentBlock, Article, ArticleCategory, MaintenanceMode, ProgramStudi, ProdiAdmin
-# from unfold.admin import ModelAdmin, StackedInline
+from unfold.admin import ModelAdmin, StackedInline
 from django.db import transaction
-from django.contrib.admin import ModelAdmin, StackedInline
+# from django.contrib.admin import ModelAdmin, StackedInline
 
 
 admin.site.site_header = 'Matana CMS'

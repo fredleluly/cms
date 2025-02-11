@@ -37,6 +37,9 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '192.168.1.8',
     '103.86.153.71',
+    'www.matanauniversity.ac.id',
+    'matanauniversity.ac.id',
+
 ]
 
 if DEBUG:
@@ -47,7 +50,7 @@ if DEBUG:
 # Application definition
 
 INSTALLED_APPS = [
-    #  "unfold",
+     "unfold",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -223,7 +226,7 @@ CACHE_TIMEOUT = 3000
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_HEADER_NAME = 'HTTP_X_CSRFTOKEN'
 
-CSRF_TRUSTED_ORIGINS = ['https://cms-2sn7d.kinsta.app/', 'https://cms-2sn7d.kinsta.app/', 'https://*.kinsta.app','https://*.127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://cms-2sn7d.kinsta.app/', 'https://cms-2sn7d.kinsta.app/', 'https://*.kinsta.app','https://*.127.0.0.1', 'https://www.matanauniversity.ac.id/']
 
 ROOT_URLCONF = 'config.urls'
 
