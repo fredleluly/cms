@@ -1,4 +1,5 @@
 {% load static %}
+{% load image_optimizer %}
 <!DOCTYPE html>
 <html lang="id">
   <head>
@@ -43,7 +44,7 @@
     <title>{% block title %}Matana University{% endblock %}</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{% static '/images/favicon.png' %}" />
+    <link rel="icon" type="image/x-icon" href="{% optimized_image '/images/favicon.png' %}" />
        <!-- Font Awesome -->
     <link
       rel="stylesheet"
@@ -284,10 +285,12 @@
           <!-- Logo -->
           <a href="/" class="flex items-center">
             <img
-              src="{% static 'images/logo-matana-white.png' %}"
+              src="{% optimized_image 'images/logo-matana-white.png' 'medium' %}"
               alt="Matana University"
               class="h-12"
             />
+            
+
           </a>
 
           <!-- Desktop Navigation -->
@@ -1063,7 +1066,7 @@
           <!-- Contact Info -->
           <div>
             <img
-              src="{% static 'images/logo-matana-white.png' %}"
+              src="{% optimized_image 'images/logo-matana-white.png' %}"
               alt="Matana University"
               class="h-12 mb-6"
             />

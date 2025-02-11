@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load image_optimizer %}
 
 {% load static %}
 {% block title %}Manajemen - Matana University{% endblock %}
@@ -29,7 +30,7 @@
     /* Hero Section */
     .hero-section {
         background: linear-gradient(rgba(0, 74, 173, 0.9), rgba(0, 74, 173, 0.9)),
-                    url('{% static "images/campus-aerial.jpg" %}') center/cover;
+                    url('{% optimized_image "images/campus-aerial.jpg" %}') center/cover;
         padding: clamp(4rem, 15vh, 8rem) 0;
         text-align: center;
         color: white;
@@ -157,7 +158,7 @@
             {% for item in blocks.rektorat_section.items %}
             <div class="management-card">
                 <img 
-                    src="{{ item.image }}" 
+                    src="{% optimized_image item.image %}" 
                     alt="Rektorat Matana University" 
                     class="management-image"
                     loading="lazy"
@@ -176,7 +177,7 @@
             {% for item in blocks.dekan_section.items %}
             <div class="management-card">
                 <img 
-                    src="{{ item.image }}" 
+                    src="{% optimized_image item.image %}" 
                     alt="Dekan Matana University" 
                     class="management-image"
                     loading="lazy"

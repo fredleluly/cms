@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load image_optimizer %}
 {% load static %}
 
 {% block title %}{{ page.title }} - Matana University{% endblock %}
@@ -7,7 +8,7 @@
 
 <section class="banner-section loading hidden md:block">
     <img 
-        src="{% static 'images/Banner-Alur-PMB.jpg' %}" 
+        src="{% optimized_image 'images/Banner-Alur-PMB.jpg' %}" 
         alt="Matana University Registration Banner"
         class="banner-image"
         width="1920"
@@ -29,7 +30,7 @@
 </section>
 <section class="banner-section loading container mx-auto ">
     <img 
-        src="{% static 'images/pmb2.jpg' %}" 
+        src="{% optimized_image 'images/pmb2.jpg' %}" 
         alt="Matana University Registration Banner"
         class="banner-image"
         loading="eager"

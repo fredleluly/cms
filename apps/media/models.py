@@ -7,16 +7,30 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 from django.conf import settings
 from datetime import datetime
+import logging
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
+
+# Constants for image optimization
+WEBP_QUALITY = 85
+JPEG_QUALITY = 85
+MAX_WIDTH = 1920
+THUMBNAIL_SIZE = (300, 300)
+ALLOWED_IMAGE_FORMATS = {'JPEG', 'PNG', 'GIF', 'WEBP'}
 
 User = get_user_model()
 
 def upload_to(instance, filename):
+    """
+    Generates upload path with proper organization and slug-based filenames
+    """
     try:
         # Get the file extension
-        ext = filename.split('.')[-1]
+        ext = filename.split('.')[-1].lower()
         # Create slug from original filename
         filename_slug = slugify(filename.rsplit('.', 1)[0])
-        # Use current date instead of instance.uploaded_at
+        # Use current date for organization
         date_path = datetime.now().strftime("%Y/%m")
         # Get upload path
         upload_path = f'uploads/{instance.content_type}/{date_path}'
@@ -26,8 +40,49 @@ def upload_to(instance, filename):
         # Return the complete path
         return f'{upload_path}/{filename_slug}.{ext}'
     except Exception as e:
-        print(f"Error in upload_to: {str(e)}")
+        logger.error(f"Error in upload_to for file {filename}: {str(e)}")
         return filename
+
+def optimize_image(img, max_width=MAX_WIDTH, convert_to_webp=True):
+    """
+    Optimize image by:
+    1. Converting to WebP format
+    2. Resizing if too large
+    3. Optimizing quality
+    4. Converting RGBA to RGB
+    """
+    try:
+        # Convert RGBA to RGB if necessary
+        if img.mode in ('RGBA', 'LA'):
+            background = Image.new('RGB', img.size, (255, 255, 255))
+            background.paste(img, mask=img.split()[-1])
+            img = background
+
+        # Resize if width exceeds max_width
+        if img.width > max_width:
+            ratio = max_width / img.width
+            new_size = (max_width, int(img.height * ratio))
+            img = img.resize(new_size, Image.Resampling.LANCZOS)
+
+        return img
+    except Exception as e:
+        logger.error(f"Error optimizing image: {str(e)}")
+        return None
+
+def create_thumbnail(img, size=THUMBNAIL_SIZE):
+    """Create optimized thumbnail in WebP format"""
+    try:
+        # Create a copy to avoid modifying original
+        thumb = img.copy()
+        thumb.thumbnail(size)
+        
+        # Convert to WebP format
+        thumb_io = BytesIO()
+        thumb.save(thumb_io, format='WEBP', quality=WEBP_QUALITY)
+        return thumb_io.getvalue()
+    except Exception as e:
+        logger.error(f"Error creating thumbnail: {str(e)}")
+        return None
 
 class MediaFile(models.Model):
     CONTENT_TYPES = [
@@ -62,37 +117,81 @@ class MediaFile(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        try:
-            # Set file size and extension before saving
-            if self.file and not self.pk:  # Only on creation
+        """
+        Enhanced save method with:
+        1. WebP conversion
+        2. Proper error handling
+        3. Image optimization
+        4. Thumbnail generation
+        """
+        if self.file and not self.pk:  # Only on creation
+            try:
                 self.file_size = self.file.size if hasattr(self.file, 'size') else 0
                 self.file_extension = os.path.splitext(self.file.name)[1][1:].lower()
 
-                # Generate thumbnail for images
+                # Process images
                 if self.content_type == 'image':
                     try:
-                        img = Image.open(self.file)
-                        self.width = img.width
-                        self.height = img.height
+                        with Image.open(self.file) as img:
+                            # Store original dimensions
+                            self.width = img.width
+                            self.height = img.height
 
-                        # Create thumbnail
-                        thumb_size = (300, 300)
-                        img.thumbnail(thumb_size)
-                        thumb_io = BytesIO()
-                        img.save(thumb_io, format='JPEG')
-                        
-                        thumbnail_name = f'thumb_{os.path.basename(self.file.name)}'
-                        self.thumbnail.save(
-                            thumbnail_name,
-                            ContentFile(thumb_io.getvalue()),
-                            save=False
-                        )
+                            # Validate image format
+                            if img.format not in ALLOWED_IMAGE_FORMATS:
+                                raise ValueError(f"Unsupported image format: {img.format}")
+
+                            # Create WebP thumbnail
+                            thumb_data = create_thumbnail(img)
+                            if thumb_data:
+                                thumbnail_name = f"{Path(self.file.name).stem}_thumb.webp"
+                                self.thumbnail.save(
+                                    thumbnail_name,
+                                    ContentFile(thumb_data),
+                                    save=False
+                                )
+
+                            # Optimize original image
+                            optimized = optimize_image(img)
+                            if optimized:
+                                # Convert to WebP and save
+                                optimized_io = BytesIO()
+                                optimized.save(
+                                    optimized_io, 
+                                    format='WEBP', 
+                                    quality=WEBP_QUALITY,
+                                    method=6  # Highest compression method
+                                )
+                                
+                                # Update filename to .webp
+                                new_name = f"{Path(self.file.name).stem}.webp"
+                                self.file.save(
+                                    new_name,
+                                    ContentFile(optimized_io.getvalue()),
+                                    save=False
+                                )
+                                # Update file size after optimization
+                                self.file_size = self.file.size
+                                self.file_extension = 'webp'
+
+                    except (IOError, OSError) as e:
+                        logger.error(f"IO Error processing image {self.file.name}: {str(e)}")
+                        raise
+                    except ValueError as e:
+                        logger.error(f"Validation error for image {self.file.name}: {str(e)}")
+                        raise
                     except Exception as e:
-                        print(f"Error creating thumbnail: {str(e)}")
+                        logger.error(f"Unexpected error processing image {self.file.name}: {str(e)}")
+                        raise
 
+            except Exception as e:
+                logger.error(f"Error in save method for file {self.file.name}: {str(e)}")
+                raise
+
+        try:
             super().save(*args, **kwargs)
         except Exception as e:
-            print(f"Error in save method: {str(e)}")
+            logger.error(f"Database error saving file {self.file.name}: {str(e)}")
             raise
 
     @property

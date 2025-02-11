@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load image_optimizer %}
 
 {% load static %}
 {% block title %}Unit Kegiatan Mahasiswa - Matana University{% endblock %}
@@ -196,7 +197,7 @@
             {% for item in blocks.olahraga_section.items %}
             <div class="ukm-card">
                 <img 
-                    src="{{ item.image }}" 
+                    src="{% optimized_image item.image  %}" 
                     alt="{{ item.title }}" 
                     class="ukm-image"
                     loading="lazy"
@@ -219,7 +220,7 @@
             {% for item in blocks.seni_section.items %}
             <div class="ukm-card">
                 <img 
-                    src="{{ item.image }}" 
+                    src="{% optimized_image item.image  %}" 
                     alt="{{ item.title }}" 
                     class="ukm-image"
                     loading="lazy"
@@ -242,7 +243,7 @@
             {% for item in blocks.akademik_section.items %}
             <div class="ukm-card">
                 <img 
-                    src="{{ item.image }}" 
+                    src="{% optimized_image item.image  %}" 
                     alt="{{ item.title }}" 
                     class="ukm-image"
                     loading="lazy"
@@ -265,7 +266,7 @@
             {% for item in blocks.minat_section.items %}
             <div class="ukm-card">
                 <img 
-                    src="{{ item.image }}" 
+                    src="{% optimized_image item.image  %}" 
                     alt="{{ item.title }}" 
                     class="ukm-image"
                     loading="lazy"

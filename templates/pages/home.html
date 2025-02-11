@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load image_optimizer %}
 
 {% block title %}Matana University - Excellence in Higher Education{% endblock %}
 
@@ -254,142 +255,6 @@
 
 {% block content %}
 
-<!-- default_blocks = [
-{
-    'identifier': 'hero_section',
-    'title': 'Welcome to Matana University',
-    'subtitle': 'Perguruan tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme',
-    'background_image': '/static/images/hero-bg.jpg',
-    'cta': {
-        'text': 'Learn More',
-        'url': '/about',
-        'style': 'primary'
-    },
-    'order': 1
-},
-{
-    'identifier': 'section1',
-    'title': 'banner section',
-    'subtitle': '',
-    'items': [
-        {
-            'title': 'banner1',
-            'image': '/static/images/banner.jpg',
-        },
-        {
-            'title': 'banner2',
-            'image': '/static/images/banner2.jpg',
-        },
-        {
-            'title': 'banner3',
-            'image': '/static/images/banner3.jpg',
-        },
-        {
-            'title': 'banner4',
-            'image': '/static/images/banner4.jpg',
-        },
-    ],
- 
-    'order': 1
-},
-{
-    'identifier': 'section2',
-    'title': '',
-    'items': [
-        {
-            'title': 'Menerapkan kurikulum akademik yang mendukung lulusan siap berkompetisi di dunia kerja.',
-        },
-        {
-            'title': 'Dosen yang profesional, praktisi, dan berprestasi di dalam dan luar negeri.',
-        },
-        {
-            'title': 'Memiliki fasilitas yang mendukung praktik dari teori pembelajaran setiap program.',
-        },
-        {
-            'title': 'Kesempatan magang dan berkarir di Paramount Group & Mitra Bisnis lainnya, serta menjadi Entrepreneur',
-        },
-        {
-            'title': 'Memiliki program Student Exchange (pertukaran mahasiswa) ke universitas ternama di Asia dan Eropa.',
-        },
-    ],
-    'order': 2
-},
-{
-    'identifier': 'section3',
-    'title': 'Penerimaan Mahasiswa Baru',
-       'background_image': '/static/images/hero-bg.jpg',
-    'items': [
-        {
-            'title': '',
-            'description': 'Tahun Akademik 2025/2026',
-        },
-        {
-            'title': '',
-            'description': 'Matana University menyelenggarakan berbagai lokakarya berbasis dunia usaha, program magang di berbagai industri, ruang inkubator di kampus, dan kompetisi rencana bisnis tahunan dengan penghargaan untuk mahasiswa wirausaha yang terbaik.',
-        },
-        {
-            'title': '',
-            'description': 'https://matanauniversity.siakadcloud.com/spmbfront/',
-        }
-    ],
-    'order': 3
-},
-{
-    'identifier': 'section4',
-    'title': '',
-    'description': 'https://www.youtube.com/watch?v=AMLKY6NBjz0',
-    'order': 4
-},
-{
-    'identifier': 'section5',
-    'title': 'Virtual Tour 360 Matana University',
-     'background_image': '/static/images/hero-bg.jpg',
-    'description': 'http://360.matanauniversity.ac.id/',
-    'order': 5
-},
-{
-    'identifier': 'section6',
-    'title': 'Follow Instagram Kami',
-    'description': 'https://www.instagram.com/matanauniversityofficial/',
-    'items': [
-        {
-            'title': 'https://www.instagram.com/p/DFchJtQsUua/',
-        },
-        {
-            'title': 'https://www.instagram.com/p/DFZOdJ9yFTc/',
-        },
-        {
-            'title': 'https://www.instagram.com/p/DFT1BvYSDB2/',
-        },
-        {
-            'title': 'https://www.instagram.com/p/DFO5HGrPN-S/',
-        }
-    ],
-    'order': 6
-}
-
-] 
-
-    
-    if blocks is None:
-        blocks = {}
-        for block in page.content_blocks.all().order_by('order'):
-            blocks[block.identifier] = {
-                'type': block.content_type,
-                'content': block.content
-            }
-        cache.set(cache_key, blocks, timeout=300)  # Cache for 5 minutes
-    
-    context = {
-        'page': page,
-        'meta': page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
-    }
-    
-    return render(request, f'pages/{page.template}', context)
-
--->
-
 <!-- Hero Slider -->
 <div class="swiper hero-slider hidden md:block">
     <div class="swiper-wrapper">
@@ -405,7 +270,7 @@
         
         {% for block in blocks.section1.items %}
         <div class="swiper-slide h-[700px]">
-            <img src="{{ block.image }}" alt="{{ block.title }}" class="w-full h-full object-cover md:object-contain">
+            <img src="{% optimized_image block.image  %}" alt="{{ block.title }}" class="w-full h-full object-cover md:object-contain">
         </div>
         {% endfor %}
      
@@ -421,7 +286,8 @@
         
         {% for block in blocks.section1_mobile.items %}
         <div class="swiper-slide h-[700px]">
-            <img src="{{ block.image }}" alt="{{ block.title }}" class="w-full h-full object-cover md:object-contain ">
+            <img src="{% optimized_image block.image %}" alt="{{ block.title }}" class="w-full h-full object-cover md:object-contain ">
+            
         </div>
         {% endfor %}
      
@@ -447,7 +313,7 @@
 
 <!-- <section class="container mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8"></section>
     <div class="w-full md:w-1/2 flex justify-center">
-        <img src="{{ blocks.section3.background_image }}" alt="{{ blocks.section3.title }}" class="w-full h-auto object-contain rounded-lg shadow-lg">
+        <img src="{% optimized_image blocks.section3.background_image  %}" alt="{{ blocks.section3.title }}" class="w-full h-auto object-contain rounded-lg shadow-lg">
     </div>
     <div class="w-full md:w-1/2 flex flex-col items-start justify-center space-y-4">
         <p class="text-lg text-gray-700">{{ blocks.section3.items.0.description }}</p>
@@ -527,7 +393,7 @@
             <div class="w-full lg:w-1/2 relative">
                 <!-- Main Image -->
                 <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-300">
-                    <img src="{{ blocks.section3.background_image }}" 
+                    <img src="{% optimized_image blocks.section3.background_image  %}" 
                          alt="{{ blocks.section3.title }}" 
                          class="w-full h-auto object-cover"
                     >
@@ -620,7 +486,7 @@ blocks['berita_terbaru'] = berita_terbaru -->
                             <div class="w-full h-20 rounded mb-1">
                                 {% if berita.featured_image %}
                                 <img 
-                                    src="{{ berita.featured_image }}" 
+                                    src="{% optimized_image berita.featured_image  %}" 
                                     alt="{{ berita.title }}"
                                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                                 >
@@ -690,7 +556,7 @@ blocks['berita_terbaru'] = berita_terbaru -->
                 <!-- Background Image -->
                 {% if blocks.section5.background_image %}
                 <div class="absolute inset-0">
-                    <img src="{{ blocks.section5.background_image }}" 
+                    <img src="{% optimized_image blocks.section5.background_image  %}" 
                          alt="Virtual Tour Background"
                          class="w-full h-full object-cover">
                     <div class="absolute inset-0 bg-black/40"></div>
@@ -741,7 +607,7 @@ blocks['berita_terbaru'] = berita_terbaru -->
                     <div class="w-full h-full bg-gray-100 relative group">
                         <!-- Instagram Post Placeholder -->
                         {% if item.image %}
-                        <img src="{{ item.image }}" alt="{{ item.title }}" class="w-full h-full object-cover">
+                        <img src="{% optimized_image item.image  %}" alt="{{ item.title }}" class="w-full h-full object-cover">
                         <!-- Instagram Icon Overlay -->
                         <!-- <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"> -->
                         <div class="absolute inset-0 flex items-center justify-center ">

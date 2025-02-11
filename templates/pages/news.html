@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% load image_optimizer %}
 {% block title %}Matana News - Latest Updates & Insights{% endblock %}
 
 {% block extra_css %}
@@ -198,7 +198,7 @@
 <section class="py-12">
     <div class="container mx-auto px-4">
         <div class="featured-article">
-            <img src="{{ featured_article.featured_image }}" 
+            <img src="{% optimized_image featured_article.featured_image  %}" 
                  alt="{{ featured_article.title }}" 
                  class="w-full h-[600px] object-cover">
             <div class="featured-content absolute inset-0 flex items-end p-8 md:p-12">
@@ -246,7 +246,7 @@
             {% for article in page_obj %}
             <article class="article-card bg-white rounded-xl overflow-hidden shadow-lg">
                 <div class="image-wrapper">
-                    <img src="{{ article.featured_image }}" 
+                    <img src="{% optimized_image article.featured_image  %}" 
                          alt="{{ article.title }}" 
                          class="w-full h-48 object-cover">
                 </div>

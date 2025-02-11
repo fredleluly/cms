@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load image_optimizer %}
 
 {% load static %}
 {% block title %}Mitra - Matana University{% endblock %}
@@ -159,7 +160,7 @@
         <div class="partner-grid">
             {% for item in blocks.hospital_section.items %}
             <div class="partner-card">
-                <img src="{{ item.image }}" alt="{{ item.title }}" class="partner-image">
+                <img src="{% optimized_image item.image  %}" alt="{{ item.title }}" class="partner-image">
                 <div class="partner-content">
                     <h3 class="partner-title">{{ item.title }}</h3>
                 </div>
@@ -176,7 +177,7 @@
         <div class="partner-grid">
             {% for item in blocks.hotel_section.items %}
             <div class="partner-card">
-                <img src="{{ item.image }}" alt="{{ item.title }}" class="partner-image">
+                <img src="{% optimized_image item.image  %}" alt="{{ item.title }}" class="partner-image">
                 <div class="partner-content">
                     <h3 class="partner-title">{{ item.title }}</h3>
                 </div>
@@ -193,7 +194,7 @@
         <div class="partner-grid">
             {% for item in blocks.institusi_section.items %}
             <div class="partner-card">
-                <img src="{{ item.image }}" alt="{{ item.title }}" class="partner-image">
+                <img src="{% optimized_image item.image  %}" alt="{{ item.title }}" class="partner-image">
                 <div class="partner-content">
                     <h3 class="partner-title">{{ item.title }}</h3>
                 </div>
@@ -210,7 +211,7 @@
         <div class="partner-grid">
             {% for item in blocks.universitas_section.items %}
             <div class="partner-card">
-                <img src="{{ item.image }}" alt="{{ item.title }}" class="partner-image">
+                <img src="{% optimized_image item.image  %}" alt="{{ item.title }}" class="partner-image">
                 <div class="partner-content">
                     <h3 class="partner-title">{{ item.title }}</h3>
                 </div>
@@ -227,7 +228,7 @@
         <div class="partner-grid">
             {% for item in blocks.bank_section.items %}
             <div class="partner-card">
-                <img src="{{ item.image }}" alt="{{ item.title }}" class="partner-image">
+                <img src="{% optimized_image item.image  %}" alt="{{ item.title }}" class="partner-image">
                 <div class="partner-content">
                     <h3 class="partner-title">{{ item.title }}</h3>
                 </div>

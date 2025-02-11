@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load image_optimizer %}
 
 {% load static %}
 {% block title %}Student Exchange - Matana University{% endblock %}
@@ -172,7 +173,7 @@
             {% for item in blocks.asia_section.items %}
             <div class="exchange-card">
                 <img 
-                    src="{{ item.image }}" 
+                    src="{% optimized_image item.image  %}" 
                     alt="Partner University in Asia" 
                     class="exchange-image"
                     loading="lazy"
@@ -192,7 +193,7 @@
             {% for item in blocks.europe_section.items %}
             <div class="exchange-card">
                 <img 
-                    src="{{ item.image }}" 
+                    src="{% optimized_image item.image  %}" 
                     alt="Partner University in Europe" 
                     class="exchange-image"
                     loading="lazy"
@@ -212,7 +213,7 @@
             {% for item in blocks.program_section.items %}
             <div class="exchange-card">
                 <img 
-                    src="{{ item.image }}" 
+                    src="{% optimized_image item.image  %}" 
                     alt="Exchange Program" 
                     class="exchange-image"
                     loading="lazy"
@@ -232,7 +233,7 @@
             {% for item in blocks.testimonial_section.items %}
             <div class="exchange-card">
                 <img 
-                    src="{{ item.image }}" 
+                    src="{% optimized_image item.image  %}" 
                     alt="Exchange Alumni" 
                     class="exchange-image"
                     loading="lazy"
@@ -249,7 +250,7 @@
         <p class="section-description">{{ blocks.testimonial_section.description }}</p>
         <div class="flex justify-center">
                 <img 
-                    src="{{ blocks.testimonial_section.items.0.image }}" 
+                    src="{% optimized_image blocks.testimonial_section.items.0.image  %}" 
 
 
                 >
