@@ -552,10 +552,10 @@ blocks['berita_terbaru'] = berita_terbaru -->
                     </div>
                     
                     <!-- Video Player -->
-                    <div class="relative rounded overflow-hidden">
-                        <div class="aspect-video relative">
-                            <div class="youtube-embed w-full h-full">
-                                <button title="Play Video" aria-label="Play Video">
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <div class="youtube-embed">
+                                <button class="play-button" title="Play Video" aria-label="Play Video">
                                     <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                         <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm-56 296V168l144 88z" fill="currentColor" />
                                     </svg>
@@ -570,7 +570,7 @@ blocks['berita_terbaru'] = berita_terbaru -->
                                     >
                                 </button>
                                 <iframe 
-                                    class="hidden"
+                                    class="video-iframe"
                                     title="Matana University Campus Video"
                                     width="1280"
                                     height="720"
@@ -583,6 +583,71 @@ blocks['berita_terbaru'] = berita_terbaru -->
                             </div>
                         </div>
                     </div>
+
+                    <style>
+                    .video-container {
+                        position: relative;
+                        overflow: hidden;
+                        border-radius: 8px;
+                    }
+
+                    .video-wrapper {
+                        position: relative;
+                        aspect-ratio: 16 / 9;
+                    }
+
+                    .youtube-embed {
+                        width: 100%;
+                        height: 100%;
+                    }
+
+                    .play-button {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        background: none;
+                        border: none;
+                        cursor: pointer;
+                        z-index: 2;
+                    }
+
+                    .play-icon {
+                        width: 64px;
+                        height: 64px;
+                        color: #ffffff;
+                        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+                    }
+
+                    .thumbnail {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+
+                    .video-iframe {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        border: none;
+                        display: none;
+                    }
+
+                    .video-iframe.active {
+                        display: block;
+                    }
+                    </style>
+
+                    <script>
+                    document.querySelector('.play-button').addEventListener('click', function() {
+                        var iframe = this.nextElementSibling;
+                        iframe.src = iframe.dataset.src;
+                        iframe.classList.add('active');
+                        this.style.display = 'none';
+                    });
+                    </script>
                     
                     <!-- Video Description -->
                     <div class="px-3 py-2 bg-gray-50">
