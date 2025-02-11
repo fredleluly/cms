@@ -15,7 +15,9 @@ from pathlib import Path
 from datetime import datetime
 from dotenv import load_dotenv
 
-load_dotenv()
+# load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(__file__), '../.env'))
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
