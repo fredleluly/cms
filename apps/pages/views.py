@@ -230,7 +230,7 @@ def create_default_homepage():
     create_standardized_blocks(homepage, default_blocks)
     return homepage
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+@cache_page(60 * 60)
 def home_view(request):
     try:
         page = Page.objects.get(is_homepage=True, status=Page.PUBLISHED)
@@ -426,7 +426,7 @@ def create_default_mitra_page():
     create_standardized_blocks(mitra_page, default_blocks)
     return mitra_page
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def mitra_view(request):
     """View for mitra page"""
     try:
@@ -452,7 +452,7 @@ def mitra_view(request):
 
 
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def news_view(request):
     # Get query parameters with defaults
     category_slug = request.GET.get('category', '')
@@ -974,7 +974,7 @@ def create_default_profile_page_manajemen():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view_manajemen(request):
     """View for profile page"""
     try:
@@ -1113,7 +1113,7 @@ def create_default_profile_page_akuntansi():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view_akuntansi(request):
     """View for profile page"""
     try:
@@ -1246,7 +1246,7 @@ def create_default_profile_page_hospitality():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view_hospitality(request):
     """View for Hospitality & Tourism profile page"""
     try:
@@ -1369,7 +1369,7 @@ def create_default_profile_page_fisika_medis():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view_fisika_medis(request):
     """View for Fisika Medis profile page"""
     try:
@@ -1496,7 +1496,7 @@ def create_default_profile_page_teknik_informatika():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view_teknik_informatika(request):
     """View for Teknik Informatika profile page"""
     try:
@@ -1625,7 +1625,7 @@ def create_default_profile_page_statistika():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view_statistika(request):
     """View for Statistika profile page"""
     try:
@@ -1759,7 +1759,7 @@ def create_default_profile_page_dkv():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view_dkv(request):
     """View for Desain Komunikasi Visual profile page"""
     try:
@@ -1876,7 +1876,7 @@ def create_default_profile_page_arsitektur():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view_arsitektur(request):
     """View for Arsitektur profile page"""
     try:
@@ -2002,7 +2002,7 @@ def create_default_profile_page_k3():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view_k3(request):
     """View for Arsitektur profile page"""
     try:
@@ -2026,7 +2026,7 @@ def profile_view_k3(request):
     
     return render(request, 'pages/prodi.html', context)
 
-@cache_page(60 * 60)  # Cache for 15 minutes
+# @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view(request):
     """View for profile page"""
     try:
@@ -3208,7 +3208,7 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
-@cache_page(60 * 60)
+# @cache_page(60 * 60)
 def profile_view_informatika(request):
     """View for Teknik Informatika profile page"""
     try:
