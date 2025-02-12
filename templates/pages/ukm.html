@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load image_optimizer %}
 
 {% load static %}
 {% block title %}Unit Kegiatan Mahasiswa - Matana University{% endblock %}
@@ -60,7 +59,8 @@
         margin-bottom: clamp(2.5rem, 8vw, 4rem);
         text-align: center;
         color: var(--text-dark);
-        font-weight: 600;
+        font-weight: bold;
+        font-size: 24px;
     }
 
     .section-description {
@@ -197,7 +197,7 @@
             {% for item in blocks.olahraga_section.items %}
             <div class="ukm-card">
                 <img 
-                    src="{% optimized_image item.image  %}" 
+                    src="{{ item.image }}" 
                     alt="{{ item.title }}" 
                     class="ukm-image"
                     loading="lazy"
@@ -220,7 +220,7 @@
             {% for item in blocks.seni_section.items %}
             <div class="ukm-card">
                 <img 
-                    src="{% optimized_image item.image  %}" 
+                    src="{{ item.image }}" 
                     alt="{{ item.title }}" 
                     class="ukm-image"
                     loading="lazy"
@@ -237,13 +237,13 @@
 <!-- UKM Akademik Section -->
 <section class="py-16">
     <div class="section-container">
-        <h2 class="section-title">{{ blocks.akademik_section.title }}</h2>
+        <h1 class="section-title">{{ blocks.akademik_section.title }}</h1>
         <p class="section-description">{{ blocks.akademik_section.description }}</p>
         <div class="ukm-grid">
             {% for item in blocks.akademik_section.items %}
             <div class="ukm-card">
                 <img 
-                    src="{% optimized_image item.image  %}" 
+                    src="{{ item.image }}" 
                     alt="{{ item.title }}" 
                     class="ukm-image"
                     loading="lazy"
@@ -266,7 +266,7 @@
             {% for item in blocks.minat_section.items %}
             <div class="ukm-card">
                 <img 
-                    src="{% optimized_image item.image  %}" 
+                    src="{{ item.image }}" 
                     alt="{{ item.title }}" 
                     class="ukm-image"
                     loading="lazy"
