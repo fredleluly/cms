@@ -2332,22 +2332,22 @@ def create_default_registration_page():
                 {
                     'title': 'Registrasi Online',
                     'description': 'Isi formulir pendaftaran online dengan data yang valid',
-                    'icon': 'form'
+                    'icon': 'fa-clipboard'
                 },
                 {
                     'title': 'Upload Dokumen',
                     'description': 'Upload dokumen yang diperlukan (Ijazah, Transkrip, dll)',
-                    'icon': 'upload'
+                    'icon': 'fa-upload'
                 },
                 {
                     'title': 'Pembayaran Registrasi',
                     'description': 'Lakukan pembayaran biaya pendaftaran',
-                    'icon': 'payment'
+                    'icon': 'fa-receipt'
                 },
                 {
                     'title': 'Tes Masuk',
                     'description': 'Ikuti tes potensi akademik dan wawancara',
-                    'icon': 'pen'
+                    'icon': 'fa-pen'
                 }
             ],
             'order': 2
