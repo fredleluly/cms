@@ -92,6 +92,8 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         height: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
     .scholarship-card:hover {
@@ -105,8 +107,21 @@
         color: white;
     }
 
+    /* Desktop fixed height for header */
+    @media (min-width: 1024px) {
+        .scholarship-header {
+            height: 200px; /* Fixed height only on desktop */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+    }
+
     .scholarship-content {
         padding: 2rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 
     .benefit-list, .requirement-list {
@@ -185,70 +200,18 @@
 <section class="py-16">
     <div class="section-container">
         <div class="scholarship-grid">
-            <!-- Program 1 -->
-            <div class="scholarship-card">
-                <div class="scholarship-header">
-                    <h3 class="text-xl font-bold mb-2">{{ blocks.scholarship_programs1.title }}</h3>
-                    <p class="text-white/90">{{ blocks.scholarship_programs1.description }}</p>
-                </div>
-                <div class="scholarship-content">
-                    {% for item in blocks.scholarship_programs1.items %}
-                        {% if item.title %}
-                            <h4 class="font-semibold text-lg mt-4 text-gray-900">{{ item.title }}</h4>
-                        {% endif %}
-                        {% if item.description %}
-                            <div class="{% if item.title == 'Benefit' %}benefit-list{% else %}requirement-list{% endif %}">
-                               {% for point in item.description|split_lines %}
-                                    <div class="{% if item.title == 'Benefit' %}benefit-item{% else %}requirement-item{% endif %}">
-                                        <svg class="w-5 h-5 text-primary-color flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                        <span class="text-gray-700">{{ point }}</span>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
+           
 
-            <!-- Program 2 -->
-            <div class="scholarship-card">
-                <div class="scholarship-header">
-                    <h3 class="text-xl font-bold mb-2">{{ blocks.scholarship_programs2.title }}</h3>
-                    <p class="text-white/90">{{ blocks.scholarship_programs2.description }}</p>
-                </div>
-                <div class="scholarship-content">
-                    {% for item in blocks.scholarship_programs2.items %}
-                        {% if item.title %}
-                            <h4 class="font-semibold text-lg mt-4 text-gray-900">{{ item.title }}</h4>
-                        {% endif %}
-                        {% if item.description %}
-                            <div class="{% if item.title == 'Benefit' %}benefit-list{% else %}requirement-list{% endif %}">
-                                {% with descriptions=item.description %}
-                                {% for point in descriptions|split_lines %}
-                                    <div class="{% if item.title == 'Benefit' %}benefit-item{% else %}requirement-item{% endif %}">
-                                        <svg class="w-5 h-5 text-primary-color flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                        <span class="text-gray-700">{{ point }}</span>
-                                    </div>
-                                {% endfor %}
-                                {% endwith %}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
 
-            <!-- Program 3 -->
+            <!-- Program dynamic -->
+            {% for program in beasiswa_page %}
             <div class="scholarship-card">
                 <div class="scholarship-header">
-                    <h3 class="text-xl font-bold mb-2">{{ blocks.scholarship_programs3.title }}</h3>
-                    <p class="text-white/90">{{ blocks.scholarship_programs3.description }}</p>
+                    <h3 class="text-xl font-bold mb-2">{{ program.title }}</h3>
+                    <p class="text-white/90">{{ program.description }}</p>
                 </div>
                 <div class="scholarship-content">
-                    {% for item in blocks.scholarship_programs3.items %}
+                    {% for item in program.items %}
                         {% if item.title %}
                             <h4 class="font-semibold text-lg mt-4 text-gray-900">{{ item.title }}</h4>
                         {% endif %}
@@ -269,35 +232,7 @@
                     {% endfor %}
                 </div>
             </div>
-
-            <!-- Program 4 -->
-            <div class="scholarship-card">
-                <div class="scholarship-header">
-                    <h3 class="text-xl font-bold mb-2">{{ blocks.scholarship_programs4.title }}</h3>
-                    <p class="text-white/90">{{ blocks.scholarship_programs4.description }}</p>
-                </div>
-                <div class="scholarship-content">
-                    {% for item in blocks.scholarship_programs4.items %}
-                        {% if item.title %}
-                            <h4 class="font-semibold text-lg mt-4 text-gray-900">{{ item.title }}</h4>
-                        {% endif %}
-                        {% if item.description %}
-                            <div class="{% if item.title == 'Benefit' %}benefit-list{% else %}requirement-list{% endif %}">
-                                {% with descriptions=item.description|split_lines %}
-                                {% for point in descriptions %}
-                                    <div class="{% if item.title == 'Benefit' %}benefit-item{% else %}requirement-item{% endif %}">
-                                        <svg class="w-5 h-5 text-primary-color flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                        </svg>
-                                        <span class="text-gray-700">{{ point }}</span>
-                                    </div>
-                                {% endfor %}
-                                {% endwith %}
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
+            {% endfor %}
         </div>
     </div>
 </section>

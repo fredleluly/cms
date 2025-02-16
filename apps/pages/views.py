@@ -2622,9 +2622,12 @@ def scholarship_view(request):
     try:
         # Get content blocks with error handling
         blocks = {}
+        beasiswa_page = []
         for block in scholarship_page.content_blocks.all().order_by('order'):
             try:
                 blocks[block.identifier] = block.content
+                if 'scholarship_programs' in block.identifier:
+                    beasiswa_page.append(block.content)
             except Exception as e:
                 print(f"Error processing block {block.identifier}: {str(e)}")
                 continue
@@ -2632,7 +2635,8 @@ def scholarship_view(request):
         context = {
             'page': scholarship_page,
             'meta': scholarship_page.metadata,
-            'blocks': blocks
+            'blocks': blocks,
+            'beasiswa_page': beasiswa_page,
         }
         
         
