@@ -6,7 +6,7 @@
 
 {% block content %}
 
-<section class="banner-section loading hidden md:block">
+<section class="banner-section loading hidden md:block container mx-auto">
     <img 
         src="{% optimized_image 'images/Banner-Alur-PMB.jpg' %}" 
         alt="Matana University Registration Banner"
@@ -48,7 +48,7 @@
                 {% for item in blocks.alur_section.items %}
                 <div class="text-center">
                     <div class="w-16 h-16 bg-matana-blue/10 rounded-full flex items-center justify-center text-2xl font-bold text-matana-blue mx-auto mb-4">
-                        <i class="fa-solid fa-{{ item.icon }}"></i>
+                        <i class="fa-solid {{ item.icon }}"></i>
                     </div>
                     <h3 class="text-lg font-bold mb-2">{{ item.title }}</h3>
                     <p class="text-gray-600">{{ item.description }}</p>
