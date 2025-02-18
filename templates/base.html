@@ -54,7 +54,7 @@
 
 
     <!-- Tailwind CSS -->
-    <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+    <script src="https://cdn.tailwindcss.com"></script>
     {% tailwind_css %}
     <!-- Alpine.js -->
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -1065,6 +1065,82 @@
 
     <!-- Main Content -->
     <main>{% block content %}{% endblock %}</main>
+
+    <!-- WhatsApp Float Button with Message -->
+    <div 
+        x-data="{ 
+            showWhatsApp: true,
+            showMessage: true,
+            isMobile: window.innerWidth < 768
+        }"
+        x-init="
+            // Initial mobile check
+            window.addEventListener('resize', () => {
+                isMobile = window.innerWidth < 768;
+            });
+
+            // Show initial message after 2 seconds
+            setTimeout(() => showMessage = true, 2000);
+
+            // Show message every 60 seconds on desktop only
+            setInterval(() => {
+                if (!isMobile && !showMessage) {
+                    showMessage = true;
+                    setTimeout(() => showMessage = false, 5000);
+                }
+            }, 60000);
+        "
+        :class="isMobile ? 'fixed z-50 flex items-end gap-3 bottom-4 left-4 right-4 md:bottom-6 md:right-6 md:left-auto' : 'fixed z-50 flex items-end gap-3 bottom-6 right-6'"
+    >
+        <!-- Message Bubble -->
+        <div
+            x-show="showMessage"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 transform translate-y-2"
+            x-transition:enter-end="opacity-100 transform translate-y-0"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 transform translate-y-0"
+            x-transition:leave-end="opacity-0 transform translate-y-2"
+            :class="isMobile ? 'relative bg-white rounded-lg shadow-lg p-3 mb-0 flex-1 md:flex-initial md:mb-2 md:max-w-[250px]' : 'relative bg-white rounded-lg shadow-lg p-4 mb-2 max-w-[250px]'"
+        >
+            <div class="text-gray-700 text-sm font-medium flex items-center justify-between gap-3">
+                <span>Halo, butuh bantuan? Yuk chat sekarang!</span>
+                <!-- Close Button - Mobile Optimized -->
+                <button 
+                    @click="showMessage = false"
+                    class="flex-shrink-0 p-1.5 hover:bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-gray-400"
+                >
+                    <span class="sr-only">Close message</span>
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <!-- Triangle - Hidden on Mobile -->
+            <div 
+                x-show="!isMobile" 
+                class="absolute -bottom-2 right-4 w-4 h-4 bg-white transform rotate-45"
+            ></div>
+        </div>
+
+        <!-- WhatsApp Button -->
+        <a 
+            href="https://wa.me/628128777599?text=Halo%20Matana%20University%2C%20saya%20ingin%20bertanya" 
+            target="_blank"
+            rel="noopener noreferrer"
+            :class="isMobile ? 'flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#25D366] text-white shadow-lg hover:bg-[#20BA5C] transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25D366] relative group flex-shrink-0' : 'flex items-center justify-center w-12 h-12 rounded-full bg-[#25D366] text-white shadow-lg hover:bg-[#20BA5C] transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25D366] relative group'"
+            aria-label="Chat on WhatsApp"
+        >
+            <span class="sr-only">Chat on WhatsApp</span>
+            <i class="fab fa-whatsapp" :class="isMobile ? 'text-2xl md:text-3xl' : 'text-3xl'"></i>
+
+            <!-- Ripple Effect -->
+            <span 
+                class="absolute w-full h-full rounded-full bg-white opacity-25"
+                :class="isMobile ? 'animate-ping hidden md:block' : 'animate-ping'"
+            ></span>
+        </a>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-matana-blue text-white pt-16 pb-8">
