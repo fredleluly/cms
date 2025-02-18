@@ -375,12 +375,14 @@
 
 {% block extra_js %}
 <script>
-    // Split helper for mission items
-    String.prototype.split = function(separator) {
-        if (typeof this === 'string') {
-            return this.toString().split(separator);
-        }
-        return [];
-    };
+    // Split helper specifically for mission items in visi_misi_section
+    if (document.querySelector('.visi-misi-description')) {
+        String.prototype.missionSplit = function(separator) {
+            if (typeof this === 'string') {
+                return this.toString().split(separator);
+            }
+            return [];
+        };
+    }
 </script>
 {% endblock %}

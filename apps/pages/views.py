@@ -230,13 +230,14 @@ def create_default_homepage():
     create_standardized_blocks(homepage, default_blocks)
     return homepage
 
-@cache_page(60 * 60)
+# @cache_page(60 * 60)
 def home_view(request):
     try:
         page = Page.objects.get(is_homepage=True, status=Page.PUBLISHED)
-    except Page.DoesNotExist:
+    except Page.DoesNotExist :
         try:
             page = Page.objects.filter(status=Page.PUBLISHED).first()
+
             if page:
                 page.is_homepage = True
                 page.save()
@@ -266,10 +267,12 @@ def home_view(request):
     berita_terbaru = Article.objects.filter(status='published').order_by('-created_at')[:4]
     blocks['berita_terbaru'] = berita_terbaru
     
+    # create_default_popup()
+
     context = {
         'page': page,
         'meta': page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  },
     }
     
     return render(request, f'pages/{page.template}', context)
@@ -291,7 +294,7 @@ def page_view(request, slug):
         context = {
             'page': page,
             'meta': page.metadata,
-            'blocks': blocks  # Simplified - just send all blocks
+            'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
         }
         
         template_name = f"pages/{page.template}.html"
@@ -445,7 +448,7 @@ def mitra_view(request):
     context = {
         'page': mitra_page,
         'meta': mitra_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/mitra.html', context)
@@ -503,6 +506,7 @@ def news_view(request):
         'current_category': category_slug,
         'search_query': search_query,
         'total_articles': total_count,
+        'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }
     }
     
     return render(request, 'pages/news.html', context)
@@ -525,6 +529,7 @@ def article_detail_view(request, slug):
     context = {
         'article': article,
         'related_articles': related_articles,
+        'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }
     }
     
     return render(request, 'pages/article_detail.html', context)
@@ -995,7 +1000,7 @@ def profile_view_manajemen(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1134,7 +1139,7 @@ def profile_view_akuntansi(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1267,7 +1272,7 @@ def profile_view_hospitality(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1388,7 +1393,7 @@ def profile_view_fisika_medis(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1517,7 +1522,7 @@ def profile_view_teknik_informatika(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1646,7 +1651,7 @@ def profile_view_statistika(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1778,7 +1783,7 @@ def profile_view_dkv(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1876,6 +1881,61 @@ def create_default_profile_page_arsitektur():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
+# Arsitektur
+def create_default_popup():
+    """Create default profile page with standardized content blocks for Arsitektur"""
+    try:
+        prodi = ProgramStudi.objects.get(slug='media')
+    except ProgramStudi.DoesNotExist:
+        return None
+        
+    profile_page = Page.objects.create(
+        title="POPUP",
+        slug="popup",
+        template='prodi.html',
+        status=Page.PUBLISHED,
+        program_studi=prodi,
+        metadata={
+            'meta_description': 'Program Studi Arsitektur Matana University',
+            'meta_keywords': 'arsitektur matana'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'POPUP',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'description_section',
+            'title': 'Penerimaan Mahasiswa Baru 2024',
+            'description': 'Wujudkan impianmu menjadi bagian dari Matana University. Dapatkan kesempatan beasiswa hingga 100% dan fasilitas pembelajaran berkualitas internasional.',
+            'order': 2
+        },
+        {
+            'identifier': 'button_section',
+            'title': 'Pendaftaran',
+            'items': [
+                {
+                    'title': 'Daftar Sekarang',
+                    'description': '/pendaftaran/'
+                },
+                {
+                    'title': 'Info Beasiswa',
+                    'description': '/beasiswa/'
+                }
+            ],
+            'order': 3
+        },
+     
+    ]
+    
+    create_standardized_blocks(profile_page, default_blocks)
+    return profile_page
+
+
 # @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view_arsitektur(request):
     """View for Arsitektur profile page"""
@@ -1895,7 +1955,7 @@ def profile_view_arsitektur(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -2021,7 +2081,7 @@ def profile_view_k3(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -2047,7 +2107,7 @@ def profile_view(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/profile.html', context)
@@ -2439,7 +2499,7 @@ def registration_view(request):
     context = {
         'page': registration_page,
         'meta': registration_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/registration.html', context)
@@ -2635,7 +2695,7 @@ def scholarship_view(request):
         context = {
             'page': scholarship_page,
             'meta': scholarship_page.metadata,
-            'blocks': blocks,
+            'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  },
             'beasiswa_page': beasiswa_page,
         }
         
@@ -2900,7 +2960,7 @@ def create_default_management_page():
     create_standardized_blocks(management_page, default_blocks)
     return management_page
 
-@cache_page(60 * 60 * 24) # Cache for 24 hours
+# @cache_page(60 * 60 * 24) # Cache for 24 hours
 def management_view(request):
     """View for management page"""
     try:
@@ -2919,7 +2979,7 @@ def management_view(request):
     context = {
         'page': management_page,
         'meta': management_page.metadata,
-        'blocks': blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }
     }
     
     return render(request, 'pages/management.html', context)
@@ -3056,7 +3116,7 @@ def ukm_view(request):
     context = {
         'page': ukm_page,
         'meta': ukm_page.metadata,
-        'blocks': blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }
     }
     
     return render(request, 'pages/ukm.html', context)
@@ -3182,7 +3242,7 @@ def exchange_view(request):
     context = {
         'page': exchange_page,
         'meta': exchange_page.metadata,
-        'blocks': blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }
     }
     
     return render(request, 'pages/exchange.html', context)
@@ -3231,7 +3291,7 @@ def profile_view_informatika(request):
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks  # Simplified - just send all blocks
+        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/prodi.html', context)

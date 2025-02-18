@@ -257,11 +257,11 @@
 {% block extra_js %}
 <script>
     // Custom split filter for newlines
-    String.prototype.split = function(separator) {
-        if (typeof this === 'string') {
-            return this.toString().split(separator);
-        }
-        return [];
-    };
+    // String.prototype.split = function(separator) {
+    //     if (typeof this === 'string') {
+    //         return this.toString().split(separator);
+    //     }
+    //     return [];
+    // };
 </script>
 {% endblock %}
