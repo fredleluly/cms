@@ -30,6 +30,7 @@ from django.db import transaction
 from .models import ProdiAdmin, ProgramStudi
 from django.contrib.auth import logout
 from django.views.decorators.cache import cache_page
+from datetime import timedelta
 
 
 
@@ -243,6 +244,7 @@ def home_view(request):
                 page.save()
             else:
                 page = create_default_homepage()
+                create_default_popup()
         except Exception as e:
             raise Http404(f"Could not create homepage: {str(e)}")
     
@@ -723,6 +725,7 @@ def create_default_profile_page():
         },
         {
             'identifier': 'visi_misi_section',
+            'background_image': '/static/images/hospar.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {
@@ -823,11 +826,12 @@ def create_default_profile_page_manajemen():
         {
             'identifier': 'hero_section',
             'title': 'S1 MANAJEMEN',
-            'background_image': '/static/images/prodi1.jpg',
+            'background_image': '/static/images/informatika.jpg',
             'order': 1
         },
         {
             'identifier': 'visi_misi_section',
+            'background_image': '/static/images/hospar.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {
@@ -995,12 +999,22 @@ def profile_view_manajemen(request):
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
-    print(f"Blocks: ", profile_page.metadata)
+    # Get related articles
+    related_articles = get_related_articles('manajemen')
     
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'manajemen'
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1029,7 +1043,7 @@ def create_default_profile_page_akuntansi():
         {
             'identifier': 'hero_section',
             'title': 'S1 AKUNTANSI',
-            'background_image': '/static/images/campus-aerial.jpg',
+            'background_image': '/static/images/hospar.jpg',
             'order': 1
         },
         {
@@ -1040,6 +1054,7 @@ def create_default_profile_page_akuntansi():
         },
         {
             'identifier': 'visi_misi_section',
+            'background_image': '/static/images/architecture.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {
@@ -1134,12 +1149,22 @@ def profile_view_akuntansi(request):
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
-    print(f"Blocks: ", profile_page.metadata)
+    # Get related articles
+    related_articles = get_related_articles('akuntansi')
     
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'akuntansi'
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1179,6 +1204,7 @@ def create_default_profile_page_hospitality():
         },
         {
             'identifier': 'visi_misi_section',
+            'background_image': '/static/images/informatika.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {
@@ -1267,12 +1293,22 @@ def profile_view_hospitality(request):
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
-    print(f"Blocks: ", profile_page.metadata)
+    # Get related articles
+    related_articles = get_related_articles('hospar')
     
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'hospar'
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1313,6 +1349,7 @@ def create_default_profile_page_fisika_medis():
         },
         {
             'identifier': 'visi_misi_section',
+            'background_image': '/static/images/informatika.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {
@@ -1390,10 +1427,22 @@ def profile_view_fisika_medis(request):
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
+    # Get related articles
+    related_articles = get_related_articles('fisika-medis')
+    
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'fisika-medis'
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1433,6 +1482,7 @@ def create_default_profile_page_teknik_informatika():
         },
         {
             'identifier': 'visi_misi_section',
+            'background_image': '/static/images/informatika.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {
@@ -1517,12 +1567,22 @@ def profile_view_teknik_informatika(request):
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
-    print(f"Blocks: ", profile_page.metadata)
+    # Get related articles
+    related_articles = get_related_articles('informatika')
     
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'informatika'
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1562,6 +1622,7 @@ def create_default_profile_page_statistika():
         },
         {
             'identifier': 'visi_misi_section',
+            'background_image': '/static/images/hospar.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {
@@ -1646,12 +1707,22 @@ def profile_view_statistika(request):
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
-    print(f"Blocks: ", profile_page.metadata)
+    # Get related articles
+    related_articles = get_related_articles('statistika')
     
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'statistika'
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1692,6 +1763,7 @@ def create_default_profile_page_dkv():
         },
         {
             'identifier': 'visi_misi_section',
+            'background_image': '/static/images/hospar.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {
@@ -1780,10 +1852,22 @@ def profile_view_dkv(request):
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
+    # Get related articles
+    related_articles = get_related_articles('dkv')
+    
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'dkv'
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1823,6 +1907,7 @@ def create_default_profile_page_arsitektur():
         },
         {
             'identifier': 'visi_misi_section',
+            'background_image': '/static/images/hospar.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {
@@ -1952,10 +2037,22 @@ def profile_view_arsitektur(request):
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
+    # Get related articles
+    related_articles = get_related_articles('arsitektur')
+    
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'arsitektur'
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -1997,6 +2094,7 @@ def create_default_profile_page_k3():
         },
         {
             'identifier': 'visi_misi_section',
+            'background_image': '/static/images/hospar.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {
@@ -2078,10 +2176,22 @@ def profile_view_k3(request):
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
+    # Get related articles
+    related_articles = get_related_articles('k3')
+    
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'k3'
     }
     
     return render(request, 'pages/prodi.html', context)
@@ -2102,12 +2212,22 @@ def profile_view(request):
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
-    print(f"Blocks: ", profile_page.metadata)
+    # Get related articles
+    related_articles = get_related_articles('profil-matana')
     
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'profil-matana'
     }
     
     return render(request, 'pages/profile.html', context)
@@ -2926,13 +3046,30 @@ def create_default_management_page():
             'items': [
                 {
                     'image': '/static/images/dekan1.jpg',
+                    'title': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI',
+                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
+                },
+                {
+                    'image': '/static/images/dekan1.jpg',
+                    'title': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI',
+                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
+                },
+                {
+                    'image': '/static/images/dekan1.jpg',
+                    'title': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI',
+                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
+                },
+                {
+                    'image': '/static/images/dekan1.jpg',
+                    'title': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI',
+                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
                 },
                 {
                     'image': '/static/images/dekan2.jpg',
+                    'title': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI',
+                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
                 },
-                {
-                    'image': '/static/images/dekan3.jpg',
-                }
+              
             ],
             'order': 2
         },
@@ -2942,16 +3079,15 @@ def create_default_management_page():
             'items': [
                 {
                     'image': '/static/images/dekan1.jpg',
+                    'title': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI',
+                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
                 },
                 {
                     'image': '/static/images/dekan2.jpg',
+                    'title': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI',
+                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
                 },
-                {
-                    'image': '/static/images/dekan1.jpg',
-                },
-                {
-                    'image': '/static/images/dekan3.jpg',
-                }
+              
             ],
             'order': 3
         }
@@ -3283,15 +3419,64 @@ def profile_view_informatika(request):
     except Page.DoesNotExist:
         profile_page = create_default_profile_page_teknik_informatika()
     
-    # Get content blocks
     blocks = {}
     for block in profile_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
 
+    # Get related articles
+    related_articles = get_related_articles('informatika')
+    
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'informatika'
     }
     
     return render(request, 'pages/prodi.html', context)
+
+def get_related_articles(prodi_slug, limit=3):
+    """
+    Helper function to get related articles for a specific program study
+    """
+    try:
+        # Get articles from the last 6 months
+        six_months_ago = timezone.now() - timedelta(days=180)
+        
+        # Base queryset
+        articles = Article.objects.filter(
+            status='published',
+            created_at__gte=six_months_ago
+        )
+        
+        # Get articles with matching category or tags
+        related = articles.filter(
+            Q(category__slug__icontains=prodi_slug) |
+            Q(tags__name__icontains=prodi_slug) |
+            Q(title__icontains=prodi_slug) |
+            Q(content__icontains=prodi_slug)
+        ).distinct()
+
+        # If not enough related articles, get latest articles
+        if related.count() < limit:
+            additional_needed = limit - related.count()
+            latest_articles = articles.exclude(
+                id__in=related.values_list('id', flat=True)
+            )[:additional_needed]
+            
+            # Combine querysets
+            related = (related | latest_articles).distinct()
+
+        return related.order_by('-created_at')[:limit]
+    
+    except Exception as e:
+        print(f"Error getting related articles: {str(e)}")
+        return Article.objects.filter(status='published')[:limit]

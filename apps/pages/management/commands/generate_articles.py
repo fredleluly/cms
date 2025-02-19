@@ -133,7 +133,7 @@ class Command(BaseCommand):
                 # Add both their own prodi and media prodi
                 prodi_admin.program_studi.add(prodi)
                 prodi_admin.program_studi.add(media_prodi)
-                # prodi_admin.program_studi.add(article_prodi)
+                prodi_admin.program_studi.add(article_prodi)
                 
                 print(f"Created admin user for {prodi_data['nama']}")
                 print(f"Username: {username}")
@@ -144,6 +144,7 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         count = kwargs['count']
         self.create_prodi_admin_group()
+        
         # return
         # Get admin user
         try:

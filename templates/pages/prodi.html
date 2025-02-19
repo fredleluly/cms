@@ -45,6 +45,8 @@
         text-align: center;
         color: white;
         margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
     }
 
     .hero-title {
@@ -143,7 +145,7 @@
 
     /* Tujuan Section */
     .tujuan-content {
-        max-width: 900px;
+        /* max-width: 900px; */
         margin: 0 auto;
         line-height: 1.8;
         color: var(--text-light);
@@ -244,51 +246,254 @@
             padding: 2rem 0;
         }
     }
+
+    /* Blog Section Styles */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Article Card Hover Effects */
+    article:hover .article-image {
+        transform: scale(1.05);
+    }
+
+    /* Responsive Article Grid */
+    @media (max-width: 768px) {
+        .article-grid {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+    }
+
+    /* Tab Navigation */
+    .tab-nav {
+        display: flex;
+        gap: 1px;
+        background: #e5e7eb;
+        padding: 4px;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .tab-nav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .tab-button {
+        flex: 1;
+        min-width: max-content;
+        padding: 1rem 1.5rem;
+        background: transparent;
+        color: #4b5563;
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    .tab-button:hover {
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    .tab-button.active {
+        background: white;
+        color: var(--primary-color);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    .tab-content {
+        opacity: 0;
+        transform: translateY(10px);
+        animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .tab-nav {
+            margin: 0 -1rem 2rem;
+            padding: 4px 1rem;
+            border-radius: 0;
+        }
+        
+        .tab-button {
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+        }
+    }
+
+    /* Program Info Cards */
+    .program-info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .info-card {
+        background: white;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+    }
+
+    .info-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* Stats Card Improvements */
+    .stats-card {
+        backdrop-filter: blur(8px);
+        background: rgba(255, 255, 255, 0.98);
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
-<section class="hero-section">
-    <div class="section-container">
-        <h1 class="hero-title">{{ blocks.hero_section.title }}</h1>
-        {% if blocks.hero_section.subtitle %}
-        <p class="hero-subtitle">{{ blocks.hero_section.subtitle }}</p>
-        {% endif %}
+<!-- Hero Section - Updated -->
+<section class="relative min-h-[80vh] flex items-center overflow-hidden">
+    <!-- Background with overlay -->
+    <div class="absolute inset-0 z-0">
+        <img 
+            src="{% optimized_image "images/campus-aerial.jpg" %}"
+            alt="Background"
+            class="w-full h-full object-cover"
+        />
+        <div class="absolute inset-0 bg-matana-blue/95 z-[1]"></div>
+        <!-- Subtle Overlay Pattern -->
+        <div class="absolute inset-0 z-[2]" style="background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px;"></div>
+    </div>
+    
+    <!-- Content Container -->
+    <div class="container mx-auto px-4 py-16 relative z-10">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <!-- Text Content -->
+            <div class="text-white space-y-6">
+                <div class="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium mb-4">
+                    Program Sarjana
+                </div>
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                    {{ blocks.hero_section.title }}
+                </h1>
+                <p class="text-lg md:text-xl text-white/90 leading-relaxed max-w-xl">
+                    {{ blocks.hero_section.description }}
+                </p>
+                <div class="flex flex-wrap gap-4 pt-4">
+                    <a 
+                        href="{% url 'registration' %}" 
+                        class="inline-flex items-center px-6 py-3 bg-white text-matana-blue rounded-xl hover:bg-matana-yellow transition-all duration-300 font-semibold group"
+                    >
+                        Daftar Sekarang
+                        <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </a>
+                    <a 
+                        href="#visi-misi" 
+                        class="inline-flex items-center px-6 py-3 border-2 border-white text-white rounded-xl hover:bg-white hover:text-matana-blue transition-all duration-300 font-semibold"
+                    >
+                        Pelajari Lebih Lanjut
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Image -->
+            <div class="relative lg:block">
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl bg-white/5 backdrop-blur-sm">
+                    <img 
+                        src="{% optimized_image blocks.hero_section.background_image %}"
+                        alt="{{ blocks.hero_section.title }}"
+                        class="w-full h-[500px] object-cover"
+                    />
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                </div>
+                
+                <!-- Stats Cards -->
+                <div class="absolute -bottom-6 left-4 right-4">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <div class="bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg">
+                            <p class="text-sm text-gray-600">Akreditasi</p>
+                            <p class="text-2xl font-bold text-matana-blue">B</p>
+                        </div>
+                        <div class="bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg">
+                            <p class="text-sm text-gray-600">Lama Studi</p>
+                            <p class="text-2xl font-bold text-matana-blue">4 Tahun</p>
+                        </div>
+                        <div class="hidden sm:block bg-white/95 backdrop-blur-sm p-4 rounded-xl shadow-lg">
+                            <p class="text-sm text-gray-600">Bahasa</p>
+                            <p class="text-2xl font-bold text-matana-blue">ID/EN</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
-<!-- Campus Aerial View -->
-<div class="campus-image-container max-w-3xl mx-auto px-4 mb-12">
-    <img 
-        src="{% optimized_image blocks.hero_section.background_image  %}" 
-        alt="Matana University Campus Aerial View"
-        class="w-full h-full object-cover border border-gray-200 rounded"
-        loading="lazy"
-    />
-</div>
 
-<!-- Visi & Misi Section -->
-<section class="py-16">
-    <div class="section-container">
-        <h2 class="section-title">{{ blocks.visi_misi_section.title }}</h2>
-        
-        <div class="grid md:grid-cols-2 gap-8">
-            <!-- Visi -->
-            <div class="vision-card">
-                <h3 class="text-2xl font-bold mb-4">{{ blocks.visi_misi_section.items.0.title }}</h3>
-                <p class="text-white/90 leading-relaxed">{{ blocks.visi_misi_section.items.0.description }}</p>
+<!-- Visi Misi Section - Updated -->
+<section id="visi-misi" class="py-24 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <!-- Image Side -->
+            <div class="relative">
+                <div class="relative rounded-2xl overflow-hidden shadow-xl">
+                    <img 
+                        src="{% optimized_image blocks.visi_misi_section.background_image %}"
+                        alt="Visi Misi"
+                        class="w-full h-[600px] object-cover"
+                    />
+                    <!-- Decorative Elements -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-matana-blue/80 to-transparent"></div>
+                </div>
+                <!-- Floating Card -->
+                <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-xl max-w-sm">
+                    <h3 class="text-xl font-bold text-matana-blue mb-3">{{ blocks.visi_misi_section.items.0.title }}</h3>
+                    <p class="text-gray-600">{{ blocks.visi_misi_section.items.0.description }}</p>
+                </div>
             </div>
-            
-            <!-- Misi -->
-            <div class="space-y-6">
-                <h3 class="text-2xl font-bold">{{ blocks.visi_misi_section.items.1.title }}</h3>
-                <div class="mission-list">
+
+            <!-- Content Side -->
+            <div class="space-y-8">
+                <div class="space-y-4">
+                    <h2 class="text-3xl font-bold text-gray-900">Visi & Misi</h2>
+                    <div class="w-20 h-2 bg-matana-yellow rounded-full"></div>
+                </div>
+
+                <!-- Missions List - Keeping Original Logic -->
+                <div class="space-y-4">
                     {% with missions=blocks.visi_misi_section.items.1.description|split_lines %}
                     {% for mission in missions %}
-                    <div class="mission-item">
-                        <svg class="w-6 h-6 text-primary-color flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
                         <span class="text-gray-700">{{ mission }}</span>
                     </div>
                     {% endfor %}
@@ -299,59 +504,222 @@
     </div>
 </section>
 
-<!-- Tujuan Section -->
-<section class="py-16 bg-gray-50">
+<!-- Tujuan Section dengan Tabs -->
+<section class="py-16 bg-gray-50" x-data="{ activeTab: 'tujuan' }">
     <div class="section-container">
-        <h2 class="section-title">{{ blocks.tujuan_section.title }}</h2>
-        <div class="tujuan-content prose prose-lg mx-auto">
-            {{ blocks.tujuan_section.description|safe|linebreaksbr }}
+        <!-- Tab Navigation -->
+        <div class="tab-nav flex flex-col md:flex-row gap-2">
+            <button 
+                @click="activeTab = 'tujuan'" 
+                :class="{'active': activeTab === 'tujuan'}"
+                class="tab-button"
+            >
+                <i class="fas fa-bullseye mr-2"></i>
+                Tujuan Program
+            </button>
+            <button 
+                @click="activeTab = 'konsentrasi'" 
+                :class="{'active': activeTab === 'konsentrasi'}"
+                class="tab-button"
+            >
+                <i class="fas fa-layer-group mr-2"></i>
+                Konsentrasi
+            </button>
+            <button 
+                @click="activeTab = 'kurikulum'" 
+                :class="{'active': activeTab === 'kurikulum'}"
+                class="tab-button"
+            >
+                <i class="fas fa-book mr-2"></i>
+                Kurikulum
+            </button>
+            <button 
+                @click="activeTab = 'karir'" 
+                :class="{'active': activeTab === 'karir'}"
+                class="tab-button"
+            >
+                <i class="fas fa-briefcase mr-2"></i>
+                Peluang Karir
+            </button>
         </div>
-    </div>
-</section>
 
-<!-- Konsentrasi Section -->
-<section class="py-16">
-    <div class="section-container">
-        <h2 class="section-title">{{ blocks.konsentrasi_section.title }}</h2>
-        <div class="konsentrasi-grid">
-            {% for item in blocks.konsentrasi_section.items %}
-            <div class="konsentrasi-card">
-                <h3 class="text-xl font-semibold text-primary-color">{{ item.title }}</h3>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- Kurikulum Section -->
-<section class="py-16 bg-gray-50">
-    <div class="section-container">
-        <h2 class="section-title text-center mb-8">{{ blocks.kurikulum_section.title }}</h2>
-        <div class="grid grid-cols-2 gap-x-8 gap-y-4 max-w-4xl mx-auto">
-            {% for item in blocks.kurikulum_section.items %}
-            <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200">
-                <h3 class="text-base font-medium text-gray-800">{{ item.title }}</h3>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- Peluang Karir Section -->
-<section class="py-16">
-    <div class="section-container">
-        <h2 class="section-title">{{ blocks.peluang_karir_section.title }}</h2>
-        <div class="karir-grid">
-            {% for item in blocks.peluang_karir_section.items %}
-            <div class="karir-card">
-                <div class="karir-icon">
-                    <svg class="w-5 h-5 text-primary-color" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
+        <!-- Tab Contents -->
+        <div class="tab-contents mt-8">
+            <!-- Tujuan Tab -->
+            <div 
+                x-show="activeTab === 'tujuan'"
+                x-cloak
+                class="tab-content"
+            >
+                <div class="prose prose-lg mx-auto bg-white p-8 rounded-xl shadow-sm max-w-5xl">
+                    <h3 class="text-2xl font-bold text-matana-blue mb-6">{{ blocks.tujuan_section.title }}</h3>
+                    {{ blocks.tujuan_section.description|safe|linebreaksbr }}
                 </div>
-                <h3 class="text-lg font-medium">{{ item.title }}</h3>
             </div>
+
+            <!-- Konsentrasi Tab -->
+            <div 
+                x-show="activeTab === 'konsentrasi'"
+                x-cloak
+                class="tab-content"
+            >
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for item in blocks.konsentrasi_section.items %}
+                    <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-graduation-cap text-xl text-matana-blue"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ item.title }}</h3>
+                                {% if item.description %}
+                                <p class="text-gray-600">{{ item.description }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Kurikulum Tab -->
+            <div 
+                x-show="activeTab === 'kurikulum'"
+                x-cloak
+                class="tab-content"
+            >
+                <div class="bg-white rounded-xl shadow-sm p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {% for item in blocks.kurikulum_section.items %}
+                        <div class="p-4 border border-gray-100 rounded-lg hover:border-matana-blue/20 hover:bg-matana-blue/5 transition-colors">
+                            <h3 class="text-base font-medium text-gray-900">{{ item.title }}</h3>
+                            {% if item.description %}
+                            <p class="text-sm text-gray-600 mt-2">{{ item.description }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Peluang Karir Tab -->
+            <div 
+                x-show="activeTab === 'karir'"
+                x-cloak
+                class="tab-content"
+            >
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for item in blocks.peluang_karir_section.items %}
+                    <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-briefcase text-xl text-matana-blue"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900">{{ item.title }}</h3>
+                                {% if item.description %}
+                                <p class="text-sm text-gray-600 mt-2">{{ item.description }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Blog Section -->
+<section class="py-16">
+    <div class="section-container">
+        <h2 class="section-title">Artikel Terkait Program Studi</h2>
+        
+        <!-- Blog Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for article in related_articles %}
+            <article class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+                <!-- Image Container -->
+                <div class="relative aspect-[16/9] overflow-hidden">
+                    <img 
+                        src="{% optimized_image article.featured_image %}" 
+                        alt="{{ article.title }}"
+                        class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                        loading="lazy"
+                    />
+                    <!-- Category Badge -->
+                    <div class="absolute top-4 left-4">
+                        <span class="bg-matana-blue/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-medium">
+                            {{ article.category }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="p-6">
+                    <!-- Date and Read Time -->
+                    <div class="flex items-center gap-4 text-sm text-gray-600 mb-3">
+                        <span class="flex items-center gap-1">
+                            <i class="far fa-calendar text-matana-yellow"></i>
+                            {{ article.published_date|date:"d M Y" }}
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i class="far fa-clock text-matana-yellow"></i>
+                            {{ article.read_time }} min read
+                        </span>
+                    </div>
+
+                    <!-- Title -->
+                    <h3 class="text-xl font-semibold text-gray-900 mb-3 line-clamp-2 hover:text-matana-blue transition-colors">
+                        <a href="{{ article.url }}">{{ article.title }}</a>
+                    </h3>
+
+                    <!-- Excerpt -->
+                    <p class="text-gray-600 mb-4 line-clamp-3">
+                        {{ article.excerpt }}
+                    </p>
+
+                    <!-- Author -->
+                    <div class="flex items-center gap-3">
+                        <img 
+                            src="{% optimized_image article.author.avatar %}" 
+                            alt="{{ article.author.name }}"
+                            class="w-10 h-10 rounded-full object-cover"
+                        />
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">{{ article.author.name }}</p>
+                            <p class="text-sm text-gray-600">{{ article.author.position }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Read More Link -->
+                <div class="px-6 pb-6">
+                    <a 
+                        href="{{ article.url }}" 
+                        class="inline-flex items-center gap-2 text-matana-blue hover:text-matana-yellow transition-colors font-medium"
+                    >
+                        Baca Selengkapnya
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </a>
+                </div>
+            </article>
             {% endfor %}
+        </div>
+
+        <!-- View All Link -->
+        <div class="text-center mt-12">
+            <a 
+                href="/articles?category={{ prodi_category }}" 
+                class="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-matana-blue text-matana-blue rounded-xl hover:bg-matana-blue hover:text-white transition-all duration-300 font-semibold"
+            >
+                Lihat Semua Artikel
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
         </div>
     </div>
 </section>

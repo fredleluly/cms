@@ -71,15 +71,17 @@
         border-radius: 2px;
     }
 
-    /* Management Grid */
+    /* Management Grid - Updated */
     .management-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: clamp(1.5rem, 4vw, 3rem);
+        grid-template-columns: repeat(3, 1fr); /* Fixed 3 columns */
+        gap: 2rem;
         padding: 1rem;
+        max-width: 1280px;
+        margin: 0 auto;
     }
 
-    /* Management Card */
+    /* Management Card - Updated */
     .management-card {
         position: relative;
         background: white;
@@ -88,11 +90,27 @@
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
         aspect-ratio: 3/4;
+        cursor: pointer;
+        height: 100%;
     }
 
     .management-card:hover {
         transform: translateY(-5px);
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Card Name Label - New */
+    .management-card-name {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        color: white;
+        padding: 2rem 1rem 1rem;
+        font-size: 1.125rem;
+        font-weight: 500;
+        text-align: center;
     }
 
     .management-image {
@@ -106,6 +124,195 @@
         transform: scale(1.05);
     }
 
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        overflow-y: auto;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        padding: 1rem;
+    }
+
+    .modal.show {
+        display: flex;
+        opacity: 1;
+        backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+        background: white;
+        margin: auto;
+        border-radius: 1rem;
+        width: 95%;
+        max-width: 1000px;
+        position: relative;
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .modal.show .modal-content {
+        transform: translateY(0);
+    }
+
+    .modal-header {
+        position: relative;
+        padding: 2rem;
+        background: linear-gradient(to right, var(--primary-color), #0062db);
+        color: white;
+    }
+
+    .modal-title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        margin: 0;
+        line-height: 1.2;
+        color: white;
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 1.25rem;
+        right: 1.25rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(4px);
+        border-radius: 9999px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .modal-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(90deg);
+    }
+
+    .modal-close::before,
+    .modal-close::after {
+        content: '';
+        position: absolute;
+        width: 1.25rem;
+        height: 2px;
+        background-color: white;
+        transition: background-color 0.2s ease;
+    }
+
+    .modal-close::before {
+        transform: rotate(45deg);
+    }
+
+    .modal-close::after {
+        transform: rotate(-45deg);
+    }
+
+    .person-info {
+        display: grid;
+        grid-template-columns: minmax(250px, 1fr) 2fr;
+        gap: 2rem;
+        padding: 2rem;
+    }
+
+    .person-image-wrapper {
+        position: relative;
+        width: 100%;
+        border-radius: 0.75rem;
+        overflow: hidden;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        aspect-ratio: 3/4;
+    }
+
+    .person-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .person-image:hover {
+        transform: scale(1.05);
+    }
+
+    .person-details {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .person-header {
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .person-name {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .person-position {
+        font-size: 1.125rem;
+        color: var(--primary-color);
+        font-weight: 500;
+    }
+
+    .person-description {
+        color: var(--text-light);
+        line-height: 1.8;
+        font-size: 1rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .person-info {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            padding: 1.5rem;
+        }
+
+        .person-image-wrapper {
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            padding-right: 2rem;
+        }
+
+        .modal-close {
+            top: 1rem;
+            right: 1rem;
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+
+    /* Animation Keyframes */
+    @keyframes modalFadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
     /* Section Container */
     .section-container {
         max-width: 1280px;
@@ -114,14 +321,24 @@
     }
 
     /* Responsive Adjustments */
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         .management-grid {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(2, 1fr); /* 2 columns for tablets */
             gap: 1.5rem;
         }
+    }
 
-        section {
-            padding: clamp(3rem, 8vw, 5rem) 0;
+    @media (max-width: 640px) {
+        .management-grid {
+            grid-template-columns: 1fr; /* Single column for mobile */
+            gap: 1.5rem;
+            padding: 1rem var(--mobile-padding);
+        }
+
+        .management-card {
+            max-width: 400px;
+            margin: 0 auto;
+            width: 100%;
         }
     }
 
@@ -150,19 +367,47 @@
     </div>
 </section>
 
+<!-- Person Details Modal -->
+<div id="personModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">Profil Pimpinan</h3>
+            <button class="modal-close" aria-label="Close modal"></button>
+        </div>
+        
+        <div class="person-info">
+            <div class="person-image-wrapper">
+                <img src="" alt="" class="person-image" id="modalImage">
+            </div>
+            
+            <div class="person-details">
+                <div class="person-header">
+                    <h4 class="person-name" id="modalName"></h4>
+                    <p class="person-position" id="modalPosition"></p>
+                </div>
+                
+                <div class="person-description" id="modalDescription"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Rektorat Section -->
 <section class="py-16">
     <div class="section-container">
         <h2 class="section-title">{{ blocks.rektorat_section.title }}</h2>
         <div class="management-grid">
             {% for item in blocks.rektorat_section.items %}
-            <div class="management-card">
+            <div class="management-card" 
+                 onclick="showPersonDetails('{{ item.title }}', '{{ item.position }}', '{% optimized_image item.image %}', '{{ item.description|escapejs }}')"
+            >
                 <img 
                     src="{% optimized_image item.image %}" 
-                    alt="Rektorat Matana University" 
+                    alt="{{ item.title }} - {{ item.position }}" 
                     class="management-image"
                     loading="lazy"
                 >
+             
             </div>
             {% endfor %}
         </div>
@@ -175,16 +420,86 @@
         <h2 class="section-title">{{ blocks.dekan_section.title }}</h2>
         <div class="management-grid">
             {% for item in blocks.dekan_section.items %}
-            <div class="management-card">
+            <div class="management-card"
+                 onclick="showPersonDetails('{{ item.name }}', '{{ item.position }}', '{% optimized_image item.image %}', '{{ item.description|escapejs }}')"
+            >
                 <img 
                     src="{% optimized_image item.image %}" 
-                    alt="Dekan Matana University" 
+                    alt="{{ item.name }} - {{ item.position }}" 
                     class="management-image"
                     loading="lazy"
                 >
+                <!-- <div class="management-card-name">
+                    {{item.name}}
+                </div> -->
             </div>
             {% endfor %}
         </div>
     </div>
 </section>
-{% endblock %} 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const modal = document.getElementById('personModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalName = document.getElementById('modalName');
+    const modalPosition = document.getElementById('modalPosition');
+    const modalDescription = document.getElementById('modalDescription');
+
+    function showPersonDetails(name, position, imageUrl, description) {
+        // Pre-load image
+        const img = new Image();
+        img.src = imageUrl;
+        
+        img.onload = () => {
+            modalImage.src = imageUrl;
+            modalImage.alt = `${name} - ${position}`;
+            modalName.textContent = name;
+            modalPosition.textContent = position;
+            modalDescription.innerHTML = description;
+            
+            // Show modal with animation
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+            
+            // Set focus to modal for accessibility
+            modal.focus();
+        };
+    }
+
+    function closeModal() {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        
+        // Clear contents after animation
+        setTimeout(() => {
+            modalImage.src = '';
+            modalName.textContent = '';
+            modalPosition.textContent = '';
+            modalDescription.innerHTML = '';
+        }, 300);
+    }
+
+    // Close modal handlers
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal || e.target.closest('.modal-close')) {
+            closeModal();
+        }
+    });
+
+    // Keyboard handlers
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('show')) {
+            closeModal();
+        }
+    });
+
+    // Prevent scroll propagation
+    modal.addEventListener('wheel', (e) => {
+        if (e.target.closest('.modal-content')) {
+            e.stopPropagation();
+        }
+    });
+</script>
+{% endblock %}
