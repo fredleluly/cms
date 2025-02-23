@@ -140,7 +140,7 @@ THUMBNAIL_ROOT = MEDIA_ROOT / 'thumbnails'
 
 # Security Settings
 
-AXES_FAILURE_LIMIT = 1
+AXES_FAILURE_LIMIT = 3
 AXES_COOLOFF_TIME = 300
 AXES_LOCKOUT_TEMPLATE = 'pages/lockout.html'
 AXES_LOCK_OUT_AT_FAILURE = True  # Lock out after failure limit is reached

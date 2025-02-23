@@ -79,6 +79,11 @@ class Command(BaseCommand):
                 'description': 'Program Studi Media'
             },
             {
+                'nama': 'Admin',
+                'slug': 'admin',
+                'description': 'Program Studi Admin'
+            },
+            {
                 'nama': 'Manajemen',
                 'slug': 'manajemen',
                 'description': 'Program Studi Manajemen'
@@ -100,6 +105,7 @@ class Command(BaseCommand):
         # Get the media prodi for default access
         media_prodi = created_prodis['media']
         article_prodi = created_prodis['article']
+        admin_prodi = created_prodis['admin']
         
         # Now create users and assign them to their prodi plus media access
         for prodi_data in default_prodi:
@@ -107,7 +113,10 @@ class Command(BaseCommand):
                 continue
             if prodi_data['slug'] == 'article':  # Skip creating separate admin for article/media
                 continue
-                
+            if prodi_data['slug'] == 'admin':  # Skip creating separate admin for article/media
+                continue
+                    
+
             prodi = created_prodis[prodi_data['slug']]
             username = f"admin_{prodi_data['slug']}"
             email = f"{username}@matanauniversity.ac.id"

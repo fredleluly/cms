@@ -1970,7 +1970,7 @@ def create_default_profile_page_arsitektur():
 def create_default_popup():
     """Create default profile page with standardized content blocks for Arsitektur"""
     try:
-        prodi = ProgramStudi.objects.get(slug='media')
+        prodi = ProgramStudi.objects.get(slug='admin')
     except ProgramStudi.DoesNotExist:
         return None
         
