@@ -789,7 +789,7 @@ def create_default_profile_page():
                     'image': '/static/images/fas3.jpg',
                 },
                 {
-                    'title': 'Lab Statistiak',
+                    'title': 'Lab Statistika',
                     'image': '/static/images/fas1.jpg',
                 },
             ],
