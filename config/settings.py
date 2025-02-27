@@ -15,7 +15,7 @@ from pathlib import Path
 from datetime import datetime
 from dotenv import load_dotenv
 
-# load_dotenv()
+load_dotenv()
 load_dotenv(os.path.join(os.path.dirname(__file__), '../.env'))
 
 
@@ -31,8 +31,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 SECRET_KEY_LOGIN = os.getenv('SECRET_KEY_LOGIN')
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG')
+DEBUG =   os.getenv('DEBUG') == "True"
+print("******************************** secret key login adalah : ", SECRET_KEY_LOGIN, "\n", "DEBUG = ", DEBUG)
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -44,9 +46,9 @@ ALLOWED_HOSTS = [
 
 ]
 
+print("===============\n\n\nDEBUG = ", DEBUG , "\n\n =========="  )
 if DEBUG:
     ALLOWED_HOSTS = ['*']
-    print("HELLLL NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO######################## DJANGO_ENV === production ===", os.getenv('DJANGO_ENV') == 'production' )
 
 
 # Application definition
@@ -192,6 +194,7 @@ CSP_SCRIPT_SRC = (
     "https://cdn.quilljs.com",
     "https://www.youtube.com",
     "https://www.instagram.com",
+    "https://cdn.tailwindcss.com"
 )
 
 CSP_STYLE_SRC = (
