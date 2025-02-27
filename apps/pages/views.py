@@ -2695,7 +2695,7 @@ def create_default_scholarship_page():
                 },
                 {
                     'text': 'Daftar Sekarang',
-                    'url': '/pendaftaran',
+                    'url': 'https://matanauniversity.siakadcloud.com/spmbfront/',
                     'style': 'secondary'
                 }
             ],
