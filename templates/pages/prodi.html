@@ -661,12 +661,12 @@
                     <div class="flex items-center gap-4 text-sm text-gray-600 mb-3">
                         <span class="flex items-center gap-1">
                             <i class="far fa-calendar text-matana-yellow"></i>
-                            {{ article.published_date|date:"d M Y" }}
+                            {{ article.published_at | date:"d M Y" }}
                         </span>
-                        <span class="flex items-center gap-1">
+                        <!-- <span class="flex items-center gap-1">
                             <i class="far fa-clock text-matana-yellow"></i>
                             {{ article.read_time }} min read
-                        </span>
+                        </span> -->
                     </div>
 
                     <!-- Title -->
@@ -680,7 +680,7 @@
                     </p>
 
                     <!-- Author -->
-                    <div class="flex items-center gap-3">
+                    <!-- <div class="flex items-center gap-3">
                         <img 
                             src="{% optimized_image article.author.avatar %}" 
                             alt="{{ article.author.name }}"
@@ -690,7 +690,7 @@
                             <p class="text-sm font-medium text-gray-900">{{ article.author.name }}</p>
                             <p class="text-sm text-gray-600">{{ article.author.position }}</p>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Read More Link -->

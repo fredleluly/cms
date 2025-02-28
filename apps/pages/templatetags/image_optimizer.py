@@ -68,6 +68,7 @@ def get_image_path(img_url):
     img_url = img_url.lstrip('/')
     if img_url.startswith('static/'):
         img_url = img_url[7:]  # Remove 'static/' prefix
+    # print(img_url)
     
     # Try multiple possible locations
     possible_paths = [
@@ -87,6 +88,7 @@ def get_image_path(img_url):
     # Try each possible path
     for path in possible_paths:
         if os.path.exists(path):
+            # print(path)
             return path
             
     # If image not found, log and return None
@@ -107,7 +109,14 @@ def convert_path_to_url(path):
             path_parts = path.split(static_indicator)
             if len(path_parts) > 1:
                 path = settings.STATIC_URL + path_parts[1]
-    return path.replace('\\', '/')
+    
+    # Fix double slashes issue
+    path = path.replace('\\', '/')
+    # Replace any double slashes with single slash (except for http:// or https://)
+    while '//' in path and not (path.startswith('http://') or path.startswith('https://')):
+        path = path.replace('//', '/')
+    
+    return path
 
 @register.simple_tag(takes_context=True)
 def optimized_image(context, img_url, size=None):
@@ -118,7 +127,6 @@ def optimized_image(context, img_url, size=None):
     """
     if not img_url:
         return ''
-    
     # jika sudah ada yang dioptimasi maka tidak perlu dioptimasi lagi
     if img_url.endswith('.webp'):
         return img_url
@@ -130,11 +138,13 @@ def optimized_image(context, img_url, size=None):
         
         # Handle both static and media URLs
         original_path = get_image_path(img_url)
-        
+        # print( "ORIGNINLA PATH = ",original_path)
         if not original_path:
             # If path not found, try to construct URL with static prefix
             if not img_url.startswith(settings.STATIC_URL):
+                print("OR  ", f"{settings.STATIC_URL}{img_url.lstrip('/')}")
                 return f"{settings.STATIC_URL}{img_url.lstrip('/')}"
+            print("THIS OR ",img_url)
             return img_url
         
         # Convert WindowsPath to string if needed

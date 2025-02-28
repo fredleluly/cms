@@ -46,9 +46,7 @@ ALLOWED_HOSTS = [
 
 ]
 
-print("===============\n\n\nDEBUG = ", DEBUG , "\n\n =========="  )
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
+
 
 
 # Application definition
@@ -116,28 +114,43 @@ AUTHENTICATION_BACKENDS = [
 IS_PRODUCTION = False
 # Deteksi environment secara otomatis
 # you have to set DJANGO_ENV=production in your environment variable, dengan cara export DJANGO_ENV=production di terminal
+
+# IS_PRODUCTION = DEBUG == False
 IS_PRODUCTION = os.getenv('DJANGO_ENV') == 'production' 
 
 STATIC_URL = '/static/'
 
 if IS_PRODUCTION:
     STATIC_ROOT = BASE_DIR / 'static'
+    # STATICFILES_DIRS = [
+    #     BASE_DIR / 'static',
+    #     BASE_DIR / 'theme/static'
+    # ]
+    # print(STATICFILES_DIRS)
+    print("THIS IS  PROD")
 else:
+    PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+    STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
     STATICFILES_DIRS = [
         BASE_DIR / 'static',
         BASE_DIR / 'theme/static'
     ]
-    # PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-    # STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+    print("THIS IS NOT PROD")
     # STATIC_ROOT = BASE_DIR / 'static'
+
+print("===============\n\n\nDEBUG = ", DEBUG , "\n\n =========="  )
+print("===============\n\n\nDJANGO ENV = ", IS_PRODUCTION , "\n\n =========="  )
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
 
 # Media files configuration
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / 'media'  # This will now be a Path object
+print("MEDIA_ROOT = ", MEDIA_ROOT)
 
 # Make sure these directories exist
-UPLOAD_ROOT = MEDIA_ROOT / 'uploads'
-THUMBNAIL_ROOT = MEDIA_ROOT / 'thumbnails'
+UPLOAD_ROOT = os.path.join(BASE_DIR, 'uploads')
+THUMBNAIL_ROOT = os.path.join(BASE_DIR, 'thumbnails')
 
 
 # Security Settings
@@ -164,6 +177,7 @@ if not IS_PRODUCTION:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = False
     SECURE_HSTS_PRELOAD = False
     SECURE_PROXY_SSL_HEADER = None
+    print("==DISABLED SSL, and HTTPS==" , " SECURE_SSL_REDIRECT = ", SECURE_SSL_REDIRECT)
     
     # Remove SecurityMiddleware in development
     MIDDLEWARE = [m for m in MIDDLEWARE if m != 'django.middleware.security.SecurityMiddleware']
@@ -171,6 +185,8 @@ if not IS_PRODUCTION:
     MIDDLEWARE = [m for m in MIDDLEWARE if m != 'csp.middleware.CSPMiddleware']
 else:
     # Use HTTPS in production
+
+    print("==ENAABLED SSL, and HTTPS==" , " SECURE_SSL_REDIRECT = ", SECURE_SSL_REDIRECT)
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True

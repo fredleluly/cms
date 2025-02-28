@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from apps.pages.views import (
@@ -32,6 +32,7 @@ from django.contrib.sitemaps.views import sitemap
 from apps.pages.sitemaps import ArticleSitemap, StaticViewSitemap
 from django.views.generic import TemplateView
 from .sitemap import StaticViewSitemap
+from django.views.static import serve
 
 # Define sitemaps dictionary before using it
 sitemaps = {
@@ -46,6 +47,8 @@ def test_404(request):
     return render(request, '404.html', status=200)
 
 urlpatterns = [
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
     path(settings.SECRET_KEY_LOGIN+"_"+'admin/', admin.site.urls),
     path('', home_view, name='home'),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
@@ -87,11 +90,17 @@ urlpatterns = [
     path('student-exchange/', exchange_view, name='exchange'),
     path('dashboard/profile/', user_profile_view, name='user_profile'),
     path('logout/', logout_view, name='logout'),
+]
+# ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     # path("__reload__/", include("django_browser_reload.urls")),
     # path('<slug:slug>/', page_view, name='page_view'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-# Add this after urlpatterns
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+#  Add this after urlpatterns
 if settings.DEBUG:
     urlpatterns += [
         path('404/', lambda request: views.custom_404(request, None)),

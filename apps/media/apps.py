@@ -1,6 +1,7 @@
 from django.apps import AppConfig
 import os
 from django.conf import settings
+from pathlib import Path
 
 
 class MediaConfig(AppConfig):
@@ -10,6 +11,5 @@ class MediaConfig(AppConfig):
 
     def ready(self):
         # Create necessary directories
-        os.makedirs(settings.MEDIA_ROOT, exist_ok=True)
         os.makedirs(settings.MEDIA_ROOT / 'uploads', exist_ok=True)
         os.makedirs(settings.MEDIA_ROOT / 'thumbnails', exist_ok=True)
