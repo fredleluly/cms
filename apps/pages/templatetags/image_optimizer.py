@@ -19,13 +19,13 @@ THUMBNAIL_SIZES = {
     'large': 1200
 }
 
-def optimize_image(image_path, max_width=MAX_WIDTH, quality=WEBP_QUALITY):
-    """Optimize image by resizing and compressing while maintaining aspect ratio"""
+def optimize_image(image_path, max_width=MAX_WIDTH, quality=WEBP_QUALITY, preserve_transparency=True):
+    """Optimize image by resizing and compressing while maintaining aspect ratio and transparency by default"""
     try:
         img = Image.open(image_path)
         
-        # Convert RGBA to RGB if necessary
-        if img.mode in ('RGBA', 'LA'):
+        # By default we preserve transparency, only convert to RGB if specifically requested
+        if not preserve_transparency and img.mode in ('RGBA', 'LA'):
             background = Image.new('RGB', img.size, (255, 255, 255))
             background.paste(img, mask=img.split()[-1])
             img = background
