@@ -398,7 +398,7 @@
         <div class="management-grid">
             {% for item in blocks.rektorat_section.items %}
             <div class="management-card" 
-                 onclick="showPersonDetails('{{ item.title }}', '{{ item.position }}', '{% optimized_image item.image %}', '{{ item.description|escapejs }}')"
+                 onclick="showPersonDetails('{{ item.name }}', '{{ item.position }}', '{% optimized_image item.image %}', '{{ item.description|escapejs }}')"
             >
                 <img 
                     src="{% optimized_image item.image %}" 
