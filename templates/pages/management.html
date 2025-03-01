@@ -398,7 +398,7 @@
         <div class="management-grid">
             {% for item in blocks.rektorat_section.items %}
             <div class="management-card" 
-                 onclick="showPersonDetails('{{ item.name }}', '{{ item.position }}', '{% optimized_image item.image %}', '{{ item.description|escapejs }}')"
+                 onclick="showPersonDetails('{{ item.title }}', '{{ item.position }}', '{% optimized_image item.image %}', '{{ item.description|escapejs }}')"
             >
                 <img 
                     src="{% optimized_image item.image %}" 
@@ -420,16 +420,16 @@
         <div class="management-grid">
             {% for item in blocks.dekan_section.items %}
             <div class="management-card"
-                 onclick="showPersonDetails('{{ item.name }}', '{{ item.position }}', '{% optimized_image item.image %}', '{{ item.description|escapejs }}')"
+                 onclick="showPersonDetails('{{ item.title }}', '{{ item.position }}', '{% optimized_image item.image %}', '{{ item.description|escapejs }}')"
             >
                 <img 
                     src="{% optimized_image item.image %}" 
-                    alt="{{ item.name }} - {{ item.position }}" 
+                    alt="{{ item.title }} - {{ item.position }}" 
                     class="management-image"
                     loading="lazy"
                 >
                 <!-- <div class="management-card-name">
-                    {{item.name}}
+                    {{item.title}}
                 </div> -->
             </div>
             {% endfor %}
