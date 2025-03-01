@@ -79,6 +79,7 @@ urlpatterns = [
     path('ukm/', ukm_view, name='ukm'),
   
     path('prodi/manajemen/', profile_view_manajemen, name='manajemen'),
+    path('prodi/manajemens2/', profile_view_manajemens2, name='manajemens2'),
     path('prodi/akuntansi/', profile_view_akuntansi, name='akuntansi'),
     path('prodi/hospar/', profile_view_hospitality, name='hospar'),
     path('prodi/dkv/', profile_view_dkv, name='dkv'),
