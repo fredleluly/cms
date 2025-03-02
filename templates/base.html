@@ -1474,5 +1474,43 @@
             </div>
         </div>
     </div>
+
+    <!-- Add this script at the bottom of your base.html file -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const programStudiButton = document.querySelector('.nav-item.relative.group > button');
+        const megaMenu = document.querySelector('.mega-menu');
+
+        let hoverTimeout;
+
+        programStudiButton.addEventListener('mouseenter', function () {
+          hoverTimeout = setTimeout(() => {
+            megaMenu.style.visibility = 'visible';
+            megaMenu.style.opacity = '1';
+            megaMenu.style.transform = 'translateY(0)';
+          }, 300); // Delay in milliseconds (300ms)
+        });
+
+        programStudiButton.addEventListener('mouseleave', function () {
+          clearTimeout(hoverTimeout);
+          megaMenu.style.visibility = 'hidden';
+          megaMenu.style.opacity = '0';
+          megaMenu.style.transform = 'translateY(10px)';
+        });
+
+        megaMenu.addEventListener('mouseenter', function () {
+          clearTimeout(hoverTimeout);
+          megaMenu.style.visibility = 'visible';
+          megaMenu.style.opacity = '1';
+          megaMenu.style.transform = 'translateY(0)';
+        });
+
+        megaMenu.addEventListener('mouseleave', function () {
+          megaMenu.style.visibility = 'hidden';
+          megaMenu.style.opacity = '0';
+          megaMenu.style.transform = 'translateY(10px)';
+        });
+      });
+    </script>
   </body>
 </html>

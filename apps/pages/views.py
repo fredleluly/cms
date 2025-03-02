@@ -1773,41 +1773,41 @@ def create_default_profile_page_teknik_informatika():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
-def profile_view_teknik_informatika(request):
-    """View for Teknik Informatika profile page"""
-    try:
-        profile_page = Page.objects.get(
-            slug='prodi-teknik-informatika',
-            status=Page.PUBLISHED
-        )
-    except Page.DoesNotExist:
-        profile_page = create_default_profile_page_teknik_informatika()
+# # @cache_page(60 * 60)  # Cache for 15 minutes
+# def profile_view_teknik_informatika(request):
+#     """View for Teknik Informatika profile page"""
+#     try:
+#         profile_page = Page.objects.get(
+#             slug='prodi-teknik-informatika',
+#             status=Page.PUBLISHED
+#         )
+#     except Page.DoesNotExist:
+#         profile_page = create_default_profile_page_teknik_informatika()
     
-    # Get content blocks
-    blocks = {}
-    for block in profile_page.content_blocks.all().order_by('order'):
-        blocks[block.identifier] = block.content
+#     # Get content blocks
+#     blocks = {}
+#     for block in profile_page.content_blocks.all().order_by('order'):
+#         blocks[block.identifier] = block.content
 
-    # Get related articles
-    related_articles = get_related_articles('informatika')
+#     # Get related articles
+#     related_articles = get_related_articles('informatika')
     
-    context = {
-        'page': profile_page,
-        'meta': profile_page.metadata,
-        'blocks': blocks,
-        'blocks_popup': {
-            i.identifier: i.content 
-            for i in Page.objects.get(
-                slug='popup', 
-                status=Page.PUBLISHED
-            ).content_blocks.all().order_by('order')
-        },
-        'related_articles': related_articles,
-        'prodi_category': 'informatika'
-    }
+#     context = {
+#         'page': profile_page,
+#         'meta': profile_page.metadata,
+#         'blocks': blocks,
+#         'blocks_popup': {
+#             i.identifier: i.content 
+#             for i in Page.objects.get(
+#                 slug='popup', 
+#                 status=Page.PUBLISHED
+#             ).content_blocks.all().order_by('order')
+#         },
+#         'related_articles': related_articles,
+#         'prodi_category': 'informatika'
+#     }
     
-    return render(request, 'pages/prodi.html', context)
+#     return render(request, 'pages/prodi.html', context)
 
 # Teknik Informatika
 def create_default_profile_page_statistika():
@@ -1912,6 +1912,42 @@ def create_default_profile_page_statistika():
     
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
+
+# @cache_page(60 * 60)
+def profile_view_informatika(request):
+    """View for Teknik Informatika profile page"""
+    try:
+        profile_page = Page.objects.get(
+            slug='prodi-teknik-informatika',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        profile_page = create_default_profile_page_teknik_informatika()
+    
+    blocks = {}
+    for block in profile_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+
+    # Get related articles
+    related_articles = get_related_articles('informatika')
+    
+    context = {
+        'page': profile_page,
+        'meta': profile_page.metadata,
+        'blocks': blocks,
+        'blocks_popup': {
+            i.identifier: i.content 
+            for i in Page.objects.get(
+                slug='popup', 
+                status=Page.PUBLISHED
+            ).content_blocks.all().order_by('order')
+        },
+        'related_articles': related_articles,
+        'prodi_category': 'informatika'
+    }
+    
+    return render(request, 'pages/prodi.html', context)
+
 
 # @cache_page(60 * 60)  # Cache for 15 minutes
 def profile_view_statistika(request):
@@ -3630,40 +3666,6 @@ def logout_view(request):
     logout(request)
     return redirect('home')
 
-# @cache_page(60 * 60)
-def profile_view_informatika(request):
-    """View for Teknik Informatika profile page"""
-    try:
-        profile_page = Page.objects.get(
-            slug='prodi-informatika',
-            status=Page.PUBLISHED
-        )
-    except Page.DoesNotExist:
-        profile_page = create_default_profile_page_teknik_informatika()
-    
-    blocks = {}
-    for block in profile_page.content_blocks.all().order_by('order'):
-        blocks[block.identifier] = block.content
-
-    # Get related articles
-    related_articles = get_related_articles('informatika')
-    
-    context = {
-        'page': profile_page,
-        'meta': profile_page.metadata,
-        'blocks': blocks,
-        'blocks_popup': {
-            i.identifier: i.content 
-            for i in Page.objects.get(
-                slug='popup', 
-                status=Page.PUBLISHED
-            ).content_blocks.all().order_by('order')
-        },
-        'related_articles': related_articles,
-        'prodi_category': 'informatika'
-    }
-    
-    return render(request, 'pages/prodi.html', context)
 
 def get_related_articles(prodi_slug, limit=3):
     """
