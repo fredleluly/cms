@@ -328,19 +328,23 @@ def create_default_mitra_page():
                  'items': [
                 {
                     'title': 'Rumah Sakit PUSB',
-                    'image': '/static/images/mitra1.png',
+                    'image': '/static/images/mitra/h1.png',
                 },
                 {
                     'title': 'BETHSAIDA',
-                    'image': '/static/images/mitra2.png',
+                    'image': '/static/images/mitra/h2.png',
                 },
                 {
                     'title': 'SERAPIMA',
-                    'image': '/static/images/mitra3.png',
+                    'image': '/static/images/mitra/h3.png',
                 },
                 {
                     'title': 'RSUD',
-                    'image': '/static/images/mitra1.png',
+                    'image': '/static/images/mitra/h4.png',
+                },
+                {
+                    'title': 'The Rits-Carliton',
+                    'image': '/static/images/mitra/h5.png',
                 },
             ],
             'order': 1
@@ -349,34 +353,59 @@ def create_default_mitra_page():
             'identifier': 'hotel_section',
             'title': 'Hotel',
             'items': [
-                {
-                    'title': 'The Rits-Carliton',
-                    'image': '/static/images/mitra1.png',
-                },
+            
                 {
                     'title': 'Hotel Santika',
-                    'image': '/static/images/mitra1.png',
+                    'image': '/static/images/mitra/h6.png',
                 },
                 {
                     'title': 'The Rits-Carliton',
-                    'image': '/static/images/mitra1.png',
+                    'image': '/static/images/mitra/h7.png',
                 },
                 {
                     'title': 'Hotel Santika',
-                    'image': '/static/images/mitra1.png',
+                    'image': '/static/images/mitra/h8.png',
                 },
                 {
                     'title': 'The Rits-Carliton',
-                    'image': '/static/images/mitra1.png',
+                    'image': '/static/images/mitra/h9.png',
                 },
                 {
                     'title': 'Hotel Santika',
-                    'image': '/static/images/mitra1.png',
+                    'image': '/static/images/mitra/h10.png',
                 },
                 {
                     'title': 'Shangri-LA',
-                    'image': '/static/images/mitra2.png',
-                }
+                    'image': '/static/images/mitra/h11.png',
+                },
+                {
+                    'title': 'Shangri-LA',
+                    'image': '/static/images/mitra/h12.png',
+                },
+                {
+                    'title': 'Shangri-LA',
+                    'image': '/static/images/mitra/h13.png',
+                },
+                {
+                    'title': 'Shangri-LA',
+                    'image': '/static/images/mitra/h14.png',
+                },
+                {
+                    'title': 'Shangri-LA',
+                    'image': '/static/images/mitra/h15.png',
+                },
+                {
+                    'title': 'Shangri-LA',
+                    'image': '/static/images/mitra/h16.png',
+                },
+                {
+                    'title': 'Shangri-LA',
+                    'image': '/static/images/mitra/h17.png',
+                },
+                {
+                    'title': 'Shangri-LA',
+                    'image': '/static/images/mitra/h18.png',
+                },
             ],
             'order': 2
         },{
@@ -385,8 +414,73 @@ def create_default_mitra_page():
             'items': [
                 {
                     'title': 'PT. Paramount Group',
-                    'image': '/static/images/mitra1.png',
-                }
+                    'image': '/static/images/mitra/h19.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h20.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h21.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h22.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h23.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h24.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h25.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h26.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h27.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h28.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h29.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h30.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h31.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h32.png',
+                },
+            
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h34.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h35.png',
+                },
+                {
+                    'title': 'PT. Paramount Group',
+                    'image': '/static/images/mitra/h36.png',
+                },
             ],
             'order': 3
         },{
@@ -395,15 +489,51 @@ def create_default_mitra_page():
             'items': [
                 {
                     'title': 'Universitas Indonesia',
-                    'image': '/static/images/mitra1.png',
+                    'image': '/static/images/mitra/h37.png',
                 },
                 {
                     'title': 'Universitas Majada',
-                    'image': '/static/images/mitra2.png',
+                    'image': '/static/images/mitra/h38.png',
+                },
+                {
+                    'title': 'Universitas Majada',
+                    'image': '/static/images/mitra/h39.png',
+                },
+                {
+                    'title': 'Universitas Majada',
+                    'image': '/static/images/mitra/h40.png',
+                },
+                {
+                    'title': 'Universitas Majada',
+                    'image': '/static/images/mitra/h41.png',
+                },
+                {
+                    'title': 'Universitas Majada',
+                    'image': '/static/images/mitra/h42.png',
+                },
+                {
+                    'title': 'Universitas Majada',
+                    'image': '/static/images/mitra/h43.png',
+                },
+                {
+                    'title': 'Universitas Majada',
+                    'image': '/static/images/mitra/h44.png',
+                },
+                {
+                    'title': 'Universitas Majada',
+                    'image': '/static/images/mitra/h45.png',
+                },
+                {
+                    'title': 'Universitas Majada',
+                    'image': '/static/images/mitra/h46.png',
+                },
+                {
+                    'title': 'Universitas Majada',
+                    'image': '/static/images/mitra/h47.png',
                 },
                 {
                     'title': 'Universitas JIU',
-                    'image': '/static/images/mitra3.png',
+                    'image': '/static/images/mitra/h48.png',
                 }
             ],
             'order': 4
@@ -413,16 +543,24 @@ def create_default_mitra_page():
             'items': [
                 {
                     'title': 'BANK BNI',
-                    'image': '/static/images/mitra1.png',
+                    'image': '/static/images/mitra/h49.png',
                 },
                 {
                     'title': 'BANK SOFT',
-                    'image': '/static/images/mitra3.png',
+                    'image': '/static/images/mitra/h50.png',
                 },
                 {
                     'title': 'BANK IDX',
-                    'image': '/static/images/mitra2.png',
-                }
+                    'image': '/static/images/mitra/h51.png',
+                },
+                {
+                    'title': 'BANK SOFT',
+                    'image': '/static/images/mitra/h52.png',
+                },
+                {
+                    'title': 'BANK IDX',
+                    'image': '/static/images/mitra/h53.png',
+                },
             ],
             'order': 5
         }
@@ -3303,30 +3441,40 @@ def create_default_management_page():
             'title': 'Rektorat & Ketua Lembaga',
             'items': [
                 {
-                    'image': '/static/images/dekan1.jpg',
-                    'title': 'Dr. Melitina Tecolau, S.E, M.M, CFP, CHCP-A',
-                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
-                },
-                {
-                    'image': '/static/images/dekan2.jpg',
-                    'title': 'Dr. rer. nat. Gregoria Illya, M.Sc',
-                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
-                },
-                {
-                    'image': '/static/images/dekan3.jpg',
-                    'title': 'Dr. Lulu Setiawati, S.E., M.Bus., D.Th., CFP, CSA',
-                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
-                },
-                {
-                    'image': '/static/images/WN.jpg',
-                    'title': 'Wijil Nugroho,S.E.,MBA.',
-                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
-                },
-                {
-                    'image': '/static/images/Baltasar-1.jpg',
-                    'title': 'Baltasar Serilus Sanggu Dedu., S.Kep., M.Sc',
-                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
-                },
+      "image": "/static/images/manajemen/r1.jpg",
+      "title": "Dr. Melitina Tecolau, S.E, M.M, CFP, CHCP-A",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/r2.jpg",
+      "title": "Dr. rer. nat. Gregoria Illya, M.Sc",
+      "description": "Dr. rer.nat. Gregoria Illya, peneliti dalam bidang fisika material, fisika komputasi, dan biofisika memperoleh gelar sarjana Fisika dari Universitas Katolik Parahyangan, dan kemudian mendapatkan gelar Master of Engineering Mathematics dari Universitas Twente, Belanda dengan beasiswa dari VNO NCW. Gelar Doktor diperoleh dari Universitas Potsdam Germany dengan disertasi berjudul Bilayer Material Properties From Dissipative Particle Dynamics Simulations yang dilaksanakan pada\ndan dibiayai penuh oleh Max Planck Institute for Colloids and Interfaces, Jerman.\n\nSetelah menyelesaikan studi doktor, beliau mengambil program Postdoctoral di Max Planck Institute for Polymer Research, Jerman dan menghasilkan publikasi di jurnal internasional bereputasi (Q1) Nature dengan judul: Aggregation and vesiculation of membrane proteins by curvature-mediated interactions. Pada tahun 2006 beliau mendapatkan beasiswa untuk mengikuti program Boulder School for Condensed Matter and Materials Physics di University of Colorado Boulder USA. Program\nPostdoctoral selanjutnya yang ditempuh oleh beliau adalah di Theoretical Physical Chemistry Department, Technische Universitaet Darmstadt, Jerman dan kemudian di Theoretical Physics Department, Justus-Liebig Universitaet Giessen, Jerman. Beliau pernah menjadi pembicara tamu di\nInternational Conference on Materials for Advanced Technologies Singapore pada tahun 2015, 2017 dan 2019 dan pada tahun 2017 beliau terpilih sebagai dosen berprestasi peringkat 1 dari Kopertis IV."
+    },
+    {
+      "image": "/static/images/manajemen/r3.jpg",
+      "title": "Dr. Bernardus Wishman S. Siregar, S.E., M.E.",
+      "description": "Dr. Bernardus Wishman S. Siregar, S.E., M.E. adalah seorang profesional yang memiliki pengalaman dalam bidang keuangan dan manajemen. Beliau telah menyelesaikan studi doktor di Universitas Katolik Parahyangan dengan disertasi berjudul “Analisis Pengaruh Kebijakan Moneter dan Fiskal Terhadap Kinerja Perbankan Syariah di Indonesia”. Beliau juga memiliki pengalaman sebagai dosen di Universitas Katolik Parahyangan dan Universitas Matana, serta sebagai pengajar di Universitas Matana. Beliau juga aktif dalam kegiatan akademik dan penelitian, serta memiliki publikasi di jurnal internasional bereputasi."
+    },
+    {
+      "image": "/static/images/manajemen/r4.jpg",
+      "title": "Dr. Lulu Setiawati, S.E., M.Bus., D.Th., CFP, CSA",
+      "description": "Dr. Lulu Setiawati, S.E., M.Bus, CFP, CSA telah berkarir di dunia pendidikan di Indonesia sejak 2002. Sebelum berkarir di dunia pendidikan, beliau telah berkarir secara professional di Australia dan Taiwan di berbagai industri. Gelar S.E. diperoleh dari Universitas Kristen Petra dalam bidang Manajemen, selanjutnya beliau mendapatkan gelar M.Bus in Finance dari RMIT, Melbourne.\n\nTahun 2017 beliau mendapatkan gelar Doktor dari Universitas Katolik Widya Mandala dalam bidang Manajemen Stratejik. Tahun 2009 beliau bergabung di UPH Surabaya sebagai dosen Keuangan dan ditunjuk sebagai Ketua Program Studi Akuntansi sejak tahun 2009 hingga tahun 2013.\n\nTahun 2014 selain sebagai dosen, beliau ditunjuk sebagai Manajer Keuangan dan tahun 2015 hingga tahun 2017 beliau juga menjabat sebagai Wakil Rektor bidang keuangan dan administrasi UPH Surabaya. Program pendidikan profesi juga telah beliau tempuh, Beliau telah mendapatkan gelar CFP sebagai perencana keuangan pada tahun 2016 dan pada tahun 2017 beliau mendapatkan gelar CSA sebagai Analis Efek."
+    },
+    {
+      "image": "/static/images/manajemen/r5.jpg",
+      "title": "Wijil Nugroho,S.E.,MBA.",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/r6.jpg",
+      "title": "Baltasar Serilus Sanggu Dedu., S.Kep., M.Sc",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/r7.jpg",
+      "title": "Dr. Kalfin, S.Mat., M.Mat",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    }
               
             ],
             'order': 2
@@ -3334,19 +3482,73 @@ def create_default_management_page():
         {
             'identifier': 'dekan_section',
             'title': 'Dekan & Ketua Program Studi',
-            'items': [
-                {
-                    'image': '/static/images/dekan1.jpg',
-                    'title': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI',
-                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
-                },
-                {
-                    'image': '/static/images/dekan2.jpg',
-                    'title': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI',
-                    'description': 'Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana.',
-                },
-              
-            ],
+     "items": [
+    {
+      "image": "/static/images/manajemen/d1.jpg",
+      "title": "Dr. M. Rachman Mulyandi, s.E, MBA.",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/d2.jpg",
+      "title": "Dr. Ir. Danang Harito Wibowo, M.T., IAI",
+      "description": "Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana."
+    },
+    {
+      "image": "/static/images/manajemen/d3.jpg",
+      "title": "PRYA ARTHA WIDJAYA, S.T., M.I.T.",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/d4.jpg",
+      "title": "Ririsma Sihombing, S.E., M.E.",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/d5.jpg",
+      "title": "Yuka Dian Narendra, S.Sn, M.Hum.",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/d6.jpg",
+      "title": "Dr. Ir. Danang Harito Wibowo, M.T., IAI",
+      "description": "Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana."
+    },
+    {
+      "image": "/static/images/manajemen/d7.jpg",
+      "title": "Triandi Pradana S.Tr.Par., M.Par",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/d8.jpg",
+      "title": "Ary Budi Warsito, S.Kom., M.Kom.",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/d9.jpg",
+      "title": "JOSUA TIMOTIUS MANIK, S.Pd., M.Si.",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/d10.jpg",
+      "title": "Jacob Steve Seleky., S.Si, M.Si, M.A",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/d11.jpg",
+      "title": "Florencia Irena Lawita, S.E., M.Ak.,  M.M., Cert. DA.",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/d12.jpg",
+      "title": "Fifit Eka Furi Astutik., S.KM., M.Kes",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+    {
+      "image": "/static/images/manajemen/d13.jpg",
+      "title": "Dr. Anton PW. Nomleni, S.E, M.M.",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+    },
+  ],
             'order': 3
         }
     ]
