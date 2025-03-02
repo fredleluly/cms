@@ -965,7 +965,21 @@ def create_default_profile_page_manajemen():
             'identifier': 'hero_section',
             'title': 'S1 MANAJEMEN',
             'background_image': '/static/images/informatika.jpg',
-            'order': 1
+            'order': 1,
+            'items': [
+                {
+                    'title': 'Akreditasi',
+                    'description': 'B'
+                },
+                {
+                    'title': 'Lama Studi',
+                    'description': '4 Tahun'
+                },
+                {
+                    'title': 'Bahasa',
+                    'description': 'ID/EN'
+                },
+            ]
         },
         {
             'identifier': 'visi_misi_section',
@@ -1182,7 +1196,21 @@ def create_default_profile_page_manajemens2():
             'identifier': 'hero_section',
             'title': 'Magister Manajemen',
             'background_image': '/static/images/informatika.jpg',
-            'order': 1
+            'order': 1 ,
+            'items': [
+                {
+                    'title': 'Akreditasi',
+                    'description': 'B'
+                },
+                {
+                    'title': 'Lama Studi',
+                    'description': '4 Tahun'
+                },
+                {
+                    'title': 'Bahasa',
+                    'description': 'ID/EN'
+                },
+            ]
         },
         {
             'identifier': 'visi_misi_section',
@@ -1404,7 +1432,21 @@ def create_default_profile_page_akuntansi():
             'identifier': 'hero_section',
             'title': 'S1 AKUNTANSI',
             'background_image': '/static/images/hospar.jpg',
-            'order': 1
+            'order': 1,
+            'items': [
+                {
+                    'title': 'Akreditasi',
+                    'description': 'B'
+                },
+                {
+                    'title': 'Lama Studi',
+                    'description': '4 Tahun'
+                },
+                {
+                    'title': 'Bahasa',
+                    'description': 'ID/EN'
+                },
+            ]
         },
         {
             'identifier': 'description_section',
@@ -1554,7 +1596,21 @@ def create_default_profile_page_hospitality():
             'identifier': 'hero_section',
             'title': 'S1 HOSPITALITI & PARIWISATA',
             'background_image': '/static/images/campus-aerial.jpg',
-            'order': 1
+            'order': 1,
+            'items': [
+                {
+                    'title': 'Akreditasi',
+                    'description': 'B'
+                },
+                {
+                    'title': 'Lama Studi',
+                    'description': '4 Tahun'
+                },
+                {
+                    'title': 'Bahasa',
+                    'description': 'ID/EN'
+                },
+            ]
         },
         {
             'identifier': 'description_section',
@@ -1699,7 +1755,21 @@ def create_default_profile_page_fisika_medis():
             'identifier': 'hero_section',
             'title': 'S1 FISIKA MEDIS',
             'background_image': '/static/images/campus-aerial.jpg',
-            'order': 1
+            'order': 1,
+            'items': [
+                {
+                    'title': 'Akreditasi',
+                    'description': 'B'
+                },
+                {
+                    'title': 'Lama Studi',
+                    'description': '4 Tahun'
+                },
+                {
+                    'title': 'Bahasa',
+                    'description': 'ID/EN'
+                },
+            ]
         },
         {
             'identifier': 'description_section',
@@ -1832,7 +1902,21 @@ def create_default_profile_page_teknik_informatika():
             'identifier': 'hero_section',
             'title': 'S1 TEKNIK INFORMATIKA',
             'background_image': '/static/images/campus-aerial.jpg',
-            'order': 1
+            'order': 1,
+            'items': [
+                {
+                    'title': 'Akreditasi',
+                    'description': 'B'
+                },
+                {
+                    'title': 'Lama Studi',
+                    'description': '4 Tahun'
+                },
+                {
+                    'title': 'Bahasa',
+                    'description': 'ID/EN'
+                },
+            ]
         },
         {
             'identifier': 'description_section',
@@ -1972,7 +2056,21 @@ def create_default_profile_page_statistika():
             'identifier': 'hero_section',
             'title': 'S1 STATISTIKA (DATA SCIENCE)',
             'background_image': '/static/images/campus-aerial.jpg',
-            'order': 1
+            'order': 1,
+            'items': [
+                {
+                    'title': 'Akreditasi',
+                    'description': 'B'
+                },
+                {
+                    'title': 'Lama Studi',
+                    'description': '4 Tahun'
+                },
+                {
+                    'title': 'Bahasa',
+                    'description': 'ID/EN'
+                },
+            ]
         },
         {
             'identifier': 'description_section',
@@ -2149,7 +2247,21 @@ def create_default_profile_page_dkv():
             'identifier': 'hero_section',
             'title': 'S1 DESAIN KOMUNIKASI VISUAL',
             'background_image': '/static/images/campus-aerial.jpg',
-            'order': 1
+            'order': 1,
+            'items': [
+                {
+                    'title': 'Akreditasi',
+                    'description': 'B'
+                },
+                {
+                    'title': 'Lama Studi',
+                    'description': '4 Tahun'
+                },
+                {
+                    'title': 'Bahasa',
+                    'description': 'ID/EN'
+                },
+            ]
         },
         {
             'identifier': 'description_section',
@@ -2293,7 +2405,21 @@ def create_default_profile_page_arsitektur():
             'identifier': 'hero_section',
             'title': 'S1 ARSITEKTUR',
             'background_image': '/static/images/campus-aerial.jpg',
-            'order': 1
+            'order': 1,
+            'items': [
+                {
+                    'title': 'Akreditasi',
+                    'description': 'B'
+                },
+                {
+                    'title': 'Lama Studi',
+                    'description': '4 Tahun'
+                },
+                {
+                    'title': 'Bahasa',
+                    'description': 'ID/EN'
+                },
+            ]
         },
         {
             'identifier': 'description_section',
@@ -2480,7 +2606,21 @@ def create_default_profile_page_k3():
             'identifier': 'hero_section',
             'title': 'S1 Keselamatan & Kesehatan Kerja(K3)',
             'background_image': '/static/images/campus-aerial.jpg',
-            'order': 1
+            'order': 1,
+            'items': [
+                {
+                    'title': 'Akreditasi',
+                    'description': 'B'
+                },
+                {
+                    'title': 'Lama Studi',
+                    'description': '4 Tahun'
+                },
+                {
+                    'title': 'Bahasa',
+                    'description': 'ID/EN'
+                },
+            ]
         },
         {
             'identifier': 'description_section',
