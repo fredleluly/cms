@@ -42,7 +42,11 @@ def custom_404(request, exception):
 
     return render(request, '404.html', status=404)
 
+# views.py
+from django.views.generic import TemplateView
 
+class PedomanAkademikView(TemplateView):
+    template_name = 'pages/pedoman_akademik.html'
 
 # Create your views here.
 

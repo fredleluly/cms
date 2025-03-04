@@ -71,6 +71,7 @@ urlpatterns = [
     path('beasiswa/', scholarship_view, name='scholarship'),
     path('test-404/', test_404, name='test_404'),
     path('lib/', include('apps.media.urls')),
+    path('pedoman-akademik/', PedomanAkademikView.as_view(), name='pedoman_akademik'),
     path('dashboard/pages/<slug:slug>/edit/', page_edit_view, name='page_edit'),
     path('dashboard/pages/', page_list_view, name='page_list'),
         path("django-check-seo/", include("django_check_seo.urls")),
