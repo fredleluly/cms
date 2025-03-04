@@ -196,7 +196,7 @@ def create_default_homepage():
         },
         {
             'identifier': 'section5',
-            'title': 'Virtual Tour 360 Matana University',
+            'title': 'Matana University Video Kampus',
              'background_image': '/static/images/section5.jpg',
             'description': 'http://360.matanauniversity.ac.id/',
             'order': 5
@@ -266,7 +266,7 @@ def home_view(request):
         blocks[block.identifier] = block.content
 
     # tambahakn 4 berita terbaru
-    berita_terbaru = Article.objects.filter(status='published').order_by('-created_at')[:4]
+    berita_terbaru = Article.objects.filter(status='published').order_by('-created_at')[:6]
     blocks['berita_terbaru'] = berita_terbaru
     
     # create_default_popup()

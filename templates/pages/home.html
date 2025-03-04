@@ -529,6 +529,8 @@ berita_terbaru = Article.objects.filter(status='published').order_by('-created_a
 blocks['berita_terbaru'] = berita_terbaru -->
 
 <!-- Academic Media & News Section -->
+
+<!-- Academic Media & News Section -->
 <section class="py-8 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
     <!-- Subtle Decorative Elements -->
     <div class="absolute top-0 left-0 w-32 h-32 bg-matana-blue/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
@@ -541,194 +543,77 @@ blocks['berita_terbaru'] = berita_terbaru -->
             <p class="text-base text-gray-600 max-w-lg mx-auto">{{ blocks.section4.subtitle }}</p>
         </div>
 
-        <div class="flex flex-col lg:flex-row gap-4 justify-center">
-            <!-- Institutional Video Showcase -->
-            <div class="w-full lg:w-1/4">
-                <div class="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
-                    <!-- Video Title -->
-                    <div class="px-3 py-2 border-b border-gray-100">
-                        <h3 class="text-lg font-semibold text-matana-blue">Video Kampus</h3>
-                        <!-- <p class="text-sm text-gray-500">Experience Matana University's Academic Journey</p> -->
-                    </div>
-                    
-                    <!-- Video Player -->
-                    <div class="video-container">
-                        <div class="video-wrapper">
-                            <div class="youtube-embed">
-                                <button class="play-button" title="Play Video" aria-label="Play Video">
-                                    <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                        <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm-56 296V168l144 88z" fill="currentColor" />
-                                    </svg>
-                                    <img 
-                                        width="1280" 
-                                        height="720" 
-                                        loading="lazy" 
-                                        decoding="async" 
-                                        class="thumbnail" 
-                                        alt="Matana University Campus Video" 
-                                        src="https://i3.ytimg.com/vi/{{blocks.section4.description|slice:'30:41'|default:''}}/maxresdefault.jpg"
-                                    >
-                                </button>
-                                <iframe 
-                                    class="video-iframe"
-                                    title="Matana University Campus Video"
-                                    width="1280"
-                                    height="720"
-                                    loading="lazy"
-                                    src="about:blank" 
-                                    data-src="{{blocks.section4.description}}?autoplay=1&rel=0&modestbranding=1" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen
-                                ></iframe>
-                            </div>
-                        </div>
-                    </div>
-
-                    <style>
-                    .video-container {
-                        position: relative;
-                        overflow: hidden;
-                        border-radius: 8px;
-                    }
-
-                    .video-wrapper {
-                        position: relative;
-                        aspect-ratio: 16 / 9;
-                    }
-
-                    .youtube-embed {
-                        width: 100%;
-                        height: 100%;
-                    }
-
-                    .play-button {
-                        position: absolute;
-                        top: 50%;
-                        left: 50%;
-                        transform: translate(-50%, -50%);
-                        background: none;
-                        border: none;
-                        cursor: pointer;
-                        z-index: 2;
-                    }
-
-                    .play-icon {
-                        width: 64px;
-                        height: 64px;
-                        color: #ffffff;
-                        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-                    }
-
-                    .thumbnail {
-                        width: 100%;
-                        height: 100%;
-                        object-fit: cover;
-                    }
-
-                    .video-iframe {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        border: none;
-                        display: none;
-                    }
-
-                    .video-iframe.active {
-                        display: block;
-                    }
-                    </style>
-
-                    <script>
-                    document.querySelector('.play-button').addEventListener('click', function() {
-                        var iframe = this.nextElementSibling;
-                        iframe.src = iframe.dataset.src;
-                        iframe.classList.add('active');
-                        this.style.display = 'none';
-                    });
-                    </script>
-                    
-                    <!-- Video Description -->
-                    <div class="px-3 py-2 bg-gray-50">
-                        <p class="text-[9px] text-gray-600">Discover our world-class facilities and innovative learning environment</p>
-                    </div>
-                </div>
+        <!-- News Grid (Modified to 3x3 grid without YouTube) -->
+        <div class="mx-auto max-w-5xl">
+            <div class="flex items-center justify-between mb-2">
+                <h3 class="text-base font-semibold text-matana-blue">Latest Updates</h3>
+                <a href="/news" class="text-sm text-matana-blue hover:text-matana-yellow transition-colors flex items-center gap-0.5">
+                    View All
+                    <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
             </div>
 
-            <!-- News Grid -->
-            <div class="w-full lg:w-1/2">
-                <div class="flex items-center justify-between mb-2">
-                    <h3 class="text-base font-semibold text-matana-blue">Latest Updates</h3>
-                    <a href="/news" class="text-sm text-matana-blue hover:text-matana-yellow transition-colors flex items-center gap-0.5">
-                        View All
-                        <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                        </svg>
-                    </a>
-                </div>
-
-                <div class="grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-2">
-                    {% for berita in blocks.berita_terbaru|slice:":4" %}
-                    <div class="bg-white rounded shadow-sm hover:shadow-md transition-all duration-200">
-                        <div class="p-2">
-                            <!-- Image -->
-                            <div class="w-full h-20 rounded mb-1">
-                                {% if berita.featured_image %}
-                                <img 
-                                    src="{% optimized_image berita.featured_image  %}" 
-                                    alt="{{ berita.title }}"
-                                    class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                                >
-                                {% else %}
-                                <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-                                    <i class="fas fa-university text-gray-400 text-sm"></i>
-                                </div>
-                                {% endif %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {% for berita in blocks.berita_terbaru|slice:":9" %}
+                <div class="bg-white rounded shadow-sm hover:shadow-md transition-all duration-200">
+                    <div class="p-2">
+                        <!-- Image -->
+                        <div class="w-full h-40 rounded mb-2">
+                            {% if berita.featured_image %}
+                            <img 
+                                src="{% optimized_image berita.featured_image  %}" 
+                                alt="{{ berita.title }}"
+                                class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            >
+                            {% else %}
+                            <div class="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                                <i class="fas fa-university text-gray-400 text-sm"></i>
                             </div>
+                            {% endif %}
+                        </div>
 
-                            <!-- Metadata -->
-                            <div class="flex items-center gap-1 mb-1">
-                                <span class="text-[9px] text-gray-500">
-                                    {{ berita.created_at|date:"d/m/y" }}
-                                </span>
-                                {% if berita.category %}
-                                <span class="px-1 py-0.5 text-[8px] font-medium text-matana-blue bg-matana-blue/10 rounded">
-                                    {{ berita.category.name }}
-                                </span>
-                                {% endif %}
-                            </div>
+                        <!-- Metadata -->
+                        <div class="flex items-center gap-1 mb-1">
+                            <span class="text-[9px] text-gray-500">
+                                {{ berita.created_at|date:"d/m/y" }}
+                            </span>
+                            {% if berita.category %}
+                            <span class="px-1 py-0.5 text-[8px] font-medium text-matana-blue bg-matana-blue/10 rounded">
+                                {{ berita.category.name }}
+                            </span>
+                            {% endif %}
+                        </div>
 
-                            <!-- Title & Excerpt -->
-                            <h4 class="text-md font-semibold text-gray-800 mb-0.5 line-clamp-1">
-                                <a href="{{ berita.get_absolute_url }}" class="hover:text-matana-blue transition-colors">
-                                    {{ berita.title }}
-                                </a>
-                            </h4>
-                            <p class="text-sm text-gray-600 line-clamp-1 mb-1">
-                                {{ berita.excerpt }}
-                            </p>
+                        <!-- Title & Excerpt -->
+                        <h4 class="text-md font-semibold text-gray-800 mb-0.5 line-clamp-2">
+                            <a href="{{ berita.get_absolute_url }}" class="hover:text-matana-blue transition-colors">
+                                {{ berita.title }}
+                            </a>
+                        </h4>
+                        <p class="text-sm text-gray-600 line-clamp-2 mb-1">
+                            {{ berita.excerpt }}
+                        </p>
 
-                            <!-- Link -->
-                            <div class="pt-1 border-t border-gray-50">
-                                <a href="{{ berita.get_absolute_url }}" class="inline-flex items-center text-sm font-medium text-matana-blue hover:text-matana-yellow">
-                                    Read More
-                                    <svg class="w-2 h-2 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                                    </svg>
-                                </a>
-                            </div>
+                        <!-- Link -->
+                        <div class="pt-1 border-t border-gray-50">
+                            <a href="{{ berita.get_absolute_url }}" class="inline-flex items-center text-sm font-medium text-matana-blue hover:text-matana-yellow">
+                                Read More
+                                <svg class="w-2 h-2 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                                </svg>
+                            </a>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
 </section>
 
-
-<!-- section 5 -->
+<!-- section 5 (Updated to use YouTube video player from section 4) -->
 <section class="relative py-24 overflow-hidden">
     <!-- Background Pattern -->
     <div class="absolute inset-0 bg-gradient-to-br from-matana-blue/5 to-transparent"></div>
@@ -740,42 +625,196 @@ blocks['berita_terbaru'] = berita_terbaru -->
             <h2 class="text-4xl font-bold text-matana-blue mb-4">{{ blocks.section5.title }}</h2>
         </div>
 
-        <!-- Virtual Tour Card -->
-        <div class=" mx-auto">
-            <div class="relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300">
-                <!-- Background Image -->
-                {% if blocks.section5.background_image %}
-                <div class="absolute inset-0">
-                    <img src="{% optimized_image blocks.section5.background_image  %}" 
-                         alt="Virtual Tour Background"
-                         class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-black/40"></div>
-                </div>
-                {% endif %}
-
-                <!-- Content -->
-                <a href="{{ blocks.section5.description }}" 
-                   target="_blank"
-                   class="relative block p-12 text-center">
-                    <div class="mb-6">
-                        <i class="fas fa-vr-cardboard text-6xl text-white"></i>
+        <!-- YouTube Video Player (moved from section 4) - Enhanced for better responsiveness -->
+        <div class="w-full max-w-5xl mx-auto">
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                <!-- Video Title -->
+                <!-- <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-matana-blue">Video Kampus</h3>
+                    <div class="flex items-center">
+                        <span class="w-2 h-2 bg-matana-yellow rounded-full mr-2 animate-pulse"></span>
+                        <span class="text-sm text-gray-500">Campus Tour</span>
                     </div>
-                    <h3 class="text-3xl font-bold text-white mb-4">Experience Our Campus</h3>
-                    <p class="text-lg text-white/90 mb-8">Take an immersive 360° virtual tour of our modern facilities</p>
-                    <br>
-                    <br>
-                    <br>
-                    <button class="inline-flex items-center px-6 py-3 bg-white text-matana-blue rounded-full font-semibold hover:bg-matana-yellow hover:text-white transition-colors duration-300">
-                        Start Virtual Tour
-                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                        </svg>
-                    </button>
-                </a>
+                </div> -->
+                
+                <!-- Video Player - Enhanced with responsive sizing -->
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <div class="youtube-embed">
+                            <img 
+                                width="1280" 
+                                height="720" 
+                                loading="lazy" 
+                                decoding="async" 
+                                class="thumbnail" 
+                                alt="Matana University Campus Video" 
+                                src="https://i3.ytimg.com/vi/{{blocks.section4.description|slice:'30:41'|default:''}}/maxresdefault.jpg"
+                            >
+                            <button class="play-button" title="Play Video" aria-label="Play Video">
+                                <div class="play-button-circle">
+                                    <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                        <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm-56 296V168l144 88z" fill="currentColor" />
+                                    </svg>
+                                </div>
+                            </button>
+                            <iframe 
+                                class="video-iframe"
+                                title="Matana University Campus Video"
+                                width="1280"
+                                height="720"
+                                loading="lazy"
+                                src="about:blank" 
+                                data-src="{{blocks.section4.description}}?autoplay=1&rel=0&modestbranding=1" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Description - Enhanced -->
+                <div class="px-6 py-4 bg-gray-50">
+                    <p class="text-base text-gray-700">Experience our world-class facilities and innovative learning environment at Matana University</p>
+                </div>
             </div>
         </div>
     </div>
 </section>
+
+<!-- Don't forget the CSS and JavaScript that make the YouTube player work -->
+<style>
+/* Enhanced Video Player Styles */
+.video-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+}
+
+.video-wrapper {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background-color: #000;
+}
+
+.youtube-embed {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.play-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: none;
+    cursor: pointer;
+    z-index: 2;
+    transition: all 0.3s ease;
+    margin: 0;
+    padding: 0;
+}
+
+.play-button:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.play-button-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.play-button:hover .play-button-circle {
+    transform: translate(-50%, -50%) scale(1.1);
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.play-icon {
+    width: 50px;
+    height: 50px;
+    color: #ffffff;
+    transition: transform 0.3s ease;
+}
+
+.thumbnail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    margin: 0;
+    padding: 0;
+}
+
+.play-button:hover .thumbnail {
+    transform: scale(1.05);
+}
+
+.video-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: none;
+}
+
+.video-iframe.active {
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .play-button-circle {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .play-icon {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .play-button-circle {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .play-icon {
+        width: 30px;
+        height: 30px;
+    }
+}
+</style>
+
+<script>
+document.querySelector('.play-button').addEventListener('click', function() {
+    var iframe = this.nextElementSibling;
+    iframe.src = iframe.dataset.src;
+    iframe.classList.add('active');
+    this.style.display = 'none';
+});
+</script>
+
  
 <!-- Instagram Feed Section -->
 <section class="py-16 bg-white">
