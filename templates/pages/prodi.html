@@ -733,18 +733,39 @@
     </div>
 </section>
 
+<!-- <section class="py-16 bg-gray-50"></section>
+    <div class="section-container">
+        <div class="text-center max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-4xl font-bold mb-6 text-matana-blue">Mulai Perjalanan Akademikmu</h2>
+            <p class="text-lg text-gray-700 mb-8">
+                Bergabunglah dengan Program Studi <span class="font-semibold">{{blocks.hero_section.title}}</span> Matana University dan raih masa depan cemerlangmu. 
+                Daftar sekarang dan wujudkan impianmu!
+            </p>
+            <a href="https://wa.me/6281287775999?text=Saya+ingin+daftar+di+{{blocks.hero_section.title}}+Matana+University" class="inline-block px-8 py-4 bg-matana-yellow text-matana-blue font-semibold rounded-full shadow-lg hover:bg-yellow-400 transition-all transform hover:scale-105">
+                Daftar Sekarang
+            </a>
+        </div>
+    </div>
+</section> -->
+
 <!-- CTA Section -->
 <section class="py-16 bg-gray-50">
     <div class="section-container">
-        <div class="text-center max-w-3xl mx-auto">
-            <h2 class="text-3xl font-bold mb-6">Mulai Perjalanan Akademikmu</h2>
-            <p class="text-gray-600 mb-8">
-                Bergabunglah dengan Program Studi {{blocks.hero_section.title}} Matana University dan raih masa depan cemerlangmu. 
-                Daftar sekarang dan wujudkan impianmu!
+        <div class="text-center max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-10">
+            <h2 class="text-5xl font-bold mb-6 text-matana-blue">Mulai Perjalanan Akademik Anda</h2>
+            <p class="text-lg text-gray-700 mb-8">
+                Bergabunglah dengan Program Studi <span class="font-semibold text-matana-yellow">{{blocks.hero_section.title}}</span> di Matana University. 
+                Wujudkan impian Anda dan raih masa depan yang cemerlang dengan pendidikan berkualitas.
             </p>
-            <a href="{% url 'registration' %}" class="inline-block px-8 py-4 bg-primary-color text-white font-semibold rounded-xl hover:bg-opacity-90 transition-all transform hover:scale-105">
+            <div class="flex justify-center mb-6 relative gap-4">
+                <img src="{% static 'images/graduate.jpg' %}" alt="Graduate" class="w-32 h-32 rounded-full object-cover relative z-10">
+                <img src="{% static 'images/graduate2.jpg' %}" alt="Graduate" class="w-32 h-32 rounded-full object-cover relative z-10">
+                <div class="absolute inset-0 bg-gray-300 rounded-full opacity-50" style="height: 100%; top: 0; z-index: 5; filter: blur(8px);"></div>
+            </div>
+            <a href="https://wa.me/6281287775999?text=Saya+ingin+daftar+di+{{blocks.hero_section.title}}+Matana+University" class="inline-block px-10 py-4 bg-matana-blue text-white font-semibold rounded-full shadow-lg hover:bg-matana-dark-blue transition-all duration-300">
                 Daftar Sekarang
             </a>
+            <p class="mt-6 text-md text-gray-600">Bergabunglah dengan komunitas akademik kami dan jadilah bagian dari perubahan positif!</p>
         </div>
     </div>
 </section>
