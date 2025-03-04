@@ -863,7 +863,7 @@ def create_default_profile_page():
         },
         {
             'identifier': 'visi_misi_section',
-            'background_image': '/static/images/hospar.jpg',
+            'background_image': '/static/images/Gedung-Matana.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {

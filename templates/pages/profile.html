@@ -283,30 +283,33 @@
 <!-- Vision & Mission -->
 <section class="py-20">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ blocks.visi_misi_section.title }}</h2>
-        
-        <div class="grid md:grid-cols-2 gap-8 mb-16">
-            <div class="vision-card p-8 rounded-2xl text-white">
+        <img 
+            src="{{ blocks.visi_misi_section.background_image | default:'/default-image.webp' }}" 
+            alt="{{ item.title }}"
+            class="w-[80%] md:w-[70%] lg:w-full max-h-[950px] mx-auto rounded-lg shadow-lg object-cover mb-12 md:mb-16 lg:mb-20"
+            loading="lazy"
+        />
+    
+        <div class="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-20 mb-16">
+            <div class="vision-card p-8 md:p-10 lg:p-12 rounded-2xl text-white">
                 <div class="relative z-10">
-                    <div class="text-2xl font-bold mb-4">{{ blocks.visi_misi_section.items.0.title }}</div>
+                    <div class="text-2xl font-bold mb-4 md:mb-6">{{ blocks.visi_misi_section.items.0.title }}</div>
                     <p class="text-white/90 leading-relaxed">{{ blocks.visi_misi_section.items.0.description }}</p>
                 </div>
             </div>
-            
-            <div class="space-y-6">
-                <div class="text-2xl font-bold mb-6">{{ blocks.visi_misi_section.items.1.title }}</div>
-                <div class="space-y-4">
-                    <div class="flex items-start">
-                        <!-- <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mt-1">
-                            <span class="text-matana-blue font-semibold">{{ forloop.counter }}</span>
-                        </div> -->
-                        <p class="ml-4 text-gray-600">{{ blocks.visi_misi_section.items.1.description|linebreaksbr  }}</p>
+
+            <div class="space-y-8">
+                <div class="text-2xl font-bold mb-6 md:mb-8">{{ blocks.visi_misi_section.items.1.title }}</div>
+                <div class="space-y-6 md:space-y-8">
+                    <div class="flex items-start space-x-4">
+                        <p class="ml-4 text-gray-600">{{ blocks.visi_misi_section.items.1.description | linebreaksbr }}</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 
 <!-- Sejarah -->
 <section class="py-20 bg-gray-50">
