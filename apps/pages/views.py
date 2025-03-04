@@ -2428,7 +2428,7 @@ def create_default_profile_page_arsitektur():
         {
             'identifier': 'description_section',
             'title': 'Program Studi Arsitektur',
-            'description': 'Program S1 Arsitektur Matana University didesain untuk menghasilkan lulusan dengan paradigma \'think globally, act locally\', dimana mahasiswa dibekali konsep global dalam merancang bangunan, permukiman dan sebuah kawasan dengan pendekatan desain cerdas (smart), yang berbasis Green, TOD (Transit Oriented Development) dan Teknologi (industri 5.0), namun begitu, dalam eksekusinya tetap berpijak pada konteks (iklim, budaya, estetika, sejarah, hukum, etika, dll) dan lokalitas yang melingkupinya.',
+            'description': "Program S1 Arsitektur Matana University didesain untuk menghasilkan lulusan dengan paradigma 'think globally, act locally', dimana mahasiswa dibekali konsep global dalam merancang bangunan, permukiman dan sebuah kawasan dengan pendekatan desain cerdas (smart), yang berbasis Green, TOD (Transit Oriented Development) dan Teknologi (industri 5.0), namun begitu, dalam eksekusinya tetap berpijak pada konteks (iklim, budaya, estetika, sejarah, hukum, etika, dll) dan lokalitas yang melingkupinya.",
             'order': 2
         },
         {
@@ -2438,11 +2438,11 @@ def create_default_profile_page_arsitektur():
             'items': [
                 {
                     'title': 'Visi',
-                    'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                    'description': "Menjadi Program Studi Arsitektur yang terkemuka dalam akademik dan profesionalisme yang berwawasan Nasional serta Internasional, yang berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, untuk kecerdasan dan kesejahteraan umat manusia serta lingkungan binaan yang berkelanjutan"
                 },
                 {
                     'title': 'Misi',
-                    'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                    'description': "Menghasilkan lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.\nMenghasilkan lulusan yang memiliki kompetensi di bidang perencanaan, perancangan dan penelitian, serta kreatif, inovatif dan memiliki jiwa kewirausahaan.\nMenghasilkan generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan."
                 }
             ],
             'order': 3
@@ -2450,7 +2450,7 @@ def create_default_profile_page_arsitektur():
         {
             'identifier': 'tujuan_section',
             'title': 'Tujuan',
-            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'description': "a.\tMendidik dan mempersiapkan lulusan yang penuh kasih, berintegritas. profesional, inovatif dan ahli di bidang perencanaan & perancangan Arsitektur, berjiwa kewiraushaan yang mampu bersaing dan berkiprah dalam dunia bisnis nasional serta internasional.\nb.\tMelaksanakan penelitian dan upaya lainnya untuk kemajuan ilmu pengetahuan, teknologi,  kesenian dan kebudayaan yang terkait dengan Arsitektur yang dapat memajukan kualitas kehidupan masyarakat.\nc.\tMelaksanakan Pengabdian Kepada Masyarakat (PKM) sebagai bentuk aktualisasi ilmu dan pengetahuan di tengah-tengah masyarakat.",
             'order': 4
         },
         {
@@ -2465,26 +2465,13 @@ def create_default_profile_page_arsitektur():
         {
             'identifier': 'kurikulum_section',
             'title': 'Kurikulum',
-            'items': [
-                {'title': 'Studio Perancangan Arsitektur'},
-                {'title': 'Studio Struktur & Konstruksi'},
-                {'title': 'Komputasi dalam Arsitektur'},
-                {'title': 'Manajemen Konstruksi'},
-                {'title': 'Studio Perancangan Pemukiman'},
-                {'title': 'Studio Perancangan Kawasan'},
-                {'title': 'Pengembangan Kawasan'},
-                {'title': 'Metode Perencanaan dan Perancangan'},
-            ],
+            'items': [{"title": "Studio Perancangan Arsitektur"}, {"title": "Studio Struktur & Konstruksi"}, {"title": "Komputasi dalam Arsitektur"}, {"title": "Manajemen Konstruksi"}, {"title": "Studio Perancangan Pemukiman"}, {"title": "Studio Perancangan Kawasan"}, {"title": "Pengembangan Kawasan"}, {"title": "Metode Perencanaan dan Perancangan"}],
             'order': 6
         },
         {
             'identifier': 'peluang_karir_section',
             'title': 'Peluang Karir',
-            'items': [
-                {'title': 'Lorem ipsum dolor sit amet'},
-                {'title': 'Consectetur adipiscing elit'},
-                {'title': 'Sed do eiusmod tempor'},
-            ],
+            'items': [{"title": "Arsitek Konsultan Arsitektur"}, {"title": "Konsultan Manajemen Konstruksi"}, {"title": "Perencana Konsultan Kawasan & Kota"}],
             'order': 7
         },
     ]
@@ -2639,11 +2626,11 @@ def create_default_profile_page_k3():
             'items': [
                 {
                     'title': 'Visi',
-                    'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                    'description': 'Menjadi program studi terkemuka yang menghasilkan sarjana profesional di bidang K3 (S. Kes) dengan keahlian dalam kesehatan, keselamatan kerja, ergonomi, human factor, dan higiene industri yang berwawasan nasional dan internasional dalam ilmu pengetahuan dan teknologi untuk mendukung kecerdasan dan kesejahteraan umat manusia, serta mewujudkan kehidupan yang lebih baik dan berkelanjutan.'
                 },
                 {
                     'title': 'Misi',
-                    'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                    'description': "Menyelenggarakan pendidikan untuk menghasilkan lulusan Keselamatan dan Kesehatan Kerja (K3) yang memiliki jiwa kepemimpinan yang kuat, berdedikasi pada perilaku etis, bertanggung jawab, dan berlandaskan pada layanan yang penuh kasih;\nMelaksanakan kegiatan penelitian untuk menghasilkan lulusan Keselamatan dan Kesehatan Kerja (K3) yang unggul dalam kemampuan penelitian, kreativitas, inovasi, dan berjiwa kewirausahaan;\nMenyelenggarakan kegiatan pengabdian kepada masyarakat untuk menghasilkan lulusan Keselamatan dan Kesehatan Kerja (K3) yang memiliki kepedulian tinggi terhadap kehidupan berkelanjutan."
                 }
             ],
             'order': 3
@@ -2651,7 +2638,7 @@ def create_default_profile_page_k3():
         {
             'identifier': 'tujuan_section',
             'title': 'Tujuan',
-            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'description': "1.\tMendidik dan mempersiapkan lulusan program studi K3 yang penuh kasih, berintegritas, profesional, inovatif dan ahli di bidangnya, berjiwa Entrepreneur dan mampu bersaing dan berkiprah dalam dunia bisnis nasional dan internasional.\n\n2.\tMelaksanakan penelitian dan implementasi keilmuan K3 melalui publikasi untuk operasional dan kewirausahaan dalam memajukan kualitas kehidupan masyarakat.\n\n3.\tMelaksanakan pengabdian kepada masyarakat sesui kebutuhan sebagai aktualisasi penerapan ilmu keselamatan dan kesehatan kerja, operasional dan kewirausahaan sebagai bentuk kepedulian atas kehidupan masyarakat yang berkelanjutan",
             'order': 4
         },
         {
@@ -2666,33 +2653,13 @@ def create_default_profile_page_k3():
         {
             'identifier': 'kurikulum_section',
             'title': 'Kurikulum',
-            'items': [
-                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
-                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
-                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
-                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
-                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
-                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
-            ],
+            'items': [{"title": "Pengantar Ilmu Kesehatan Masyarakat"}, {"title": "Ilmu Biomedik Dasar"}, {"title": "Fisika dan Kimia dalam K3"}, {"title": "Fisiologi Kerja"}, {"title": "Dasar Keselamatan dan Kesehatan Kerja"}, {"title": "Komunikasi & Promosi"}, {"title": "Biostatistik"}, {"title": "Prinsip Keselamatan Kerja"}, {"title": "Pengantar Higiene Industri"}, {"title": "Pengantar Kesehatan Lingkungan"}, {"title": "Peraturan Perundangan K3"}, {"title": "Gizi Kerja"}, {"title": "Epidemiologi"}, {"title": "Prinsip Kesehatan Kerja"}, {"title": "Ergonomi"}, {"title": "Aspek Manusia Dalam K3"}, {"title": "Psikososial di Tempat Kerja"}, {"title": "Manajemen Bising Getar"}, {"title": "Manajemen B3"}, {"title": "Bahaya Kimia & Biomonitoring"}],
             'order': 6
         },
         {
             'identifier': 'peluang_karir_section',
             'title': 'Peluang Karir',
-            'items': [
-  {"title": "Environmental Specialist"},
-  {"title": "Analist Quality Control"},
-  {"title": "Health and Safety Engineer"},
-  {"title": "Pengawas Konstruksi Bangunan"},
-  {"title": "Advisor dan Auditor K3"},
-  {"title": "Ahli Ergonomi"},
-  {"title": "Ahli K3 Rumah Sakit"},
-  {"title": "Corporate Safety"},
-  {"title": "Spesialis Kebakaran"},
-  {"title": "Industrial Hygiene"},
-  {"title": "Permit to Work Coordinator"}
-
-            ],
+            'items': [{"title": "Environmental Specialist"}, {"title": "Analist Quality Control"}, {"title": "Health and Safety Engineer"}, {"title": "Pengawas Konstruksi Bangunan"}, {"title": "Advisor dan Auditor K3"}, {"title": "Ahli Ergonomi"}, {"title": "Ahli K3 Rumah Sakit"}, {"title": "Corporate Safety"}, {"title": "Spesialis Kebakaran"}, {"title": "Industrial Hygiene"}, {"title": "Permit to Work Coordinator"}],
             'order': 7
         },
     ]
