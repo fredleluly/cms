@@ -48,6 +48,9 @@ from django.views.generic import TemplateView
 class PedomanAkademikView(TemplateView):
     template_name = 'pages/pedoman_akademik.html'
 
+class KalenderAkademikView(TemplateView):
+    template_name = 'pages/kalender_akademik.html'
+
 # Create your views here.
 
 def create_standardized_blocks(page, blocks_data):
