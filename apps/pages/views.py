@@ -2648,8 +2648,7 @@ def create_default_profile_page_k3():
             'identifier': 'konsentrasi_section',
             'title': 'Konsentrasi',
             'items': [
-                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
-                {'title': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'},
+                {'title': 'General Occupational Health and Safety (Ahli K3 umum)'},
             ],
             'order': 5
         },
