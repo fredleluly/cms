@@ -1950,7 +1950,7 @@ def create_default_profile_page_teknik_informatika():
         {
             'identifier': 'tujuan_section',
             'title': 'Tujuan',
-            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'description': 'Terbentuknya lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih. Terbentuknya lulusan yang memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang komputer sains untuk sektor kesehatan yang berjiwa kewirausahaan. Terbentuknya lulusan yang memiliki kepedulian untuk kehidupan berkelanjutan..',
             'order': 4
         },
         {
