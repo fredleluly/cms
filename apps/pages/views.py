@@ -2283,7 +2283,7 @@ def create_default_profile_page_dkv():
             'items': [
                 {
                     'title': 'Visi',
-                    'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                    'description': 'Menjadi program studi yang terpercaya dan terkemuka dalam menumbuhkembangkan karakter intelektual seni rupa dan desain yang mandiri, yang senantiasa mengedepankan wawasan keindonesiaan di kancah global, demi berlangsungnya tatanan peradaban, yang merupakan karunia Tuhan untuk kemanusiaan.'
                 },
                 {
                     'title': 'Misi',
