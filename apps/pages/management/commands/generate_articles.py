@@ -241,7 +241,7 @@ class Command(BaseCommand):
                     published_at=created_date,
                     created_by=admin_user,
                     updated_by=admin_user,
-                    featured_image='static/images/article2.jpg'
+                    featured_image='/static/images/article2.jpg'
                 )
                 
                 self.stdout.write(
