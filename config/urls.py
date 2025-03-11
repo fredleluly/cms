@@ -25,7 +25,7 @@ from apps.pages.views import (
     profile_view, category_create_view, upload_image, article_list_view, bulk_action_view,
     registration_view, registration_submit, scholarship_view, page_edit_view, page_list_view,
     mitra_view, management_view, ukm_view, exchange_view, profile_view_manajemen,
-    user_profile_view, logout_view
+    user_profile_view, logout_view, delete_page
 )
 from apps.pages.views import *
 from django.contrib.sitemaps.views import sitemap
@@ -75,11 +75,11 @@ urlpatterns = [
     path('kalender-akademik/', KalenderAkademikView.as_view(), name='kalender_akademik'),
     path('dashboard/pages/<slug:slug>/edit/', page_edit_view, name='page_edit'),
     path('dashboard/pages/', page_list_view, name='page_list'),
-        path("django-check-seo/", include("django_check_seo.urls")),
+    path('dashboard/pages/<slug:slug>/delete/', delete_page, name='delete_page'),
+    path("django-check-seo/", include("django_check_seo.urls")),
     path('mitra/', mitra_view, name='mitra'),
     path('manajemen/', management_view, name='management'),
     path('ukm/', ukm_view, name='ukm'),
-  
     path('prodi/manajemen/', profile_view_manajemen, name='manajemen'),
     path('prodi/manajemens2/', profile_view_manajemens2, name='manajemens2'),
     path('prodi/akuntansi/', profile_view_akuntansi, name='akuntansi'),

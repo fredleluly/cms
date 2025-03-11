@@ -4019,3 +4019,15 @@ def get_related_articles(prodi_slug, limit=3):
     except Exception as e:
         print(f"Error getting related articles: {str(e)}")
         return Article.objects.filter(status='published')[:limit]
+
+@require_POST
+@login_required
+def delete_page(request, slug):
+    try:
+        page = Page.objects.get(slug=slug)
+        page.delete()
+        return JsonResponse({'success': True})
+    except Page.DoesNotExist:
+        return JsonResponse({'error': 'Page not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
