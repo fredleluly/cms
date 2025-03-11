@@ -34,7 +34,8 @@
         <div class="space-y-8">
             <div v-for="(content, identifier) in blocks" :key="identifier" class="bg-white rounded-xl shadow-sm overflow-hidden">
                 <div class="bg-gray-50 px-6 py-4 border-b flex justify-between items-center">
-                    <h3 class="text-lg font-semibold text-gray-900">[[content.title|capitalize ]]</h3>
+                    <!-- <h3 class="text-lg font-semibold text-gray-900">[[content.title|capitalize ]]</h3> -->
+                    <h3 class="text-lg font-semibold text-gray-900">[[ identifier|capitalize ]]</h3>
                     <button type="button" @click="toggleBlock(identifier)"
                             class="text-gray-500 hover:text-gray-700">
                         <i :class="['fas', blockStates[identifier] ? 'fa-chevron-down' : 'fa-chevron-right']"></i>
@@ -93,10 +94,31 @@
                     <div class="space-y-4">
                         <div class="flex justify-between items-center">
                             <label class="block text-sm font-medium text-gray-700">Items</label>
+                            <!-- Add Button for Items -->
+                            <button type="button" @click="addItem(identifier)" 
+                                    class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-lg hover:bg-blue-100">
+                                <i class="fas fa-plus mr-1"></i> Add Item
+                            </button>
                         </div>
                         <div class="space-y-4">
                             <div v-for="(item, index) in content.items" :key="index"
                                  class="bg-gray-50 p-4 rounded-lg relative group">
+                                
+                                <!-- Item Control Buttons -->
+                                <div class="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <!-- Duplicate Button -->
+                                    <button type="button" @click="duplicateItem(identifier, index)" 
+                                            class="p-1 text-blue-500 hover:text-blue-700" 
+                                            title="Duplicate Item">
+                                        <i class="fas fa-copy"></i>
+                                    </button>
+                                    <!-- Remove Button -->
+                                    <button type="button" @click="removeItem(identifier, index)" 
+                                            class="p-1 text-red-500 hover:text-red-700" 
+                                            title="Remove Item">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
                                 
                                 <!-- Dynamic Fields Based on Item Structure -->
                                 <div class="grid gap-4">
@@ -123,8 +145,6 @@
                                             <!-- Regular Text Field -->
                                             <template v-else>
                                                 <label class="block text-sm font-medium text-gray-700 mb-1">[[ key ]]</label>
-                                                <!-- <input type="text" v-model="item[key]"
-                                                       class="w-full px-4 py-2 border rounded-lg"> -->
                                                 <textarea v-model="item[key]" rows="3"
                                                           class="w-full px-4 py-2 border rounded-lg"></textarea>
                                             </template>
@@ -223,6 +243,28 @@ new Vue({
         
         removeItem(identifier, index) {
             this.blocks[identifier].items.splice(index, 1);
+        },
+        
+        // New method to duplicate an item
+        duplicateItem(identifier, index) {
+            if (!this.blocks[identifier].items) {
+                return;
+            }
+            
+            try {
+                // Create a deep copy of the item
+                const originalItem = this.blocks[identifier].items[index];
+                const newItem = JSON.parse(JSON.stringify(originalItem));
+                
+                // Insert the copy after the original
+                this.blocks[identifier].items.splice(index + 1, 0, newItem);
+                
+                // Show success notification
+                this.showNotification('Item duplicated successfully', 'success');
+            } catch (error) {
+                console.error('Error duplicating item:', error);
+                this.error = 'Failed to duplicate item';
+            }
         },
         
         addNestedItem(identifier, itemIndex) {
