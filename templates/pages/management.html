@@ -57,6 +57,7 @@
         text-align: center;
         color: var(--text-dark);
         font-weight: 600;
+        font-size: 2rem;
     }
 
     .section-title::after {
@@ -391,7 +392,7 @@
 <!-- Rektorat Section -->
 <section class="py-16">
     <div class="section-container">
-        <h2 class="section-title">{{ blocks.rektorat_section.title }}</h2>
+        <h1 class="section-title">{{ blocks.rektorat_section.title }}</h2>
         <div class="management-grid">
             {% for item in blocks.rektorat_section.items %}
             <div class="management-card" 
@@ -413,7 +414,7 @@
 <!-- Dekan Section -->
 <section class="py-16 bg-gray-50">
     <div class="section-container">
-        <h2 class="section-title">{{ blocks.dekan_section.title }}</h2>
+        <h2 class="section-title">{{ blocks.dekan_section.title }}</h1>
         <div class="management-grid">
             {% for item in blocks.dekan_section.items %}
             <div class="management-card"
