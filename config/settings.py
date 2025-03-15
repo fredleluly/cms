@@ -131,6 +131,7 @@ if IS_PRODUCTION:
 else:
     PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
     STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+    # about staticfiledirs when prod is gonna take all of the content from it and dump it to 1 static STATIC_ROOT DIRECTORY,
     STATICFILES_DIRS = [
         BASE_DIR / 'static',
         # STATIC_ROOT,
