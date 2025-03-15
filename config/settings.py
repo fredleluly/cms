@@ -43,6 +43,7 @@ ALLOWED_HOSTS = [
     '103.86.153.71',
     'www.matanauniversity.ac.id',
     'matanauniversity.ac.id',
+    'manajemen.matanauniversity.ac.id',
 
 ]
 
