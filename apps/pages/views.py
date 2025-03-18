@@ -2511,7 +2511,7 @@ def create_default_popup():
         },
         {
             'identifier': 'description_section',
-            'title': 'Penerimaan Mahasiswa Baru 2024',
+            'title': 'Penerimaan Mahasiswa Baru 2025',
             'description': 'Wujudkan impianmu menjadi bagian dari Matana University. Dapatkan kesempatan beasiswa hingga 100% dan fasilitas pembelajaran berkualitas internasional.',
             'order': 2
         },
@@ -2521,7 +2521,7 @@ def create_default_popup():
             'items': [
                 {
                     'title': 'Daftar Sekarang',
-                    'description': '/pendaftaran/'
+                    'description': 'https://pmb.matanauniversity.ac.id/'
                 },
                 {
                     'title': 'Info Beasiswa',
