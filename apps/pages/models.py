@@ -145,8 +145,10 @@ def validate_file_extension(value):
 
 class Article(models.Model):
     STATUS_CHOICES = [
-        ('draft', 'Draft'),
+        ('pending', 'Pending'),
+        ('on_review', 'On Review'),
         ('published', 'Published'),
+        ('rejected', 'Rejected'),
     ]
 
     title = models.CharField(max_length=200)
@@ -160,10 +162,22 @@ class Article(models.Model):
     )
     excerpt = models.TextField(help_text="A short description that will appear in article lists")
     content = RichTextField()
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     is_featured = models.BooleanField(default=False)
     meta_description = models.CharField(max_length=160, blank=True, help_text="SEO meta description")
     meta_keywords = models.CharField(max_length=255, blank=True, help_text="SEO keywords (comma-separated)")
+    
+    # Review-related fields
+    review_comment = models.TextField(blank=True, null=True, help_text="Comment from reviewer when article is rejected")
+    reviewed_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='reviewed_articles',
+        help_text="User who reviewed the article"
+    )
+    reviewed_at = models.DateTimeField(null=True, blank=True)
     
     # Timestamps and author info
     created_at = models.DateTimeField(auto_now_add=True)
@@ -222,9 +236,13 @@ class Article(models.Model):
             return self.meta_description
         return strip_tags(self.excerpt)[:160]
 
-    # def clean(self):
-    #     if self.featured_image and self.featured_image.size > 5*1024*1024:  # 5MB
-    #         raise ValidationError('File too large')
+    def can_edit(self, user):
+        """Check if user can edit the article"""
+        return (
+            user.is_superuser or 
+            user == self.created_by or 
+            (self.status == 'rejected' and user == self.created_by)
+        )
 
     def get_safe_content(self):
         allowed_tags = [
@@ -242,6 +260,29 @@ class Article(models.Model):
             strip=True
         )
         return mark_safe(cleaned_content)
+
+class ArticleReviewHistory(models.Model):
+    article = models.ForeignKey(
+        Article, 
+        on_delete=models.CASCADE,
+        related_name='review_history'
+    )
+    status = models.CharField(max_length=20, choices=Article.STATUS_CHOICES)
+    comment = models.TextField(blank=True)
+    reviewed_by = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        related_name='article_reviews'
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name_plural = "Article Review History"
+
+    def __str__(self):
+        return f"{self.article.title} - {self.status} by {self.reviewed_by}"
 
 class MaintenanceMode(models.Model):
     is_active = models.BooleanField(default=False)

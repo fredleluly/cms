@@ -628,7 +628,7 @@ blocks['berita_terbaru'] = berita_terbaru -->
         <!-- YouTube Video Player (moved from section 4) - Enhanced for better responsiveness -->
         <div class="w-full max-w-5xl mx-auto">
             <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                <!-- Video Title -->
+                    <!-- Video Title -->
                 <!-- <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
                     <h3 class="text-xl font-bold text-matana-blue">Video Kampus</h3>
                     <div class="flex items-center">
@@ -636,41 +636,41 @@ blocks['berita_terbaru'] = berita_terbaru -->
                         <span class="text-sm text-gray-500">Campus Tour</span>
                     </div>
                 </div> -->
-                
+                    
                 <!-- Video Player - Enhanced with responsive sizing -->
-                <div class="video-container">
-                    <div class="video-wrapper">
-                        <div class="youtube-embed">
-                            <img 
-                                width="1280" 
-                                height="720" 
-                                loading="lazy" 
-                                decoding="async" 
-                                class="thumbnail" 
-                                alt="Matana University Campus Video" 
-                                src="https://i3.ytimg.com/vi/{{blocks.section4.description|slice:'30:41'|default:''}}/maxresdefault.jpg"
-                            >
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <div class="youtube-embed">
+                                    <img 
+                                        width="1280" 
+                                        height="720" 
+                                        loading="lazy" 
+                                        decoding="async" 
+                                        class="thumbnail" 
+                                        alt="Matana University Campus Video" 
+                                        src="https://i3.ytimg.com/vi/{{blocks.section4.description|slice:'30:41'|default:''}}/maxresdefault.jpg"
+                                    >
                             <button class="play-button" title="Play Video" aria-label="Play Video">
                                 <div class="play-button-circle">
                                     <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                                         <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm-56 296V168l144 88z" fill="currentColor" />
                                     </svg>
                                 </div>
-                            </button>
-                            <iframe 
-                                class="video-iframe"
-                                title="Matana University Campus Video"
-                                width="1280"
-                                height="720"
-                                loading="lazy"
-                                src="about:blank" 
-                                data-src="{{blocks.section4.description}}?autoplay=1&rel=0&modestbranding=1" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen
-                            ></iframe>
+                                </button>
+                                <iframe 
+                                    class="video-iframe"
+                                    title="Matana University Campus Video"
+                                    width="1280"
+                                    height="720"
+                                    loading="lazy"
+                                    src="about:blank" 
+                                    data-src="{{blocks.section4.description}}?autoplay=1&rel=0&modestbranding=1" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
                         </div>
                     </div>
-                </div>
 
                 <!-- Video Description - Enhanced -->
                 <div class="px-6 py-4 bg-gray-50">
@@ -682,37 +682,37 @@ blocks['berita_terbaru'] = berita_terbaru -->
 </section>
 
 <!-- Don't forget the CSS and JavaScript that make the YouTube player work -->
-<style>
+                    <style>
 /* Enhanced Video Player Styles */
-.video-container {
-    position: relative;
-    overflow: hidden;
+                    .video-container {
+                        position: relative;
+                        overflow: hidden;
     border-radius: 0;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
-}
+                    }
 
-.video-wrapper {
-    position: relative;
-    aspect-ratio: 16 / 9;
+                    .video-wrapper {
+                        position: relative;
+                        aspect-ratio: 16 / 9;
     background-color: #000;
-}
+                    }
 
-.youtube-embed {
-    width: 100%;
-    height: 100%;
+                    .youtube-embed {
+                        width: 100%;
+                        height: 100%;
     position: relative;
-}
+                    }
 
-.play-button {
-    position: absolute;
+                    .play-button {
+                        position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.2);
-    border: none;
-    cursor: pointer;
-    z-index: 2;
+                        border: none;
+                        cursor: pointer;
+                        z-index: 2;
     transition: all 0.3s ease;
     margin: 0;
     padding: 0;
@@ -741,22 +741,22 @@ blocks['berita_terbaru'] = berita_terbaru -->
 .play-button:hover .play-button-circle {
     transform: translate(-50%, -50%) scale(1.1);
     background: rgba(0, 0, 0, 0.8);
-}
+                    }
 
-.play-icon {
+                    .play-icon {
     width: 50px;
     height: 50px;
-    color: #ffffff;
+                        color: #ffffff;
     transition: transform 0.3s ease;
-}
+                    }
 
-.thumbnail {
+                    .thumbnail {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
     transition: transform 0.5s ease;
     margin: 0;
     padding: 0;
@@ -764,21 +764,21 @@ blocks['berita_terbaru'] = berita_terbaru -->
 
 .play-button:hover .thumbnail {
     transform: scale(1.05);
-}
+                    }
 
-.video-iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: none;
-}
+                    .video-iframe {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        border: none;
+                        display: none;
+                    }
 
-.video-iframe.active {
-    display: block;
-}
+                    .video-iframe.active {
+                        display: block;
+                    }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
@@ -804,17 +804,17 @@ blocks['berita_terbaru'] = berita_terbaru -->
         height: 30px;
     }
 }
-</style>
+                    </style>
 
-<script>
-document.querySelector('.play-button').addEventListener('click', function() {
-    var iframe = this.nextElementSibling;
-    iframe.src = iframe.dataset.src;
-    iframe.classList.add('active');
-    this.style.display = 'none';
-});
-</script>
-
+                    <script>
+                    document.querySelector('.play-button').addEventListener('click', function() {
+                        var iframe = this.nextElementSibling;
+                        iframe.src = iframe.dataset.src;
+                        iframe.classList.add('active');
+                        this.style.display = 'none';
+                    });
+                    </script>
+                    
  
 <!-- Instagram Feed Section -->
 <section class="py-16 bg-white">

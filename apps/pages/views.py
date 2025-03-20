@@ -31,6 +31,7 @@ from .models import ProdiAdmin, ProgramStudi
 from django.contrib.auth import logout
 from django.views.decorators.cache import cache_page
 from datetime import timedelta
+from .models import ArticleReviewHistory
 
 
 
@@ -779,41 +780,105 @@ def article_save_view(request):
         messages.success(request, f'Category "{name}" created successfully.')
         return redirect(request.path)
 
-    article_id = request.POST.get('article_id')
-    
-    if article_id:
-        article = get_object_or_404(Article, id=article_id)
-    else:
-        article = Article(created_by=request.user)
-    
-    # # Handle image upload
-    # if 'featured_image' in request.FILES:
-    #     if article.featured_image:
-    #         default_storage.delete(article.featured_image.path)
-    #     article.featured_image = request.FILES['featured_image']
-    
-    # Update fields
-    print(f"Request from save view #######: {request.POST}")
-
-    article.featured_image = request.POST.get('featured_image')
-    article.title = request.POST.get('title')
-    article.slug = request.POST.get('slug') or slugify(article.title)
-    article.category_id = request.POST.get('category')
-    article.excerpt = request.POST.get('excerpt')
-    article.content = request.POST.get('content')
-    article.status = request.POST.get('status')
-    article.meta_description = request.POST.get('meta_description')
-    article.meta_keywords = request.POST.get('meta_keywords')
-    article.is_featured = request.POST.get('is_featured') == 'on'
-    
-    if article.status == 'published' and not article.published_at:
-        article.published_at = timezone.now()
-    
-    article.updated_by = request.user
-    article.save()
-    
-    messages.success(request, f'Article "{article.title}" has been saved successfully.')
-    return redirect('content_dashboard')
+    try:
+        with transaction.atomic():
+            article_id = request.POST.get('article_id')
+            
+            if article_id:
+                article = get_object_or_404(Article, id=article_id)
+                # Check if user can edit this article
+                if not article.can_edit(request.user):
+                    messages.error(request, 'You do not have permission to edit this article.')
+                    return redirect('content_dashboard')
+            else:
+                article = Article(created_by=request.user)
+            
+            # Validate required fields
+            required_fields = ['title', 'excerpt', 'content', 'category']
+            for field in required_fields:
+                if not request.POST.get(field):
+                    messages.error(request, f'{field.title()} is required.')
+                    return redirect('article_edit' if article_id else 'article_create')
+            
+            # Update basic fields
+            article.featured_image = request.POST.get('featured_image')
+            article.title = request.POST.get('title')
+            article.slug = request.POST.get('slug') or slugify(article.title)
+            article.category_id = request.POST.get('category')
+            article.excerpt = request.POST.get('excerpt')
+            article.content = request.POST.get('content')
+            article.meta_description = request.POST.get('meta_description')
+            article.meta_keywords = request.POST.get('meta_keywords')
+            article.is_featured = request.POST.get('is_featured') == 'on'
+            
+            # Handle status changes
+            new_status = request.POST.get('status')
+            old_status = article.status
+            
+            # Handle resubmission of rejected articles
+            if request.POST.get('resubmit') and article.status == 'rejected':
+                if article.created_by != request.user:
+                    messages.error(request, 'Only the original author can resubmit a rejected article.')
+                    return redirect('content_dashboard')
+                article.status = 'pending'
+                article.review_comment = None
+                article.reviewed_by = None
+                article.reviewed_at = None
+                messages.success(request, 'Article has been resubmitted for review.')
+            
+            # Handle status changes by superuser
+            elif request.user.is_superuser and new_status:
+                if new_status not in dict(Article.STATUS_CHOICES):
+                    messages.error(request, 'Invalid status.')
+                    return redirect('article_edit' if article_id else 'article_create')
+                
+                article.status = new_status
+                if new_status == 'published':
+                    article.published_at = timezone.now()
+                elif new_status == 'rejected':
+                    article.review_comment = request.POST.get('review_comment')
+                    article.reviewed_by = request.user
+                    article.reviewed_at = timezone.now()
+                
+                # Create review history entry
+                if old_status != new_status:
+                    ArticleReviewHistory.objects.create(
+                        article=article,
+                        status=new_status,
+                        comment=request.POST.get('review_comment'),
+                        reviewed_by=request.user
+                    )
+            
+            # For non-superusers updating published articles
+            elif article.status == 'published' and not request.user.is_superuser:
+                # Set status back to pending for review
+                article.status = 'pending'
+                article.review_comment = None
+                article.reviewed_by = None
+                article.reviewed_at = None
+                messages.success(request, 'Your changes have been submitted for review.')
+                
+                # Create review history entry
+                ArticleReviewHistory.objects.create(
+                    article=article,
+                    status='pending',
+                    comment='Article update submitted for review',
+                    reviewed_by=request.user
+                )
+            
+            # For non-superusers creating new articles
+            elif not request.user.is_superuser:
+                article.status = 'pending'
+            
+            article.updated_by = request.user
+            article.save()
+            
+            messages.success(request, f'Article "{article.title}" has been saved successfully.')
+            return redirect('content_dashboard')
+            
+    except Exception as e:
+        messages.error(request, f'Error saving article: {str(e)}')
+        return redirect('article_edit' if article_id else 'article_create')
 
 @staff_member_required
 @require_POST
@@ -2453,7 +2518,7 @@ def create_default_profile_page_arsitektur():
         {
             'identifier': 'tujuan_section',
             'title': 'Tujuan',
-            'description': "a.\tMendidik dan mempersiapkan lulusan yang penuh kasih, berintegritas. profesional, inovatif dan ahli di bidang perencanaan & perancangan Arsitektur, berjiwa kewiraushaan yang mampu bersaing dan berkiprah dalam dunia bisnis nasional serta internasional.\nb.\tMelaksanakan penelitian dan upaya lainnya untuk kemajuan ilmu pengetahuan, teknologi,  kesenian dan kebudayaan yang terkait dengan Arsitektur yang dapat memajukan kualitas kehidupan masyarakat.\nc.\tMelaksanakan Pengabdian Kepada Masyarakat (PKM) sebagai bentuk aktualisasi ilmu dan pengetahuan di tengah-tengah masyarakat.",
+            'description': "a.\tMendidik dan mempersiapkan lulusan yang penuh kasih, berintegritas. profesional, inovatif dan ahli di bidang perencanaan & perancangan Arsitektur, berjiwa kewiraushaan yang mampu bersaing dan berkiprah dalam dunia bisnis nasional serta internasional.\nb.\tMelaksanakan penelitian dan upaya lainnya untuk kemajuan ilmu pengetahuan, teknologi,  kesenian dan kebudayaan yang terkait dengan Arsitektur yang dapat memajukan kualitas kehidupan masyarakat.\nc.\tMelaksanakan Pengabdian Kepada Masyarakat (PKM) sebagai bentuk aktualisasi ilmu dan pengetahuan di tengah-tengahmasyarakat.",
             'order': 4
         },
         {
@@ -2648,7 +2713,7 @@ def create_default_profile_page_k3():
             'identifier': 'konsentrasi_section',
             'title': 'Konsentrasi',
             'items': [
-                {'title': 'General Occupational Health and Safety (Ahli K3 umum)'},
+                {'title': 'General Occupational Health and Safety (Ahli K3 umum)'},
             ],
             'order': 5
         },
@@ -3197,11 +3262,11 @@ def create_default_scholarship_page():
             'description': 'Raih kesempatan mendapatkan beasiswa pendidikan di Matana University. Kami berkomitmen untuk mendukung mahasiswa berprestasi dalam menggapai masa depan yang lebih baik.',
             'badge_text': '🎓 Program Beasiswa 2024',
             'cta': [
-                {
-                    'text': 'Lihat Program Beasiswa',
-                    'url': '#scholarship-programs',
-                    'style': 'primary'
-                },
+                # {
+                #     'text': 'Lihat Program Beasiswa',
+                #     'url': '#scholarship-programs',
+                #     'style': 'primary'
+                # },
                 {
                     'text': 'Daftar Sekarang',
                     'url': 'https://matanauniversity.siakadcloud.com/spmbfront/',
@@ -3337,39 +3402,85 @@ def scholarship_view(request):
 @login_required
 def article_save(request):
     try:
-        article_id = request.POST.get('article_id')
-        article = Article.objects.get(id=article_id) if article_id else Article()
-        
-        # Log untuk debugging
-        print("Form data received:", request.POST)
-        print("Featured image:", request.POST.get('featured_image'))
-        
-        # Update article fields
-        article.title = request.POST.get('title')
-        article.featured_image = request.POST.get('featured_image')
-        article.excerpt = request.POST.get('excerpt')
-        article.content = request.POST.get('content')
-        article.category_id = request.POST.get('category')
-        article.status = request.POST.get('status', 'draft')
-        article.meta_description = request.POST.get('meta_description', '')
-        article.meta_keywords = request.POST.get('meta_keywords', '')
-        article.is_featured = request.POST.get('is_featured') == 'on'
-        
-        if not article_id:
-            article.created_by = request.user
-        article.updated_by = request.user
-        
-        # Generate slug if needed
-        if not article.slug:
-            article.slug = slugify(article.title)
-        
-        article.save()
-        
-        messages.success(request, 'Article saved successfully!')
-        return redirect('article_edit', pk=article.id)
-        
+        with transaction.atomic():
+            article_id = request.POST.get('article_id')
+            article = Article.objects.get(id=article_id) if article_id else Article()
+            
+            # Check permissions
+            if article_id and not article.can_edit(request.user):
+                messages.error(request, 'You do not have permission to edit this article')
+                return redirect('article_list')
+
+            # Validate required fields
+            required_fields = ['title', 'excerpt', 'content', 'category']
+            for field in required_fields:
+                if not request.POST.get(field):
+                    messages.error(request, f'{field.title()} is required')
+                    return redirect('article_edit', pk=article_id) if article_id else redirect('article_create')
+
+            # Update article fields
+            article.title = request.POST.get('title')
+            article.featured_image = request.POST.get('featured_image')
+            article.excerpt = request.POST.get('excerpt')
+            article.content = request.POST.get('content')
+            article.category_id = request.POST.get('category')
+            article.meta_description = request.POST.get('meta_description', '')
+            article.meta_keywords = request.POST.get('meta_keywords', '')
+            article.is_featured = request.POST.get('is_featured') == 'on'
+
+            # Handle status changes
+            old_status = article.status if article_id else None
+            new_status = request.POST.get('status')
+
+            # Handle resubmission of rejected article
+            if request.POST.get('resubmit') and article.status == 'rejected':
+                if request.user != article.created_by:
+                    messages.error(request, 'Only the article creator can resubmit a rejected article')
+                    return redirect('article_edit', pk=article_id)
+                new_status = 'pending'
+                article.review_comment = None
+                article.reviewed_by = None
+                article.reviewed_at = None
+
+            # Handle status changes by superuser
+            elif request.user.is_superuser and article.status != 'published':
+                if new_status in ['published', 'rejected', 'on_review']:
+                    article.status = new_status
+                    article.reviewed_by = request.user
+                    article.reviewed_at = timezone.now()
+                    article.review_comment = request.POST.get('review_comment', '')
+            else:
+                # Non-superusers can only submit/resubmit
+                if not article_id or article.status == 'rejected':
+                    article.status = 'pending'
+                    article.review_comment = None
+                    article.reviewed_by = None
+                    article.reviewed_at = None
+
+            if not article_id:
+                article.created_by = request.user
+            article.updated_by = request.user
+
+            # Generate slug if needed
+            if not article.slug:
+                article.slug = slugify(article.title)
+
+            article.save()
+
+            # Create review history if status changed
+            if old_status != article.status:
+                ArticleReviewHistory.objects.create(
+                    article=article,
+                    status=article.status,
+                    comment=article.review_comment,
+                    reviewed_by=request.user
+                )
+
+            messages.success(request, 'Article saved successfully!')
+            return redirect('article_edit', pk=article.id)
+
     except Exception as e:
-        print("Error saving article:", str(e))
+        logger.error(f"Error saving article: {str(e)}")
         messages.error(request, f'Error saving article: {str(e)}')
         return redirect('article_list')
 
@@ -3554,40 +3665,40 @@ def create_default_management_page():
             'title': 'Rektorat & Ketua Lembaga',
             'items': [
                 {
-      "image": "/static/images/manajemen/r1.jpg",
-      "title": "Dr. Melitina Tecolau, S.E, M.M, CFP, CHCP-A",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/r2.jpg",
-      "title": "Dr. rer. nat. Gregoria Illya, M.Sc",
-      "description": "Dr. rer.nat. Gregoria Illya, peneliti dalam bidang fisika material, fisika komputasi, dan biofisika memperoleh gelar sarjana Fisika dari Universitas Katolik Parahyangan, dan kemudian mendapatkan gelar Master of Engineering Mathematics dari Universitas Twente, Belanda dengan beasiswa dari VNO NCW. Gelar Doktor diperoleh dari Universitas Potsdam Germany dengan disertasi berjudul Bilayer Material Properties From Dissipative Particle Dynamics Simulations yang dilaksanakan pada\ndan dibiayai penuh oleh Max Planck Institute for Colloids and Interfaces, Jerman.\n\nSetelah menyelesaikan studi doktor, beliau mengambil program Postdoctoral di Max Planck Institute for Polymer Research, Jerman dan menghasilkan publikasi di jurnal internasional bereputasi (Q1) Nature dengan judul: Aggregation and vesiculation of membrane proteins by curvature-mediated interactions. Pada tahun 2006 beliau mendapatkan beasiswa untuk mengikuti program Boulder School for Condensed Matter and Materials Physics di University of Colorado Boulder USA. Program\nPostdoctoral selanjutnya yang ditempuh oleh beliau adalah di Theoretical Physical Chemistry Department, Technische Universitaet Darmstadt, Jerman dan kemudian di Theoretical Physics Department, Justus-Liebig Universitaet Giessen, Jerman. Beliau pernah menjadi pembicara tamu di\nInternational Conference on Materials for Advanced Technologies Singapore pada tahun 2015, 2017 dan 2019 dan pada tahun 2017 beliau terpilih sebagai dosen berprestasi peringkat 1 dari Kopertis IV."
-    },
-    {
-      "image": "/static/images/manajemen/r3.jpg",
-      "title": "Dr. Bernardus Wishman S. Siregar, S.E., M.E.",
-      "description": "Dr. Bernardus Wishman S. Siregar, S.E., M.E. adalah seorang profesional yang memiliki pengalaman dalam bidang keuangan dan manajemen. Beliau telah menyelesaikan studi doktor di Universitas Katolik Parahyangan dengan disertasi berjudul “Analisis Pengaruh Kebijakan Moneter dan Fiskal Terhadap Kinerja Perbankan Syariah di Indonesia”. Beliau juga memiliki pengalaman sebagai dosen di Universitas Katolik Parahyangan dan Universitas Matana, serta sebagai pengajar di Universitas Matana. Beliau juga aktif dalam kegiatan akademik dan penelitian, serta memiliki publikasi di jurnal internasional bereputasi."
-    },
-    {
-      "image": "/static/images/manajemen/r4.jpg",
-      "title": "Dr. Lulu Setiawati, S.E., M.Bus., D.Th., CFP, CSA",
-      "description": "Dr. Lulu Setiawati, S.E., M.Bus, CFP, CSA telah berkarir di dunia pendidikan di Indonesia sejak 2002. Sebelum berkarir di dunia pendidikan, beliau telah berkarir secara professional di Australia dan Taiwan di berbagai industri. Gelar S.E. diperoleh dari Universitas Kristen Petra dalam bidang Manajemen, selanjutnya beliau mendapatkan gelar M.Bus in Finance dari RMIT, Melbourne.\n\nTahun 2017 beliau mendapatkan gelar Doktor dari Universitas Katolik Widya Mandala dalam bidang Manajemen Stratejik. Tahun 2009 beliau bergabung di UPH Surabaya sebagai dosen Keuangan dan ditunjuk sebagai Ketua Program Studi Akuntansi sejak tahun 2009 hingga tahun 2013.\n\nTahun 2014 selain sebagai dosen, beliau ditunjuk sebagai Manajer Keuangan dan tahun 2015 hingga tahun 2017 beliau juga menjabat sebagai Wakil Rektor bidang keuangan dan administrasi UPH Surabaya. Program pendidikan profesi juga telah beliau tempuh, Beliau telah mendapatkan gelar CFP sebagai perencana keuangan pada tahun 2016 dan pada tahun 2017 beliau mendapatkan gelar CSA sebagai Analis Efek."
-    },
-    {
-      "image": "/static/images/manajemen/r5.jpg",
-      "title": "Wijil Nugroho,S.E.,MBA.",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/r6.jpg",
-      "title": "Baltasar Serilus Sanggu Dedu., S.Kep., M.Sc",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/r7.jpg",
-      "title": "Dr. Kalfin, S.Mat., M.Mat",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    }
+                "image": "/static/images/manajemen/r1.jpg",
+                "title": "Dr. Melitina Tecolau, S.E, M.M, CFP, CHCP-A",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+                },
+                {
+                "image": "/static/images/manajemen/r2.jpg",
+                "title": "Dr. rer. nat. Gregoria Illya, M.Sc",
+                "description": "Dr. rer.nat. Gregoria Illya, peneliti dalam bidang fisika material, fisika komputasi, dan biofisika memperoleh gelar sarjana Fisika dari Universitas Katolik Parahyangan, dan kemudian mendapatkan gelar Master of Engineering Mathematics dari Universitas Twente, Belanda dengan beasiswa dari VNO NCW. Gelar Doktor diperoleh dari Universitas Potsdam Germany dengan disertasi berjudul Bilayer Material Properties From Dissipative Particle Dynamics Simulations yang dilaksanakan pada dan dibiayai penuh oleh Max Planck Institute for Colloids and Interfaces, Jerman.\n\nSetelah menyelesaikan studi doktor, beliau mengambil program Postdoctoral di Max Planck Institute for Polymer Research, Jerman dan menghasilkan publikasi di jurnal internasional bereputasi (Q1) Nature dengan judul: Aggregation and vesiculation of membrane proteins by curvature-mediated interactions. Pada tahun 2006 beliau mendapatkan beasiswa untuk mengikuti program Boulder School for Condensed Matter and Materials Physics di University of Colorado Boulder USA. Program Postdoctoral selanjutnya yang ditempuh oleh beliau adalah di Theoretical Physical Chemistry Department, Technische Universitaet Darmstadt, Jerman dan kemudian di Theoretical Physics Department, Justus-Liebig Universitaet Giessen, Jerman. Beliau pernah menjadi pembicara tamu di International Conference on Materials for Advanced Technologies Singapore pada tahun 2015, 2017 dan 2019 dan pada tahun 2017 beliau terpilih sebagai dosen berprestasi peringkat 1 dari Kopertis IV."
+                },
+                {
+                "image": "/static/images/manajemen/r3.jpg", 
+                "title": "Dr. Bernardus Wishman S. Siregar, S.E., M.E.",
+                "description": "Dr. Bernardus Wishman S. Siregar, S.E., M.E. adalah seorang profesional yang memiliki pengalaman dalam bidang keuangan dan manajemen. Beliau telah menyelesaikan studi doktor di Universitas Katolik Parahyangan dengan disertasi berjudul \"Analisis Pengaruh Kebijakan Moneter dan Fiskal Terhadap Kinerja Perbankan Syariah di Indonesia\". Beliau juga memiliki pengalaman sebagai dosen di Universitas Katolik Parahyangan dan Universitas Matana, serta sebagai pengajar di Universitas Matana. Beliau juga aktif dalam kegiatan akademik dan penelitian, serta memiliki publikasi di jurnal internasional bereputasi."
+                },
+                {
+                "image": "/static/images/manajemen/r4.jpg",
+                "title": "Dr. Lulu Setiawati, S.E., M.Bus., D.Th., CFP, CSA",
+                "description": "Dr. Lulu Setiawati, S.E., M.Bus, CFP, CSA telah berkarir di dunia pendidikan di Indonesia sejak 2002. Sebelum berkarir di dunia pendidikan, beliau telah berkarir secara professional di Australia dan Taiwan di berbagai industri. Gelar S.E. diperoleh dari Universitas Kristen Petra dalam bidang Manajemen, selanjutnya beliau mendapatkan gelar M.Bus in Finance dari RMIT, Melbourne.\n\nTahun 2017 beliau mendapatkan gelar Doktor dari Universitas Katolik Widya Mandala dalam bidang Manajemen Stratejik. Tahun 2009 beliau bergabung di UPH Surabaya sebagai dosen Keuangan dan ditunjuk sebagai Ketua Program Studi Akuntansi sejak tahun 2009 hingga tahun 2013.\n\nTahun 2014 selain sebagai dosen, beliau ditunjuk sebagai Manajer Keuangan dan tahun 2015 hingga tahun 2017 beliau juga menjabat sebagai Wakil Rektor bidang keuangan dan administrasi UPH Surabaya. Program pendidikan profesi juga telah beliau tempuh, Beliau telah mendapatkan gelar CFP sebagai perencana keuangan pada tahun 2016 dan pada tahun 2017 beliau mendapatkan gelar CSA sebagai Analis Efek."
+                },
+                {
+                "image": "/static/images/manajemen/r5.jpg",
+                "title": "Wijil Nugroho,S.E.,MBA.",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+                },
+                {
+                "image": "/static/images/manajemen/r6.jpg",
+                "title": "Baltasar Serilus Sanggu Dedu., S.Kep., M.Sc",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+                },
+                {
+                "image": "/static/images/manajemen/r7.jpg",
+                "title": "Dr. Kalfin, S.Mat., M.Mat",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
+                }
               
             ],
             'order': 2
