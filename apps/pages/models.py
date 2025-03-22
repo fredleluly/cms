@@ -314,6 +314,47 @@ class MaintenanceMode(models.Model):
             'allowed_ips': [ip.strip() for ip in self.allowed_ips.split(',') if ip.strip()]
         })
 
+class DownloadToken(models.Model):
+    """Stores a random token for secure file downloads"""
+    token = models.CharField(max_length=64, unique=True)
+    description = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_active = models.BooleanField(default=True)
+    expiry_date = models.DateTimeField(null=True, blank=True, 
+                                     help_text="When this token will expire. Leave blank for no expiry.")
+    
+    def is_expired(self):
+        """Check if token has expired"""
+        if not self.expiry_date:
+            return False
+        return timezone.now() > self.expiry_date
+    
+    def is_valid(self):
+        """Check if token is valid for use"""
+        return self.is_active and not self.is_expired()
+    
+    @classmethod
+    def generate_token(cls, length=48):
+        """Generate a new random token"""
+        import random
+        import string
+        chars = string.ascii_letters + string.digits
+        return ''.join(random.choice(chars) for _ in range(length))
+    
+    @classmethod
+    def create_new_token(cls, description=""):
+        """Create a new token instance"""
+        token = cls.generate_token()
+        return cls.objects.create(token=token, description=description)
+    
+    def __str__(self):
+        return f"{self.token[:10]}... ({self.description})"
+    
+    class Meta:
+        verbose_name = "Download Token"
+        verbose_name_plural = "Download Tokens"
+
 class ProgramStudi(models.Model):
     name = models.CharField(max_length=100)
     slug = models.SlugField(unique=True)

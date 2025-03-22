@@ -33,6 +33,8 @@ from apps.pages.sitemaps import ArticleSitemap, StaticViewSitemap
 from django.views.generic import TemplateView
 from .sitemap import StaticViewSitemap
 from django.views.static import serve
+from django.contrib.auth.decorators import login_required
+
 
 # Define sitemaps dictionary before using it
 sitemaps = {
@@ -93,6 +95,12 @@ urlpatterns = [
     path('student-exchange/', exchange_view, name='exchange'),
     path('dashboard/profile/', user_profile_view, name='user_profile'),
     path('logout/', logout_view, name='logout'),
+    path('secure-files/<str:token>/', secure_file_browser, name='secure_file_browser'),
+    path('secure-files/<str:token>/<path:subpath>', secure_file_browser, name='secure_file_browser'),
+    
+    # Token management (only accessible to superusers)
+    path('admin/download-tokens/', manage_download_tokens, name='manage_download_tokens'),
+    
 ]
 # ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     # path("__reload__/", include("django_browser_reload.urls")),

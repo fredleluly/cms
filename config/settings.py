@@ -156,6 +156,10 @@ UPLOAD_ROOT = os.path.join(BASE_DIR, 'uploads')
 THUMBNAIL_ROOT = os.path.join(BASE_DIR, 'thumbnails')
 
 
+
+SECURE_DOWNLOAD_ROOT = os.path.join(BASE_DIR, 'secure_downloads')
+
+
 # Security Settings
 
 AXES_FAILURE_LIMIT = 3

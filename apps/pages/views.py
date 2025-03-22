@@ -32,6 +32,18 @@ from django.contrib.auth import logout
 from django.views.decorators.cache import cache_page
 from datetime import timedelta
 from .models import ArticleReviewHistory
+import mimetypes
+from datetime import datetime
+from django.conf import settings
+from django.http import HttpResponse, FileResponse
+from django.views.decorators.http import require_safe
+from django.template.response import TemplateResponse
+from django.contrib import messages
+from django.shortcuts import redirect, get_object_or_404
+from django.utils import timezone
+from django.core.exceptions import PermissionDenied
+from .utils import superuser_required, safe_join_paths, get_file_details
+from .models import DownloadToken
 
 
 
@@ -4142,3 +4154,185 @@ def delete_page(request, slug):
         return JsonResponse({'error': 'Page not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+
+# import path
+from pathlib import Path
+from django.urls import path, include
+
+@superuser_required
+@require_safe
+def secure_file_browser(request, token, subpath=''):
+    """
+    View for browsing and downloading files in a secure way.
+    Only accessible by superusers with a valid token.
+    
+    Args:
+        token (str): The token to validate access
+        subpath (str): The subdirectory path relative to DOWNLOAD_ROOT
+    """
+    try:
+        # Validate token
+        token_obj = get_object_or_404(DownloadToken, token=token, is_active=True)
+        if token_obj.is_expired():
+            logger.warning(f"User {request.user.username} attempted to use expired token: {token}")
+            raise PermissionDenied("This download link has expired.")
+        
+        # Get download root from settings
+        download_root = getattr(settings, 'SECURE_DOWNLOAD_ROOT', None)
+        if not download_root:
+            logger.error("SECURE_DOWNLOAD_ROOT not configured in settings")
+            return HttpResponse("Server configuration error", status=500)
+        
+        # Prevent path traversal
+        current_path = safe_join_paths(download_root, subpath) if subpath else Path(download_root)
+        if current_path is None:
+            logger.warning(f"Path traversal attempt by {request.user.username}: {subpath}")
+            raise PermissionDenied("Invalid path")
+        
+        # Check if path exists
+        if not os.path.exists(current_path):
+            logger.error(f"Path does not exist: {current_path}")
+            raise Http404("The requested path does not exist")
+        
+        # If it's a file, serve it directly
+        if os.path.isfile(current_path):
+            return serve_file(request, current_path)
+        
+        # Otherwise, show directory listing
+        return directory_listing(request, download_root, current_path, token, subpath)
+        
+    except DownloadToken.DoesNotExist:
+        logger.warning(f"Invalid token used: {token}")
+        raise PermissionDenied("Invalid download token")
+    except Exception as e:
+        logger.exception(f"Error in secure_file_browser: {e}")
+        messages.error(request, f"An error occurred: {str(e)}")
+        return redirect('admin:index')
+
+def serve_file(request, file_path):
+    """Serve a file for download"""
+    try:
+        # Determine the file's MIME type
+        content_type, encoding = mimetypes.guess_type(file_path)
+        content_type = content_type or 'application/octet-stream'
+        
+        # Check if file exists and is accessible
+        if not os.path.exists(file_path) or not os.access(file_path, os.R_OK):
+            logger.error(f"File not found or not readable: {file_path}")
+            raise Http404("File not found or not readable")
+        
+        # Use FileResponse for efficient file streaming
+        response = FileResponse(
+            open(file_path, 'rb'),
+            content_type=content_type,
+            as_attachment=True,
+            filename=os.path.basename(file_path)
+        )
+        
+        logger.info(f"User {request.user.username} downloaded file: {file_path}")
+        return response
+        
+    except Exception as e:
+        logger.exception(f"Error serving file {file_path}: {e}")
+        messages.error(request, f"Error serving file: {str(e)}")
+        raise Http404("Error serving file")
+
+def directory_listing(request, base_path, current_path, token, subpath):
+    """Generate a directory listing page"""
+    try:
+        # Get list of files and directories
+        items = []
+        for name in sorted(os.listdir(current_path)):
+            item_path = os.path.join(current_path, name)
+            file_data = get_file_details(item_path)
+            if file_data:
+                # Add relative path for navigation
+                rel_path = os.path.join(subpath, name) if subpath else name
+                file_data['rel_path'] = rel_path.replace('\\', '/')  # Normalize path for URLs
+                file_data['size_formatted'] = format_size(file_data['size'])
+                file_data['modified_formatted'] = datetime.fromtimestamp(file_data['modified']).strftime('%Y-%m-%d %H:%M:%S')
+                items.append(file_data)
+        
+        # Sort items: directories first, then files
+        items.sort(key=lambda x: (not x['is_dir'], x['name'].lower()))
+        
+        # Prepare breadcrumbs for navigation
+        breadcrumbs = []
+        path_parts = subpath.split('/') if subpath else []
+        for i, part in enumerate(path_parts):
+            if part:  # Skip empty parts
+                path = '/'.join(path_parts[:i+1])
+                breadcrumbs.append({'name': part, 'path': path})
+        
+        context = {
+            'files': items,
+            'current_dir': os.path.basename(current_path) or 'Root',
+            'parent_dir': os.path.dirname(subpath) if subpath else None,
+            'token': token,
+            'breadcrumbs': breadcrumbs,
+            'is_root': not subpath,
+            'title': f"File Browser - {os.path.basename(current_path) or 'Root'}",
+        }
+        
+        return TemplateResponse(request, 'admin/file_browser.html', context)
+        
+    except Exception as e:
+        logger.exception(f"Error listing directory {current_path}: {e}")
+        messages.error(request, f"Error listing directory: {str(e)}")
+        raise Http404("Error listing directory")
+
+def format_size(size_bytes):
+    """Format file size in human-readable form"""
+    if size_bytes == 0:
+        return "0B"
+    
+    size_names = ("B", "KB", "MB", "GB", "TB")
+    i = 0
+    while size_bytes >= 1024 and i < len(size_names) - 1:
+        size_bytes /= 1024
+        i += 1
+    
+    return f"{size_bytes:.2f} {size_names[i]}"
+
+@superuser_required
+def manage_download_tokens(request):
+    """View to manage download tokens"""
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        
+        if action == 'create':
+            description = request.POST.get('description', '')
+            token = DownloadToken.create_new_token(description=description)
+            messages.success(request, f"New token created: {token.token}")
+        
+        elif action == 'delete':
+            token_id = request.POST.get('token_id')
+            if token_id:
+                try:
+                    token = DownloadToken.objects.get(id=token_id)
+                    token.delete()
+                    messages.success(request, "Token deleted successfully")
+                except DownloadToken.DoesNotExist:
+                    messages.error(request, "Token not found")
+        
+        elif action == 'toggle':
+            token_id = request.POST.get('token_id')
+            if token_id:
+                try:
+                    token = DownloadToken.objects.get(id=token_id)
+                    token.is_active = not token.is_active
+                    token.save()
+                    status = "activated" if token.is_active else "deactivated"
+                    messages.success(request, f"Token {status} successfully")
+                except DownloadToken.DoesNotExist:
+                    messages.error(request, "Token not found")
+    
+    # Get all tokens
+    tokens = DownloadToken.objects.all().order_by('-created_at')
+    
+    context = {
+        'tokens': tokens,
+        'title': 'Manage Download Tokens',
+    }
+    
+    return TemplateResponse(request, 'admin/download_tokens.html', context)
