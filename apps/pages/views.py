@@ -44,6 +44,8 @@ from django.utils import timezone
 from django.core.exceptions import PermissionDenied
 from .utils import superuser_required, safe_join_paths, get_file_details
 from .models import DownloadToken
+from .backup_utils import create_project_backup, get_project_size_estimation, check_available_space, DEFAULT_EXCLUDES
+import threading
 
 
 
@@ -4336,3 +4338,121 @@ def manage_download_tokens(request):
     }
     
     return TemplateResponse(request, 'admin/download_tokens.html', context)
+
+@login_required
+@superuser_required
+def backup_api_view(request):
+    """
+    API endpoint for triggering project backups, especially for background processing.
+    Only accessible to superusers.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Only POST method is allowed'}, status=405)
+    
+    try:
+        # Parse JSON data from request body
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Invalid JSON data'}, status=400)
+        
+        backup_name = data.get('backup_name', '')
+        run_in_background = data.get('background', False)
+        token = data.get('token', '')
+        
+        # Set default directories to exclude based on parameters
+        exclude_dirs = []
+        if not data.get('include_db', True):
+            db_path = os.path.join(settings.BASE_DIR, 'db.sqlite3')
+            exclude_dirs.append(db_path)
+        
+        if not data.get('include_media', True):
+            media_path = settings.MEDIA_ROOT
+            exclude_dirs.append(media_path)
+        
+        if run_in_background:
+            # Run backup in a separate thread to avoid blocking the request
+            backup_thread = threading.Thread(
+                target=_perform_backup_in_background,
+                args=(backup_name, DEFAULT_EXCLUDES, exclude_dirs, token)
+            )
+            backup_thread.daemon = True  # Thread will exit when main process exits
+            backup_thread.start()
+            
+            return JsonResponse({
+                'success': True,
+                'message': 'Backup started in background',
+                'background': True
+            })
+        else:
+            # Run backup synchronously
+            result = create_project_backup(
+                backup_name=backup_name,
+                exclude_patterns=DEFAULT_EXCLUDES,
+                exclude_dirs=exclude_dirs
+            )
+            
+            if result['success']:
+                response_data = {
+                    'success': True,
+                    'filename': result['filename'],
+                    'size': result['size'],
+                    'path': os.path.basename(result['path'])
+                }
+                
+                # Add download URL if a token was provided
+                if token:
+                    try:
+                        if DownloadToken.objects.filter(token=token, is_active=True).exists():
+                            backup_relpath = os.path.relpath(
+                                result['path'], 
+                                settings.SECURE_DOWNLOAD_ROOT
+                            )
+                            download_url = reverse('secure_file_browser', kwargs={
+                                'token': token,
+                                'subpath': backup_relpath
+                            })
+                            response_data['download_url'] = request.build_absolute_uri(download_url)
+                    except Exception as e:
+                        logger.error(f"Error generating download URL: {str(e)}")
+                
+                return JsonResponse(response_data)
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error': result.get('error', 'Unknown error occurred')
+                }, status=500)
+    
+    except Exception as e:
+        logger.exception(f"Unexpected error in backup_api_view: {str(e)}")
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=500)
+
+def _perform_backup_in_background(backup_name, exclude_patterns, exclude_dirs, token=None):
+    """
+    Helper function to perform backup in a background thread.
+    
+    Args:
+        backup_name (str): Name for the backup file
+        exclude_patterns (list): Patterns to exclude
+        exclude_dirs (list): Directories to exclude
+        token (str): Optional token ID for creating download URL
+    """
+    try:
+        logger.info(f"Starting background backup: {backup_name}")
+        
+        result = create_project_backup(
+            backup_name=backup_name,
+            exclude_patterns=exclude_patterns,
+            exclude_dirs=exclude_dirs
+        )
+        
+        if result['success']:
+            logger.info(f"Background backup completed successfully: {result['filename']}")
+        else:
+            logger.error(f"Background backup failed: {result.get('error', 'Unknown error')}")
+    
+    except Exception as e:
+        logger.exception(f"Error in background backup process: {str(e)}")

@@ -34,6 +34,7 @@ from django.views.generic import TemplateView
 from .sitemap import StaticViewSitemap
 from django.views.static import serve
 from django.contrib.auth.decorators import login_required
+from apps.pages.utils import superuser_required
 
 
 # Define sitemaps dictionary before using it
@@ -95,11 +96,24 @@ urlpatterns = [
     path('student-exchange/', exchange_view, name='exchange'),
     path('dashboard/profile/', user_profile_view, name='user_profile'),
     path('logout/', logout_view, name='logout'),
-    path('secure-files/<str:token>/', secure_file_browser, name='secure_file_browser'),
-    path('secure-files/<str:token>/<path:subpath>', secure_file_browser, name='secure_file_browser'),
+    # path('secure-files/<str:token>/', secure_file_browser, name='secure_file_browser'),
+    # path('secure-files/<str:token>/<path:subpath>', secure_file_browser, name='secure_file_browser'),
+    
+    # Token management (only accessible to superusers)
+    # path('admin/download-tokens/', manage_download_tokens, name='manage_download_tokens'),
+    
+    path('admin/secure-files/<str:token>/', secure_file_browser, name='secure_file_browser_root'),
+    path('admin/secure-files/<str:token>/<path:subpath>', secure_file_browser, name='secure_file_browser'),
     
     # Token management (only accessible to superusers)
     path('admin/download-tokens/', manage_download_tokens, name='manage_download_tokens'),
+    
+    # Add backup project URL
+    # path('admin/backup-project/', backup_project_view, name='backup_project'),
+    
+    # Add backup API endpoint
+    path('admin/api/backup/', backup_api_view, name='backup_api'),
+    
     
 ]
 # ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
