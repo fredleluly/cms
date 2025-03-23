@@ -45,3 +45,18 @@ python manage.py generate_articles 10
 ```bash
 python manage.py unban_all
 ```
+
+
+
+#### requirements (winodws)
+need to have zip binary
+C:\Program Files\Git\mingw64\bin
+copy to that dir
+```
+Download zip-3.0-bin.zip
+In the zipped file, in the bin folder, find the file zip.exe.
+Extract the file zip.exe to your mingw64 bin folder (for me: C:\Program Files\Git\mingw64\bin)
+Download bzip2-1.0.5-bin.zip
+In the zipped file, in the bin folder, find the file bzip2.dll
+Extract bzip2.dll to your mingw64\bin folder (same folder as above: C:\Program Files\Git\mingw64\bin)
+```
