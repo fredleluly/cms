@@ -949,7 +949,7 @@ def create_default_profile_page():
         },
         {
             'identifier': 'visi_misi_section',
-            'background_image': '/static/images/Gedung Matana.jpg',
+            'background_image': '/static/images/Gedung.jpg',
             'title': 'Visi & Misi',
             'items': [
                 {
