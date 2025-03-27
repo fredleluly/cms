@@ -1339,7 +1339,7 @@
         x-cloak
         class="fixed inset-0 z-[999] overflow-y-auto"
         role="dialog"
-        aria-modal="true"
+        {% if blocks_popup is not defined %}style="display: none !important;"{% endif %}
     >
         <!-- Backdrop -->
         <div 
