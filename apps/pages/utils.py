@@ -99,7 +99,7 @@ def togglable_cache(timeout=None, *, key_prefix=None, cache=None, description=No
         cache.delete_pattern(f"views.decorators.cache.cache_page.{key_prefix}.*")
     """
     if timeout is None:
-        timeout = getattr(settings, 'CACHE_TIMEOUT', 3600 * 48)  # Default to 1 hour
+        timeout = getattr(settings, 'CACHE_TIMEOUT', 3600 * 24 * 2)  # Default to 1 hour
     
     def decorator(view_func):
         view_name = view_func.__name__
