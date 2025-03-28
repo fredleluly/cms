@@ -258,8 +258,9 @@ CSP_FRAME_SRC = (
     "https://www.instagram.com",
 )
 
-# Cache timeout in seconds (5 minutes)
-CACHE_TIMEOUT = 3000
+# Cache configuration
+CACHE_ENABLED = os.getenv('CACHE_ENABLED', 'True') == 'True'  # Defaults to True
+CACHE_TIMEOUT = 3600  # Default timeout in seconds (1 hour)
 
 # CSRF settings
 CSRF_COOKIE_NAME = 'csrftoken'

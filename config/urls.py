@@ -25,7 +25,7 @@ from apps.pages.views import (
     profile_view, category_create_view, upload_image, article_list_view, bulk_action_view,
     registration_view, registration_submit, scholarship_view, page_edit_view, page_list_view,
     mitra_view, management_view, ukm_view, exchange_view, profile_view_manajemen,
-    user_profile_view, logout_view, delete_page
+    user_profile_view, logout_view, delete_page, cache_management_view
 )
 from apps.pages.views import *
 from django.contrib.sitemaps.views import sitemap
@@ -114,6 +114,8 @@ urlpatterns = [
     # Add backup API endpoint
     path('admin/api/backup/', backup_api_view, name='backup_api'),
     
+    # Add cache management view
+    path('admin/cache-management/', cache_management_view, name='cache_management'),
     
 ]
 # ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

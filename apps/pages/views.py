@@ -46,8 +46,7 @@ from .utils import superuser_required, safe_join_paths, get_file_details
 from .models import DownloadToken
 from .backup_utils import create_project_backup, get_project_size_estimation, check_available_space, DEFAULT_EXCLUDES
 import threading
-
-
+from apps.pages.utils import togglable_cache, clear_view_cache, CACHED_VIEWS_REGISTRY
 
 
 # Get logger for this file
@@ -253,7 +252,7 @@ def create_default_homepage():
     create_standardized_blocks(homepage, default_blocks)
     return homepage
 
-# @cache_page(60 * 60)
+@togglable_cache()
 def home_view(request):
     try:
         page = Page.objects.get(is_homepage=True, status=Page.PUBLISHED)
@@ -591,7 +590,7 @@ def create_default_mitra_page():
     create_standardized_blocks(mitra_page, default_blocks)
     return mitra_page
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+@togglable_cache()
 def mitra_view(request):
     """View for mitra page"""
     try:
@@ -615,9 +614,78 @@ def mitra_view(request):
     
     return render(request, 'pages/mitra.html', context)
 
+@staff_member_required
+
+def cache_management_view(request):
+    """
+    View for managing the cache settings. Allows admin users to:
+    1. Enable/disable caching globally
+    2. Clear specific view caches or all caches
+    3. See current cache status
+    """
+    try:
+        # Handle form submissions
+        if request.method == 'POST':
+            action = request.POST.get('action')
+            
+            if action == 'toggle_global':
+                # Toggle global cache setting
+                new_status = request.POST.get('cache_enabled') == 'true'
+                
+                # In a real application, you'd update an environment variable or a database setting
+                # For this example, we'll just update the setting in memory (will reset on server restart)
+                settings.CACHE_ENABLED = new_status
+                
+                messages.success(request, f"Global caching {'enabled' if new_status else 'disabled'}")
+                
+            elif action == 'clear_cache':
+                # Clear specific view cache or all caches
+                view_name = request.POST.get('view_name')
+                if view_name and view_name != 'all':
+                    success = clear_view_cache(view_name=view_name)
+                else:
+                    # Clear all caches
+                    success = clear_view_cache()
+                
+                if success:
+                    messages.success(request, f"Cache cleared for {'all views' if not view_name or view_name == 'all' else view_name}")
+                else:
+                    messages.error(request, "Failed to clear cache")
+        
+        # Get current cache status
+        cache_status = {
+            'global_enabled': getattr(settings, 'CACHE_ENABLED', True),
+            'timeout': getattr(settings, 'CACHE_TIMEOUT', 3600),
+            'backend': settings.CACHES['default']['BACKEND'],
+            'cacheable_views': [
+                {
+                    'name': name,
+                    'description': info['description'],
+                    'timeout': info['timeout']
+                } 
+                for name, info in CACHED_VIEWS_REGISTRY.items()
+            ]
+        }
+        
+        # Add stats about cache usage if possible
+        if hasattr(cache, 'info'):
+            try:
+                cache_status['stats'] = cache.info()
+            except:
+                cache_status['stats'] = None
+        
+        return render(request, 'admin/cache_management.html', {
+            'cache_status': cache_status,
+            'title': 'Cache Management'
+        })
+    except Exception as e:
+        logger.error(f"Error in cache_management_view: {str(e)}")
+        messages.error(request, f"An error occurred: {str(e)}")
+        return redirect('admin:index')
 
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+
+@togglable_cache()
 def news_view(request):
     # Get query parameters with defaults
     category_slug = request.GET.get('category', '')
@@ -1221,7 +1289,7 @@ def create_default_profile_page_manajemen():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+@togglable_cache()
 def profile_view_manajemen(request):
     """View for profile page"""
     try:
@@ -1457,7 +1525,7 @@ def create_default_profile_page_manajemens2():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+@togglable_cache()
 def profile_view_manajemens2(request):
     """View for profile page"""
     try:
@@ -1621,7 +1689,7 @@ def create_default_profile_page_akuntansi():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+@togglable_cache()
 def profile_view_akuntansi(request):
     """View for profile page"""
     try:
@@ -1779,7 +1847,7 @@ def create_default_profile_page_hospitality():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+@togglable_cache()
 def profile_view_hospitality(request):
     """View for Hospitality & Tourism profile page"""
     try:
@@ -1927,7 +1995,7 @@ def create_default_profile_page_fisika_medis():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+@togglable_cache()
 def profile_view_fisika_medis(request):
     """View for Fisika Medis profile page"""
     try:
@@ -2081,7 +2149,7 @@ def create_default_profile_page_teknik_informatika():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-# # @cache_page(60 * 60)  # Cache for 15 minutes
+# @togglable_cache()
 # def profile_view_teknik_informatika(request):
 #     """View for Teknik Informatika profile page"""
 #     try:
@@ -2235,7 +2303,7 @@ def create_default_profile_page_statistika():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-# @cache_page(60 * 60)
+@togglable_cache()
 def profile_view_informatika(request):
     """View for Teknik Informatika profile page"""
     try:
@@ -2271,7 +2339,7 @@ def profile_view_informatika(request):
     return render(request, 'pages/prodi.html', context)
 
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+@togglable_cache()
 def profile_view_statistika(request):
     """View for Statistika profile page"""
     try:
@@ -2430,7 +2498,7 @@ def create_default_profile_page_dkv():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+@togglable_cache()
 def profile_view_dkv(request):
     """View for Desain Komunikasi Visual profile page"""
     try:
@@ -2616,7 +2684,7 @@ def create_default_popup():
     return profile_page
 
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+@togglable_cache()
 def profile_view_arsitektur(request):
     """View for Arsitektur profile page"""
     try:
@@ -2748,7 +2816,7 @@ def create_default_profile_page_k3():
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+@togglable_cache()
 def profile_view_k3(request):
     """View for Arsitektur profile page"""
     try:
@@ -2784,7 +2852,7 @@ def profile_view_k3(request):
     
     return render(request, 'pages/prodi.html', context)
 
-# @cache_page(60 * 60)  # Cache for 15 minutes
+@togglable_cache()
 def profile_view(request):
     """View for profile page"""
     try:
@@ -3794,7 +3862,7 @@ def create_default_management_page():
     create_standardized_blocks(management_page, default_blocks)
     return management_page
 
-# @cache_page(60 * 60 * 24) # Cache for 24 hours
+@togglable_cache()
 def management_view(request):
     """View for management page"""
     try:
