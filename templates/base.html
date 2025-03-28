@@ -1333,14 +1333,14 @@
 
     <!-- After opening body tag, before main content -->
     <!-- Promotional Popup -->
+    {% if blocks_popup and blocks_popup.hero_section and blocks_popup.description_section and blocks_popup.button_section and blocks_popup.button_section.items %}
     <div 
         x-data="initializePopup()"
         x-show="showPopup"
         x-cloak
         class="fixed inset-0 z-[999] overflow-y-auto"
         role="dialog"
-        {% if blocks_popup is not defined %}style="display: none !important;"{% endif %}
-    >
+        aria-modal="true">
         <!-- Backdrop -->
         <div 
             x-show="showPopup"
@@ -1380,7 +1380,6 @@
 
                 <div class="flex flex-col md:flex-row">
                     <!-- Image Container -->
-
                     <div class="relative md:w-7/12 overflow-hidden">
                         <img 
                             src="{% optimized_image blocks_popup.hero_section.background_image %}"
@@ -1442,6 +1441,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
     <!-- Add this script at the bottom of your base.html file -->
     <script>
