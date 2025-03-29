@@ -654,7 +654,7 @@ def cache_management_view(request):
         
         # Get current cache status
         cache_status = {
-            'global_enabled': getattr(settings, 'CACHE_ENABLED', True),
+            'global_enabled': getattr(settings, 'CACHE_ENABLED', False) ,
             'timeout': getattr(settings, 'CACHE_TIMEOUT', 3600 * 24 * 2),
             'backend': settings.CACHES['default']['BACKEND'],
             'cacheable_views': [

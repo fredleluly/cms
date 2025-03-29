@@ -407,10 +407,22 @@ CKEDITOR_CONFIGS = {
 # }
 
 # Replace with local memory cache for development
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+#         'LOCATION': 'unique-snowflake',
+#     }
+# }
+
+
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'django_file_cache'), # **PENTING: Ganti path ini jika perlu!**
+        'OPTIONS': {
+            'MAX_ENTRIES': 300, # Batasan jumlah file cache (opsional, sesuaikan)
+            'CULL_FREQUENCY': 3, # Rasio pembersihan cache (opsional, sesuaikan)
+        },
     }
 }
 
