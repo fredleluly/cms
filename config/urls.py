@@ -117,7 +117,7 @@ urlpatterns = [
     # Add cache management view
     path('admin/cache-management/', cache_management_view, name='cache_management'),
     path('admin/git-pull/', git_pull_view, name='git_pull'), # Tambahkan ini di bawah namespace admin
-    path('admin/git-pull-page/', git_pull_page_view, name='git_pull_page'),
+    path('admin/git-pull-page909/', git_pull_page_view, name='git_pull_page'),
     
     
 ]
