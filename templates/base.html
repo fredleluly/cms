@@ -1445,40 +1445,56 @@
 
     <!-- Add this script at the bottom of your base.html file -->
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const programStudiButton = document.querySelector('.nav-item.relative.group > button');
-        const megaMenu = document.querySelector('.mega-menu');
-
-        let hoverTimeout;
-
-        programStudiButton.addEventListener('mouseenter', function () {
-          hoverTimeout = setTimeout(() => {
-            megaMenu.style.visibility = 'visible';
-            megaMenu.style.opacity = '1';
-            megaMenu.style.transform = 'translateY(0)';
-          }, 300); // Delay in milliseconds (300ms)
-        });
-
-        programStudiButton.addEventListener('mouseleave', function () {
-          clearTimeout(hoverTimeout);
+     document.addEventListener('DOMContentLoaded', function () {
+  // Get all nav items with dropdowns
+  const navItems = document.querySelectorAll('.nav-item.relative.group');
+  
+  navItems.forEach(navItem => {
+    const button = navItem.querySelector('button');
+    const megaMenu = navItem.querySelector('.mega-menu');
+    let isHovering = false;
+    let hideTimeout;
+    
+    // When mouse enters the nav item
+    navItem.addEventListener('mouseenter', function () {
+      isHovering = true;
+      clearTimeout(hideTimeout);
+      
+      // Show the mega menu
+      megaMenu.style.visibility = 'visible';
+      megaMenu.style.opacity = '1';
+      megaMenu.style.transform = 'translateY(0)';
+    });
+    
+    // When mouse leaves the nav item
+    navItem.addEventListener('mouseleave', function () {
+      isHovering = false;
+      
+      // Set a small delay before hiding, so if mouse re-enters quickly it won't disappear
+      hideTimeout = setTimeout(() => {
+        if (!isHovering) {
           megaMenu.style.visibility = 'hidden';
           megaMenu.style.opacity = '0';
           megaMenu.style.transform = 'translateY(10px)';
-        });
-
-        megaMenu.addEventListener('mouseenter', function () {
-          clearTimeout(hoverTimeout);
-          megaMenu.style.visibility = 'visible';
-          megaMenu.style.opacity = '1';
-          megaMenu.style.transform = 'translateY(0)';
-        });
-
-        megaMenu.addEventListener('mouseleave', function () {
-          megaMenu.style.visibility = 'hidden';
-          megaMenu.style.opacity = '0';
-          megaMenu.style.transform = 'translateY(10px)';
-        });
+        }
+      }, 500);  // 300ms delay, adjust as needed
+    });
+    
+    // Handle submenu hover (for submenus like Faculty items)
+    const facultyGroups = navItem.querySelectorAll('.group\\/faculty');
+    
+    facultyGroups.forEach(facultyGroup => {
+      facultyGroup.addEventListener('mouseenter', function() {
+        isHovering = true;
+        clearTimeout(hideTimeout);
       });
+      
+      facultyGroup.addEventListener('mouseleave', function() {
+        isHovering = false;
+      });
+    });
+  });
+});
     </script>
   </body>
 </html>
