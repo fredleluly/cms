@@ -653,6 +653,8 @@ def cache_management_view(request):
                     messages.error(request, "Failed to clear cache")
         
         # Get current cache status
+        print('Debug: CACHE_ENABLED from settings:', getattr(settings, 'CACHE_ENABLED', False))
+        
         cache_status = {
             'global_enabled': getattr(settings, 'CACHE_ENABLED', False) ,
             'timeout': getattr(settings, 'CACHE_TIMEOUT', 3600 * 24 * 2),
@@ -666,6 +668,7 @@ def cache_management_view(request):
                 for name, info in CACHED_VIEWS_REGISTRY.items()
             ]
         }
+        print('Debug: cache_status[global_enabled]:', cache_status['global_enabled'])
         
         # Add stats about cache usage if possible
         if hasattr(cache, 'info'):
@@ -4524,3 +4527,67 @@ def _perform_backup_in_background(backup_name, exclude_patterns, exclude_dirs, t
     
     except Exception as e:
         logger.exception(f"Error in background backup process: {str(e)}")
+
+import subprocess
+import json
+from django.http import JsonResponse
+from django.conf import settings
+from .utils import superuser_required  # Decorator superuser_required yang sudah Anda punya
+
+
+@superuser_required
+def git_pull_page_view(request):
+    """
+    View untuk menampilkan halaman admin git pull.
+    """
+    return render(request, 'admin/git_pull.html')
+
+@superuser_required
+def git_pull_view(request):
+    """
+    Endpoint untuk menjalankan 'git pull' pada direktori project.
+    Hanya bisa diakses oleh superuser.
+    """
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'error': 'Method not allowed. Use POST.'}, status=405)
+
+    try:
+        # Jalankan git pull di direktori BASE_DIR project Django
+        process = subprocess.run(
+            ['git', 'pull'],
+            cwd=settings.BASE_DIR,  # Penting: cwd=BASE_DIR
+            capture_output=True,
+            text=True,
+            check=False  # Jangan raise exception jika return code != 0, kita handle sendiri
+        )
+
+        output = process.stdout
+        error_output = process.stderr
+        return_code = process.returncode
+
+        if return_code == 0:
+            log_message = f"Git pull berhasil dijalankan oleh user {request.user.username}:\nOutput:\n{output}"
+            logger.info(log_message) # Log info jika berhasil
+            return JsonResponse({
+                'success': True,
+                'message': 'Git pull berhasil!',
+                'output': output,
+                'error': error_output
+            })
+        else:
+            error_message = f"Git pull GAGAL dijalankan oleh user {request.user.username}:\nReturn Code: {return_code}\nOutput:\n{output}\nError Output:\n{error_output}"
+            logger.error(error_message) # Log error jika gagal
+            return JsonResponse({
+                'success': False,
+                'error': 'Git pull gagal!',
+                'output': output,
+                'error_output': error_output
+            }, status=500) # Status 500 untuk error server
+
+    except Exception as e:
+        error_message = f"Error saat menjalankan git pull oleh user {request.user.username}: {str(e)}"
+        logger.exception(error_message) # Log exception lengkap
+        return JsonResponse({
+            'success': False,
+            'error': f'Terjadi kesalahan server: {str(e)}'
+        }, status=500)

@@ -116,7 +116,7 @@ def togglable_cache(timeout=None, *, key_prefix=None, cache=None, description=No
         def wrapped_view(request, *args, **kwargs):
             try:
                 # Check if caching is enabled globally
-                cache_enabled = getattr(settings, 'CACHE_ENABLED', True)
+                cache_enabled = getattr(settings, 'CACHE_ENABLED', False)
                 
                 # Check for cache override in request query params (for superusers/staff only)
                 if request.user.is_authenticated and (request.user.is_superuser or request.user.is_staff):
@@ -128,6 +128,10 @@ def togglable_cache(timeout=None, *, key_prefix=None, cache=None, description=No
                 if cache_enabled:
                     # Apply cache_page decorator dynamically
                     cached_view = cache_page(timeout, key_prefix=key_prefix, cache=cache)(view_func)
+                    if hasattr(cached_view, 'is_cached') and cached_view.is_cached(request, *args, **kwargs): # Cek apakah cache di-hit
+                        logger.info(f"Cache HIT for view '{view_name}' (key_prefix='{key_prefix or 'views.decorators.cache.cache_page'}').") # Log cache hit
+                    else:
+                        logger.info(f"Cache MISS for view '{view_name}' (key_prefix='{key_prefix or 'views.decorators.cache.cache_page'}').") # Log cache miss
                     return cached_view(request, *args, **kwargs)
                 else:
                     # Skip caching
