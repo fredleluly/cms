@@ -7,6 +7,9 @@ db.sqlite3
 media
 migrations
 coba334
+.specstory
+.specstory/*
+
 
 node_modules
 package-lock.json

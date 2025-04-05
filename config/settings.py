@@ -53,7 +53,7 @@ ALLOWED_HOSTS = [
 # Application definition
 
 INSTALLED_APPS = [
-     "unfold",
+    "unfold",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -65,16 +65,26 @@ INSTALLED_APPS = [
 
     # Third party apps
     'ckeditor',  # for rich text editing
-    'apps.media.apps.MediaConfig',
-
-
+    'rest_framework',  # Make sure DRF is installed
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    
     # Local apps
     'apps.pages.apps.PagesConfig',
+    'apps.media.apps.MediaConfig',
+    'apps.members.apps.MembersConfig',  # Make sure this matches exactly
+    
     'axes',
     'tailwind',
     'theme',
     #  'django_browser_reload'
 ]
+
+# REST_AUTH = {
+#     'USE_JWT': True,
+#     'JWT_AUTH_COOKIE': 'jwt-auth',
+# }
+
 TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",
@@ -407,24 +417,24 @@ CKEDITOR_CONFIGS = {
 # }
 
 # Replace with local memory cache for development
-# CACHES = {
-#     'default': {
-#         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-#         'LOCATION': 'unique-snowflake',
-#     }
-# }
-
-
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(BASE_DIR, 'django_file_cache'), # **PENTING: Ganti path ini jika perlu!**
-        'OPTIONS': {
-            'MAX_ENTRIES': 300, # Batasan jumlah file cache (opsional, sesuaikan)
-            'CULL_FREQUENCY': 3, # Rasio pembersihan cache (opsional, sesuaikan)
-        },
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
     }
 }
+
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+#         'LOCATION': os.path.join(BASE_DIR, 'django_file_cache'), # **PENTING: Ganti path ini jika perlu!**
+#         'OPTIONS': {
+#             'MAX_ENTRIES': 300, # Batasan jumlah file cache (opsional, sesuaikan)
+#             'CULL_FREQUENCY': 3, # Rasio pembersihan cache (opsional, sesuaikan)
+#         },
+#     }
+# }
 
 # Logging Configuration
 LOGGING = {

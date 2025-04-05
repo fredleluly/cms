@@ -119,6 +119,8 @@ urlpatterns = [
     path('admin/git-pull/', git_pull_view, name='git_pull'), # Tambahkan ini di bawah namespace admin
     path('admin/git-pull-page909/', git_pull_page_view, name='git_pull_page'),
     
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),    # Add the members API URLs
+    path('members/', include('apps.members.urls', namespace='members')),
     
 ]
 # ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
