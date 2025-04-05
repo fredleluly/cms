@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import HelloWorldSerializer
+from .serializers import HelloWorldSerializer, NoteImageSerializer
 
 
 class HelloWorldAPIView(APIView):
@@ -27,3 +27,447 @@ class HelloWorldAPIView(APIView):
             content = {'message': f'Hello, {name}!'}
             return Response(content)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+# Add to the top of views.py
+import django_filters
+from .models import Element
+
+class ElementFilter(django_filters.FilterSet):
+    created_after = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='gte')
+    created_before = django_filters.DateTimeFilter(field_name='created_at', lookup_expr='lte')
+    updated_after = django_filters.DateTimeFilter(field_name='updated_at', lookup_expr='gte')
+    updated_before = django_filters.DateTimeFilter(field_name='updated_at', lookup_expr='lte')
+    due_after = django_filters.DateTimeFilter(field_name='due_date', lookup_expr='gte')
+    due_before = django_filters.DateTimeFilter(field_name='due_date', lookup_expr='lte')
+    
+    class Meta:
+        model = Element
+        fields = {
+            'type': ['exact'],
+            'section': ['exact'],
+            'is_archived': ['exact'],
+            'is_favorite': ['exact'],
+            'is_completed': ['exact'],
+        }
+
+
+
+from rest_framework import viewsets, permissions, filters, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django_filters.rest_framework import DjangoFilterBackend
+from .models import Tag, Section, Element, StudySession, StudyRecord
+from .serializers import (
+    TagSerializer, SectionSerializer, ElementSerializer, ElementDetailSerializer,
+    StudySessionSerializer, StudyRecordSerializer, FlashcardSerializer,
+    QuestionSerializer, MultipleChoiceSerializer, TodoSerializer, NoteSerializer
+)
+
+class TagViewSet(viewsets.ModelViewSet):
+    serializer_class = TagSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = ['name']
+    
+    def get_queryset(self):
+        # Only return tags created by the current user
+        return Tag.objects.filter(user=self.request.user)
+
+class SectionViewSet(viewsets.ModelViewSet):
+    serializer_class = SectionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['title', 'description']
+    ordering_fields = ['title', 'order']
+    filterset_fields = ['parent']
+    
+    def get_queryset(self):
+        # Only return sections created by the current user
+        return Section.objects.filter(user=self.request.user)
+    
+    @action(detail=True, methods=['get'])
+    def elements(self, request, pk=None):
+        """Get all elements in this section"""
+        section = self.get_object()
+        elements = Element.objects.filter(section=section, user=request.user)
+        serializer = ElementSerializer(elements, many=True)
+        return Response(serializer.data)
+
+class ElementViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    filterset_class = ElementFilter
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['title', 'content', 'additional_content']
+    ordering_fields = ['title', 'created_at', 'updated_at', 'order']
+    filterset_fields = ['type', 'section', 'tags', 'is_archived', 'is_favorite', 'is_completed']
+    
+    def get_serializer_class(self):
+        if self.action == 'retrieve' or self.action == 'update' or self.action == 'partial_update':
+            return ElementDetailSerializer
+        return ElementSerializer
+    
+    def get_queryset(self):
+        # Only return elements created by the current user
+        return Element.objects.filter(user=self.request.user)
+    
+    @action(detail=True, methods=['post'])
+    def complete(self, request, pk=None):
+        """Mark an element as complete"""
+        element = self.get_object()
+        element.mark_as_complete()
+        return Response({'status': 'Element marked as complete'})
+    
+    @action(detail=True, methods=['post'])
+    def incomplete(self, request, pk=None):
+        """Mark an element as incomplete"""
+        element = self.get_object()
+        element.mark_as_incomplete()
+        return Response({'status': 'Element marked as incomplete'})
+    
+    @action(detail=True, methods=['get'])
+    def related(self, request, pk=None):
+        """Get related elements"""
+        element = self.get_object()
+        relationship_type = request.query_params.get('type', None)
+        related_elements = element.get_related_elements(relationship_type)
+        serializer = ElementSerializer(related_elements, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['post'])
+    def add_related(self, request, pk=None):
+        """Add a related element"""
+        element = self.get_object()
+        related_id = request.data.get('related_id')
+        relationship_type = request.data.get('relationship_type', 'related')
+        
+        try:
+            related_element = Element.objects.get(id=related_id, user=request.user)
+            element.add_related_element(related_element, relationship_type)
+            return Response({'status': 'Related element added'})
+        except Element.DoesNotExist:
+            return Response(
+                {'error': 'Related element not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+    # Add to ElementViewSet
+    @action(detail=False, methods=['post'])
+    def bulk_update(self, request):
+        """Update multiple elements at once"""
+        element_ids = request.data.get('element_ids', [])
+        update_data = request.data.get('update_data', {})
+        
+        if not element_ids or not update_data:
+            return Response(
+                {'error': 'Both element_ids and update_data are required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Get elements owned by the current user
+        elements = Element.objects.filter(
+            id__in=element_ids,
+            user=request.user
+        )
+        
+        # Validate that all requested elements exist
+        if len(elements) != len(element_ids):
+            return Response(
+                {'error': 'One or more elements not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Only allow specific fields to be updated in bulk
+        allowed_fields = [
+            'section', 'is_archived', 'is_favorite', 
+            'is_completed', 'order', 'due_date'
+        ]
+        
+        update_fields = {k: v for k, v in update_data.items() if k in allowed_fields}
+        
+        # Handle tag operations separately
+        add_tags = request.data.get('add_tags', [])
+        remove_tags = request.data.get('remove_tags', [])
+        
+        # Update elements
+        updated_count = elements.update(**update_fields)
+        
+        # Handle tag operations
+        if add_tags:
+            tags_to_add = Tag.objects.filter(id__in=add_tags, user=request.user)
+            for element in elements:
+                element.tags.add(*tags_to_add)
+        
+        if remove_tags:
+            tags_to_remove = Tag.objects.filter(id__in=remove_tags, user=request.user)
+            for element in elements:
+                element.tags.remove(*tags_to_remove)
+        
+        return Response({
+            'status': 'success',
+            'updated_count': updated_count,
+            'affected_elements': element_ids
+        })
+
+
+class FlashcardViewSet(viewsets.ModelViewSet):
+    serializer_class = FlashcardSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['title', 'content', 'additional_content']
+    ordering_fields = ['title', 'created_at', 'updated_at', 'order']
+    filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
+    
+    def get_queryset(self):
+        # Only return flashcards created by the current user
+        return Element.objects.filter(
+            user=self.request.user,
+            type=Element.FLASHCARD
+        )
+
+class QuestionViewSet(viewsets.ModelViewSet):
+    serializer_class = QuestionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['title', 'content', 'additional_content']
+    ordering_fields = ['title', 'created_at', 'updated_at', 'order']
+    filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
+    
+    def get_queryset(self):
+        # Only return questions created by the current user
+        return Element.objects.filter(
+            user=self.request.user,
+            type=Element.QUESTION
+        )
+
+class MultipleChoiceViewSet(viewsets.ModelViewSet):
+    serializer_class = MultipleChoiceSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['title', 'content']
+    ordering_fields = ['title', 'created_at', 'updated_at', 'order']
+    filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
+    
+    def get_queryset(self):
+        # Only return multiple choice questions created by the current user
+        return Element.objects.filter(
+            user=self.request.user,
+            type=Element.MULTIPLE_CHOICE
+        )
+
+class TodoViewSet(viewsets.ModelViewSet):
+    serializer_class = TodoSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['title', 'content']
+    ordering_fields = ['title', 'created_at', 'updated_at', 'order', 'due_date']
+    filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite', 'is_completed']
+    
+    def get_queryset(self):
+        # Only return todos created by the current user
+        return Element.objects.filter(
+            user=self.request.user,
+            type=Element.TODO
+        )
+    
+    @action(detail=True, methods=['post'])
+    def complete(self, request, pk=None):
+        """Mark a todo as complete"""
+        todo = self.get_object()
+        todo.mark_as_complete()
+        return Response({'status': 'Todo marked as complete'})
+    
+    @action(detail=True, methods=['post'])
+    def incomplete(self, request, pk=None):
+        """Mark a todo as incomplete"""
+        todo = self.get_object()
+        todo.mark_as_incomplete()
+        return Response({'status': 'Todo marked as incomplete'})
+
+class NoteViewSet(viewsets.ModelViewSet):
+    serializer_class = NoteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    search_fields = ['title', 'content']
+    ordering_fields = ['title', 'created_at', 'updated_at', 'order']
+    filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
+    
+    def get_queryset(self):
+        # Only return notes created by the current user
+        return Element.objects.filter(
+            user=self.request.user,
+            type=Element.NOTE
+        )
+    
+
+class StudySessionViewSet(viewsets.ModelViewSet):
+    serializer_class = StudySessionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        return StudySession.objects.filter(user=self.request.user)
+    
+    @action(detail=True, methods=['post'])
+    def end(self, request, pk=None):
+        """End a study session"""
+        session = self.get_object()
+        session.end_session()
+        serializer = StudySessionSerializer(session)
+        return Response(serializer.data)
+
+    # Add to StudySessionViewSet
+    @action(detail=True, methods=['post'])
+    def add_record(self, request, pk=None):
+        """Add a study record to a session"""
+        session = self.get_object()
+        
+        # Validate the session is not ended
+        if session.ended_at:
+            return Response(
+                {'error': 'Cannot add records to an ended session'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Get required data
+        element_id = request.data.get('element_id')
+        result = request.data.get('result')
+        time_spent = request.data.get('time_spent')
+        notes = request.data.get('notes', '')
+        
+        # Validate required fields
+        if not element_id or not result:
+            return Response(
+                {'error': 'element_id and result are required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Validate the element exists and belongs to the user
+        try:
+            element = Element.objects.get(id=element_id, user=request.user)
+        except Element.DoesNotExist:
+            return Response(
+                {'error': 'Element not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        # Create the study record
+        record = StudyRecord.objects.create(
+            session=session,
+            element=element,
+            result=result,
+            time_spent=time_spent,
+            notes=notes
+        )
+        
+        serializer = StudyRecordSerializer(record)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=False, methods=['get'])
+    def active(self, request):
+        """Get the active study session for the current user"""
+        active_session = StudySession.objects.filter(
+            user=request.user,
+            ended_at=None
+        ).first()
+        
+        if not active_session:
+            return Response(
+                {'error': 'No active study session found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        serializer = StudySessionSerializer(active_session)
+        return Response(serializer.data)
+
+class StudyRecordViewSet(viewsets.ModelViewSet):
+    serializer_class = StudyRecordSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['session', 'element', 'result']
+    
+    def get_queryset(self):
+        return StudyRecord.objects.filter(session__user=self.request.user)
+    
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.db.models import Q
+
+class SearchView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request):
+        query = request.query_params.get('q', '')
+        if not query:
+            return Response({'error': 'No search query provided'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        elements = Element.objects.filter(
+            Q(user=request.user) &
+            (Q(title__icontains=query) | 
+             Q(content__icontains=query) | 
+             Q(additional_content__icontains=query))
+        )
+        
+        # Optional filtering by type
+        element_type = request.query_params.get('type', None)
+        if element_type:
+            elements = elements.filter(type=element_type)
+        
+        # Optional filtering by section
+        section_id = request.query_params.get('section', None)
+        if section_id:
+            elements = elements.filter(section_id=section_id)
+        
+        # Optional filtering by tag
+        tag_id = request.query_params.get('tag', None)
+        if tag_id:
+            elements = elements.filter(tags__id=tag_id)
+        
+        serializer = ElementSerializer(elements, many=True)
+        return Response(serializer.data)
+    
+
+# Add to views.py inside NoteViewSet
+
+@action(detail=True, methods=['post'])
+def upload_image(self, request, pk=None):
+    """Upload an image to a note"""
+    note = self.get_object()
+    
+    # Check if this is actually a note
+    if note.type != Element.NOTE:
+        return Response(
+            {'error': 'This element is not a note'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    # Handle file upload
+    image = request.FILES.get('image')
+    if not image:
+        return Response(
+            {'error': 'No image provided'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    note_image = NoteImage.objects.create(note=note, image=image)
+    serializer = NoteImageSerializer(note_image)
+    
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+@action(detail=True, methods=['get'])
+def images(self, request, pk=None):
+    """Get all images for a note"""
+    note = self.get_object()
+    
+    # Check if this is actually a note
+    if note.type != Element.NOTE:
+        return Response(
+            {'error': 'This element is not a note'},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+    
+    images = NoteImage.objects.filter(note=note)
+    serializer = NoteImageSerializer(images, many=True)
+    
+    return Response(serializer.data)

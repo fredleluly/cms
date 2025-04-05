@@ -69,6 +69,10 @@ urlpatterns = [
     path('upload/image/', upload_image, name='upload_image'),
     path('dashboard/content/articles/', article_list_view, name='article_list'),
     path('dashboard/content/bulk-action/', bulk_action_view, name='bulk_action'),
+    
+    # Members productivity app URLs
+    # path('productivity/', include('apps.members.urls', namespace='members')),
+    
     path('pendaftaran/', registration_view, name='registration'),
     path('pendaftaran/submit/', registration_submit, name='registration_submit'),
     path('beasiswa/', scholarship_view, name='scholarship'),
@@ -119,7 +123,6 @@ urlpatterns = [
     path('admin/git-pull/', git_pull_view, name='git_pull'), # Tambahkan ini di bawah namespace admin
     path('admin/git-pull-page909/', git_pull_page_view, name='git_pull_page'),
     
-    path('dj-rest-auth/', include('dj_rest_auth.urls')),    # Add the members API URLs
     path('members/', include('apps.members.urls', namespace='members')),
     
 ]

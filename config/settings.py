@@ -62,12 +62,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sitemaps',
     'django.contrib.sites',
+    'drf_yasg',
+
 
     # Third party apps
     'ckeditor',  # for rich text editing
     'rest_framework',  # Make sure DRF is installed
     'rest_framework.authtoken',
     'dj_rest_auth',
+    'corsheaders',
     
     # Local apps
     'apps.pages.apps.PagesConfig',
@@ -77,8 +80,36 @@ INSTALLED_APPS = [
     'axes',
     'tailwind',
     'theme',
+    
     #  'django_browser_reload'
 ]
+
+SWAGGER_SETTINGS = {
+    'DEFAULT_INFO': 'config.urls.schema_info',
+    'USE_SESSION_AUTH': False,
+    'VALIDATOR_URL': None,
+}
+
+SWAGGER_SETTINGS['VALIDATOR_URL'] = '127.0.0.1:8080'
+
+# REST Framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+}
+# CORS settings (for development)
+CORS_ALLOW_ALL_ORIGINS = True  # Only in developmen
 
 # REST_AUTH = {
 #     'USE_JWT': True,
@@ -97,6 +128,7 @@ SITE_ID = 1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware', 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
