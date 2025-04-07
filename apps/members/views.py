@@ -3,7 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import HelloWorldSerializer, NoteImageSerializer
-
+# At the top of views.py, add this import
+from .filters import HierarchicalSectionFilterBackend
 
 class HelloWorldAPIView(APIView):
     """
@@ -52,6 +53,12 @@ class ElementFilter(django_filters.FilterSet):
         }
 
 
+from rest_framework.pagination import PageNumberPagination
+
+class FlexiblePagination(PageNumberPagination):
+    page_size = 10
+    max_page_size = 1000
+    page_size_query_param = 'page_size'
 
 from rest_framework import viewsets, permissions, filters, status
 from rest_framework.decorators import action
@@ -67,7 +74,7 @@ from .serializers import (
 class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, HierarchicalSectionFilterBackend]
     search_fields = ['name']
     ordering_fields = ['name']
     
@@ -77,8 +84,9 @@ class TagViewSet(viewsets.ModelViewSet):
 
 class SectionViewSet(viewsets.ModelViewSet):
     serializer_class = SectionSerializer
+    pagination_class = FlexiblePagination
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
     search_fields = ['title', 'description']
     ordering_fields = ['title', 'order']
     filterset_fields = ['parent']
@@ -98,7 +106,8 @@ class SectionViewSet(viewsets.ModelViewSet):
 class ElementViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     filterset_class = ElementFilter
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    pagination_class = FlexiblePagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
     search_fields = ['title', 'content', 'additional_content']
     ordering_fields = ['title', 'created_at', 'updated_at', 'order']
     filterset_fields = ['type', 'section', 'tags', 'is_archived', 'is_favorite', 'is_completed']
@@ -213,8 +222,9 @@ class ElementViewSet(viewsets.ModelViewSet):
 
 class FlashcardViewSet(viewsets.ModelViewSet):
     serializer_class = FlashcardSerializer
+    pagination_class = FlexiblePagination
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
     search_fields = ['title', 'content', 'additional_content']
     ordering_fields = ['title', 'created_at', 'updated_at', 'order']
     filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
@@ -226,10 +236,45 @@ class FlashcardViewSet(viewsets.ModelViewSet):
             type=Element.FLASHCARD
         )
 
+
+    @action(detail=True, methods=['get'])
+    def next(self, request, pk=None):
+        """Get the next flashcard after this one"""
+        current = self.get_object()
+        next_flashcard = Element.objects.filter(
+            user=request.user,
+            type=Element.FLASHCARD,
+            id__gt=current.id
+        ).order_by('id').first()
+        
+        if not next_flashcard:
+            return Response({'detail': 'No next flashcard found'}, status=404)
+        
+        serializer = self.get_serializer(next_flashcard)
+        return Response(serializer.data)
+
+    @action(detail=True, methods=['get'])
+    def previous(self, request, pk=None):
+        """Get the previous flashcard before this one"""
+        current = self.get_object()
+        prev_flashcard = Element.objects.filter(
+            user=request.user,
+            type=Element.FLASHCARD,
+            id__lt=current.id
+        ).order_by('-id').first()
+        
+        if not prev_flashcard:
+            return Response({'detail': 'No previous flashcard found'}, status=404)
+        
+        serializer = self.get_serializer(prev_flashcard)
+        return Response(serializer.data)
+
 class QuestionViewSet(viewsets.ModelViewSet):
+
+    pagination_class = FlexiblePagination
     serializer_class = QuestionSerializer
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
     search_fields = ['title', 'content', 'additional_content']
     ordering_fields = ['title', 'created_at', 'updated_at', 'order']
     filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
@@ -244,7 +289,8 @@ class QuestionViewSet(viewsets.ModelViewSet):
 class MultipleChoiceViewSet(viewsets.ModelViewSet):
     serializer_class = MultipleChoiceSerializer
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    pagination_class = FlexiblePagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
     search_fields = ['title', 'content']
     ordering_fields = ['title', 'created_at', 'updated_at', 'order']
     filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
@@ -256,10 +302,12 @@ class MultipleChoiceViewSet(viewsets.ModelViewSet):
             type=Element.MULTIPLE_CHOICE
         )
 
+
 class TodoViewSet(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
+    pagination_class = FlexiblePagination
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
     search_fields = ['title', 'content']
     ordering_fields = ['title', 'created_at', 'updated_at', 'order', 'due_date']
     filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite', 'is_completed']
@@ -285,10 +333,57 @@ class TodoViewSet(viewsets.ModelViewSet):
         todo.mark_as_incomplete()
         return Response({'status': 'Todo marked as incomplete'})
 
+    # In TodoViewSet
+    @action(detail=False, methods=['get'])
+    def by_section(self, request):
+        """Get todos for a section including all subsections."""
+        section_id = request.query_params.get('id')
+        if not section_id:
+            return Response(
+                {'error': 'Section ID is required'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Get all subsection IDs
+        section_ids = [section_id]
+        
+        def get_subsection_ids(parent_id):
+            subsection_ids = []
+            subsections = Section.objects.filter(parent_id=parent_id, user=request.user)
+            for sub in subsections:
+                subsection_ids.append(sub.id)
+                subsection_ids.extend(get_subsection_ids(sub.id))
+            return subsection_ids
+        
+        section_ids.extend(get_subsection_ids(section_id))
+        
+        # Filter todos
+        todos = Element.objects.filter(
+            user=request.user,
+            type=Element.TODO,
+            section_id__in=section_ids
+        )
+        
+        # Apply any other filters
+        if 'is_completed' in request.query_params:
+            is_completed = request.query_params.get('is_completed').lower() == 'true'
+            todos = todos.filter(is_completed=is_completed)
+        
+        # Pagination
+        page = self.paginate_queryset(todos)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        
+        serializer = self.get_serializer(todos, many=True)
+        return Response(serializer.data)
+
+
 class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
+    pagination_class = FlexiblePagination
     permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
     search_fields = ['title', 'content']
     ordering_fields = ['title', 'created_at', 'updated_at', 'order']
     filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
@@ -304,6 +399,7 @@ class NoteViewSet(viewsets.ModelViewSet):
 class StudySessionViewSet(viewsets.ModelViewSet):
     serializer_class = StudySessionSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = FlexiblePagination
     
     def get_queryset(self):
         return StudySession.objects.filter(user=self.request.user)
@@ -382,6 +478,7 @@ class StudySessionViewSet(viewsets.ModelViewSet):
 
 class StudyRecordViewSet(viewsets.ModelViewSet):
     serializer_class = StudyRecordSerializer
+    pagination_class = FlexiblePagination
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['session', 'element', 'result']
@@ -399,14 +496,13 @@ class SearchView(APIView):
     
     def get(self, request):
         query = request.query_params.get('q', '')
-        if not query:
-            return Response({'error': 'No search query provided'}, status=status.HTTP_400_BAD_REQUEST)
-        
+        # if not query:
+        #     return Response({'error': 'No search query provided'}, status=status.HTTP_400_BAD_REQUEST)
         elements = Element.objects.filter(
             Q(user=request.user) &
             (Q(title__icontains=query) | 
-             Q(content__icontains=query) | 
-             Q(additional_content__icontains=query))
+            Q(content__icontains=query) | 
+            Q(additional_content__icontains=query))
         )
         
         # Optional filtering by type
@@ -415,9 +511,27 @@ class SearchView(APIView):
             elements = elements.filter(type=element_type)
         
         # Optional filtering by section
+        # In the SearchView.get method in views.py
         section_id = request.query_params.get('section', None)
         if section_id:
-            elements = elements.filter(section_id=section_id)
+            # Get the section and all its subsections
+            section_ids = [section_id]
+            subsections = Section.objects.filter(parent_id=section_id, user=request.user)
+            
+            # Recursively find all subsections
+            def get_subsection_ids(parent_id):
+                subsection_ids = []
+                subs = Section.objects.filter(parent_id=parent_id, user=request.user)
+                for sub in subs:
+                    subsection_ids.append(sub.id)
+                    subsection_ids.extend(get_subsection_ids(sub.id))
+                return subsection_ids
+            
+            # Add all subsection IDs to our filter list
+            section_ids.extend(get_subsection_ids(section_id))
+            
+            # Filter elements that belong to the section or any of its subsections
+            elements = elements.filter(section_id__in=section_ids)
         
         # Optional filtering by tag
         tag_id = request.query_params.get('tag', None)
@@ -429,6 +543,7 @@ class SearchView(APIView):
     
 
 # Add to views.py inside NoteViewSet
+from .models import NoteImage
 
 @action(detail=True, methods=['post'])
 def upload_image(self, request, pk=None):
