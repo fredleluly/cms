@@ -21,3 +21,15 @@ django-unfold==0.46.0
 gunicorn==23.0.0
 pillow==11.1.0
 django-tailwind==3.8.0
+django-cors-headers
+dj-rest-auth
+djangorestframework-simplejwt
+coreschema
+drf-yasg
+django-filter
+uritemplate
+coreapi
+pyyaml
+drf-yasg[validation]
+django-coreapi
+openapi-codec
