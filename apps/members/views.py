@@ -5,12 +5,77 @@ from rest_framework import status
 from .serializers import HelloWorldSerializer, NoteImageSerializer
 # At the top of views.py, add this import
 from .filters import HierarchicalSectionFilterBackend
+import hashlib
+from django.utils.http import quote_etag
+from functools import wraps
+# import time
+# import json
+
+# ETag decorator for REST API views
+def etag_decorator(view_func):
+    @wraps(view_func)
+    def wrapped_view(self, request, *args, **kwargs):
+        # Only apply ETags to GET requests
+        if request.method != 'GET':
+            return view_func(self, request, *args, **kwargs)
+        
+        # Print full request info for debugging
+        # print(f"\n\n=== REQUEST INFO ===")
+        # print(f"Path: {request.path}")
+        # print(f"Method: {request.method}")
+        # print(f"Query params: {request.GET}")
+        # print(f"Headers: {json.dumps({k: v for k, v in request.META.items() if k.startswith('HTTP_')}, indent=2)}")
+            
+        # Execute the view to get the response
+        response = view_func(self, request, *args, **kwargs)
+        
+        # Generate ETag from the response data
+        if hasattr(response, 'data'):
+            data_str = str(response.data).encode('utf-8')
+            etag = quote_etag(hashlib.md5(data_str).hexdigest())
+            
+            # Set the ETag header
+            response['ETag'] = etag
+            #print(f"[ETag] Generated ETag: {etag} for {request.path}")
+            
+            # Check if the client sent an If-None-Match header
+            if_none_match = request.META.get('HTTP_IF_NONE_MATCH')
+            if if_none_match:
+                #print(f"[ETag] Client sent If-None-Match: {if_none_match}")
+                
+                # Clean both ETags for comparison (remove W/ prefix and quotes)
+                clean_server_etag = etag.replace('"', '')
+                clean_client_etag = if_none_match.replace('W/', '').replace('"', '')
+                
+                #print(f"[ETag] Clean comparison - Server: {clean_server_etag}, Client: {clean_client_etag}")
+                
+                if clean_server_etag == clean_client_etag:
+                    #print(f"\n$$$$$ CACHE BERHASIL: 304 Not Modified untuk {request.path} $$$$$")
+                    #print(f"[ETag] 304 Not Modified returned for {request.path}")
+                    # Return 304 Not Modified if the ETag matches
+                    return Response(status=status.HTTP_304_NOT_MODIFIED)
+                # else:
+                    #print(f"\n$$$$$ CACHE GAGAL: Konten berubah untuk {request.path} $$$$$")
+                    #print(f"[ETag] ETag changed, sending new content")
+                    #print(f"[ETag] Server: {clean_server_etag}, Client: {clean_client_etag}")
+                    # Add delay to simulate slow response when not cached
+                    #print(f"[ETag] Sleeping for 5 seconds to simulate slow response...")
+                    # time.sleep(5)  # Increased to 5 seconds to make it very noticeable
+            # else:
+                #print(f"\n$$$$$ CACHE TIDAK ADA: Request pertama atau ETag tidak dikirim untuk {request.path} $$$$$")
+                # Add delay to simulate slow response when not cached
+                #print(f"[ETag] Sleeping for 5 seconds to simulate slow response...")
+                # time.sleep(5)  # Increased to 5 seconds to make it very noticeable
+        
+        return response
+    return wrapped_view
 
 class HelloWorldAPIView(APIView):
     """
     A simple API view that returns a hello world message
     """
     
+    @etag_decorator
     def get(self, request, format=None):
         """
         Return a simple hello world message
@@ -81,6 +146,14 @@ class TagViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # Only return tags created by the current user
         return Tag.objects.filter(user=self.request.user)
+        
+    @etag_decorator
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+        
+    @etag_decorator
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
 
 class SectionViewSet(viewsets.ModelViewSet):
     serializer_class = SectionSerializer
@@ -95,6 +168,15 @@ class SectionViewSet(viewsets.ModelViewSet):
         # Only return sections created by the current user
         return Section.objects.filter(user=self.request.user)
     
+    @etag_decorator
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+        
+    @etag_decorator
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+    @etag_decorator
     @action(detail=True, methods=['get'])
     def elements(self, request, pk=None):
         """Get all elements in this section"""
@@ -121,6 +203,14 @@ class ElementViewSet(viewsets.ModelViewSet):
         # Only return elements created by the current user
         return Element.objects.filter(user=self.request.user)
     
+    @etag_decorator
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+        
+    @etag_decorator
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
     @action(detail=True, methods=['post'])
     def complete(self, request, pk=None):
         """Mark an element as complete"""
@@ -135,6 +225,7 @@ class ElementViewSet(viewsets.ModelViewSet):
         element.mark_as_incomplete()
         return Response({'status': 'Element marked as incomplete'})
     
+    @etag_decorator
     @action(detail=True, methods=['get'])
     def related(self, request, pk=None):
         """Get related elements"""
@@ -236,7 +327,15 @@ class FlashcardViewSet(viewsets.ModelViewSet):
             type=Element.FLASHCARD
         )
 
+    @etag_decorator
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+        
+    @etag_decorator
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
 
+    @etag_decorator
     @action(detail=True, methods=['get'])
     def next(self, request, pk=None):
         """Get the next flashcard after this one"""
@@ -270,7 +369,6 @@ class FlashcardViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 class QuestionViewSet(viewsets.ModelViewSet):
-
     pagination_class = FlexiblePagination
     serializer_class = QuestionSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -285,6 +383,14 @@ class QuestionViewSet(viewsets.ModelViewSet):
             user=self.request.user,
             type=Element.QUESTION
         )
+        
+    @etag_decorator
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+        
+    @etag_decorator
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
 
 class MultipleChoiceViewSet(viewsets.ModelViewSet):
     serializer_class = MultipleChoiceSerializer
@@ -318,6 +424,14 @@ class TodoViewSet(viewsets.ModelViewSet):
             user=self.request.user,
             type=Element.TODO
         )
+        
+    @etag_decorator
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+        
+    @etag_decorator
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
     
     @action(detail=True, methods=['post'])
     def complete(self, request, pk=None):
@@ -333,10 +447,10 @@ class TodoViewSet(viewsets.ModelViewSet):
         todo.mark_as_incomplete()
         return Response({'status': 'Todo marked as incomplete'})
 
-    # In TodoViewSet
+    @etag_decorator
     @action(detail=False, methods=['get'])
     def by_section(self, request):
-        """Get todos for a section including all subsections."""
+        """Get todos grouped by section"""
         section_id = request.query_params.get('id')
         if not section_id:
             return Response(
@@ -394,7 +508,15 @@ class NoteViewSet(viewsets.ModelViewSet):
             user=self.request.user,
             type=Element.NOTE
         )
-    
+        
+    @etag_decorator
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+        
+    @etag_decorator
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
 
 class StudySessionViewSet(viewsets.ModelViewSet):
     serializer_class = StudySessionSerializer
@@ -403,6 +525,14 @@ class StudySessionViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         return StudySession.objects.filter(user=self.request.user)
+    
+    @etag_decorator
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+        
+    @etag_decorator
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
     
     @action(detail=True, methods=['post'])
     def end(self, request, pk=None):
@@ -484,8 +614,16 @@ class StudyRecordViewSet(viewsets.ModelViewSet):
     filterset_fields = ['session', 'element', 'result']
     
     def get_queryset(self):
+        # Make sure we filter by session__user to maintain proper access control
         return StudyRecord.objects.filter(session__user=self.request.user)
-    
+        
+    @etag_decorator
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+        
+    @etag_decorator
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -494,6 +632,7 @@ from django.db.models import Q
 class SearchView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
+    @etag_decorator
     def get(self, request):
         query = request.query_params.get('q', '')
         # if not query:

@@ -157,7 +157,76 @@ def format_size(size_bytes):
     
     return f"{size_bytes:.2f} {size_names[i]}"
 
-def create_project_backup(backup_name=None, exclude_patterns=None, exclude_dirs=None):
+def backup_sqlite_database():
+    """
+    Create a backup of the SQLite database with the specified filename format.
+    
+    Returns:
+        dict: Result dictionary with keys:
+            - success (bool): Whether the backup was successful
+            - filename (str): Name of the backup file (if successful)
+            - path (str): Path to the backup file (if successful)
+            - error (str): Error message (if unsuccessful)
+    """
+    try:
+        # Get database path from Django settings
+        if hasattr(settings, 'DATABASES') and 'default' in settings.DATABASES:
+            db_settings = settings.DATABASES['default']
+            if db_settings.get('ENGINE') == 'django.db.backends.sqlite3':
+                db_path = db_settings.get('NAME')
+                if db_path and os.path.exists(db_path):
+                    # Create backup directory if it doesn't exist
+                    backup_dir = os.path.join(settings.SECURE_DOWNLOAD_ROOT)
+                    os.makedirs(backup_dir, exist_ok=True)
+                    
+                    # Generate filename with the requested format: db.sqlite3-2025-04-08---00-29
+                    timestamp = datetime.datetime.now().strftime("%Y-%m-%d---%H-%M")
+                    backup_filename = f"db.sqlite3-{timestamp}"
+                    backup_path = os.path.join(backup_dir, backup_filename)
+                    
+                    # Copy the database file
+                    shutil.copy2(db_path, backup_path)
+                    
+                    backup_size = os.path.getsize(backup_path)
+                    backup_size_formatted = format_size(backup_size)
+                    
+                    logger.info(f"Database backup completed: {backup_path} ({backup_size_formatted})")
+                    
+                    return {
+                        'success': True,
+                        'filename': backup_filename,
+                        'path': backup_path,
+                        'size': backup_size_formatted
+                    }
+                else:
+                    error_msg = f"SQLite database file not found at {db_path}"
+                    logger.error(error_msg)
+                    return {
+                        'success': False,
+                        'error': error_msg
+                    }
+            else:
+                error_msg = "The project is not using SQLite database"
+                logger.info(error_msg)
+                return {
+                    'success': False,
+                    'error': error_msg
+                }
+        else:
+            error_msg = "Database settings not found"
+            logger.error(error_msg)
+            return {
+                'success': False,
+                'error': error_msg
+            }
+    except Exception as e:
+        logger.exception(f"Database backup failed: {str(e)}")
+        return {
+            'success': False,
+            'error': str(e)
+        }
+
+def create_project_backup(backup_name=None, exclude_patterns=None, exclude_dirs=None, backup_db=True):
     """
     Create a backup of the project directory using the Linux zip command.
     
@@ -165,6 +234,7 @@ def create_project_backup(backup_name=None, exclude_patterns=None, exclude_dirs=
         backup_name (str): Optional name for the backup file
         exclude_patterns (list): List of patterns to exclude
         exclude_dirs (list): List of directories to exclude
+        backup_db (bool): Whether to create a separate backup of the SQLite database
     
     Returns:
         dict: Result dictionary with keys:
@@ -173,6 +243,7 @@ def create_project_backup(backup_name=None, exclude_patterns=None, exclude_dirs=
             - path (str): Path to the backup file (if successful)
             - size (str): Human-readable size of the backup file (if successful)
             - error (str): Error message (if unsuccessful)
+            - db_backup (dict): Database backup result (if backup_db is True)
     """
     if exclude_patterns is None:
         exclude_patterns = DEFAULT_EXCLUDES
@@ -185,6 +256,15 @@ def create_project_backup(backup_name=None, exclude_patterns=None, exclude_dirs=
     backup_dir = os.path.join(settings.SECURE_DOWNLOAD_ROOT)
     
     try:
+        # Create database backup if requested
+        db_backup_result = None
+        if backup_db:
+            db_backup_result = backup_sqlite_database()
+            if db_backup_result and db_backup_result.get('success'):
+                logger.info(f"SQLite database backup created: {db_backup_result.get('filename')}")
+            else:
+                logger.warning("SQLite database backup failed or not applicable")
+        
         # Verify that zip command is available
         try:
             subprocess.run(['zip', '--version'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
@@ -192,7 +272,8 @@ def create_project_backup(backup_name=None, exclude_patterns=None, exclude_dirs=
             logger.error(f"zip command not available: {str(e)}")
             return {
                 'success': False,
-                'error': "zip command not available on the server. Please contact the administrator."
+                'error': "zip command not available on the server. Please contact the administrator.",
+                'db_backup': db_backup_result
             }
         
         # Make sure backup directory exists
@@ -261,7 +342,8 @@ def create_project_backup(backup_name=None, exclude_patterns=None, exclude_dirs=
                 logger.error(f"Backup failed: {error_msg}")
                 return {
                     'success': False,
-                    'error': error_msg
+                    'error': error_msg,
+                    'db_backup': db_backup_result
                 }
             
             # Get backup file size
@@ -274,7 +356,8 @@ def create_project_backup(backup_name=None, exclude_patterns=None, exclude_dirs=
                 'success': True,
                 'filename': backup_name,
                 'path': backup_path,
-                'size': backup_size_formatted
+                'size': backup_size_formatted,
+                'db_backup': db_backup_result
             }
         
         finally:
@@ -294,5 +377,6 @@ def create_project_backup(backup_name=None, exclude_patterns=None, exclude_dirs=
         logger.exception(f"Backup failed: {str(e)}")
         return {
             'success': False,
-            'error': str(e)
-        } 
+            'error': str(e),
+            'db_backup': db_backup_result if 'db_backup_result' in locals() else None
+        }
