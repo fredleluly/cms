@@ -45,6 +45,7 @@ urlpatterns = [
     path('hello/', HelloWorldAPIView.as_view(), name='hello_world'),
     path('', include(router.urls)),
     path('search/', views.SearchView.as_view(), name='search'),
+    path('cache/clear/', views.CacheClearView.as_view(), name='cache_clear'),
     path('auth/', include('dj_rest_auth.urls')),    # Add the members API URLs
   path('swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

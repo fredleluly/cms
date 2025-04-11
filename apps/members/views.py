@@ -3,84 +3,34 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import HelloWorldSerializer, NoteImageSerializer
-# At the top of views.py, add this import
 from .filters import HierarchicalSectionFilterBackend
-import hashlib
-from django.utils.http import quote_etag
-from functools import wraps
-# import time
-# import json
+import time
+import json
+from django.core.cache import cache
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.conf import settings
 
-# ETag decorator for REST API views
-def etag_decorator(view_func):
-    @wraps(view_func)
-    def wrapped_view(self, request, *args, **kwargs):
-        # Only apply ETags to GET requests
-        if request.method != 'GET':
-            return view_func(self, request, *args, **kwargs)
-        
-        # Print full request info for debugging
-        # print(f"\n\n=== REQUEST INFO ===")
-        # print(f"Path: {request.path}")
-        # print(f"Method: {request.method}")
-        # print(f"Query params: {request.GET}")
-        # print(f"Headers: {json.dumps({k: v for k, v in request.META.items() if k.startswith('HTTP_')}, indent=2)}")
-            
-        # Execute the view to get the response
-        response = view_func(self, request, *args, **kwargs)
-        
-        # Generate ETag from the response data
-        if hasattr(response, 'data'):
-            data_str = str(response.data).encode('utf-8')
-            etag = quote_etag(hashlib.md5(data_str).hexdigest())
-            
-            # Set the ETag header
-            response['ETag'] = etag
-            #print(f"[ETag] Generated ETag: {etag} for {request.path}")
-            
-            # Check if the client sent an If-None-Match header
-            if_none_match = request.META.get('HTTP_IF_NONE_MATCH')
-            if if_none_match:
-                #print(f"[ETag] Client sent If-None-Match: {if_none_match}")
-                
-                # Clean both ETags for comparison (remove W/ prefix and quotes)
-                clean_server_etag = etag.replace('"', '')
-                clean_client_etag = if_none_match.replace('W/', '').replace('"', '')
-                
-                #print(f"[ETag] Clean comparison - Server: {clean_server_etag}, Client: {clean_client_etag}")
-                
-                if clean_server_etag == clean_client_etag:
-                    #print(f"\n$$$$$ CACHE BERHASIL: 304 Not Modified untuk {request.path} $$$$$")
-                    #print(f"[ETag] 304 Not Modified returned for {request.path}")
-                    # Return 304 Not Modified if the ETag matches
-                    return Response(status=status.HTTP_304_NOT_MODIFIED)
-                # else:
-                    #print(f"\n$$$$$ CACHE GAGAL: Konten berubah untuk {request.path} $$$$$")
-                    #print(f"[ETag] ETag changed, sending new content")
-                    #print(f"[ETag] Server: {clean_server_etag}, Client: {clean_client_etag}")
-                    # Add delay to simulate slow response when not cached
-                    #print(f"[ETag] Sleeping for 5 seconds to simulate slow response...")
-                    # time.sleep(5)  # Increased to 5 seconds to make it very noticeable
-            # else:
-                #print(f"\n$$$$$ CACHE TIDAK ADA: Request pertama atau ETag tidak dikirim untuk {request.path} $$$$$")
-                # Add delay to simulate slow response when not cached
-                #print(f"[ETag] Sleeping for 5 seconds to simulate slow response...")
-                # time.sleep(5)  # Increased to 5 seconds to make it very noticeable
-        
-        return response
-    return wrapped_view
+# Waktu cache default ( 2 jam)
+CACHE_TTL = getattr(settings, 'CACHE_TTL', 60 * 60 * 2)
 
 class HelloWorldAPIView(APIView):
     """
     A simple API view that returns a hello world message
     """
     
-    @etag_decorator
     def get(self, request, format=None):
         """
         Return a simple hello world message
         """
+        # Gunakan cache untuk endpoint sederhana ini juga
+        cache_key = "hello_world"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            return Response(cached_data)
+            
         content = {'message': 'Hello, World!'}
+        cache.set(cache_key, content, CACHE_TTL)
         return Response(content)
     
     def post(self, request, format=None):
@@ -146,14 +96,59 @@ class TagViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # Only return tags created by the current user
         return Tag.objects.filter(user=self.request.user)
-        
-    @etag_decorator
+    
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Hapus cache terkait dengan tags
+        cache_key = f"tags_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        # Hapus cache terkait dengan tags
+        cache_key = f"tags_list_{request.user.id}"
+        cache.delete(cache_key)
+        # Hapus cache detail tag
+        detail_cache_key = f"tag_detail_{kwargs.get('pk')}_{request.user.id}"
+        cache.delete(detail_cache_key)
+        return response
+    
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        # Hapus cache terkait dengan tags
+        cache_key = f"tags_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        # Membuat cache_key yang unik berdasarkan user dan filter
+        params = request.query_params.copy()
+        params_str = "_".join([f"{k}_{v}" for k, v in sorted(params.items())])
+        cache_key = f"tags_list_{request.user.id}_{params_str}"
         
-    @etag_decorator
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+    
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        cache_key = f"tag_detail_{kwargs.get('pk')}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().retrieve(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
 
 class SectionViewSet(viewsets.ModelViewSet):
     serializer_class = SectionSerializer
@@ -168,21 +163,76 @@ class SectionViewSet(viewsets.ModelViewSet):
         # Only return sections created by the current user
         return Section.objects.filter(user=self.request.user)
     
-    @etag_decorator
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-        
-    @etag_decorator
-    def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Hapus cache list sections
+        cache_key = f"sections_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
     
-    @etag_decorator
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        # Hapus cache list dan detail
+        cache_key = f"sections_list_{request.user.id}"
+        cache.delete(cache_key)
+        detail_cache_key = f"section_detail_{kwargs.get('pk')}_{request.user.id}"
+        cache.delete(detail_cache_key)
+        # Juga hapus cache elements dalam section
+        elements_cache_key = f"section_elements_{kwargs.get('pk')}_{request.user.id}"
+        cache.delete(elements_cache_key)
+        return response
+    
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        # Hapus cache terkait
+        cache_key = f"sections_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
+    def list(self, request, *args, **kwargs):
+        # Membuat cache_key yang unik berdasarkan user dan filter
+        params = request.query_params.copy()
+        params_str = "_".join([f"{k}_{v}" for k, v in sorted(params.items())])
+        cache_key = f"sections_list_{request.user.id}_{params_str}"
+        
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+    
+    def retrieve(self, request, *args, **kwargs):
+        cache_key = f"section_detail_{kwargs.get('pk')}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().retrieve(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+    
     @action(detail=True, methods=['get'])
     def elements(self, request, pk=None):
         """Get all elements in this section"""
+        cache_key = f"section_elements_{pk}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+            
+        #print(f"Cache miss for {cache_key}")
         section = self.get_object()
         elements = Element.objects.filter(section=section, user=request.user)
         serializer = ElementSerializer(elements, many=True)
+        cache.set(cache_key, serializer.data, CACHE_TTL)
         return Response(serializer.data)
 
 class ElementViewSet(viewsets.ModelViewSet):
@@ -203,19 +253,74 @@ class ElementViewSet(viewsets.ModelViewSet):
         # Only return elements created by the current user
         return Element.objects.filter(user=self.request.user)
     
-    @etag_decorator
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Hapus cache element list
+        self._invalidate_element_cache(request)
+        return response
+    
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        # Hapus cache detail dan list
+        self._invalidate_element_cache(request)
+        detail_cache_key = f"element_detail_{kwargs.get('pk')}_{request.user.id}"
+        cache.delete(detail_cache_key)
+        return response
+    
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        # Hapus cache terkait
+        self._invalidate_element_cache(request)
+        return response
+    
+    def _invalidate_element_cache(self, request):
+        """Helper method to invalidate element caches"""
+        element_types = ['element', 'flashcard', 'question', 'todo', 'note']
+        for element_type in element_types:
+            cache_key = f"{element_type}_list_{request.user.id}"
+            cache.delete(cache_key)
+            
+        # Juga invalidate section_elements cache
+        section_id = request.data.get('section')
+        if section_id:
+            cache_key = f"section_elements_{section_id}_{request.user.id}"
+            cache.delete(cache_key)
+    
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        # Membuat cache_key yang unik berdasarkan user dan filter
+        params = request.query_params.copy()
+        params_str = "_".join([f"{k}_{v}" for k, v in sorted(params.items())])
+        cache_key = f"element_list_{request.user.id}_{params_str}"
         
-    @etag_decorator
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+    
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        cache_key = f"element_detail_{kwargs.get('pk')}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().retrieve(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
     
     @action(detail=True, methods=['post'])
     def complete(self, request, pk=None):
         """Mark an element as complete"""
         element = self.get_object()
         element.mark_as_complete()
+        self._invalidate_element_cache(request)
         return Response({'status': 'Element marked as complete'})
     
     @action(detail=True, methods=['post'])
@@ -223,16 +328,27 @@ class ElementViewSet(viewsets.ModelViewSet):
         """Mark an element as incomplete"""
         element = self.get_object()
         element.mark_as_incomplete()
+        self._invalidate_element_cache(request)
         return Response({'status': 'Element marked as incomplete'})
     
-    @etag_decorator
     @action(detail=True, methods=['get'])
     def related(self, request, pk=None):
         """Get related elements"""
-        element = self.get_object()
+        cache_key = f"element_related_{pk}_{request.user.id}"
         relationship_type = request.query_params.get('type', None)
+        if relationship_type:
+            cache_key += f"_{relationship_type}"
+            
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+            
+        #print(f"Cache miss for {cache_key}")
+        element = self.get_object()
         related_elements = element.get_related_elements(relationship_type)
         serializer = ElementSerializer(related_elements, many=True)
+        cache.set(cache_key, serializer.data, CACHE_TTL)
         return Response(serializer.data)
     
     @action(detail=True, methods=['post'])
@@ -245,6 +361,9 @@ class ElementViewSet(viewsets.ModelViewSet):
         try:
             related_element = Element.objects.get(id=related_id, user=request.user)
             element.add_related_element(related_element, relationship_type)
+            # Invalidate related cache
+            cache_key = f"element_related_{pk}_{request.user.id}"
+            cache.delete(cache_key)
             return Response({'status': 'Related element added'})
         except Element.DoesNotExist:
             return Response(
@@ -252,7 +371,6 @@ class ElementViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_404_NOT_FOUND
             )
 
-    # Add to ElementViewSet
     @action(detail=False, methods=['post'])
     def bulk_update(self, request):
         """Update multiple elements at once"""
@@ -304,12 +422,14 @@ class ElementViewSet(viewsets.ModelViewSet):
             for element in elements:
                 element.tags.remove(*tags_to_remove)
         
+        # Invalidate element caches
+        self._invalidate_element_cache(request)
+        
         return Response({
             'status': 'success',
             'updated_count': updated_count,
             'affected_elements': element_ids
         })
-
 
 class FlashcardViewSet(viewsets.ModelViewSet):
     serializer_class = FlashcardSerializer
@@ -327,18 +447,69 @@ class FlashcardViewSet(viewsets.ModelViewSet):
             type=Element.FLASHCARD
         )
 
-    @etag_decorator
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Hapus cache list
+        cache_key = f"flashcard_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        # Hapus cache list dan detail
+        cache_key = f"flashcard_list_{request.user.id}"
+        cache.delete(cache_key)
+        detail_cache_key = f"flashcard_detail_{kwargs.get('pk')}_{request.user.id}"
+        cache.delete(detail_cache_key)
+        return response
+    
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        # Hapus cache terkait
+        cache_key = f"flashcard_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        # Membuat cache_key yang unik berdasarkan user dan filter
+        params = request.query_params.copy()
+        params_str = "_".join([f"{k}_{v}" for k, v in sorted(params.items())])
+        cache_key = f"flashcard_list_{request.user.id}_{params_str}"
         
-    @etag_decorator
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+    
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
-
-    @etag_decorator
+        cache_key = f"flashcard_detail_{kwargs.get('pk')}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().retrieve(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+    
     @action(detail=True, methods=['get'])
     def next(self, request, pk=None):
         """Get the next flashcard after this one"""
+        cache_key = f"flashcard_next_{pk}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+            
+        #print(f"Cache miss for {cache_key}")
         current = self.get_object()
         next_flashcard = Element.objects.filter(
             user=request.user,
@@ -347,14 +518,30 @@ class FlashcardViewSet(viewsets.ModelViewSet):
         ).order_by('id').first()
         
         if not next_flashcard:
-            return Response({'detail': 'No next flashcard found'}, status=404)
+            next_flashcard = Element.objects.filter(
+                user=request.user,
+                type=Element.FLASHCARD
+            ).order_by('id').first()
         
-        serializer = self.get_serializer(next_flashcard)
-        return Response(serializer.data)
+        if next_flashcard:
+            serializer = FlashcardSerializer(next_flashcard)
+            cache.set(cache_key, serializer.data, CACHE_TTL)
+            return Response(serializer.data)
+        
+        return Response({'error': 'No flashcards available'}, status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=True, methods=['get'])
     def previous(self, request, pk=None):
         """Get the previous flashcard before this one"""
+        cache_key = f"flashcard_previous_{pk}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+            
+        #print(f"Cache miss for {cache_key}")
+        
         current = self.get_object()
         prev_flashcard = Element.objects.filter(
             user=request.user,
@@ -366,48 +553,8 @@ class FlashcardViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'No previous flashcard found'}, status=404)
         
         serializer = self.get_serializer(prev_flashcard)
+        cache.set(cache_key, serializer.data, CACHE_TTL)
         return Response(serializer.data)
-
-class QuestionViewSet(viewsets.ModelViewSet):
-    pagination_class = FlexiblePagination
-    serializer_class = QuestionSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
-    search_fields = ['title', 'content', 'additional_content']
-    ordering_fields = ['title', 'created_at', 'updated_at', 'order']
-    filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
-    
-    def get_queryset(self):
-        # Only return questions created by the current user
-        return Element.objects.filter(
-            user=self.request.user,
-            type=Element.QUESTION
-        )
-        
-    @etag_decorator
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-        
-    @etag_decorator
-    def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
-
-class MultipleChoiceViewSet(viewsets.ModelViewSet):
-    serializer_class = MultipleChoiceSerializer
-    permission_classes = [permissions.IsAuthenticated]
-    pagination_class = FlexiblePagination
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
-    search_fields = ['title', 'content']
-    ordering_fields = ['title', 'created_at', 'updated_at', 'order']
-    filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
-    
-    def get_queryset(self):
-        # Only return multiple choice questions created by the current user
-        return Element.objects.filter(
-            user=self.request.user,
-            type=Element.MULTIPLE_CHOICE
-        )
-
 
 class TodoViewSet(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
@@ -424,20 +571,69 @@ class TodoViewSet(viewsets.ModelViewSet):
             user=self.request.user,
             type=Element.TODO
         )
-        
-    @etag_decorator
+    
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Hapus cache todo list
+        self._invalidate_todo_cache(request)
+        return response
+    
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        # Hapus cache detail dan list
+        self._invalidate_todo_cache(request)
+        detail_cache_key = f"todo_detail_{kwargs.get('pk')}_{request.user.id}"
+        cache.delete(detail_cache_key)
+        return response
+    
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        # Hapus cache terkait
+        self._invalidate_todo_cache(request)
+        return response
+    
+    def _invalidate_todo_cache(self, request):
+        """Helper method to invalidate todo caches"""
+        cache_key = f"todo_list_{request.user.id}"
+        cache.delete(cache_key)
+        cache_key = f"todo_by_section_{request.user.id}"
+        cache.delete(cache_key)
+    
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        # Membuat cache_key yang unik berdasarkan user dan filter
+        params = request.query_params.copy()
+        params_str = "_".join([f"{k}_{v}" for k, v in sorted(params.items())])
+        cache_key = f"todo_list_{request.user.id}_{params_str}"
         
-    @etag_decorator
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+    
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        cache_key = f"todo_detail_{kwargs.get('pk')}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().retrieve(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
     
     @action(detail=True, methods=['post'])
     def complete(self, request, pk=None):
         """Mark a todo as complete"""
         todo = self.get_object()
         todo.mark_as_complete()
+        self._invalidate_todo_cache(request)
         return Response({'status': 'Todo marked as complete'})
     
     @action(detail=True, methods=['post'])
@@ -445,78 +641,82 @@ class TodoViewSet(viewsets.ModelViewSet):
         """Mark a todo as incomplete"""
         todo = self.get_object()
         todo.mark_as_incomplete()
+        self._invalidate_todo_cache(request)
         return Response({'status': 'Todo marked as incomplete'})
-
-    @etag_decorator
+    
     @action(detail=False, methods=['get'])
     def by_section(self, request):
         """Get todos grouped by section"""
         section_id = request.query_params.get('id')
+        params = request.query_params.copy()
+        
+        # Create a unique cache key
+        params_str = "_".join([f"{k}_{v}" for k, v in sorted(params.items())])
+        cache_key = f"todo_by_section_{request.user.id}_{params_str}"
+        
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+            
+        #print(f"Cache miss for {cache_key}")
+        
         if not section_id:
             return Response(
                 {'error': 'Section ID is required'},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
+        try:
+            section = Section.objects.get(id=section_id, user=request.user)
+        except Section.DoesNotExist:
+            return Response(
+                {'error': 'Section not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
         # Get all subsection IDs
-        section_ids = [section_id]
+        section_ids = [section.id]
         
         def get_subsection_ids(parent_id):
-            subsection_ids = []
             subsections = Section.objects.filter(parent_id=parent_id, user=request.user)
-            for sub in subsections:
-                subsection_ids.append(sub.id)
-                subsection_ids.extend(get_subsection_ids(sub.id))
-            return subsection_ids
+            for subsection in subsections:
+                section_ids.append(subsection.id)
+                get_subsection_ids(subsection.id)
         
-        section_ids.extend(get_subsection_ids(section_id))
+        get_subsection_ids(section.id)
         
-        # Filter todos
+        # Get todos in all those sections
+        is_completed = request.query_params.get('is_completed')
         todos = Element.objects.filter(
             user=request.user,
             type=Element.TODO,
             section_id__in=section_ids
         )
         
-        # Apply any other filters
-        if 'is_completed' in request.query_params:
-            is_completed = request.query_params.get('is_completed').lower() == 'true'
+        if is_completed is not None:
+            is_completed = is_completed.lower() == 'true'
             todos = todos.filter(is_completed=is_completed)
         
-        # Pagination
-        page = self.paginate_queryset(todos)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+        # Group by section
+        result = {}
+        for section_id in section_ids:
+            section_todos = todos.filter(section_id=section_id)
+            if section_todos.exists():
+                try:
+                    section = Section.objects.get(id=section_id)
+                    result[section_id] = {
+                        'section': {
+                            'id': section.id,
+                            'title': section.title
+                        },
+                        'todos': TodoSerializer(section_todos, many=True).data
+                    }
+                except Section.DoesNotExist:
+                    pass
         
-        serializer = self.get_serializer(todos, many=True)
-        return Response(serializer.data)
-
-
-class NoteViewSet(viewsets.ModelViewSet):
-    serializer_class = NoteSerializer
-    pagination_class = FlexiblePagination
-    permission_classes = [permissions.IsAuthenticated]
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
-    search_fields = ['title', 'content']
-    ordering_fields = ['title', 'created_at', 'updated_at', 'order']
-    filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
-    
-    def get_queryset(self):
-        # Only return notes created by the current user
-        return Element.objects.filter(
-            user=self.request.user,
-            type=Element.NOTE
-        )
-        
-    @etag_decorator
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-        
-    @etag_decorator
-    def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
-
+        cache.set(cache_key, result, CACHE_TTL)
+        return Response(result)
 
 class StudySessionViewSet(viewsets.ModelViewSet):
     serializer_class = StudySessionSerializer
@@ -526,23 +726,67 @@ class StudySessionViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return StudySession.objects.filter(user=self.request.user)
     
-    @etag_decorator
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Hapus cache list
+        cache_key = f"study_session_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        # Hapus cache list dan detail
+        cache_key = f"study_session_list_{request.user.id}"
+        cache.delete(cache_key)
+        detail_cache_key = f"study_session_detail_{kwargs.get('pk')}_{request.user.id}"
+        cache.delete(detail_cache_key)
+        return response
+    
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        # Hapus cache terkait
+        cache_key = f"study_session_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
     def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+        # Membuat cache_key yang unik berdasarkan user dan filter
+        params = request.query_params.copy()
+        params_str = "_".join([f"{k}_{v}" for k, v in sorted(params.items())])
+        cache_key = f"study_session_list_{request.user.id}_{params_str}"
         
-    @etag_decorator
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+    
     def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+        cache_key = f"study_session_detail_{kwargs.get('pk')}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().retrieve(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
     
     @action(detail=True, methods=['post'])
     def end(self, request, pk=None):
         """End a study session"""
         session = self.get_object()
         session.end_session()
+        self._invalidate_study_session_cache(request)
         serializer = StudySessionSerializer(session)
         return Response(serializer.data)
 
-    # Add to StudySessionViewSet
     @action(detail=True, methods=['post'])
     def add_record(self, request, pk=None):
         """Add a study record to a session"""
@@ -606,6 +850,13 @@ class StudySessionViewSet(viewsets.ModelViewSet):
         serializer = StudySessionSerializer(active_session)
         return Response(serializer.data)
 
+    def _invalidate_study_session_cache(self, request):
+        """Helper method to invalidate study session caches"""
+        cache_key = f"study_session_list_{request.user.id}"
+        cache.delete(cache_key)
+        cache_key = f"study_session_active_{request.user.id}"
+        cache.delete(cache_key)
+
 class StudyRecordViewSet(viewsets.ModelViewSet):
     serializer_class = StudyRecordSerializer
     pagination_class = FlexiblePagination
@@ -617,13 +868,30 @@ class StudyRecordViewSet(viewsets.ModelViewSet):
         # Make sure we filter by session__user to maintain proper access control
         return StudyRecord.objects.filter(session__user=self.request.user)
         
-    @etag_decorator
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
-        
-    @etag_decorator
-    def retrieve(self, request, *args, **kwargs):
-        return super().retrieve(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Hapus cache record list
+        self._invalidate_record_cache(request)
+        return response
+    
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        # Hapus cache detail dan list
+        self._invalidate_record_cache(request)
+        detail_cache_key = f"study_record_detail_{kwargs.get('pk')}_{request.user.id}"
+        cache.delete(detail_cache_key)
+        return response
+    
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        # Hapus cache terkait
+        self._invalidate_record_cache(request)
+        return response
+    
+    def _invalidate_record_cache(self, request):
+        """Helper method to invalidate study record caches"""
+        cache_key = f"study_record_list_{request.user.id}"
+        cache.delete(cache_key)
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -632,7 +900,6 @@ from django.db.models import Q
 class SearchView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
-    @etag_decorator
     def get(self, request):
         query = request.query_params.get('q', '')
         # if not query:
@@ -725,3 +992,276 @@ def images(self, request, pk=None):
     serializer = NoteImageSerializer(images, many=True)
     
     return Response(serializer.data)
+
+class QuestionViewSet(viewsets.ModelViewSet):
+    pagination_class = FlexiblePagination
+    serializer_class = QuestionSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
+    search_fields = ['title', 'content', 'additional_content']
+    ordering_fields = ['title', 'created_at', 'updated_at', 'order']
+    filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
+    
+    def get_queryset(self):
+        # Only return questions created by the current user
+        return Element.objects.filter(
+            user=self.request.user,
+            type=Element.QUESTION
+        )
+    
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Hapus cache list
+        cache_key = f"question_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        # Hapus cache list dan detail
+        cache_key = f"question_list_{request.user.id}"
+        cache.delete(cache_key)
+        detail_cache_key = f"question_detail_{kwargs.get('pk')}_{request.user.id}"
+        cache.delete(detail_cache_key)
+        return response
+    
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        # Hapus cache terkait
+        cache_key = f"question_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
+    def list(self, request, *args, **kwargs):
+        # Membuat cache_key yang unik berdasarkan user dan filter
+        params = request.query_params.copy()
+        params_str = "_".join([f"{k}_{v}" for k, v in sorted(params.items())])
+        cache_key = f"question_list_{request.user.id}_{params_str}"
+        
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+    
+    def retrieve(self, request, *args, **kwargs):
+        cache_key = f"question_detail_{kwargs.get('pk')}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().retrieve(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+
+class MultipleChoiceViewSet(viewsets.ModelViewSet):
+    serializer_class = MultipleChoiceSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = FlexiblePagination
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
+    search_fields = ['title', 'content']
+    ordering_fields = ['title', 'created_at', 'updated_at', 'order']
+    filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
+    
+    def get_queryset(self):
+        # Only return multiple choice questions created by the current user
+        return Element.objects.filter(
+            user=self.request.user,
+            type=Element.MULTIPLE_CHOICE
+        )
+    
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Hapus cache list
+        cache_key = f"multiple_choice_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        # Hapus cache list dan detail
+        cache_key = f"multiple_choice_list_{request.user.id}"
+        cache.delete(cache_key)
+        detail_cache_key = f"multiple_choice_detail_{kwargs.get('pk')}_{request.user.id}"
+        cache.delete(detail_cache_key)
+        return response
+    
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        # Hapus cache terkait
+        cache_key = f"multiple_choice_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
+    def list(self, request, *args, **kwargs):
+        # Membuat cache_key yang unik berdasarkan user dan filter
+        params = request.query_params.copy()
+        params_str = "_".join([f"{k}_{v}" for k, v in sorted(params.items())])
+        cache_key = f"multiple_choice_list_{request.user.id}_{params_str}"
+        
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+    
+    def retrieve(self, request, *args, **kwargs):
+        cache_key = f"multiple_choice_detail_{kwargs.get('pk')}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().retrieve(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+
+class NoteViewSet(viewsets.ModelViewSet):
+    serializer_class = NoteSerializer
+    pagination_class = FlexiblePagination
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter, DjangoFilterBackend, HierarchicalSectionFilterBackend]
+    search_fields = ['title', 'content']
+    ordering_fields = ['title', 'created_at', 'updated_at', 'order']
+    filterset_fields = ['section', 'tags', 'is_archived', 'is_favorite']
+    
+    def get_queryset(self):
+        # Only return notes created by the current user
+        return Element.objects.filter(
+            user=self.request.user,
+            type=Element.NOTE
+        )
+    
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        # Hapus cache list
+        cache_key = f"note_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        # Hapus cache list dan detail
+        cache_key = f"note_list_{request.user.id}"
+        cache.delete(cache_key)
+        detail_cache_key = f"note_detail_{kwargs.get('pk')}_{request.user.id}"
+        cache.delete(detail_cache_key)
+        return response
+    
+    def destroy(self, request, *args, **kwargs):
+        response = super().destroy(request, *args, **kwargs)
+        # Hapus cache terkait
+        cache_key = f"note_list_{request.user.id}"
+        cache.delete(cache_key)
+        return response
+    
+    def list(self, request, *args, **kwargs):
+        # Membuat cache_key yang unik berdasarkan user dan filter
+        params = request.query_params.copy()
+        params_str = "_".join([f"{k}_{v}" for k, v in sorted(params.items())])
+        cache_key = f"note_list_{request.user.id}_{params_str}"
+        
+        cached_data = cache.get(cache_key)
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().list(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+    
+    def retrieve(self, request, *args, **kwargs):
+        cache_key = f"note_detail_{kwargs.get('pk')}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+        
+        #print(f"Cache miss for {cache_key}")
+        response = super().retrieve(request, *args, **kwargs)
+        cache.set(cache_key, response.data, CACHE_TTL)
+        return response
+        
+    @action(detail=True, methods=['post'])
+    def upload_image(self, request, pk=None):
+        """Upload an image to a note"""
+        note = self.get_object()
+        
+        # Check if this is actually a note
+        if note.type != Element.NOTE:
+            return Response(
+                {'error': 'This element is not a note'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Handle file upload
+        image = request.FILES.get('image')
+        if not image:
+            return Response(
+                {'error': 'No image provided'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        note_image = NoteImage.objects.create(note=note, image=image)
+        # Clear cache for this note
+        cache_key = f"note_detail_{pk}_{request.user.id}"
+        cache.delete(cache_key)
+        cache_key = f"note_images_{pk}_{request.user.id}"
+        cache.delete(cache_key)
+        
+        serializer = NoteImageSerializer(note_image)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=['get'])
+    def images(self, request, pk=None):
+        """Get all images for a note"""
+        cache_key = f"note_images_{pk}_{request.user.id}"
+        cached_data = cache.get(cache_key)
+        
+        if cached_data:
+            #print(f"Cache hit for {cache_key}")
+            return Response(cached_data)
+            
+        note = self.get_object()
+        
+        # Check if this is actually a note
+        if note.type != Element.NOTE:
+            return Response(
+                {'error': 'This element is not a note'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        images = NoteImage.objects.filter(note=note)
+        serializer = NoteImageSerializer(images, many=True)
+        
+        cache.set(cache_key, serializer.data, CACHE_TTL)
+        return Response(serializer.data)
+
+class CacheClearView(APIView):
+    """
+    An endpoint to clear all caches in the application
+    """
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def post(self, request, format=None):
+        """
+        Clear all caches
+        """
+        # Clear all caches completely
+        cache.clear()
+        return Response({'status': 'success', 'message': 'All caches have been cleared'})
