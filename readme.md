@@ -60,3 +60,5 @@ Download bzip2-1.0.5-bin.zip
 In the zipped file, in the bin folder, find the file bzip2.dll
 Extract bzip2.dll to your mingw64\bin folder (same folder as above: C:\Program Files\Git\mingw64\bin)
 ```
+
+
