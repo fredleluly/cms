@@ -125,7 +125,7 @@ urlpatterns = [
     path('admin/git-pull/', git_pull_view, name='git_pull'), # Tambahkan ini di bawah namespace admin
     path('admin/git-pull-page909/', git_pull_page_view, name='git_pull_page'),
     
-    path('qnWmCHVq7x7keXdxjyp4OkecPCxgda42FH0V5PGs7Hon1YTO/', include('apps.members.urls', namespace='members')),
+    #path('qnWmCHVq7x7keXdxjyp4OkecPCxgda42FH0V5PGs7Hon1YTO/', include('apps.members.urls', namespace='members')),
     path('django_f', TemplateView.as_view(template_name='index.html'), name='django_f'),
     
 ]
