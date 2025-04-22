@@ -1333,7 +1333,7 @@
 
     <!-- After opening body tag, before main content -->
     <!-- Promotional Popup -->
-    {% if blocks_popup and blocks_popup.hero_section and blocks_popup.description_section and blocks_popup.button_section and blocks_popup.button_section.items %}
+    {% if popup_active and blocks_popup and blocks_popup.hero_section and blocks_popup.description_section and blocks_popup.button_section and blocks_popup.button_section.items %}
     <div 
         x-data="initializePopup()"
         x-show="showPopup"

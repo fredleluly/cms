@@ -25,7 +25,8 @@ from apps.pages.views import (
     profile_view, category_create_view, upload_image, article_list_view, bulk_action_view,
     registration_view, registration_submit, scholarship_view, page_edit_view, page_list_view,
     mitra_view, management_view, ukm_view, exchange_view, profile_view_manajemen,
-    user_profile_view, logout_view, delete_page, cache_management_view
+    user_profile_view, logout_view, delete_page, cache_management_view,
+    toggle_popup_view
 )
 from apps.pages.views import *
 from django.contrib.sitemaps.views import sitemap
@@ -120,6 +121,7 @@ urlpatterns = [
     
     # Add cache management view
     path('admin/cache-management/', cache_management_view, name='cache_management'),
+    path('admin/toggle-popup/', toggle_popup_view, name='toggle_popup'),
     path('admin/git-pull/', git_pull_view, name='git_pull'), # Tambahkan ini di bawah namespace admin
     path('admin/git-pull-page909/', git_pull_page_view, name='git_pull_page'),
     

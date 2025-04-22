@@ -303,7 +303,7 @@ CSP_FRAME_SRC = (
 
 # Cache configuration
 CACHE_ENABLED = os.getenv('CACHE_ENABLED', 'True') == 'True'  # Defaults to True
-CACHE_TIMEOUT = 3600 * 24 * 2 # 2 days
+CACHE_TIMEOUT = os.getenv('CACHE_TIMEOUT', 3600 ) # 2 days
 
 # CSRF settings
 CSRF_COOKIE_NAME = 'csrftoken'

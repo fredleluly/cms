@@ -295,10 +295,28 @@ def home_view(request):
     context = {
         'page': page,
         'meta': page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  },
+        'blocks': blocks, 
     }
     
+    # Add popup context
+    context.update(get_popup_context())
+    
     return render(request, f'pages/{page.template}', context)
+
+def get_popup_context():
+    """Helper function to get popup blocks if the popup is active"""
+    context = {}
+    try:
+        popup_page = Page.objects.get(slug='popup', status=Page.PUBLISHED)
+        if popup_page.metadata.get('is_active', False):
+            context['blocks_popup'] = {
+                i.identifier: i.content 
+                for i in popup_page.content_blocks.all().order_by('order')
+            }
+            context['popup_active'] = True
+    except Page.DoesNotExist:
+        pass
+    return context
 
 def page_view(request, slug):
     page = get_object_or_404(Page, slug=slug, status=Page.PUBLISHED)
@@ -317,8 +335,11 @@ def page_view(request, slug):
         context = {
             'page': page,
             'meta': page.metadata,
-            'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+            'blocks': blocks
         }
+        
+        # Add popup context
+        context.update(get_popup_context())
         
         template_name = f"pages/{page.template}.html"
         return render(request, template_name, context)
@@ -668,6 +689,14 @@ def cache_management_view(request):
                 for name, info in CACHED_VIEWS_REGISTRY.items()
             ]
         }
+        
+        # Get popup status
+        try:
+            popup_page = Page.objects.get(slug='popup', status=Page.PUBLISHED)
+            popup_status = popup_page.metadata.get('is_active', False)
+        except Page.DoesNotExist:
+            popup_status = False
+        
         print('Debug: cache_status[global_enabled]:', cache_status['global_enabled'])
         
         # Add stats about cache usage if possible
@@ -679,7 +708,8 @@ def cache_management_view(request):
         
         return render(request, 'admin/cache_management.html', {
             'cache_status': cache_status,
-            'title': 'Cache Management'
+            'title': 'Cache Management',
+            'popup_status': popup_status
         })
     except Exception as e:
         logger.error(f"Error in cache_management_view: {str(e)}")
@@ -739,8 +769,10 @@ def news_view(request):
         'current_category': category_slug,
         'search_query': search_query,
         'total_articles': total_count,
-        'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }
     }
+    
+    # Add popup context
+    context.update(get_popup_context())
     
     return render(request, 'pages/news.html', context)
 
@@ -762,8 +794,10 @@ def article_detail_view(request, slug):
     context = {
         'article': article,
         'related_articles': related_articles,
-        'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }
     }
+    
+    # Add popup context
+    context.update(get_popup_context())
     
     return render(request, 'pages/article_detail.html', context)
 
@@ -2648,7 +2682,8 @@ def create_default_popup():
         program_studi=prodi,
         metadata={
             'meta_description': 'Program Studi Arsitektur Matana University',
-            'meta_keywords': 'arsitektur matana'
+            'meta_keywords': 'arsitektur matana',
+            'is_active': True  # Add flag to control popup visibility
         }
     )
     
@@ -4591,3 +4626,27 @@ def git_pull_view(request):
             'success': False,
             'error': f'Terjadi kesalahan server: {str(e)}'
         }, status=500)
+
+@staff_member_required
+def toggle_popup_view(request):
+    """Toggle the visibility of the popup"""
+    try:
+        popup_page = Page.objects.get(slug='popup', status=Page.PUBLISHED)
+        metadata = popup_page.metadata
+        
+        # Toggle is_active value
+        is_active = metadata.get('is_active', False)
+        metadata['is_active'] = not is_active
+        popup_page.metadata = metadata
+        popup_page.save()
+        
+        status = "activated" if metadata['is_active'] else "deactivated"
+        messages.success(request, f"Popup has been {status}")
+    except Page.DoesNotExist:
+        messages.error(request, "Popup page does not exist")
+    
+    # Redirect back to the referring page or to cache management if no referrer
+    referrer = request.META.get('HTTP_REFERER', None)
+    if referrer:
+        return redirect(referrer)
+    return redirect('cache_management')

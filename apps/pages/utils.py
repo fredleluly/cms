@@ -99,7 +99,10 @@ def togglable_cache(timeout=None, *, key_prefix=None, cache=None, description=No
         cache.delete_pattern(f"views.decorators.cache.cache_page.{key_prefix}.*")
     """
     if timeout is None:
-        timeout = getattr(settings, 'CACHE_TIMEOUT', 3600 * 24 * 2)  # Default to 1 hour
+        timeout = getattr(settings, 'CACHE_TIMEOUT', 3600 * 24 * 2)  # Default to 2 days
+    
+    # Ensure timeout is an integer
+    timeout = int(timeout)
     
     def decorator(view_func):
         view_name = view_func.__name__
@@ -126,13 +129,40 @@ def togglable_cache(timeout=None, *, key_prefix=None, cache=None, description=No
                         cache_enabled = cache_override.lower() in ('true', '1', 'yes')
                 
                 if cache_enabled:
-                    # Apply cache_page decorator dynamically
-                    cached_view = cache_page(timeout, key_prefix=key_prefix, cache=cache)(view_func)
-                    if hasattr(cached_view, 'is_cached') and cached_view.is_cached(request, *args, **kwargs): # Cek apakah cache di-hit
-                        logger.info(f"Cache HIT for view '{view_name}' (key_prefix='{key_prefix or 'views.decorators.cache.cache_page'}').") # Log cache hit
+                    # Get the cache instance to use
+                    cache_instance = cache or globals().get('cache')
+                    
+                    # Create a unique cache key based on view name, path, and query parameters
+                    # This ensures different URLs with different parameters get different cache entries
+                    request_path = request.get_full_path()
+                    view_key = key_prefix or f"view:{view_name}"
+                    cache_key = f"{view_key}:{request_path}"
+                    
+                    # Try to get the cached response
+                    cached_response = cache_instance.get(cache_key)
+                    
+                    if cached_response is None:
+                        # Cache miss - generate and cache the response
+                        logger.info(f"Cache MISS for view '{view_name}' - generating new response")
+                        response = view_func(request, *args, **kwargs)
+                        
+                        # If the response is a TemplateResponse, it hasn't been rendered yet
+                        if hasattr(response, 'render') and callable(response.render):
+                            # Add a callback to cache after rendering
+                            def cache_response(rendered_response):
+                                cache_instance.set(cache_key, rendered_response, timeout)
+                                return rendered_response
+                            
+                            response.add_post_render_callback(cache_response)
+                        else:
+                            # For pre-rendered responses, cache immediately
+                            cache_instance.set(cache_key, response, timeout)
+                        
+                        return response
                     else:
-                        logger.info(f"Cache MISS for view '{view_name}' (key_prefix='{key_prefix or 'views.decorators.cache.cache_page'}').") # Log cache miss
-                    return cached_view(request, *args, **kwargs)
+                        # Cache hit
+                        logger.info(f"Cache HIT for view '{view_name}'")
+                        return cached_response
                 else:
                     # Skip caching
                     return view_func(request, *args, **kwargs)
@@ -157,27 +187,59 @@ def clear_view_cache(view_name=None, key_prefix=None):
         bool: True if cache was successfully cleared, False otherwise.
     """
     try:
-        if key_prefix is None:
-            key_prefix = 'views.decorators.cache.cache_page'
+        # For our new cache key format
+        if view_name and not key_prefix:
+            key_prefix = f"view:{view_name}"
+        elif not key_prefix:
+            key_prefix = "view"
         
-        pattern = f"{key_prefix}.*"
-        if view_name:
-            # Check if view has a custom key_prefix in the registry
-            if view_name in CACHED_VIEWS_REGISTRY and CACHED_VIEWS_REGISTRY[view_name].get('key_prefix'):
-                pattern = f"{CACHED_VIEWS_REGISTRY[view_name]['key_prefix']}.*"
-            else:
-                pattern = f"{key_prefix}.{view_name}.*"
-            
+        # Check registry for custom key_prefix
+        if view_name and view_name in CACHED_VIEWS_REGISTRY and CACHED_VIEWS_REGISTRY[view_name].get('key_prefix'):
+            key_prefix = CACHED_VIEWS_REGISTRY[view_name]['key_prefix']
+        
+        # Create pattern for cache clearing
+        pattern = f"{key_prefix}:*" if key_prefix else "*"
+        
         # Django's default cache doesn't have delete_pattern method
         # so we'll need to handle this differently based on the cache backend
         if hasattr(cache, 'delete_pattern'):
             # Redis and some other backends have delete_pattern
             cache.delete_pattern(pattern)
+            logger.info(f"Cache cleared with pattern: {pattern}")
         else:
-            # For default cache, we can only clear the entire cache
-            cache.clear()
+            # For FileBasedCache, we need to clear specific keys or the entire cache
+            if settings.CACHES['default']['BACKEND'].endswith('FileBasedCache'):
+                if view_name:
+                    # Try to clear the cache directory for a specific view
+                    cache_dir = settings.CACHES['default'].get('LOCATION')
+                    if cache_dir and os.path.exists(cache_dir):
+                        import glob
+                        import pathlib
+                        
+                        # Search for cache files with the pattern
+                        pattern_for_files = f"*{key_prefix.replace(':', '_')}*"
+                        matching_files = glob.glob(str(pathlib.Path(cache_dir) / pattern_for_files))
+                        
+                        # Delete all matching cache files
+                        for cache_file in matching_files:
+                            try:
+                                os.remove(cache_file)
+                                logger.info(f"Removed cache file: {cache_file}")
+                            except (OSError, PermissionError) as e:
+                                logger.warning(f"Could not remove cache file {cache_file}: {e}")
+                        
+                        logger.info(f"Cleared {len(matching_files)} cache files for pattern: {pattern_for_files}")
+                    else:
+                        logger.warning("Could not locate cache directory for FileBasedCache")
+                else:
+                    # Clear the entire cache
+                    cache.clear()
+                    logger.info("Cleared entire cache")
+            else:
+                # For other cache backends without delete_pattern, clear the entire cache
+                cache.clear()
+                logger.info("Cleared entire cache (cache backend doesn't support pattern deletion)")
             
-        logger.info(f"Cache cleared for pattern: {pattern}")
         return True
     except Exception as e:
         logger.error(f"Failed to clear cache: {str(e)}")
