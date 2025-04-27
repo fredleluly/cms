@@ -5,85 +5,104 @@
 
 {% block content %}
 <div id="pageApp" class="max-w-5xl mx-auto">
-    <form @submit.prevent="savePage" class="space-y-8" id="pageForm">
+    <form @submit.prevent="savePage" class="space-y-6" id="pageForm">
         {% csrf_token %}
         
         <!-- Page Info -->
-        <div class="bg-white rounded-xl shadow-sm p-6">
-            <h3 class="text-lg font-semibold mb-4">Page Information</h3>
+        <div class="bg-white rounded-xl shadow-sm p-5 transition-all hover:shadow-md">
+            <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">Page Information</h3>
             <div class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
                     <input type="text" v-model="pageData.title" required
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                           class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
-                    <textarea v-model="pageData.metadata.meta_description" rows="2" 
-                              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
-                    <input type="text" v-model="pageData.metadata.meta_keywords"
-                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
+                        <textarea v-model="pageData.metadata.meta_description" rows="2" 
+                                class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
+                        <input type="text" v-model="pageData.metadata.meta_keywords"
+                            class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Content Blocks -->
-        <div class="space-y-8">
-            <div v-for="(content, identifier) in blocks" :key="identifier" class="bg-white rounded-xl shadow-sm overflow-hidden">
-                <div class="bg-gray-50 px-6 py-4 border-b flex justify-between items-center">
-                    <!-- <h3 class="text-lg font-semibold text-gray-900">[[content.title|capitalize ]]</h3> -->
-                    <h3 class="text-lg font-semibold text-gray-900">[[ identifier|capitalize ]]</h3>
-                    <button type="button" @click="toggleBlock(identifier)"
-                            class="text-gray-500 hover:text-gray-700">
-                        <i :class="['fas', blockStates[identifier] ? 'fa-chevron-down' : 'fa-chevron-right']"></i>
-                    </button>
+        <div class="space-y-5">
+            <div v-for="(content, identifier) in blocks" :key="identifier" 
+                 class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 transition-all hover:shadow-md">
+                <div class="bg-gray-50 px-5 py-3 border-b flex justify-between items-center cursor-pointer" 
+                     @click="toggleBlock(identifier)">
+                    <h3 class="font-semibold text-gray-800 flex items-center">
+                        <span class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mr-2">
+                            <i class="fas fa-cube text-xs"></i>
+                        </span>
+                        [[ identifier|capitalize ]]
+                    </h3>
+                    <div class="flex items-center">
+                        <span class="text-xs text-gray-500 mr-2" v-if="content.items">
+                            [[ content.items.length ]] Items
+                        </span>
+                        <button type="button" 
+                                class="text-gray-400 hover:text-gray-700 transition-colors">
+                            <i :class="['fas', blockStates[identifier] ? 'fa-chevron-up' : 'fa-chevron-down']"></i>
+                        </button>
+                    </div>
                 </div>
                 
-                <div :id="'block-' + identifier" v-show="blockStates[identifier]" class="p-6 space-y-6">
+                <div :id="'block-' + identifier" v-show="blockStates[identifier]" 
+                     class="p-5 space-y-5 transition-all" 
+                     :class="blockStates[identifier] ? 'animate-fade-in' : ''">
                     <!-- Title & Subtitle -->
                     <div class="grid md:grid-cols-2 gap-4">
-                        <div>
+                        <!-- Title (only if it exists or can be added) -->
+                        <div v-if="propertyExists(content, 'title')">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
                             <input type="text" v-model="content.title"
-                                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 transition-colors">
                         </div>
-                        <div>
+                        <!-- Subtitle (only if it exists or can be added) -->
+                        <div v-if="propertyExists(content, 'subtitle')">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Subtitle</label>
                             <input type="text" v-model="content.subtitle"
-                                   class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                                   class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 transition-colors">
                         </div>
                     </div>
 
                     <!-- Description -->
-                    <div>
+                    <div v-if="propertyExists(content, 'description')">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
                         <textarea v-model="content.description" rows="3"
-                                  class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
+                                  class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 transition-colors"></textarea>
                     </div>
 
                     <!-- Images -->
                     <div class="grid md:grid-cols-2 gap-4">
-                        <div>
+                        <!-- Image (only if it exists or can be added) -->
+                        <div v-if="propertyExists(content, 'image')">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
                             <div class="flex gap-2">
                                 <input type="text" v-model="content.image"
-                                       class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                                       class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 transition-colors">
                                 <button type="button" @click="openMediaLibrary(identifier, 'image')"
-                                        class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                        class="px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-gray-600 transition-colors">
                                     <i class="fas fa-image"></i>
                                 </button>
                             </div>
                         </div>
-                        <div>
+                        <!-- Background Image (only if it exists or can be added) -->
+                        <div v-if="propertyExists(content, 'background_image')">
                             <label class="block text-sm font-medium text-gray-700 mb-1">Background Image</label>
                             <div class="flex gap-2">
                                 <input type="text" v-model="content.background_image"
-                                       class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500">
+                                       class="w-full px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 transition-colors">
                                 <button type="button" @click="openMediaLibrary(identifier, 'background_image')"
-                                        class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                        class="px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-gray-600 transition-colors">
                                     <i class="fas fa-image"></i>
                                 </button>
                             </div>
@@ -91,37 +110,60 @@
                     </div>
 
                     <!-- Items -->
-                    <div class="space-y-4">
+                    <div v-if="propertyExists(content, 'items') || content.items && content.items.length" class="space-y-3 bg-gray-50 p-4 rounded-lg">
                         <div class="flex justify-between items-center">
-                            <label class="block text-sm font-medium text-gray-700">Items</label>
+                            <label class="text-sm font-medium text-gray-800 flex items-center">
+                                <i class="fas fa-list-ul mr-2 text-blue-500"></i> Items
+                            </label>
                             <!-- Add Button for Items -->
                             <button type="button" @click="addItem(identifier)" 
-                                    class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-lg hover:bg-blue-100">
+                                    class="text-sm bg-blue-50 text-blue-600 px-3 py-1 rounded-lg hover:bg-blue-100 transition-colors flex items-center">
                                 <i class="fas fa-plus mr-1"></i> Add Item
                             </button>
                         </div>
-                        <div class="space-y-4">
+                        <div class="space-y-3">
                             <div v-for="(item, index) in content.items" :key="index"
-                                 class="bg-gray-50 p-4 rounded-lg relative group">
+                                 class="bg-white p-4 rounded-lg relative group border border-gray-100 hover:border-gray-200 transition-all">
+                                
+                                <!-- Item header with index -->
+                                <div class="absolute top-3 left-3 bg-blue-50 text-blue-600 w-6 h-6 rounded-full flex items-center justify-center text-xs font-medium">
+                                    [[ index + 1 ]]
+                                </div>
                                 
                                 <!-- Item Control Buttons -->
-                                <div class="absolute top-2 right-2 flex space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <div class="absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <!-- Move Up Button -->
+                                    <button type="button" @click="moveItem(identifier, index, 'up')" 
+                                            class="p-1.5 text-gray-500 hover:text-gray-700 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors" 
+                                            :disabled="index === 0"
+                                            :class="{'opacity-50 cursor-not-allowed': index === 0}"
+                                            title="Move Up">
+                                        <i class="fas fa-arrow-up text-xs"></i>
+                                    </button>
+                                    <!-- Move Down Button -->
+                                    <button type="button" @click="moveItem(identifier, index, 'down')" 
+                                            class="p-1.5 text-gray-500 hover:text-gray-700 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors" 
+                                            :disabled="index === blocks[identifier].items.length - 1"
+                                            :class="{'opacity-50 cursor-not-allowed': index === blocks[identifier].items.length - 1}"
+                                            title="Move Down">
+                                        <i class="fas fa-arrow-down text-xs"></i>
+                                    </button>
                                     <!-- Duplicate Button -->
                                     <button type="button" @click="duplicateItem(identifier, index)" 
-                                            class="p-1 text-blue-500 hover:text-blue-700" 
+                                            class="p-1.5 text-blue-500 hover:text-blue-700 bg-blue-50 rounded-md hover:bg-blue-100 transition-colors" 
                                             title="Duplicate Item">
-                                        <i class="fas fa-copy"></i>
+                                        <i class="fas fa-copy text-xs"></i>
                                     </button>
                                     <!-- Remove Button -->
                                     <button type="button" @click="removeItem(identifier, index)" 
-                                            class="p-1 text-red-500 hover:text-red-700" 
+                                            class="p-1.5 text-red-500 hover:text-red-600 bg-red-50 rounded-md hover:bg-red-100 transition-colors" 
                                             title="Remove Item">
-                                        <i class="fas fa-trash-alt"></i>
+                                        <i class="fas fa-trash-alt text-xs"></i>
                                     </button>
                                 </div>
                                 
                                 <!-- Dynamic Fields Based on Item Structure -->
-                                <div class="grid gap-4">
+                                <div class="grid gap-4 mt-4 pl-5">
                                     <!-- Iterate through item properties -->
                                     <template v-for="(value, key) in item">
                                         <div v-if="key !== 'items'" class="w-full" :key="key">
@@ -130,23 +172,26 @@
                                                 <label class="block text-sm font-medium text-gray-700 mb-1">[[ key ]]</label>
                                                 <div class="flex gap-2">
                                                     <input type="text" v-model="item[key]"
-                                           class="w-full px-4 py-2 border rounded-lg">
+                                                           class="w-full px-4 py-2 border border-gray-200 rounded-lg transition-colors">
                                                     <button type="button" @click="openMediaLibrary(identifier, key, index)"
-                                                            class="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                                            class="px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 text-gray-600 transition-colors">
                                                         <i class="fas fa-image"></i>
-                                        </button>
-                                    </div>
+                                                    </button>
+                                                </div>
                                                 <!-- Preview if image exists -->
                                                 <div v-if="item[key]" class="mt-2">
-                                                    <img :src="item[key]" class="h-20 w-auto rounded-lg">
+                                                    <img :src="item[key]" 
+                                                         class="h-20 w-auto rounded-lg cursor-pointer hover:opacity-90 transition-opacity" 
+                                                         @click="previewImage(item[key])"
+                                                         title="Click to enlarge">
                                                 </div>
                                             </template>
                                             
                                             <!-- Regular Text Field -->
                                             <template v-else>
                                                 <label class="block text-sm font-medium text-gray-700 mb-1">[[ key ]]</label>
-                                                <textarea v-model="item[key]" rows="3"
-                                                          class="w-full px-4 py-2 border rounded-lg"></textarea>
+                                                <textarea v-model="item[key]" rows="2"
+                                                          class="w-full px-4 py-2 border border-gray-200 rounded-lg transition-colors"></textarea>
                                             </template>
                                         </div>
                                     </template>
@@ -156,19 +201,30 @@
                     </div>
 
                     <!-- Call to Action -->
-                    <div class="bg-gray-50 p-4 rounded-lg">
-                        <h4 class="font-medium text-gray-900 mb-3">Call to Action</h4>
-                        <div class="grid md:grid-cols-3 gap-4">
-                            <input type="text" v-model="content.cta.text" placeholder="Button Text"
-                                   class="w-full px-4 py-2 border rounded-lg">
-                            <input type="text" v-model="content.cta.url" placeholder="URL"
-                                   class="w-full px-4 py-2 border rounded-lg">
-                            <select v-model="content.cta.style"
-                                    class="w-full px-4 py-2 border rounded-lg">
-                                <option value="primary">Primary</option>
-                                <option value="secondary">Secondary</option>
-                                <option value="outline">Outline</option>
-                            </select>
+                    <div v-if="hasCta(content)" class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-400">
+                        <h4 class="font-medium text-gray-800 mb-3 flex items-center">
+                            <i class="fas fa-link mr-2 text-blue-500"></i> Call to Action
+                        </h4>
+                        <div class="grid md:grid-cols-3 gap-3">
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">Button Text</label>
+                                <input type="text" v-model="content.cta.text" placeholder="Button Text"
+                                       class="w-full px-3 py-2 border border-gray-200 rounded-lg transition-colors text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">URL</label>
+                                <input type="text" v-model="content.cta.url" placeholder="URL"
+                                       class="w-full px-3 py-2 border border-gray-200 rounded-lg transition-colors text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">Style</label>
+                                <select v-model="content.cta.style"
+                                        class="w-full px-3 py-2 border border-gray-200 rounded-lg transition-colors text-sm">
+                                    <option value="primary">Primary</option>
+                                    <option value="secondary">Secondary</option>
+                                    <option value="outline">Outline</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -176,28 +232,46 @@
         </div>
 
         <!-- Actions -->
-        <div class="flex justify-end gap-4">
+        <div class="flex justify-end gap-3 sticky bottom-4 z-10">
             <button type="button" @click="cancel" 
-                    class="px-6 py-2 border rounded-lg hover:bg-gray-50">
+                    class="px-5 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors shadow-sm text-gray-700">
                 Cancel
             </button>
             <button type="submit" :disabled="saving"
-                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+                    class="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors shadow-sm flex items-center">
+                <i class="fas" :class="saving ? 'fa-circle-notch fa-spin' : 'fa-save'" :style="saving ? 'margin-right: 0.5rem' : 'margin-right: 0.5rem'"></i>
                 [[ saving ? 'Saving...' : 'Save Changes' ]]
             </button>
         </div>
     </form>
 
     <!-- Error Alert -->
-    <div v-if="error" class="fixed top-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg">
-        [[ error ]]
+    <div v-if="error" class="fixed top-4 right-4 bg-red-500 text-white px-5 py-3 rounded-lg shadow-lg flex items-center">
+        <i class="fas fa-exclamation-circle mr-2"></i> [[ error ]]
     </div>
 
     <!-- Success Alert -->
-    <div v-if="successMessage" class="fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
-        [[ successMessage ]]
+    <div v-if="successMessage" class="fixed top-4 right-4 bg-green-500 text-white px-5 py-3 rounded-lg shadow-lg flex items-center">
+        <i class="fas fa-check-circle mr-2"></i> [[ successMessage ]]
     </div>
 </div>
+
+<style>
+.animate-fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -267,6 +341,37 @@ new Vue({
             }
         },
         
+        // New method to move an item up or down
+        moveItem(identifier, index, direction) {
+            if (!this.blocks[identifier].items) {
+                return;
+            }
+            
+            try {
+                const items = this.blocks[identifier].items;
+                
+                // Don't move if at the boundaries
+                if (direction === 'up' && index === 0) return;
+                if (direction === 'down' && index === items.length - 1) return;
+                
+                // Create a copy of the item to move
+                const itemToMove = JSON.parse(JSON.stringify(items[index]));
+                
+                // Remove the item from its current position
+                items.splice(index, 1);
+                
+                // Calculate new index and insert the item
+                const newIndex = direction === 'up' ? index - 1 : index + 1;
+                items.splice(newIndex, 0, itemToMove);
+                
+                // Show success notification
+                this.showNotification(`Item moved ${direction}`, 'success');
+            } catch (error) {
+                console.error(`Error moving item ${direction}:`, error);
+                this.error = `Failed to move item ${direction}`;
+            }
+        },
+        
         addNestedItem(identifier, itemIndex) {
             if (!this.blocks[identifier].items[itemIndex].items) {
                 this.$set(this.blocks[identifier].items[itemIndex], 'items', []);
@@ -276,6 +381,45 @@ new Vue({
         
         removeNestedItem(identifier, itemIndex, nestedIndex) {
             this.blocks[identifier].items[itemIndex].items.splice(nestedIndex, 1);
+        },
+        
+        // Show a larger preview of the image
+        previewImage(imageSrc) {
+            if (!imageSrc) return;
+            
+            // Create a modal to display the image
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50';
+            modal.style.backdropFilter = 'blur(5px)';
+            
+            // Create the image element
+            const img = document.createElement('img');
+            img.src = imageSrc;
+            img.className = 'max-w-[90%] max-h-[90vh] rounded-lg shadow-xl';
+            
+            // Close button
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'absolute top-4 right-4 bg-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg text-gray-800 hover:bg-gray-100';
+            closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            
+            // Add elements to the modal
+            modal.appendChild(img);
+            modal.appendChild(closeBtn);
+            
+            // Close on click anywhere or Escape key
+            modal.addEventListener('click', () => {
+                document.body.removeChild(modal);
+            });
+            
+            document.addEventListener('keydown', function escHandler(e) {
+                if (e.key === 'Escape') {
+                    document.body.removeChild(modal);
+                    document.removeEventListener('keydown', escHandler);
+                }
+            });
+            
+            // Add to document
+            document.body.appendChild(modal);
         },
         
         openMediaLibrary(identifier, field, itemIndex = null) {
@@ -372,6 +516,69 @@ new Vue({
         
         cancel() {
             history.back();
+        },
+        
+        // Function to safely check if a property exists on an object
+        propertyExists(obj, prop) {
+            // Special case for new/empty objects - show standard fields
+            if (Object.keys(obj).length <= 2) {
+                // For CTA, always hide unless explicitly present
+                if (prop === 'cta') {
+                    return obj.hasOwnProperty('cta') && obj.cta;
+                }
+                return true;
+            }
+            
+            // Direct property presence check (hasOwnProperty ignores inherited properties)
+            if (!obj.hasOwnProperty(prop)) {
+                return false;
+            }
+            
+            // For empty objects/arrays, we should hide them if they have no content
+            if (prop === 'items' && Array.isArray(obj[prop])) {
+                // Only show items section if there are items or we're looking at it
+                return obj[prop].length > 0 || this.blockStates[Object.keys(this.blocks).find(key => this.blocks[key] === obj)];
+            }
+            
+            // Special handling for CTA
+            if (prop === 'cta') {
+                // Only show if CTA exists and has at least one non-empty field
+                if (!obj.cta || typeof obj.cta !== 'object') {
+                    return false;
+                }
+                // Check if any CTA field has a value
+                return Object.values(obj.cta).some(val => val !== null && val !== undefined && val !== '');
+            }
+            
+            // For empty strings/nulls, we should still hide them
+            if (obj[prop] === null || obj[prop] === undefined || obj[prop] === '') {
+                return false;
+            }
+            
+            // For empty objects, we should hide them
+            if (typeof obj[prop] === 'object' && !Array.isArray(obj[prop]) && Object.keys(obj[prop]).length === 0) {
+                return false;
+            }
+            
+            return true;
+        },
+        
+        // New method to check if CTA exists and should be shown
+        hasCta(content) {
+            console.log('Checking if CTA exists:', content);
+            // if content inside  content.cta.text is not empty, return true
+            if (content.cta  ) {
+                console.log('CTA text:', content.cta.text);
+                if (content.cta.text === "") {
+                    console.log('CTA text is empty');
+                    return false;
+                }
+            }
+            // Safe check: content exists and has 'cta' property that is an object
+            return content && 
+                   Object.prototype.hasOwnProperty.call(content, 'cta') && 
+                   content.cta && 
+                   typeof content.cta === 'object';
         }
     },
     watch: {
