@@ -534,7 +534,7 @@
             <!-- Pendaftaran -->
             <div class="nav-item">
               <a
-                href="https://matanauniversity.siakadcloud.com/spmbfront/"
+                href="https://pmb.matanauniversity.ac.id/"
                 class="nav-link text-gray-700 hover:text-matana-blue px-4 py-2 focus-ring"
               >
                 Pendaftaran
@@ -1147,7 +1147,7 @@
 
         <!-- WhatsApp Button -->
         <a 
-            href="https://wa.me/6281287775999?text=Saya+ingin+bertanya+tentang+perkuliahan+di+Matana+University&type=phone_number&app_absent=0" 
+            href="https://api.whatsapp.com/send?phone=6285187229774&text=Halo%20Matana" 
             target="_blank"
             rel="noopener noreferrer"
             :class="isMobile ? 'flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#25D366] text-white shadow-lg hover:bg-[#20BA5C] transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25D366] relative group flex-shrink-0' : 'flex items-center justify-center w-12 h-12 rounded-full bg-[#25D366] text-white shadow-lg hover:bg-[#20BA5C] transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#25D366] relative group'"
@@ -1363,77 +1363,78 @@
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
             x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-            class="fixed inset-0 transform transition-all flex items-center justify-center min-h-screen p-4 z-[1000]"
+            class="fixed inset-0 transform transition-all flex items-center justify-center p-2 sm:p-4 z-[1000]"
         >
-            <!-- Popup Container -->
-            <div class="relative bg-white rounded-lg overflow-hidden max-w-4xl w-full mx-auto shadow-xl">
+            <!-- Popup Container - Mobile First Design -->
+            <div class="relative bg-white rounded-lg overflow-hidden w-full max-w-[95%] sm:max-w-lg md:max-w-4xl mx-auto shadow-xl flex flex-col max-h-[90vh]">
                 <!-- Close Button -->
                 <button 
                     @click="closePopup()"
-                    class="absolute top-4 right-4 z-10 bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-matana-blue group"
+                    class="absolute top-2 right-2 z-50 bg-white/90 backdrop-blur-sm rounded-full p-1.5 sm:p-2 hover:bg-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-matana-blue"
                     aria-label="Close popup"
                 >
-                    <svg class="w-5 h-5 text-gray-600 group-hover:text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
 
-                <div class="flex flex-col md:flex-row">
-                    <!-- Image Container -->
-                    <div class="relative md:w-7/12 overflow-hidden">
+                <!-- Mobile Layout (Stack) / Desktop Layout (Side by Side) -->
+                <div class="flex flex-col md:flex-row w-full overflow-hidden max-h-[90vh]">
+                    <!-- Image Container - Smaller on Mobile -->
+                    <div class="relative w-full md:w-7/12 h-32 sm:h-40 md:h-auto overflow-hidden flex-shrink-0">
                         <img 
                             src="{% optimized_image blocks_popup.hero_section.background_image %}"
                             alt="Matana University Promotion"
-                            class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
+                            class="w-full h-full object-cover"
                             loading="eager"
                             onerror="this.style.display='none'"
                         />
-                        <!-- Overlay gradient for better text visibility -->
+                        <!-- Overlay gradient -->
                         <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
                     </div>
 
-                    <!-- Content Container -->
-                    <div class="md:w-5/12 p-6 md:p-8 flex flex-col justify-between bg-white">
+                    <!-- Content Container - Scrollable -->
+                    <div class="w-full md:w-5/12 p-3 sm:p-4 md:p-6 flex flex-col bg-white overflow-y-auto">
                         <!-- Logo -->
-                        <div class="mb-4">
+                        <div class="mb-2 sm:mb-3">
                             <img 
                                 src="{% optimized_image 'images/logo-matana-white.png' %}"
                                 alt="Matana University Logo"
-                                class="h-10"
+                                class="h-7 sm:h-8 md:h-10"
                             />
                         </div>
 
-                        <!-- Text Content -->
-                        <div class="space-y-4">
-                            <h2 class="text-2xl font-bold text-matana-blue">
+                        <!-- Text Content - Condensed on Mobile -->
+                        <div class="space-y-1.5 sm:space-y-3">
+                            <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-matana-blue line-clamp-2">
                                 {{ blocks_popup.description_section.title }}
                             </h2>
-                            <p class="text-gray-600">
+                            <p class="text-xs sm:text-sm md:text-base text-gray-600 line-clamp-3 sm:line-clamp-4 md:line-clamp-none">
                                 {{ blocks_popup.description_section.description }}
                             </p>
                         </div>
 
-                        <!-- CTA Buttons -->
-                        <div class="mt-6 space-y-3">
+                        <!-- CTA Buttons - Smaller on Mobile -->
+                        <div class="mt-2.5 sm:mt-4 md:mt-6 space-y-2">
                             <a 
                                 href="{{ blocks_popup.button_section.items.0.description }}"
-                                class="block w-full px-6 py-3 text-center bg-matana-blue text-white font-semibold rounded-lg hover:bg-matana-blue/90 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-matana-blue"
+                                class="block w-full px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-3 text-center text-xs sm:text-sm md:text-base bg-matana-blue text-white font-semibold rounded-md sm:rounded-lg hover:bg-matana-blue/90 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-matana-blue"
                             >
                                 {{ blocks_popup.button_section.items.0.title }}
                             </a>
                             <a 
                                 href="{{ blocks_popup.button_section.items.1.description }}"
-                                class="block w-full px-6 py-3 text-center border-2 border-matana-yellow text-matana-blue font-semibold rounded-lg hover:bg-matana-yellow/10 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-matana-yellow"
+                                class="block w-full px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-3 text-center text-xs sm:text-sm md:text-base border-2 border-matana-yellow text-matana-blue font-semibold rounded-md sm:rounded-lg hover:bg-matana-yellow/10 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-matana-yellow"
                             >
                                 {{ blocks_popup.button_section.items.1.title }}
                             </a>
                         </div>
 
-                        <!-- Contact Info -->
-                        <div class="mt-6 pt-6 border-t border-gray-200">
-                            <p class="text-sm text-gray-600 flex items-center gap-2">
+                        <!-- Contact Info - Simplified on Mobile -->
+                        <div class="mt-2.5 sm:mt-4 md:mt-6 pt-2.5 sm:pt-4 md:pt-6 border-t border-gray-200">
+                            <p class="text-xs md:text-sm text-gray-600 flex items-center gap-1 sm:gap-2">
                                 <i class="fas fa-phone text-matana-yellow"></i>
-                                Hubungi kami: 0812-8777-5999
+                                <span class="whitespace-nowrap">0812-8777-5999</span>
                             </p>
                         </div>
                     </div>
