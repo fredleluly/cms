@@ -341,6 +341,11 @@
         -webkit-transform: translateZ(0);
         will-change: transform;
     }
+
+    .bg-pattern {
+        background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f0f4f8' fill-opacity='0.4'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E");
+        background-repeat: repeat;
+    }
 </style>
 {% endblock %}
 
@@ -402,7 +407,7 @@
 </div>
 
 <!-- section 2 -->
-<div class="container mx-auto px-4 flex flex-col items-center justify-center my-12">
+<!-- <div class="container mx-auto px-4 flex flex-col items-center justify-center my-12">
     <div class="flex flex-col items-center justify-center">
         <h2 class="text-4xl font-bold text-matana-blue mb-4">Mengapa Matana University?</h2>
     </div>
@@ -413,18 +418,40 @@
         </div>
         {% endfor %}
     </ul>
-</div>
+</div> -->
 
-<!-- <section class="container mx-auto px-4 py-8 flex flex-col md:flex-row items-center justify-center space-y-8 md:space-y-0 md:space-x-8"></section>
-    <div class="w-full md:w-1/2 flex justify-center">
-        <img src="{% optimized_image blocks.section3.background_image  %}" alt="{{ blocks.section3.title }}" class="w-full h-auto object-contain rounded-lg shadow-lg">
+<div class=" mx-auto px-4 flex flex-col items-center justify-center my-16 relative ">
+    <!-- Subtle background pattern/texture -->
+        <!-- Light beam effects similar to the image -->
+    <div class="absolute -top-20 -left-20 w-64 h-64 bg-yellow-400/10 rounded-full blur-2xl transform rotate-12"></div>
+    <!-- <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-blue-400/20 rounded-full blur-2xl"></div> -->
+    <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-yellow-400/15 rounded-full blur-2xl"></div>
+    <!-- <div class="absolute top-1/4 right-1/3 w-40 h-40 bg-yellow-300/10 rounded-full blur-xl"></div> -->
+   
+    <!-- <div class="absolute inset-0 bg-gradient-to-b from-gray-50 to-white opacity-70"></div> -->
+    <!-- <div class="absolute inset-0 bg-pattern"></div> -->
+    
+    <div class="relative z-10 max-w-3xl w-full py-5 px-6 md:px-10 bg-white/80 backdrop-blur-sm rounded-2xl shadow-soft">
+        <div class="flex flex-col items-center justify-center mb-6">
+            <div class="w-16 h-1 bg-matana-yellow rounded-full mb-6"></div>
+            <h2 class="text-3xl md:text-4xl font-bold text-matana-blue mb-2 text-center">Mengapa Matana University?</h2>
+            <!-- <p class="text-gray-600 text-center">Keunggulan yang membuat kami berbeda</p> -->
+        </div>
+        
+        <ul class="space-y-4 w-full">
+            {% for item in blocks.section2.items %}
+            <li class="flex items-start space-x-3  rounded-lg transition-colors duration-300">
+                <span class="flex-shrink-0 w-6 h-6 rounded-full bg-matana-yellow/20 flex items-center justify-center text-matana-yellow">✓</span>
+                <span class="text-gray-700">{{ item.title }}</span>
+            </li>
+            {% endfor %}
+        </ul>
     </div>
-    <div class="w-full md:w-1/2 flex flex-col items-start justify-center space-y-4">
-        <p class="text-lg text-gray-700">{{ blocks.section3.items.0.description }}</p>
-        <p class="text-lg text-gray-700">{{ blocks.section3.items.1.description }}</p>
-        <a href="{{ blocks.section3.items.2.description }}" class="bg-matana-blue text-white px-6 py-3 rounded-md shadow-md hover:bg-matana-dark-blue transition duration-300">Daftar</a>
-    </div>
-</section> -->
+    
+    <!-- Subtle decorative elements -->
+    <!-- <div class="absolute -top-6 -left-6 w-12 h-12 bg-matana-yellow/10 rounded-full hidden md:block"></div>
+    <div class="absolute -bottom-6 -right-6 w-16 h-16 bg-matana-blue/10 rounded-full hidden md:block"></div> -->
+</div>
 
 <!-- Admission Section -->
 <section class="relative py-24 overflow-hidden">
@@ -530,6 +557,76 @@ blocks['berita_terbaru'] = berita_terbaru -->
 
 <!-- Academic Media & News Section -->
 
+
+
+<!-- section 5 (Updated to use YouTube video player from section 4) -->
+<section class="relative py-24 overflow-hidden">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 bg-gradient-to-br from-matana-blue/5 to-transparent"></div>
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-matana-yellow to-transparent opacity-30"></div>
+    
+    <div class="container mx-auto px-4 relative">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-matana-blue mb-4">{{ blocks.section5.title }}</h2>
+        </div>
+
+        <!-- YouTube Video Player (moved from section 4) - Enhanced for better responsiveness -->
+        <div class="w-full max-w-5xl mx-auto">
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                    <!-- Video Title -->
+                <!-- <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+                    <h3 class="text-xl font-bold text-matana-blue">Video Kampus</h3>
+                    <div class="flex items-center">
+                        <span class="w-2 h-2 bg-matana-yellow rounded-full mr-2 animate-pulse"></span>
+                        <span class="text-sm text-gray-500">Campus Tour</span>
+                    </div>
+                </div> -->
+                    
+                <!-- Video Player - Enhanced with responsive sizing -->
+                    <div class="video-container">
+                        <div class="video-wrapper">
+                            <div class="youtube-embed">
+                                    <img 
+                                        width="1280" 
+                                        height="720" 
+                                        loading="lazy" 
+                                        decoding="async" 
+                                        class="thumbnail" 
+                                        alt="Matana University Campus Video" 
+                                        src="https://i3.ytimg.com/vi/{{blocks.section4.description|slice:'30:41'|default:''}}/maxresdefault.jpg"
+                                    >
+                            <button class="play-button" title="Play Video" aria-label="Play Video">
+                                <div class="play-button-circle">
+                                    <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                        <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm-56 296V168l144 88z" fill="currentColor" />
+                                    </svg>
+                                </div>
+                                </button>
+                                <iframe 
+                                    class="video-iframe"
+                                    title="Matana University Campus Video"
+                                    width="1280"
+                                    height="720"
+                                    loading="lazy"
+                                    src="about:blank" 
+                                    data-src="{{blocks.section4.description}}?autoplay=1&rel=0&modestbranding=1" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- Video Description - Enhanced -->
+                <div class="px-6 py-4 bg-gray-50">
+                    <p class="text-base text-gray-700">Experience our world-class facilities and innovative learning environment at Matana University</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Academic Media & News Section -->
 <section class="py-8 bg-gradient-to-b from-gray-50 to-white relative overflow-hidden">
     <!-- Subtle Decorative Elements -->
@@ -613,73 +710,6 @@ blocks['berita_terbaru'] = berita_terbaru -->
     </div>
 </section>
 
-<!-- section 5 (Updated to use YouTube video player from section 4) -->
-<section class="relative py-24 overflow-hidden">
-    <!-- Background Pattern -->
-    <div class="absolute inset-0 bg-gradient-to-br from-matana-blue/5 to-transparent"></div>
-    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-matana-yellow to-transparent opacity-30"></div>
-    
-    <div class="container mx-auto px-4 relative">
-        <!-- Section Header -->
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-matana-blue mb-4">{{ blocks.section5.title }}</h2>
-        </div>
-
-        <!-- YouTube Video Player (moved from section 4) - Enhanced for better responsiveness -->
-        <div class="w-full max-w-5xl mx-auto">
-            <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                    <!-- Video Title -->
-                <!-- <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-                    <h3 class="text-xl font-bold text-matana-blue">Video Kampus</h3>
-                    <div class="flex items-center">
-                        <span class="w-2 h-2 bg-matana-yellow rounded-full mr-2 animate-pulse"></span>
-                        <span class="text-sm text-gray-500">Campus Tour</span>
-                    </div>
-                </div> -->
-                    
-                <!-- Video Player - Enhanced with responsive sizing -->
-                    <div class="video-container">
-                        <div class="video-wrapper">
-                            <div class="youtube-embed">
-                                    <img 
-                                        width="1280" 
-                                        height="720" 
-                                        loading="lazy" 
-                                        decoding="async" 
-                                        class="thumbnail" 
-                                        alt="Matana University Campus Video" 
-                                        src="https://i3.ytimg.com/vi/{{blocks.section4.description|slice:'30:41'|default:''}}/maxresdefault.jpg"
-                                    >
-                            <button class="play-button" title="Play Video" aria-label="Play Video">
-                                <div class="play-button-circle">
-                                    <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                        <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm-56 296V168l144 88z" fill="currentColor" />
-                                    </svg>
-                                </div>
-                                </button>
-                                <iframe 
-                                    class="video-iframe"
-                                    title="Matana University Campus Video"
-                                    width="1280"
-                                    height="720"
-                                    loading="lazy"
-                                    src="about:blank" 
-                                    data-src="{{blocks.section4.description}}?autoplay=1&rel=0&modestbranding=1" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen
-                                ></iframe>
-                            </div>
-                        </div>
-                    </div>
-
-                <!-- Video Description - Enhanced -->
-                <div class="px-6 py-4 bg-gray-50">
-                    <p class="text-base text-gray-700">Experience our world-class facilities and innovative learning environment at Matana University</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- Don't forget the CSS and JavaScript that make the YouTube player work -->
                     <style>
