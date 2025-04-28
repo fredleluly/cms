@@ -206,9 +206,8 @@ class Article(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
-        
-        # Set published_at when status changes to published
-        if self.status == 'published' and not self.published_at:
+        # ONLY set published_at when status changes to published AND no date is specified
+        if self.status == 'published' and self.published_at is None:
             self.published_at = timezone.now()
         
         # Ensure only one featured article

@@ -300,6 +300,7 @@ def home_view(request):
     
     # Add popup context
     context.update(get_popup_context())
+    print( " popup_active : ",context.get('popup_active'))
     
     return render(request, f'pages/{page.template}', context)
 
@@ -636,7 +637,6 @@ def mitra_view(request):
     return render(request, 'pages/mitra.html', context)
 
 @staff_member_required
-
 def cache_management_view(request):
     """
     View for managing the cache settings. Allows admin users to:
@@ -725,8 +725,14 @@ def news_view(request):
     search_query = request.GET.get('search', '').strip()
     page_number = request.GET.get('page', 1)
     
+    # Get current date
+    today = timezone.now().date()
+    
     # Base queryset with select_related for performance
-    articles = Article.objects.select_related('category', 'created_by').filter(status='published')
+    articles = Article.objects.select_related('category', 'created_by').filter(
+        status='published',
+        published_at__date__lte=today  # Only show articles with publication date today or earlier
+    )
     
     # Apply filters
     if category_slug:
@@ -759,7 +765,7 @@ def news_view(request):
     
     # Get all categories with article counts
     categories = ArticleCategory.objects.annotate(
-        article_count=Count('articles', filter=Q(articles__status='published'))
+        article_count=Count('articles', filter=Q(articles__status='published', articles__published_at__date__lte=today))
     )
     
     context = {
@@ -848,11 +854,13 @@ def article_create_view(request):
     
     form = ArticleForm()
     categories = ArticleCategory.objects.all()
+    
     context = {
         'form': form,
         'categories': categories,
         'action': 'create',
-        'title': 'Create New Article'
+        'title': 'Create New Article',
+        'now': timezone.now()  # Add current time to context
     }
     return render(request, 'admin/article_form.html', context)
 
@@ -880,7 +888,8 @@ def article_edit_view(request, pk):
         'article': article,
         'categories': categories,
         'action': 'edit',
-        'title': f'Edit Article: {article.title}'
+        'title': f'Edit Article: {article.title}',
+        'now': timezone.now()  # Add current time to context
     }
     return render(request, 'admin/article_form.html', context)
 
@@ -930,6 +939,28 @@ def article_save_view(request):
             article.meta_keywords = request.POST.get('meta_keywords')
             article.is_featured = request.POST.get('is_featured') == 'on'
             
+            # Store any scheduled publication date from form
+            scheduled_date = None
+            published_at_str = request.POST.get('published_at')
+            if published_at_str:
+                try:
+                    # Try multiple formats to handle browser differences
+                    for format_str in ['%Y-%m-%dT%H:%M:%S', '%Y-%m-%dT%H:%M']:
+                        try:
+                            scheduled_date = timezone.make_aware(
+                                datetime.strptime(published_at_str, format_str),
+                                timezone.get_current_timezone()
+                            )
+                            break
+                        except ValueError:
+                            continue
+                            
+                    # If we found a valid date, keep it for later
+                    if scheduled_date:
+                        article.published_at = scheduled_date
+                except Exception as e:
+                    logger.error(f"Error parsing published_at date: {str(e)}")
+            
             # Handle status changes
             new_status = request.POST.get('status')
             old_status = article.status
@@ -952,7 +983,12 @@ def article_save_view(request):
                     return redirect('article_edit' if article_id else 'article_create')
                 
                 article.status = new_status
-                if new_status == 'published':
+                
+                # Only set published_at automatically if:
+                # 1. There is no scheduled date from the form, AND
+                # 2. There is no existing published_at date, AND
+                # 3. The status is being set to published
+                if new_status == 'published' and not scheduled_date and not article.published_at:
                     article.published_at = timezone.now()
                 elif new_status == 'rejected':
                     article.review_comment = request.POST.get('review_comment')
@@ -992,7 +1028,20 @@ def article_save_view(request):
             article.updated_by = request.user
             article.save()
             
-            messages.success(request, f'Article "{article.title}" has been saved successfully.')
+            # If this is a scheduled publication, make sure the date is preserved
+            if scheduled_date and scheduled_date > timezone.now():
+                # Force update with direct database query to bypass model save logic
+                Article.objects.filter(id=article.id).update(published_at=scheduled_date)
+                # Refresh to get updated values
+                article.refresh_from_db()
+                
+                if article.status == 'published':
+                    messages.success(request, f'Article "{article.title}" has been scheduled for publication on {scheduled_date.strftime("%B %d, %Y at %H:%M")}.')
+                else:
+                    messages.success(request, f'Article "{article.title}" has been saved successfully.')
+            else:
+                messages.success(request, f'Article "{article.title}" has been saved successfully.')
+                
             return redirect('content_dashboard')
             
     except Exception as e:
@@ -3585,7 +3634,9 @@ def article_save(request):
             if not article.slug:
                 article.slug = slugify(article.title)
 
-            article.save()
+            article.save(update_fields=['title', 'status', 'featured_image', 'excerpt', 'content', 
+                                       'category_id', 'meta_description', 'meta_keywords', 
+                                       'is_featured', 'published_at'])
 
             # Create review history if status changed
             if old_status != article.status:
