@@ -674,7 +674,7 @@ blocks['berita_terbaru'] = berita_terbaru -->
                         <!-- Metadata -->
                         <div class="flex items-center gap-1 mb-1">
                             <span class="text-[9px] text-gray-500">
-                                {{ berita.created_at|date:"d/m/y" }}
+                                {{ berita.published_at|date:"d/m/y" }}
                             </span>
                             {% if berita.category %}
                             <span class="px-1 py-0.5 text-[8px] font-medium text-matana-blue bg-matana-blue/10 rounded">
