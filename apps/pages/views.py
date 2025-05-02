@@ -255,6 +255,9 @@ def create_default_homepage():
 def profile_view_lpm(request):
     return render(request, 'pages/profile_view_lpm.html')
 
+def profile_view_lppm(request):
+    return render(request, 'pages/profile_view_lppm.html')
+
 @togglable_cache()
 def home_view(request):
     try:
