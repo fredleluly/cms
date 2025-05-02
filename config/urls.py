@@ -25,7 +25,7 @@ from apps.pages.views import (
     profile_view, category_create_view, upload_image, article_list_view, bulk_action_view,
     registration_view, registration_submit, scholarship_view, page_edit_view, page_list_view,
     mitra_view, management_view, ukm_view, exchange_view, profile_view_manajemen,
-    user_profile_view, logout_view, delete_page, cache_management_view,
+    user_profile_view, logout_view, delete_page, cache_management_view, profile_view_lpm,
     toggle_popup_view
 )
 from apps.pages.views import *
@@ -94,6 +94,7 @@ urlpatterns = [
     path('pariwisata/', profile_view_hospitality, name='pariwisata'),
     path('dkv/', profile_view_dkv, name='dkv'),
     path('arsitektur/', profile_view_arsitektur, name='arsitektur'),
+    path('lpm/', profile_view_lpm, name='lpm'),
     path('k3/', profile_view_k3, name='k3'),
     path('fisika-medis/', profile_view_fisika_medis, name='fisika_medis'),
     path('statistika/', profile_view_statistika, name='statistika'),

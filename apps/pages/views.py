@@ -252,6 +252,9 @@ def create_default_homepage():
     create_standardized_blocks(homepage, default_blocks)
     return homepage
 
+def profile_view_lpm(request):
+    return render(request, 'pages/profile_view_lpm.html')
+
 @togglable_cache()
 def home_view(request):
     try:
@@ -287,7 +290,8 @@ def home_view(request):
         blocks[block.identifier] = block.content
 
     # tambahakn 4 berita terbaru
-    berita_terbaru = Article.objects.filter(status='published').order_by('-created_at')[:6]
+    today = timezone.now().date()
+    berita_terbaru = Article.objects.filter(status='published', published_at__date__lte=today).order_by('-created_at')[:6]
     blocks['berita_terbaru'] = berita_terbaru
     
     # create_default_popup()
