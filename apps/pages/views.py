@@ -294,7 +294,12 @@ def home_view(request):
 
     # tambahakn 4 berita terbaru
     today = timezone.now().date()
-    berita_terbaru = Article.objects.filter(status='published', published_at__date__lte=today).order_by('-created_at')[:6]
+    current_year = today.year
+    berita_terbaru = Article.objects.filter(
+        status='published', 
+        published_at__date__lte=today,
+        published_at__year=current_year
+    ).order_by('-created_at')[:6]
     blocks['berita_terbaru'] = berita_terbaru
     
     # create_default_popup()
