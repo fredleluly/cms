@@ -258,6 +258,12 @@ def profile_view_lpm(request):
 def profile_view_lppm(request):
     return render(request, 'pages/profile_view_lppm.html')
 
+def profile_view_mbkm(request):
+    return render(request, 'pages/profile_view_mbkm.html')
+
+def profile_view_mku(request):
+    return render(request, 'pages/profile_view_mku.html')
+
 @togglable_cache()
 def home_view(request):
     try:

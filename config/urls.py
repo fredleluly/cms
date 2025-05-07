@@ -26,6 +26,7 @@ from apps.pages.views import (
     registration_view, registration_submit, scholarship_view, page_edit_view, page_list_view,
     mitra_view, management_view, ukm_view, exchange_view, profile_view_manajemen,
     user_profile_view, logout_view, delete_page, cache_management_view, profile_view_lpm,profile_view_lppm,
+    profile_view_mbkm,profile_view_mku,
     toggle_popup_view
 )
 from apps.pages.views import *
@@ -96,6 +97,8 @@ urlpatterns = [
     path('arsitektur/', profile_view_arsitektur, name='arsitektur'),
     path('lpm/', profile_view_lpm, name='lpm'),
     path('lppm/', profile_view_lppm, name='lppm'),
+    path('mku/', profile_view_mku, name='mku'),
+    path('mbkm/', profile_view_mbkm, name='mbkm'),
     path('k3/', profile_view_k3, name='k3'),
     path('fisika-medis/', profile_view_fisika_medis, name='fisika_medis'),
     path('statistika/', profile_view_statistika, name='statistika'),
