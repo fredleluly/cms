@@ -3,6 +3,8 @@ from django.core.cache import cache
 from django.conf import settings
 from django.urls import reverse
 from apps.pages.models import MaintenanceMode
+import gzip
+from io import BytesIO
 
 class MaintenanceModeMiddleware:
     def __init__(self, get_response):
@@ -54,7 +56,21 @@ class MaintenanceModeMiddleware:
                             </a>
                         </div>
                     '''
-                    response.content = response.content.decode('utf-8').replace('</body>', f'{banner}</body>')
+                    try:
+                        # Check if content is gzipped
+                        if response.get('Content-Encoding') == 'gzip':
+                            # Decompress the content
+                            content = gzip.decompress(response.content)
+                            # Add banner
+                            modified_content = content.decode('utf-8').replace('</body>', f'{banner}</body>')
+                            # Recompress the content
+                            response.content = gzip.compress(modified_content.encode('utf-8'))
+                        else:
+                            # Handle uncompressed content
+                            response.content = response.content.decode('utf-8').replace('</body>', f'{banner}</body>')
+                    except Exception as e:
+                        # If there's any error in processing the content, return the original response
+                        return response
                 return response
 
             # Check allowed IPs
