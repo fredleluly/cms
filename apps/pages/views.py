@@ -253,16 +253,80 @@ def create_default_homepage():
     return homepage
 
 def profile_view_lpm(request):
-    return render(request, 'pages/profile_view_lpm.html')
+    # Get or create LPM category
+    lpm_category, created = ArticleCategory.objects.get_or_create(
+        slug='lpm',
+        defaults={'name': 'LPM', 'description': 'Lembaga Penjaminan Mutu'}
+    )
+    
+    # Get latest 3 published articles from LPM category
+    lpm_articles = Article.objects.filter(
+        category=lpm_category, 
+        status='published'
+    ).order_by('-published_at')[:3]
+    
+    context = {
+        'articles': lpm_articles,
+        'category': lpm_category,
+    }
+    return render(request, 'pages/profile_view_lpm.html', context)
 
 def profile_view_lppm(request):
-    return render(request, 'pages/profile_view_lppm.html')
+    # Get or create LPPM category
+    lppm_category, created = ArticleCategory.objects.get_or_create(
+        slug='lppm',
+        defaults={'name': 'LPPM', 'description': 'Lembaga Penelitian dan Pengabdian Masyarakat'}
+    )
+    
+    # Get latest 3 published articles from LPPM category
+    lppm_articles = Article.objects.filter(
+        category=lppm_category, 
+        status='published'
+    ).order_by('-published_at')[:3]
+    
+    context = {
+        'articles': lppm_articles,
+        'category': lppm_category,
+    }
+    return render(request, 'pages/profile_view_lppm.html', context)
 
 def profile_view_mbkm(request):
-    return render(request, 'pages/profile_view_mbkm.html')
+    # Get or create MBKM category
+    mbkm_category, created = ArticleCategory.objects.get_or_create(
+        slug='mbkm',
+        defaults={'name': 'MBKM', 'description': 'Merdeka Belajar Kampus Merdeka'}
+    )
+    
+    # Get latest 3 published articles from MBKM category
+    mbkm_articles = Article.objects.filter(
+        category=mbkm_category, 
+        status='published'
+    ).order_by('-published_at')[:3]
+    
+    context = {
+        'articles': mbkm_articles,
+        'category': mbkm_category,
+    }
+    return render(request, 'pages/profile_view_mbkm.html', context)
 
 def profile_view_mku(request):
-    return render(request, 'pages/profile_view_mku.html')
+    # Get or create MKU category
+    mku_category, created = ArticleCategory.objects.get_or_create(
+        slug='mku',
+        defaults={'name': 'MKU', 'description': 'Mata Kuliah Umum'}
+    )
+    
+    # Get latest 3 published articles from MKU category
+    mku_articles = Article.objects.filter(
+        category=mku_category, 
+        status='published'
+    ).order_by('-published_at')[:3]
+    
+    context = {
+        'articles': mku_articles,
+        'category': mku_category,
+    }
+    return render(request, 'pages/profile_view_mku.html', context)
 
 @togglable_cache()
 def home_view(request):
