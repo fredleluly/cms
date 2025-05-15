@@ -305,7 +305,7 @@ def home_view(request):
         status='published', 
         published_at__date__lte=today,
         published_at__year=current_year
-    ).order_by('-created_at')[:6]
+    ).order_by('-published_at')[:6]
     blocks['berita_terbaru'] = berita_terbaru
     
     # create_default_popup()
