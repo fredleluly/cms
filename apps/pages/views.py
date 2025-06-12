@@ -253,6 +253,15 @@ def create_default_homepage():
     return homepage
 
 def profile_view_lpm(request):
+    """View for LPM page with blocks structure"""
+    try:
+        lpm_page = Page.objects.get(
+            slug='lpm',
+            status=Page.PUBLISHED
+        )
+    except Page.DoesNotExist:
+        lpm_page = create_default_lpm_page()
+    
     # Get or create LPM category
     lpm_category, created = ArticleCategory.objects.get_or_create(
         slug='lpm',
@@ -265,10 +274,19 @@ def profile_view_lpm(request):
         status='published'
     ).order_by('-published_at')[:3]
     
+    # Get content blocks
+    blocks = {}
+    for block in lpm_page.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+    
     context = {
+        'page': lpm_page,
+        'meta': lpm_page.metadata,
+        'blocks': blocks,
         'articles': lpm_articles,
         'category': lpm_category,
     }
+    
     return render(request, 'pages/profile_view_lpm.html', context)
 
 def profile_view_lppm(request):
@@ -4790,3 +4808,36 @@ def toggle_popup_view(request):
     if referrer:
         return redirect(referrer)
     return redirect('cache_management')
+
+def create_default_lpm_page():
+    """Create default LPM page with standardized content blocks"""
+    lpm_page = Page.objects.create(
+        title="Lembaga Penjamin Mutu",
+        slug="lpm",
+        template='profile_view_lpm.html',
+        status=Page.PUBLISHED,
+        metadata={
+            'meta_description': 'Lembaga Penjamin Mutu Matana University - Penjaminan Kualitas Pendidikan',
+            'meta_keywords': 'LPM, lembaga penjamin mutu, matana university, kualitas pendidikan'
+        }
+    )
+    
+    default_blocks = [
+        {
+            'identifier': 'hero_section',
+            'title': 'Lembaga Penjamin Mutu',
+            'subtitle': 'Lembaga Penjamin Mutu Matana University',
+            'background_image': '/static/images/campus-aerial.jpg',
+            'order': 1
+        },
+        {
+            'identifier': 'organizational_structure',
+            'title': 'Struktur Organisasi',
+            'description': 'Struktur organisasi Lembaga Penjamin Mutu Matana University',
+            'image': '/static/images/campus-aerial.jpg',
+            'order': 2
+        }
+    ]
+    
+    create_standardized_blocks(lpm_page, default_blocks)
+    return lpm_page
