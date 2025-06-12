@@ -54,6 +54,95 @@
         margin: 0 auto;
     }
 
+    /* YouTube Video Styles */
+    .video-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 0;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+    }
+
+    .video-wrapper {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        background-color: #000;
+    }
+
+    .youtube-embed {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    .play-button {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.2);
+        border: none;
+        cursor: pointer;
+        z-index: 2;
+        transition: all 0.3s ease;
+        margin: 0;
+        padding: 0;
+    }
+
+    .play-button:hover {
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .play-button-circle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80px;
+        height: 80px;
+        background: rgba(0, 0, 0, 0.7);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .play-button:hover .play-button-circle {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    .play-icon {
+        width: 30px;
+        height: 30px;
+        color: white;
+        margin-left: 3px;
+    }
+
+    .youtube-embed img,
+    .youtube-embed iframe {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .youtube-embed .thumbnail {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .video-iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 0;
+    }
+
     /* Section Styles */
     .section-title {
         position: relative;
@@ -138,6 +227,16 @@
         section {
             padding: clamp(3rem, 8vw, 5rem) 0;
         }
+
+        .play-button-circle {
+            width: 60px;
+            height: 60px;
+        }
+
+        .play-icon {
+            width: 24px;
+            height: 24px;
+        }
     }
 
     /* Print Styles */
@@ -165,11 +264,72 @@
     </div>
 </section>
 
-<!-- Asia Universities Section -->
+<!-- Video Section -->
+<section class="py-16 bg-gradient-to-b from-white to-gray-50">
+    <div class="section-container">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-matana-blue mb-4">{{ blocks.video_section.title }}</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">{{ blocks.video_section.subtitle }}</p>
+        </div>
+
+        <!-- YouTube Video Player -->
+        <div class="w-full max-w-5xl mx-auto">
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
+                <!-- Video Player -->
+                <div class="video-container">
+                    <div class="video-wrapper">
+                        <div class="youtube-embed">
+                            <img 
+                                width="1280" 
+                                height="720" 
+                                loading="lazy" 
+                                decoding="async" 
+                                class="thumbnail" 
+                                alt="Student Exchange Experience Video" 
+                                src="https://i3.ytimg.com/vi/{{blocks.video_section.description|slice:'30:41'|default:''}}/maxresdefault.jpg"
+                            >
+                            <button class="play-button" title="Play Video" aria-label="Play Video">
+                                <div class="play-button-circle">
+                                    <svg class="play-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                        <path d="M256 48C141.31 48 48 141.31 48 256s93.31 208 208 208 208-93.31 208-208S370.69 48 256 48zm-56 296V168l144 88z" fill="currentColor" />
+                                    </svg>
+                                </div>
+                            </button>
+                            <iframe 
+                                class="video-iframe"
+                                title="Student Exchange Experience Video"
+                                width="1280"
+                                height="720"
+                                loading="lazy"
+                                src="about:blank" 
+                                data-src="{{blocks.video_section.description}}?autoplay=1&rel=0&modestbranding=1" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                            ></iframe>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Description -->
+                <div class="px-6 py-4 bg-gray-50">
+                    <p class="text-base text-gray-700">Experience the global perspective and cultural exchange through our international student exchange programs</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Asia Universities Section -->      
+{% if blocks.asia_section %}
 <section class="py-16">
     <div class="section-container">
+        {% if blocks.asia_section.title %}
         <h2 class="section-title">{{ blocks.asia_section.title }}</h2>
+        {% endif %}
+        {% if blocks.asia_section.description %}
         <p class="section-description">{{ blocks.asia_section.description }}</p>
+        {% endif %}
+        {% if blocks.asia_section.items %}
         <div class="exchange-grid">
             {% for item in blocks.asia_section.items %}
             <div class="exchange-card">
@@ -182,8 +342,10 @@
             </div>
             {% endfor %}
         </div>
+        {% endif %}
     </div>
 </section>
+{% endif %}
 
 <!-- Europe Universities Section -->
 <!-- <section class="py-16 bg-gray-50">
@@ -245,17 +407,61 @@
     </div>
 </section> -->
 <!-- Alumni Section -->
+{% if blocks.testimonial_section and blocks.testimonial_section.items %}
 <section class="py-16 bg-gray-50">
     <div class="section-container">
+        {% if blocks.testimonial_section.title %}
         <h2 class="section-title">{{ blocks.testimonial_section.title }}</h2>
+        {% endif %}
+        {% if blocks.testimonial_section.description %}
         <p class="section-description">{{ blocks.testimonial_section.description }}</p>
+        {% endif %}
         <div class="flex justify-center">
-                <img 
-                    src="{% optimized_image blocks.testimonial_section.items.0.image  %}" 
-
-
-                >
+            {% if blocks.testimonial_section.items.0.image %}
+            <img 
+                src="{% optimized_image blocks.testimonial_section.items.0.image  %}" 
+                alt="Exchange Alumni"
+                loading="lazy"
+            >
+            {% endif %}
         </div>
     </div>
 </section>
+{% endif %}
+
+<script>
+    function initYoutubeEmbed(el) {
+        const playButton = el.querySelector('button');
+        const iframe = el.querySelector('iframe');
+        const thumbnail = el.querySelector('img');
+
+        playButton.addEventListener('click', () => {
+            iframe.src = iframe.dataset.src;
+            iframe.classList.remove('hidden');
+            playButton.style.display = 'none';
+            thumbnail.style.display = 'none';
+
+            // Track video play event if analytics is available
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'play_video', {
+                    'event_category': 'Video',
+                    'event_label': iframe.dataset.src
+                });
+            }
+        });
+
+        // Add error handling for thumbnail
+        thumbnail.addEventListener('error', () => {
+            thumbnail.src = 'https://img.youtube.com/vi/{{blocks.video_section.description|slice:'32:'|default:''}}/hqdefault.jpg';
+        });
+    }
+
+    // Initialize all YouTube embeds
+    document.addEventListener('DOMContentLoaded', () => {
+        const youtubeEmbeds = document.querySelectorAll('.youtube-embed');
+        youtubeEmbeds.forEach(embed => {
+            initYoutubeEmbed(embed);
+        });
+    });
+</script>
 {% endblock %} 

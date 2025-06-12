@@ -4216,6 +4216,13 @@ def create_default_exchange_page():
             'order': 1
         },
         {
+            'identifier': 'video_section',
+            'title': 'Student Exchange Experience',
+            'subtitle': 'Saksikan pengalaman mahasiswa kami dalam program pertukaran',
+            'description': 'https://www.youtube.com/embed/azZYA3Sh1gI',
+            'order': 2
+        },
+        {
             'identifier': 'asia_section',
             'title': 'Partner Universities in Asia',
             'description': 'Universitas mitra kami di kawasan Asia',
@@ -4239,7 +4246,7 @@ def create_default_exchange_page():
                     'image': '/static/images/ex4.jpg',
                 }
             ],
-            'order': 2
+            'order': 3
         },
         {
             'identifier': 'europe_section',
@@ -4256,7 +4263,7 @@ def create_default_exchange_page():
                     'image': '/static/images/univ-europe3.jpg',
                 }
             ],
-            'order': 3
+            'order': 4
         },
         {
             'identifier': 'program_section',
@@ -4273,7 +4280,7 @@ def create_default_exchange_page():
                     'image': '/static/images/exchange3.jpg',
                 }
             ],
-            'order': 4
+            'order': 5
         },
         {
             'identifier': 'testimonial_section',
@@ -4290,7 +4297,7 @@ def create_default_exchange_page():
                     'image': '/static/images/exa3.jpg',
                 }
             ],
-            'order': 5
+            'order': 6
         }
     ]
     
