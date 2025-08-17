@@ -551,6 +551,8 @@
               </a>
             </div>
 
+            <hr>
+
             <!-- Beasiswa -->
             <div class="nav-item">
               <a
@@ -622,7 +624,7 @@
               <button
                 class="nav-link text-gray-700 group-hover:text-matana-blue flex items-center space-x-1 px-4 py-2 focus-ring"
               >
-                <span>Dokumen</span>
+                <span>Lembaga</span>
                 <svg
                   class="w-4 h-4 transition-transform group-hover:rotate-180"
                   fill="none"
@@ -1101,13 +1103,54 @@
                 </div>
               </div>
 
-              <!-- LPM Link -->
-              <a
-                href="/lpm"
-                class="block text-lg font-semibold text-gray-900 hover:text-matana-blue border-b border-gray-200 pb-6 pt-6"
+              <!-- Lembaga Link -->
+               <div
+                x-data="{ open: false }"
+                class="border-b border-gray-200 pb-6"
               >
-                LPPM
-              </a>
+                <button
+                  @click="open = !open"
+                  class="flex items-center justify-between w-full"
+                >
+                  <span class="text-lg font-semibold text-gray-900">Lembaga</span>
+                  <svg
+                    class="w-5 h-5 transform transition-transform"
+                    :class="{'rotate-180': open}"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </button>
+                <div x-show="open" class="mt-4 ml-4 space-y-4">
+                  <a
+                    href="/lppm"
+                    class="block text-gray-600 hover:text-matana-blue"
+                    >LPPM</a
+                  >
+                  <a
+                    href="/lpm"
+                    class="block text-gray-600 hover:text-matana-blue"
+                    >LPM</a
+                  >
+                  <a
+                    href="/mbkm"
+                    class="block text-gray-600 hover:text-matana-blue"
+                    >MBKM</a
+                  >
+                  <a
+                    href="/mku"
+                    class="block text-gray-600 hover:text-matana-blue"
+                    >MKU</a
+                  >
+                </div>
+              </div>
 
               <!-- Media Section -->
               <div
