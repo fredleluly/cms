@@ -1,0 +1,372 @@
+{% extends "base.html" %} {% load static %} {% block title %}{{ title }}{%
+endblock %} {% block meta_description %}{{ meta.description }}{% endblock %} {%
+block meta_keywords %}{{ meta.keywords }}{% endblock %} {% block content %}
+<div class="min-h-screen bg-gradient-to-r from-blue-600 to-purple-600">
+  <!-- Hero Section -->
+  <div class="container mx-auto px-4 py-16">
+    <div class="flex flex-wrap items-center -mx-4">
+      <div class="w-full lg:w-1/2 px-4 mb-12 lg:mb-0">
+        <div class="text-white">
+          <!-- Brand -->
+          <div class="flex items-center mb-8">
+            <span class="text-3xl font-bold text-yellow-400">M</span>
+            <span class="ml-2 font-semibold">MATANA VENTURA</span>
+          </div>
+          <p class="text-gray-300 mb-8">Practical Learning, Real Impact.</p>
+
+          <h1 class="text-5xl lg:text-6xl font-bold mb-8 leading-tight">
+            MAVEN<br />
+            <span class="text-yellow-400">COURSE</span>
+          </h1>
+
+          <p class="text-xl mb-12 opacity-90">
+            Master build automation and project management with hands-on Maven
+            training designed for real-world development scenarios.
+          </p>
+
+          <div class="flex flex-wrap gap-4">
+            <button
+              class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-semibold px-8 py-4 rounded-lg transition duration-300"
+            >
+              Learn Now
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full lg:w-1/2 px-4">
+        <div class="relative">
+          <!-- Main Card -->
+          <div class="bg-white rounded-2xl shadow-2xl p-6 transform -rotate-2">
+            <div
+              class="bg-gray-100 rounded-xl h-64 flex items-center justify-center"
+            >
+              <i class="fas fa-graduation-cap text-5xl text-gray-400"></i>
+            </div>
+          </div>
+
+          <!-- Floating Info Cards -->
+          <div
+            class="absolute top-0 right-0 transform translate-x-4 -translate-y-4"
+          >
+            <div
+              class="bg-blue-600 text-white p-4 rounded-xl shadow-lg max-w-xs"
+            >
+              <h6 class="text-yellow-400 font-semibold mb-1">
+                Learn More About Matana Ventura
+              </h6>
+              <span class="text-sm">Discover innovation →</span>
+            </div>
+          </div>
+
+          <div
+            class="absolute bottom-0 left-0 transform -translate-x-4 translate-y-4"
+          >
+            <div class="bg-gray-900 text-white p-4 rounded-xl shadow-lg">
+              <div class="flex items-center">
+                <i class="fas fa-laptop-code text-2xl text-yellow-400 mr-3"></i>
+                <div>
+                  <p class="text-sm font-semibold">Hands-on Learning</p>
+                  <p class="text-xs text-gray-400">Real Projects</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Courses Section -->
+  <div class="bg-white py-24">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-4">Our Courses</h2>
+        <p class="text-xl text-gray-600">
+          Choose from our comprehensive Maven learning tracks
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Course Card 1 -->
+        <div
+          class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+        >
+          <div class="relative">
+            <div
+              class="bg-gradient-to-r from-blue-600 to-purple-600 h-48 flex items-center justify-center"
+            >
+              <i class="fas fa-paint-brush text-4xl text-white"></i>
+            </div>
+            <div class="absolute top-4 right-4">
+              <span
+                class="bg-blue-600 text-white text-xs px-3 py-1 rounded-full"
+              >
+                Short Course
+              </span>
+            </div>
+            <div class="absolute bottom-4 left-4">
+              <div class="flex items-center text-white">
+                <i class="fas fa-calendar mr-2"></i>
+                <span class="text-sm">8-29 December 2024</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-4">
+              Build a Professional Brand Identity from Concept to Execution
+            </h3>
+            <p class="text-gray-600 text-sm mb-6">
+              Participants will learn about branding structure, logo creation,
+              visual guidelines, and brand presentation.
+            </p>
+
+            <div class="flex items-center mb-6">
+              <span class="text-gray-400 line-through">Rp 1.500.000</span>
+              <span class="text-blue-600 font-bold text-xl ml-3"
+                >Rp 1.200.000</span
+              >
+            </div>
+
+            <a
+              href="{% url 'maven_course_detail' 'professional-brand' %}"
+              class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center font-semibold py-3 rounded-lg transition duration-300"
+            >
+              Register Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Course Card 2 -->
+        <div
+          class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+        >
+          <div class="relative">
+            <div
+              class="bg-gradient-to-r from-green-500 to-teal-400 h-48 flex items-center justify-center"
+            >
+              <i class="fas fa-atom text-4xl text-white"></i>
+            </div>
+            <div class="absolute top-4 right-4">
+              <span
+                class="bg-green-500 text-white text-xs px-3 py-1 rounded-full"
+              >
+                Short Course
+              </span>
+            </div>
+            <div class="absolute bottom-4 left-4">
+              <div class="flex items-center text-white">
+                <i class="fas fa-calendar mr-2"></i>
+                <span class="text-sm">10-31 December 2024</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-4">
+              Simulasi Monte Carlo untuk Aplikasi Radioterapi dan Dosimetri
+            </h3>
+            <p class="text-gray-600 text-sm mb-6">
+              Participants will learn an introduction to medical physics and the
+              role of simulation in radiotherapy.
+            </p>
+
+            <div class="flex items-center mb-6">
+              <span class="text-gray-400 line-through">Rp 2.500.000</span>
+              <span class="text-green-600 font-bold text-xl ml-3"
+                >Rp 2.100.000</span
+              >
+            </div>
+
+            <a
+              href="{% url 'maven_course_detail' 'monte-carlo-simulation' %}"
+              class="block w-full bg-green-500 hover:bg-green-600 text-white text-center font-semibold py-3 rounded-lg transition duration-300"
+            >
+              Register Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Course Card 3 -->
+        <div
+          class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+        >
+          <div class="relative">
+            <div
+              class="bg-gradient-to-r from-pink-500 to-red-500 h-48 flex items-center justify-center"
+            >
+              <i class="fas fa-lightbulb text-4xl text-white"></i>
+            </div>
+            <div class="absolute top-4 right-4">
+              <span
+                class="bg-yellow-400 text-gray-900 text-xs px-3 py-1 rounded-full"
+              >
+                Short Course
+              </span>
+            </div>
+            <div class="absolute bottom-4 left-4">
+              <div class="flex items-center text-white">
+                <i class="fas fa-calendar mr-2"></i>
+                <span class="text-sm">5-26 January 2025</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-4">
+              Strategic Creative Thinking for Designers & Marketers
+            </h3>
+            <p class="text-gray-600 text-sm mb-6">
+              Participants will learn ideation techniques, problem-solving, and
+              campaign concept development.
+            </p>
+
+            <div class="flex items-center mb-6">
+              <span class="text-gray-400 line-through">Rp 2.000.000</span>
+              <span class="text-yellow-600 font-bold text-xl ml-3"
+                >Rp 1.700.000</span
+              >
+            </div>
+
+            <a
+              href="{% url 'maven_course_detail' 'creative-thinking' %}"
+              class="block w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 text-center font-semibold py-3 rounded-lg transition duration-300"
+            >
+              Register Now
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Load More -->
+      <div class="text-center mt-16">
+        <button
+          class="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold px-10 py-4 rounded-lg transition duration-300"
+        >
+          Load More
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why Choose Us -->
+  <div class="bg-gray-50 py-24">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-wrap -mx-4">
+        <div class="w-full lg:w-1/2 px-4 mb-12 lg:mb-0">
+          <h2 class="text-3xl font-bold mb-12">
+            Why Choose Matana Maven Courses?
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Feature 1 -->
+            <div class="flex items-start">
+              <div class="bg-blue-600 text-white rounded-full p-4 mr-4">
+                <i class="fas fa-certificate text-xl"></i>
+              </div>
+              <div>
+                <h3 class="font-bold mb-2">Certified Training</h3>
+                <p class="text-gray-600 text-sm">
+                  Industry-recognized certifications upon completion
+                </p>
+              </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="flex items-start">
+              <div class="bg-green-500 text-white rounded-full p-4 mr-4">
+                <i class="fas fa-users text-xl"></i>
+              </div>
+              <div>
+                <h3 class="font-bold mb-2">Expert Instructors</h3>
+                <p class="text-gray-600 text-sm">
+                  Learn from industry professionals
+                </p>
+              </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="flex items-start">
+              <div class="bg-yellow-400 text-white rounded-full p-4 mr-4">
+                <i class="fas fa-laptop-code text-xl"></i>
+              </div>
+              <div>
+                <h3 class="font-bold mb-2">Hands-on Learning</h3>
+                <p class="text-gray-600 text-sm">
+                  Practical exercises and real-world projects
+                </p>
+              </div>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="flex items-start">
+              <div class="bg-purple-500 text-white rounded-full p-4 mr-4">
+                <i class="fas fa-clock text-xl"></i>
+              </div>
+              <div>
+                <h3 class="font-bold mb-2">Flexible Schedule</h3>
+                <p class="text-gray-600 text-sm">Learn at your own pace</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full lg:w-1/2 px-4">
+          <div class="relative">
+            <div
+              class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-xl h-80 flex items-center justify-center"
+            >
+              <i class="fas fa-chalkboard-teacher text-5xl text-white"></i>
+            </div>
+            <div
+              class="absolute bottom-0 inset-x-0 bg-black bg-opacity-75 text-white p-6 rounded-b-2xl"
+            >
+              <div class="grid grid-cols-3 gap-4 text-center">
+                <div>
+                  <h4 class="text-2xl font-bold text-yellow-400">1000+</h4>
+                  <p class="text-sm">Students Trained</p>
+                </div>
+                <div>
+                  <h4 class="text-2xl font-bold text-yellow-400">50+</h4>
+                  <p class="text-sm">Courses Available</p>
+                </div>
+                <div>
+                  <h4 class="text-2xl font-bold text-yellow-400">95%</h4>
+                  <p class="text-sm">Success Rate</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <div class="bg-white py-24">
+    <div class="container mx-auto px-4 text-center">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-4xl font-bold mb-6">
+          Ready to Start Your Maven Journey?
+        </h2>
+        <p class="text-xl text-gray-600 mb-12">
+          Join thousands of developers who have transformed their careers with
+          our comprehensive Maven training programs.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <button
+            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-4 rounded-lg transition duration-300"
+          >
+            <i class="fas fa-rocket mr-2"></i>Explore All Courses
+          </button>
+          <button
+            class="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold px-8 py-4 rounded-lg transition duration-300"
+          >
+            <i class="fas fa-phone mr-2"></i>Contact Us
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

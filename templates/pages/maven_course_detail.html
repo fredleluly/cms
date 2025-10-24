@@ -1,0 +1,605 @@
+{% extends "base.html" %} {% load static string_filters %} {% block title %}{{
+title }}{% endblock %} {% block content %}
+<div class="min-h-screen bg-gray-50">
+  <!-- Breadcrumb -->
+  <nav class="bg-white border-b">
+    <div class="container mx-auto px-4 py-3">
+      <div class="flex items-center space-x-2 text-sm text-gray-600">
+        <a href="{% url 'home' %}" class="hover:text-blue-600">Home</a>
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <a href="{% url 'maven_course' %}" class="hover:text-blue-600"
+          >Maven Course</a
+        >
+        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <span class="text-gray-400">{{ course_id|replace_dash|title }}</span>
+      </div>
+    </div>
+  </nav>
+  <!-- Hero Section -->
+  <div class="relative overflow-hidden">
+    <div class="absolute inset-0">
+      <img
+        src="https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80"
+        alt="Professional Branding"
+        class="w-full h-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-purple-900/90"></div>
+    </div>
+    <div class="container mx-auto px-4 py-16 relative">
+      <div class="max-w-4xl mx-auto text-center text-white">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+          {{ course_id|replace_dash|title }}
+        </h1>
+        <p class="text-xl opacity-90 mb-8">
+          Master the fundamentals and advanced concepts through hands-on
+          learning
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+          <div
+            class="flex items-center bg-white bg-opacity-20 rounded-lg px-4 py-2"
+          >
+            <i class="fas fa-clock mr-2"></i>
+            <span>8 Weeks</span>
+          </div>
+          <div
+            class="flex items-center bg-white bg-opacity-20 rounded-lg px-4 py-2"
+          >
+            <i class="fas fa-user-graduate mr-2"></i>
+            <span>Intermediate</span>
+          </div>
+          <div
+            class="flex items-center bg-white bg-opacity-20 rounded-lg px-4 py-2"
+          >
+            <i class="fas fa-globe mr-2"></i>
+            <span>Online/Offline</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-12">
+    <div class="flex flex-wrap -mx-4">
+      <!-- Left Column - Course Content -->
+      <div class="w-full lg:w-8/12 px-4 mb-8 lg:mb-0">
+        <!-- Course Overview -->
+        <div class="bg-white rounded-xl shadow-sm mb-8 overflow-hidden">
+          <div class="border-b border-gray-100">
+            <nav class="flex">
+              <button
+                class="px-6 py-4 text-sm font-semibold text-blue-600 border-b-2 border-blue-600"
+              >
+                Overview
+              </button>
+              <button
+                class="px-6 py-4 text-sm font-semibold text-gray-600 hover:text-blue-600"
+              >
+                Curriculum
+              </button>
+              <button
+                class="px-6 py-4 text-sm font-semibold text-gray-600 hover:text-blue-600"
+              >
+                Instructor
+              </button>
+            </nav>
+          </div>
+
+          <div class="p-6">
+            <h2 class="text-2xl font-bold mb-4">Course Description</h2>
+            <p class="text-gray-600 mb-6">
+              This comprehensive course will equip you with the knowledge and
+              skills needed to excel in Maven development. Through practical
+              exercises and real-world examples, you'll learn how to effectively
+              use Maven for build automation and project management.
+            </p>
+
+            <!-- Course Features -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div class="flex items-start">
+                <div class="flex-shrink-0">
+                  <div
+                    class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white"
+                  >
+                    <i class="fas fa-video"></i>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <h3 class="text-lg font-semibold">HD Video Content</h3>
+                  <p class="text-gray-600">
+                    20+ hours of high-quality video lessons
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div class="flex-shrink-0">
+                  <div
+                    class="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white"
+                  >
+                    <i class="fas fa-tasks"></i>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <h3 class="text-lg font-semibold">Practical Exercises</h3>
+                  <p class="text-gray-600">
+                    Real-world projects and assignments
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div class="flex-shrink-0">
+                  <div
+                    class="flex items-center justify-center h-12 w-12 rounded-md bg-yellow-500 text-white"
+                  >
+                    <i class="fas fa-certificate"></i>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <h3 class="text-lg font-semibold">Certificate</h3>
+                  <p class="text-gray-600">Industry-recognized certification</p>
+                </div>
+              </div>
+
+              <div class="flex items-start">
+                <div class="flex-shrink-0">
+                  <div
+                    class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-500 text-white"
+                  >
+                    <i class="fas fa-comments"></i>
+                  </div>
+                </div>
+                <div class="ml-4">
+                  <h3 class="text-lg font-semibold">Live Support</h3>
+                  <p class="text-gray-600">Direct access to instructors</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Course Modules -->
+            <div class="space-y-4">
+              <h2 class="text-2xl font-bold mb-6">Course Modules</h2>
+
+              <div class="border rounded-lg overflow-hidden">
+                <div
+                  class="bg-gray-50 px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-gray-100"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center"
+                    >
+                      <span class="text-blue-600 font-semibold">1</span>
+                    </div>
+                    <div class="ml-4">
+                      <h3 class="text-lg font-semibold">
+                        Introduction to Maven
+                      </h3>
+                      <p class="text-sm text-gray-500">4 lessons • 1.5 hours</p>
+                    </div>
+                  </div>
+                  <svg
+                    class="w-6 h-6 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="border rounded-lg overflow-hidden">
+                <div
+                  class="bg-gray-50 px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-gray-100"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center"
+                    >
+                      <span class="text-blue-600 font-semibold">2</span>
+                    </div>
+                    <div class="ml-4">
+                      <h3 class="text-lg font-semibold">
+                        Dependency Management
+                      </h3>
+                      <p class="text-sm text-gray-500">6 lessons • 2.5 hours</p>
+                    </div>
+                  </div>
+                  <svg
+                    class="w-6 h-6 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="border rounded-lg overflow-hidden">
+                <div
+                  class="bg-gray-50 px-6 py-4 flex items-center justify-between cursor-pointer hover:bg-gray-100"
+                >
+                  <div class="flex items-center">
+                    <div
+                      class="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center"
+                    >
+                      <span class="text-blue-600 font-semibold">3</span>
+                    </div>
+                    <div class="ml-4">
+                      <h3 class="text-lg font-semibold">Build Lifecycle</h3>
+                      <p class="text-sm text-gray-500">5 lessons • 2 hours</p>
+                    </div>
+                  </div>
+                  <svg
+                    class="w-6 h-6 text-gray-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column - Course Info & Enrollment -->
+      <div class="w-full lg:w-4/12 px-4">
+        <div class="bg-white rounded-xl shadow-sm p-6 sticky top-6">
+          <div class="mb-6">
+            <div class="mb-4">
+              <span class="text-gray-400 line-through text-lg"
+                >Rp 2.500.000</span
+              >
+              <span class="text-3xl font-bold text-blue-600 ml-2"
+                >Rp 1.700.000</span
+              >
+            </div>
+            <button
+              onclick="openRegistrationModal()"
+              class="w-full bg-blue-600 text-white rounded-lg px-4 py-3 font-semibold hover:bg-blue-700 transition duration-200"
+            >
+              Register Now
+            </button>
+          </div>
+
+          <div class="border-t pt-6">
+            <h3 class="font-semibold text-lg mb-4">This course includes:</h3>
+            <ul class="space-y-3">
+              <li class="flex items-center text-gray-600">
+                <i class="fas fa-play-circle mr-3 text-blue-600"></i>
+                <span>20 hours on-demand video</span>
+              </li>
+              <li class="flex items-center text-gray-600">
+                <i class="fas fa-file-alt mr-3 text-blue-600"></i>
+                <span>15 downloadable resources</span>
+              </li>
+              <li class="flex items-center text-gray-600">
+                <i class="fas fa-infinity mr-3 text-blue-600"></i>
+                <span>Full lifetime access</span>
+              </li>
+              <li class="flex items-center text-gray-600">
+                <i class="fas fa-mobile-alt mr-3 text-blue-600"></i>
+                <span>Access on mobile and desktop</span>
+              </li>
+              <li class="flex items-center text-gray-600">
+                <i class="fas fa-certificate mr-3 text-blue-600"></i>
+                <span>Certificate of completion</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Share Course -->
+          <div class="border-t mt-6 pt-6">
+            <h3 class="font-semibold text-lg mb-4">Share this course</h3>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-blue-500">
+                <i class="fab fa-facebook fa-lg"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-blue-400">
+                <i class="fab fa-twitter fa-lg"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-blue-600">
+                <i class="fab fa-linkedin fa-lg"></i>
+              </a>
+              <a href="#" class="text-gray-400 hover:text-green-500">
+                <i class="fab fa-whatsapp fa-lg"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Registration Modal -->
+  <div
+    id="registrationModal"
+    class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center z-50"
+  >
+    <div
+      class="bg-white rounded-xl shadow-xl max-w-xl w-full mx-4 overflow-hidden"
+    >      <!-- Banner Image Section -->
+      <div class="relative h-48">
+        <img
+          src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+          alt="Professional Brand Course"
+          class="w-full h-full object-cover"
+        />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"
+        ></div>
+        <div class="absolute inset-x-0 bottom-0 p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-2xl font-bold text-white mb-1">
+                Registration Form
+              </h2>
+              <p class="text-white/90 text-sm">
+                {{ course_id|replace_dash|title }}
+              </p>
+            </div>
+            <button
+              onclick="closeRegistrationModal()"
+              class="text-white hover:text-gray-200 transition-colors"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Course Summary -->
+      <div class="px-6 py-4 bg-gray-50 border-b">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-500">Course Fee</p>
+            <div class="flex items-baseline">
+              <span class="text-lg font-bold text-blue-600">Rp 1.700.000</span>
+              <span class="ml-2 text-sm text-gray-500 line-through"
+                >Rp 2.500.000</span
+              >
+            </div>
+          </div>
+          <div>
+            <p class="text-sm text-gray-500">Schedule</p>
+            <p class="font-medium">9-12 December 2025</p>
+          </div>
+        </div>
+      </div>
+
+      <form class="p-6 space-y-4" onsubmit="handleRegistration(event)">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >First Name</label
+            >
+            <input
+              type="text"
+              required
+              placeholder="Enter your first name"
+              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1"
+              >Last Name</label
+            >
+            <input
+              type="text"
+              required
+              placeholder="Enter your last name"
+              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Email</label
+          >
+          <input
+            type="email"
+            required
+            placeholder="your.email@example.com"
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >Phone Number</label
+          >
+          <div class="flex">
+            <select
+              class="px-4 py-2.5 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors bg-gray-50"
+            >
+              <option value="+62">+62</option>
+            </select>
+            <input
+              type="tel"
+              required
+              placeholder="8123456789"
+              class="w-full px-4 py-2.5 border border-l-0 border-gray-300 rounded-r-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors"
+            />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1"
+            >City of Residence</label
+          >
+          <select
+            required
+            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors bg-white"
+          >
+            <option value="">Select your city...</option>
+            <option value="jakarta">Jakarta</option>
+            <option value="tangerang">Tangerang</option>
+            <option value="bekasi">Bekasi</option>
+            <option value="depok">Depok</option>
+            <option value="bogor">Bogor</option>
+          </select>
+        </div>
+
+        <div class="flex items-start space-x-3">
+          <input
+            type="checkbox"
+            required
+            class="mt-0.5 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
+          />
+          <label class="text-sm text-gray-600">
+            I agree to the
+            <a href="#" class="text-blue-600 hover:underline font-medium"
+              >Terms and Conditions</a
+            >
+            and acknowledge that I have read the course details
+          </label>
+        </div>
+
+        <div class="pt-4">
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white rounded-lg px-6 py-3 font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 flex items-center justify-center space-x-2"
+          >
+            <span>Submit Registration</span>
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 7l5 5m0 0l-5 5m5-5H6"
+              ></path>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openRegistrationModal() {
+      document.getElementById('registrationModal').classList.remove('hidden');
+      document.getElementById('registrationModal').classList.add('flex');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeRegistrationModal() {
+      document.getElementById('registrationModal').classList.add('hidden');
+      document.getElementById('registrationModal').classList.remove('flex');
+      document.body.style.overflow = '';
+    }
+
+    function handleRegistration(event) {
+      event.preventDefault();
+      // Add your registration logic here
+      alert('Registration submitted!');
+      closeRegistrationModal();
+    }
+
+    // Close modal when clicking outside
+    document.getElementById('registrationModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeRegistrationModal();
+      }
+    });
+  </script>
+
+  <!-- Instructor Section -->
+  <div class="bg-white border-t">
+    <div class="container mx-auto px-4 py-12">
+      <h2 class="text-2xl font-bold mb-8">Meet Your Instructor</h2>
+      <div class="flex flex-wrap items-center">
+        <div class="w-full md:w-auto mb-6 md:mb-0 md:mr-8">          <img
+            src="https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
+            alt="Professional instructor"
+            class="w-32 h-32 rounded-full object-cover"
+          />
+        </div>
+        <div class="flex-1">
+          <h3 class="text-xl font-bold mb-2">
+            Michelle E. Lapian, S.Sn., MM., M.Ds.
+          </h3>
+          <p class="text-gray-600 mb-4">
+            Visual Communication Design practitioner and instructor with over
+            five years of experience. A graduate of Binus University and
+            Trisakti University, specialized in graphic design, branding,
+            typography, and visual communication strategy.
+          </p>
+          <div class="flex space-x-4">
+            <div class="flex items-center">
+              <i class="fas fa-star text-yellow-400 mr-2"></i>
+              <span class="font-semibold">4.9</span>
+              <span class="text-gray-500 ml-1">Instructor Rating</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-user-graduate text-blue-600 mr-2"></i>
+              <span class="font-semibold">1,200+</span>
+              <span class="text-gray-500 ml-1">Students</span>
+            </div>
+            <div class="flex items-center">
+              <i class="fas fa-play-circle text-green-500 mr-2"></i>
+              <span class="font-semibold">15</span>
+              <span class="text-gray-500 ml-1">Courses</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Courses -->
+  <div class="bg-gray-50 py-12">
+    <div class="container mx-auto px-4">
+      <h2 class="text-2xl font-bold mb-8">Related Courses</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Related Course Cards will go here -->
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
