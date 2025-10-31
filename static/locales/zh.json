@@ -1,0 +1,64 @@
+{
+  "nav": {
+    "profile": "简介",
+    "academics": "学术",
+    "admissions": "招生",
+    "campus_life": "校园生活",
+    "about": "关于",
+    "contact": "联系",
+    "news": "新闻",
+    "events": "活动"
+  },
+  "profile": {
+    "about_matana": "关于马塔纳",
+    "vision_mission": "愿景与使命",
+    "history": "历史",
+    "organization": "组织结构",
+    "facilities": "设施"
+  },
+  "academics": {
+    "programs": "学习项目",
+    "faculty": "院系",
+    "research": "研究",
+    "library": "图书馆",
+    "academic_calendar": "学术日历"
+  },
+  "admissions": {
+    "apply_now": "立即申请",
+    "requirements": "要求",
+    "tuition_fees": "学费",
+    "scholarships": "奖学金",
+    "international_students": "国际学生"
+  },
+  "campus_life": {
+    "student_activities": "学生活动",
+    "clubs": "俱乐部和组织",
+    "sports": "体育",
+    "housing": "住宿",
+    "dining": "餐饮"
+  },
+  "common": {
+    "home": "首页",
+    "read_more": "阅读更多",
+    "learn_more": "了解更多",
+    "apply": "申请",
+    "submit": "提交",
+    "cancel": "取消",
+    "search": "搜索",
+    "language": "语言",
+    "welcome": "欢迎",
+    "email": "邮箱",
+    "phone": "电话",
+    "address": "地址"
+  },
+  "footer": {
+    "quick_links": "快速链接",
+    "contact_us": "联系我们",
+    "follow_us": "关注我们",
+    "copyright": "版权所有 © 2025 马塔纳大学。保留所有权利。"
+  },
+  "meta": {
+    "description": "马塔纳大学 - 一所值得信赖的领先高等教育机构，具有国内和国际学术和专业卓越性",
+    "keywords": "马塔纳大学, 学院, 高等教育, 加丁瑟彭, 丹格朗"
+  }
+}
