@@ -15,13 +15,14 @@ This project now supports multi-language functionality with Indonesian (default)
 
 ```
 cms/
-├── locales/                    # Translation source files (for reference)
+├── locales/                    # Translation source files (for editing)
 │   ├── id.json                # Indonesian translations
 │   ├── en.json                # English translations
-│   └── zh.json                # Mandarin translations
+│   ├── zh.json                # Mandarin translations
+│   └── README.md              # This documentation
 ├── static/
-│   ├── locales/               # Translation files served to client
-│   │   ├── id.json
+│   ├── locales/               # Translation files served to client (copy of /locales/*.json)
+│   │   ├── id.json            # These should be kept in sync with /locales/
 │   │   ├── en.json
 │   │   └── zh.json
 │   └── js/
@@ -29,6 +30,12 @@ cms/
 └── templates/
     └── base.html              # Updated with language selector
 ```
+
+**Note:** The translation files exist in two locations:
+- `/locales/*.json` - Source files for editing and version control
+- `/static/locales/*.json` - Files served to the browser
+
+When updating translations, modify both locations or use a build process to copy them.
 
 ## Usage
 
@@ -126,9 +133,32 @@ const formattedCurrency = i18n.formatCurrency(15000000, 'IDR');
 
 ## Adding New Translations
 
-1. **Add to JSON files**: Update `id.json`, `en.json`, and `zh.json` in both `/locales/` and `/static/locales/`
-2. **Use consistent structure**: Ensure all three files have the same keys
-3. **Add data-i18n attributes**: Mark the HTML elements to use the new translations
+1. **Add to JSON files**: Update `id.json`, `en.json`, and `zh.json` in `/locales/`
+2. **Copy to static**: Copy the updated files to `/static/locales/` or use the provided script
+3. **Use consistent structure**: Ensure all three files have the same keys
+4. **Add data-i18n attributes**: Mark the HTML elements to use the new translations
+
+### Syncing Translation Files
+
+After editing files in `/locales/`, copy them to `/static/locales/`:
+
+```bash
+# From the project root
+cp locales/*.json static/locales/
+```
+
+Or use this Python script:
+
+```python
+import shutil
+import os
+
+for file in ['id.json', 'en.json', 'zh.json']:
+    src = os.path.join('locales', file)
+    dst = os.path.join('static', 'locales', file)
+    shutil.copy2(src, dst)
+    print(f"Copied {src} to {dst}")
+```
 
 Example:
 

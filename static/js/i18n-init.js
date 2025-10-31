@@ -226,9 +226,14 @@
 
   // Auto-initialize when DOM is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => i18n.init());
+    document.addEventListener('DOMContentLoaded', () => {
+      i18n.init().catch(err => console.error('Failed to initialize i18n:', err));
+    });
   } else {
-    i18n.init();
+    // Use requestAnimationFrame to ensure DOM is fully parsed
+    requestAnimationFrame(() => {
+      i18n.init().catch(err => console.error('Failed to initialize i18n:', err));
+    });
   }
 
   // Add click handlers for language switcher buttons
