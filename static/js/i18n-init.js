@@ -66,8 +66,23 @@
      */
     async loadTranslation(lang) {
       try {
-        const response = await fetch(`/static/locales/${lang}.json`);
-        if (!response.ok) {
+        // Try Django static path first, fallback to relative path
+        const paths = [
+          `/static/locales/${lang}.json`,
+          `/locales/${lang}.json`
+        ];
+        
+        let response;
+        for (const path of paths) {
+          try {
+            response = await fetch(path);
+            if (response.ok) break;
+          } catch (e) {
+            continue;
+          }
+        }
+        
+        if (!response || !response.ok) {
           throw new Error(`Failed to load ${lang}.json`);
         }
         this.translations = await response.json();
