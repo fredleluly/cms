@@ -92,6 +92,9 @@
     <!-- Alpine.js -->
     <script defer src="{% static '/js/alpine.min.js' %}"></script>
     
+    <!-- i18n Support -->
+    <script src="{% static '/js/i18n-init.js' %}"></script>
+    
 
     <!-- Custom CSS -->
     <style>
@@ -283,11 +286,24 @@
             >
               <a
                 href="#"
+                data-lang-switch="id"
                 class="text-white hover:text-matana-yellow transition-colors text-sm font-medium"
                 >ID</a
               >
               <span class="text-white/40">|</span>
-              <!-- <a href="#" class="text-white hover:text-matana-yellow transition-colors text-sm font-medium">EN</a> -->
+              <a
+                href="#"
+                data-lang-switch="en"
+                class="text-white hover:text-matana-yellow transition-colors text-sm font-medium"
+                >EN</a
+              >
+              <span class="text-white/40">|</span>
+              <a
+                href="#"
+                data-lang-switch="zh"
+                class="text-white hover:text-matana-yellow transition-colors text-sm font-medium"
+                >中文</a
+              >
             </div>
           </div>
         </div>
@@ -327,7 +343,7 @@
               <button
                 class="nav-link text-gray-700 group-hover:text-matana-blue flex items-center space-x-1 px-4 py-2 focus-ring"
               >
-                <span>Profil</span>
+                <span data-i18n="nav.profile">Profil</span>
                 <svg
                   class="w-4 h-4 transition-transform group-hover:rotate-180"
                   fill="none"

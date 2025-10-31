@@ -1,0 +1,64 @@
+{
+  "nav": {
+    "profile": "Profile",
+    "academics": "Academics",
+    "admissions": "Admissions",
+    "campus_life": "Campus Life",
+    "about": "About",
+    "contact": "Contact",
+    "news": "News",
+    "events": "Events"
+  },
+  "profile": {
+    "about_matana": "About Matana",
+    "vision_mission": "Vision & Mission",
+    "history": "History",
+    "organization": "Organizational Structure",
+    "facilities": "Facilities"
+  },
+  "academics": {
+    "programs": "Study Programs",
+    "faculty": "Faculty",
+    "research": "Research",
+    "library": "Library",
+    "academic_calendar": "Academic Calendar"
+  },
+  "admissions": {
+    "apply_now": "Apply Now",
+    "requirements": "Requirements",
+    "tuition_fees": "Tuition Fees",
+    "scholarships": "Scholarships",
+    "international_students": "International Students"
+  },
+  "campus_life": {
+    "student_activities": "Student Activities",
+    "clubs": "Clubs & Organizations",
+    "sports": "Sports",
+    "housing": "Housing",
+    "dining": "Dining"
+  },
+  "common": {
+    "home": "Home",
+    "read_more": "Read More",
+    "learn_more": "Learn More",
+    "apply": "Apply",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "search": "Search",
+    "language": "Language",
+    "welcome": "Welcome",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address"
+  },
+  "footer": {
+    "quick_links": "Quick Links",
+    "contact_us": "Contact Us",
+    "follow_us": "Follow Us",
+    "copyright": "Copyright © 2025 Matana University. All rights reserved."
+  },
+  "meta": {
+    "description": "Matana University - A trusted and leading higher education institution with national and international academic and professional excellence",
+    "keywords": "matana university, college, higher education, gading serpong, tangerang"
+  }
+}
