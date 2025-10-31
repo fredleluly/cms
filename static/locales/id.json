@@ -1,0 +1,64 @@
+{
+  "nav": {
+    "profile": "Profil",
+    "academics": "Akademik",
+    "admissions": "Penerimaan",
+    "campus_life": "Kehidupan Kampus",
+    "about": "Tentang",
+    "contact": "Kontak",
+    "news": "Berita",
+    "events": "Acara"
+  },
+  "profile": {
+    "about_matana": "Tentang Matana",
+    "vision_mission": "Visi & Misi",
+    "history": "Sejarah",
+    "organization": "Struktur Organisasi",
+    "facilities": "Fasilitas"
+  },
+  "academics": {
+    "programs": "Program Studi",
+    "faculty": "Fakultas",
+    "research": "Penelitian",
+    "library": "Perpustakaan",
+    "academic_calendar": "Kalender Akademik"
+  },
+  "admissions": {
+    "apply_now": "Daftar Sekarang",
+    "requirements": "Persyaratan",
+    "tuition_fees": "Biaya Kuliah",
+    "scholarships": "Beasiswa",
+    "international_students": "Mahasiswa Internasional"
+  },
+  "campus_life": {
+    "student_activities": "Kegiatan Mahasiswa",
+    "clubs": "Klub & Organisasi",
+    "sports": "Olahraga",
+    "housing": "Asrama",
+    "dining": "Kantin"
+  },
+  "common": {
+    "home": "Beranda",
+    "read_more": "Baca Selengkapnya",
+    "learn_more": "Pelajari Lebih Lanjut",
+    "apply": "Daftar",
+    "submit": "Kirim",
+    "cancel": "Batal",
+    "search": "Cari",
+    "language": "Bahasa",
+    "welcome": "Selamat Datang",
+    "email": "Email",
+    "phone": "Telepon",
+    "address": "Alamat"
+  },
+  "footer": {
+    "quick_links": "Tautan Cepat",
+    "contact_us": "Hubungi Kami",
+    "follow_us": "Ikuti Kami",
+    "copyright": "Hak Cipta © 2025 Matana University. Semua hak dilindungi."
+  },
+  "meta": {
+    "description": "Matana University - Perguruan tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional",
+    "keywords": "universitas matana, kuliah, pendidikan tinggi, gading serpong, tangerang"
+  }
+}
