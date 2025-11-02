@@ -1,0 +1,297 @@
+{
+  "comments": [
+    "This is an example of how Program Studi content blocks should be structured",
+    "for multilingual support (Indonesian, English, Chinese).",
+    "Each text field is converted to an object with 'id', 'en', and 'zh' keys."
+  ],
+  
+  "hero_section": {
+    "title": {
+      "id": "Informatika",
+      "en": "Informatics",
+      "zh": "信息学"
+    },
+    "description": {
+      "id": "Program studi yang mempersiapkan lulusan untuk menjadi profesional di bidang teknologi informasi dan komputer dengan kurikulum yang relevan dengan kebutuhan industri.",
+      "en": "A study program that prepares graduates to become professionals in information technology and computing with a curriculum relevant to industry needs.",
+      "zh": "一个旨在培养信息技术和计算机领域专业人才的学习计划，课程设置符合行业需求。"
+    },
+    "background_image": "/static/images/prodi/informatika-hero.jpg",
+    "items": [
+      {
+        "title": {
+          "id": "Akreditasi",
+          "en": "Accreditation",
+          "zh": "认证"
+        },
+        "description": {
+          "id": "A",
+          "en": "A",
+          "zh": "A"
+        }
+      },
+      {
+        "title": {
+          "id": "Mahasiswa Aktif",
+          "en": "Active Students",
+          "zh": "在校学生"
+        },
+        "description": {
+          "id": "500+",
+          "en": "500+",
+          "zh": "500+"
+        }
+      },
+      {
+        "title": {
+          "id": "Dosen",
+          "en": "Lecturers",
+          "zh": "讲师"
+        },
+        "description": {
+          "id": "25",
+          "en": "25",
+          "zh": "25"
+        }
+      }
+    ]
+  },
+  
+  "visi_misi_section": {
+    "background_image": "/static/images/prodi/visi-misi-bg.jpg",
+    "items": [
+      {
+        "title": {
+          "id": "Visi",
+          "en": "Vision",
+          "zh": "愿景"
+        },
+        "description": {
+          "id": "Menjadi program studi informatika yang unggul dalam menghasilkan lulusan yang kompeten, berkarakter, dan berwawasan global di bidang teknologi informasi pada tahun 2030.",
+          "en": "To become an excellent informatics study program in producing competent, character-driven, and globally-minded graduates in information technology by 2030.",
+          "zh": "到2030年成为一流的信息学学习计划，培养信息技术领域有能力、有品格、具有全球视野的毕业生。"
+        }
+      },
+      {
+        "title": {
+          "id": "Misi",
+          "en": "Mission",
+          "zh": "使命"
+        },
+        "description": {
+          "id": "Menyelenggarakan pendidikan informatika yang berkualitas dan relevan dengan kebutuhan industri\nMengembangkan penelitian di bidang teknologi informasi yang inovatif dan aplikatif\nMelaksanakan pengabdian kepada masyarakat melalui penerapan teknologi informasi\nMembangun kerjasama dengan industri dan institusi pendidikan dalam dan luar negeri\nMembentuk lulusan yang memiliki kompetensi, integritas, dan daya saing global",
+          "en": "Provide quality informatics education relevant to industry needs\nDevelop innovative and applicable research in information technology\nImplement community service through information technology applications\nBuild partnerships with industry and educational institutions domestically and internationally\nProduce graduates with competence, integrity, and global competitiveness",
+          "zh": "提供符合行业需求的优质信息学教育\n开展创新且实用的信息技术研究\n通过信息技术应用实施社区服务\n与国内外行业和教育机构建立合作伙伴关系\n培养具有能力、诚信和全球竞争力的毕业生"
+        }
+      }
+    ]
+  },
+  
+  "tujuan_section": {
+    "title": {
+      "id": "Tujuan Program Studi",
+      "en": "Study Program Objectives",
+      "zh": "学习计划目标"
+    },
+    "description": {
+      "id": "Program Studi Informatika bertujuan untuk:<br><br>1. Menghasilkan lulusan yang menguasai konsep fundamental ilmu komputer dan mampu menerapkannya dalam pengembangan sistem informasi<br><br>2. Menghasilkan lulusan yang mampu merancang, mengimplementasikan, dan mengevaluasi solusi berbasis teknologi informasi untuk mengatasi permasalahan bisnis dan industri<br><br>3. Menghasilkan lulusan yang memiliki kemampuan berpikir kritis, analitis, dan kreatif dalam menghadapi perkembangan teknologi informasi<br><br>4. Menghasilkan lulusan yang memiliki jiwa kewirausahaan dan mampu bersaing di tingkat nasional maupun internasional<br><br>5. Menghasilkan lulusan yang memiliki etika profesional dan tanggung jawab sosial dalam penerapan teknologi informasi",
+      "en": "The Informatics Study Program aims to:<br><br>1. Produce graduates who master fundamental computer science concepts and can apply them in information system development<br><br>2. Produce graduates capable of designing, implementing, and evaluating information technology-based solutions to address business and industry problems<br><br>3. Produce graduates with critical, analytical, and creative thinking abilities in facing information technology developments<br><br>4. Produce graduates with entrepreneurial spirit and competitive capability at national and international levels<br><br>5. Produce graduates with professional ethics and social responsibility in information technology applications",
+      "zh": "信息学学习计划旨在：<br><br>1. 培养掌握计算机科学基本概念并能将其应用于信息系统开发的毕业生<br><br>2. 培养能够设计、实施和评估基于信息技术的解决方案以解决商业和行业问题的毕业生<br><br>3. 培养在面对信息技术发展时具有批判性、分析性和创造性思维能力的毕业生<br><br>4. 培养具有创业精神并能在国家和国际层面竞争的毕业生<br><br>5. 培养在信息技术应用中具有职业道德和社会责任的毕业生"
+    }
+  },
+  
+  "konsentrasi_section": {
+    "items": [
+      {
+        "title": {
+          "id": "Software Engineering",
+          "en": "Software Engineering",
+          "zh": "软件工程"
+        },
+        "description": {
+          "id": "Fokus pada pengembangan perangkat lunak berkualitas tinggi dengan metodologi modern",
+          "en": "Focus on developing high-quality software with modern methodologies",
+          "zh": "专注于使用现代方法开发高质量软件"
+        }
+      },
+      {
+        "title": {
+          "id": "Data Science & AI",
+          "en": "Data Science & AI",
+          "zh": "数据科学与人工智能"
+        },
+        "description": {
+          "id": "Mempelajari analisis data, machine learning, dan kecerdasan buatan",
+          "en": "Study data analysis, machine learning, and artificial intelligence",
+          "zh": "学习数据分析、机器学习和人工智能"
+        }
+      },
+      {
+        "title": {
+          "id": "Cyber Security",
+          "en": "Cyber Security",
+          "zh": "网络安全"
+        },
+        "description": {
+          "id": "Keamanan sistem informasi dan perlindungan data",
+          "en": "Information system security and data protection",
+          "zh": "信息系统安全和数据保护"
+        }
+      }
+    ]
+  },
+  
+  "kurikulum_section": {
+    "items": [
+      {
+        "title": {
+          "id": "Pemrograman Dasar",
+          "en": "Basic Programming",
+          "zh": "基础编程"
+        },
+        "description": {
+          "id": "Dasar-dasar pemrograman dan algoritma",
+          "en": "Programming fundamentals and algorithms",
+          "zh": "编程基础和算法"
+        }
+      },
+      {
+        "title": {
+          "id": "Struktur Data",
+          "en": "Data Structures",
+          "zh": "数据结构"
+        },
+        "description": {
+          "id": "Struktur data dan implementasinya",
+          "en": "Data structures and their implementation",
+          "zh": "数据结构及其实现"
+        }
+      },
+      {
+        "title": {
+          "id": "Basis Data",
+          "en": "Database",
+          "zh": "数据库"
+        },
+        "description": {
+          "id": "Sistem manajemen basis data",
+          "en": "Database management systems",
+          "zh": "数据库管理系统"
+        }
+      },
+      {
+        "title": {
+          "id": "Jaringan Komputer",
+          "en": "Computer Networks",
+          "zh": "计算机网络"
+        },
+        "description": {
+          "id": "Dasar jaringan dan komunikasi data",
+          "en": "Network fundamentals and data communication",
+          "zh": "网络基础和数据通信"
+        }
+      },
+      {
+        "title": {
+          "id": "Pengembangan Web",
+          "en": "Web Development",
+          "zh": "网页开发"
+        },
+        "description": {
+          "id": "Teknologi dan framework web modern",
+          "en": "Modern web technologies and frameworks",
+          "zh": "现代网络技术和框架"
+        }
+      },
+      {
+        "title": {
+          "id": "Pengembangan Mobile",
+          "en": "Mobile Development",
+          "zh": "移动开发"
+        },
+        "description": {
+          "id": "Aplikasi mobile Android dan iOS",
+          "en": "Android and iOS mobile applications",
+          "zh": "Android和iOS移动应用"
+        }
+      }
+    ]
+  },
+  
+  "peluang_karir_section": {
+    "items": [
+      {
+        "title": {
+          "id": "Software Developer",
+          "en": "Software Developer",
+          "zh": "软件开发人员"
+        },
+        "description": {
+          "id": "Pengembang aplikasi dan sistem perangkat lunak",
+          "en": "Application and software system developer",
+          "zh": "应用程序和软件系统开发人员"
+        }
+      },
+      {
+        "title": {
+          "id": "Data Scientist",
+          "en": "Data Scientist",
+          "zh": "数据科学家"
+        },
+        "description": {
+          "id": "Analis data dan pengembang model AI/ML",
+          "en": "Data analyst and AI/ML model developer",
+          "zh": "数据分析师和AI/ML模型开发人员"
+        }
+      },
+      {
+        "title": {
+          "id": "System Analyst",
+          "en": "System Analyst",
+          "zh": "系统分析师"
+        },
+        "description": {
+          "id": "Analis dan perancang sistem informasi",
+          "en": "Information system analyst and designer",
+          "zh": "信息系统分析师和设计师"
+        }
+      },
+      {
+        "title": {
+          "id": "Network Engineer",
+          "en": "Network Engineer",
+          "zh": "网络工程师"
+        },
+        "description": {
+          "id": "Perancang dan administrator jaringan",
+          "en": "Network designer and administrator",
+          "zh": "网络设计师和管理员"
+        }
+      },
+      {
+        "title": {
+          "id": "Security Specialist",
+          "en": "Security Specialist",
+          "zh": "安全专家"
+        },
+        "description": {
+          "id": "Spesialis keamanan siber dan data",
+          "en": "Cyber and data security specialist",
+          "zh": "网络和数据安全专家"
+        }
+      },
+      {
+        "title": {
+          "id": "IT Consultant",
+          "en": "IT Consultant",
+          "zh": "IT顾问"
+        },
+        "description": {
+          "id": "Konsultan teknologi informasi",
+          "en": "Information technology consultant",
+          "zh": "信息技术顾问"
+        }
+      }
+    ]
+  }
+}

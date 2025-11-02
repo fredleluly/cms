@@ -436,7 +436,8 @@ def page_view(request, slug):
         context = {
             'page': page,
             'meta': page.metadata,
-            'blocks': blocks
+            'blocks': blocks,
+            'blocks_json': json.dumps(blocks)  # Safe JSON serialization for JavaScript
         }
         
         # Add popup context
