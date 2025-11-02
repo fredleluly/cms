@@ -53,5 +53,23 @@
     "whatsapp": "WhatsApp",
     "email": "Email",
     "address": "Address"
+  },
+  "whatsapp": {
+    "greeting": "Hello, need help? Let's chat now!",
+    "close": "Close"
+  },
+  "home": {
+    "why_matana": "Why Matana University?",
+    "latest_updates": "Latest Updates",
+    "view_all": "View All",
+    "read_more": "Read More"
+  },
+  "scholarship": {
+    "register_now": "Register Now",
+    "register_opportunity": "Don't miss the opportunity to get an educational scholarship at Matana University. Register now and make your dreams come true!",
+    "start_registration": "Start Registration"
+  },
+  "siak": {
+    "title": "Academic Information System(SIAK)"
   }
 }

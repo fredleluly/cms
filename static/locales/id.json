@@ -53,5 +53,23 @@
     "whatsapp": "WhatsApp",
     "email": "Email",
     "address": "Alamat"
+  },
+  "whatsapp": {
+    "greeting": "Halo, butuh bantuan? Yuk chat sekarang!",
+    "close": "Tutup"
+  },
+  "home": {
+    "why_matana": "Mengapa Matana University?",
+    "latest_updates": "Latest Updates",
+    "view_all": "View All",
+    "read_more": "Read More"
+  },
+  "scholarship": {
+    "register_now": "Daftar Sekarang",
+    "register_opportunity": "Jangan lewatkan kesempatan untuk mendapatkan beasiswa pendidikan di Matana University. Daftar sekarang dan wujudkan impianmu!",
+    "start_registration": "Mulai Pendaftaran"
+  },
+  "siak": {
+    "title": "Sistem Informasi Akademik(SIAK)"
   }
 }

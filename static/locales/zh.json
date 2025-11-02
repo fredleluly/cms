@@ -53,5 +53,23 @@
     "whatsapp": "WhatsApp",
     "email": "电子邮件",
     "address": "地址"
+  },
+  "whatsapp": {
+    "greeting": "您好，需要帮助吗？现在就聊天吧！",
+    "close": "关闭"
+  },
+  "home": {
+    "why_matana": "为什么选择玛塔纳大学？",
+    "latest_updates": "最新更新",
+    "view_all": "查看全部",
+    "read_more": "阅读更多"
+  },
+  "scholarship": {
+    "register_now": "立即注册",
+    "register_opportunity": "不要错过在玛塔纳大学获得教育奖学金的机会。立即注册，实现您的梦想！",
+    "start_registration": "开始注册"
+  },
+  "siak": {
+    "title": "学术信息系统(SIAK)"
   }
 }
