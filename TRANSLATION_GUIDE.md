@@ -6,7 +6,15 @@ This CMS supports 3 languages:
 - **EN** (English)
 - **ZH** (Chinese/中文)
 
-## Translation File Structure
+## Two Types of Translation
+
+### 1. Static UI Elements (Labels, Buttons, etc.)
+Located in `/static/locales/*.json` files. Used for navigation, buttons, and static page elements.
+
+### 2. Dynamic Content (Program Descriptions, etc.)
+Stored in database ContentBlocks with multilingual JSON structure. Used for Program Studi content, articles, etc.
+
+## Translation File Structure (Static UI)
 
 Translation files are located in `/static/locales/`:
 - `id.json` - Indonesian (Bahasa Indonesia)
@@ -187,6 +195,19 @@ python3 -m json.tool static/locales/id.json
 python3 -m json.tool static/locales/en.json
 python3 -m json.tool static/locales/zh.json
 ```
+
+## Dynamic Content Translation (Content Blocks)
+
+For detailed information about translating dynamic content stored in the database (Program Studi descriptions, etc.), see:
+- **[MULTILINGUAL_CONTENT_GUIDE.md](MULTILINGUAL_CONTENT_GUIDE.md)** - Complete guide for content block translation
+- **[example_prodi_content_multilingual.json](example_prodi_content_multilingual.json)** - Example structure
+- **[migrate_prodi_content.py](migrate_prodi_content.py)** - Migration script for existing content
+
+Quick overview of content block translation:
+1. Content blocks use nested JSON structure with `id`, `en`, `zh` keys
+2. Use `data-i18n-content` attribute in templates to mark translatable content
+3. JavaScript automatically switches content based on selected language
+4. See MULTILINGUAL_CONTENT_GUIDE.md for complete instructions
 
 ## Contact
 
