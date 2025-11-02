@@ -1,7 +1,15 @@
 from django import template
 from django.utils.safestring import mark_safe
+import logging
+
+logger = logging.getLogger(__name__)
 
 register = template.Library()
+
+# Supported languages - can be moved to settings if needed
+SUPPORTED_LANGUAGES = ['id', 'en', 'zh']
+DEFAULT_LANGUAGE = 'id'
+
 
 @register.filter(name='i18n_content')
 def i18n_content(content_dict, language='id'):
@@ -28,16 +36,16 @@ def i18n_content(content_dict, language='id'):
     
     # Handle dict with direct language keys
     if isinstance(content_dict, dict):
-        # Check if this is a direct language dict (has 'id', 'en', or 'zh' keys)
-        if 'id' in content_dict or 'en' in content_dict or 'zh' in content_dict:
+        # Check if this is a direct language dict (has supported language keys)
+        if any(lang in content_dict for lang in SUPPORTED_LANGUAGES):
             # Try requested language
             if language in content_dict:
                 return content_dict[language]
-            # Fallback to Indonesian
-            if 'id' in content_dict:
-                return content_dict['id']
-            # Fallback to first available
-            for lang in ['en', 'zh']:
+            # Fallback to default language
+            if DEFAULT_LANGUAGE in content_dict:
+                return content_dict[DEFAULT_LANGUAGE]
+            # Fallback to first available supported language
+            for lang in SUPPORTED_LANGUAGES:
                 if lang in content_dict:
                     return content_dict[lang]
         
@@ -64,7 +72,8 @@ def i18n_field(obj, field_and_lang):
         field_name, language = field_and_lang.split(',')
         field_name = field_name.strip()
         language = language.strip()
-    except ValueError:
+    except ValueError as e:
+        logger.warning(f"Invalid i18n_field parameter format: {field_and_lang}. Expected 'field,lang'. Error: {e}")
         return ''
     
     if not isinstance(obj, dict):

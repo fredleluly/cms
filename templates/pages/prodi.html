@@ -774,7 +774,8 @@
 {% block extra_js %}
 <script>
     // Make blocks available to JavaScript for i18n content switching
-    window.pageBlocks = {{ blocks|safe }};
+    // Using server-side JSON serialization for security
+    window.pageBlocks = {{ blocks_json|safe }};
 </script>
 <script src="{% static 'js/i18n-content.js' %}"></script>
 <script>

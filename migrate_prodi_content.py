@@ -37,6 +37,16 @@ django.setup()
 
 from apps.pages.models import Page, ContentBlock
 
+# Configuration
+TRANSLATION_PREFIXES = {
+    'en': '[EN_TODO]',
+    'zh': '[ZH_TODO]'
+}
+
+# Fields that should not be translated (images, URLs, etc.)
+# Can be extended to include pattern matching
+NON_TRANSLATABLE_FIELDS = {'image', 'background_image', 'url', 'icon', 'cta', 'link', 'href'}
+
 
 def is_multilingual(value):
     """Check if a value is already in multilingual format"""
@@ -45,13 +55,25 @@ def is_multilingual(value):
     return any(key in value for key in ['id', 'en', 'zh'])
 
 
-def convert_to_multilingual(value, placeholder_prefix="[TRANSLATE]"):
+def should_skip_field(field_name):
+    """
+    Determine if a field should be skipped for translation.
+    Checks both exact matches and patterns (e.g., fields ending with _image or _url)
+    """
+    if field_name in NON_TRANSLATABLE_FIELDS:
+        return True
+    # Check for common patterns
+    skip_patterns = ['_image', '_url', '_link', '_icon', '_href']
+    return any(field_name.endswith(pattern) for pattern in skip_patterns)
+
+
+def convert_to_multilingual(value, field_name=''):
     """
     Convert a single-language value to multilingual format.
     
     Args:
         value: The value to convert (string, dict, list, etc.)
-        placeholder_prefix: Prefix for untranslated content
+        field_name: Name of the field (used to check if it should be skipped)
         
     Returns:
         Multilingual version of the value
@@ -67,23 +89,22 @@ def convert_to_multilingual(value, placeholder_prefix="[TRANSLATE]"):
     if isinstance(value, str):
         return {
             'id': value,
-            'en': f"{placeholder_prefix} {value}",
-            'zh': f"{placeholder_prefix} {value}"
+            'en': f"{TRANSLATION_PREFIXES['en']} {value}",
+            'zh': f"{TRANSLATION_PREFIXES['zh']} {value}"
         }
     
     # List - convert each item
     if isinstance(value, list):
-        return [convert_to_multilingual(item, placeholder_prefix) for item in value]
+        return [convert_to_multilingual(item, field_name) for item in value]
     
     # Dict - recursively convert values (but skip image/url fields)
     if isinstance(value, dict):
-        skip_fields = ['image', 'background_image', 'url', 'icon', 'cta']
         result = {}
         for key, val in value.items():
-            if key in skip_fields:
+            if should_skip_field(key):
                 result[key] = val  # Keep as-is
             else:
-                result[key] = convert_to_multilingual(val, placeholder_prefix)
+                result[key] = convert_to_multilingual(val, key)
         return result
     
     # Other types - return as-is
@@ -110,7 +131,7 @@ def migrate_content_block(block, dry_run=False):
     
     for key, value in old_content.items():
         if key in multilingual_fields or key == 'items':
-            new_value = convert_to_multilingual(value)
+            new_value = convert_to_multilingual(value, key)
             new_content[key] = new_value
             if new_value != value:
                 changed = True
