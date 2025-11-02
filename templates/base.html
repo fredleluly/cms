@@ -92,6 +92,8 @@
     <!-- Alpine.js -->
     <script defer src="{% static '/js/alpine.min.js' %}"></script>
     
+    <!-- i18n Initialization -->
+    <script src="{% static '/js/i18n-init.js' %}"></script>
 
     <!-- Custom CSS -->
     <style>
@@ -278,16 +280,82 @@
                 <i class="fab fa-youtube"></i>
               </a>
             </div>
+            <!-- Language Switcher Desktop -->
             <div
-              class="border-l border-white/20 pl-6 flex items-center space-x-4"
+              class="border-l border-white/20 pl-6"
+              x-data="{ 
+                langOpen: false,
+                currentLang: 'id',
+                languages: {
+                  'id': 'ID',
+                  'en': 'EN',
+                  'zh': 'ZH'
+                },
+                init() {
+                  this.currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'id';
+                  window.addEventListener('languageChanged', (e) => {
+                    this.currentLang = e.detail.language;
+                  });
+                }
+              }"
             >
-              <a
-                href="#"
-                class="text-white hover:text-matana-yellow transition-colors text-sm font-medium"
-                >ID</a
-              >
-              <span class="text-white/40">|</span>
-              <!-- <a href="#" class="text-white hover:text-matana-yellow transition-colors text-sm font-medium">EN</a> -->
+              <div class="relative">
+                <button
+                  @click="langOpen = !langOpen"
+                  @click.away="langOpen = false"
+                  class="flex items-center space-x-2 text-white hover:text-matana-yellow transition-colors text-sm font-medium"
+                >
+                  <i class="fas fa-globe"></i>
+                  <span x-text="languages[currentLang]"></span>
+                  <svg
+                    class="w-4 h-4 transition-transform"
+                    :class="{'rotate-180': langOpen}"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M19 9l-7 7-7-7"
+                    ></path>
+                  </svg>
+                </button>
+                <div
+                  x-show="langOpen"
+                  x-transition:enter="transition ease-out duration-200"
+                  x-transition:enter-start="opacity-0 transform scale-95"
+                  x-transition:enter-end="opacity-100 transform scale-100"
+                  x-transition:leave="transition ease-in duration-150"
+                  x-transition:leave-start="opacity-100 transform scale-100"
+                  x-transition:leave-end="opacity-0 transform scale-95"
+                  class="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg py-1 z-50"
+                  x-cloak
+                >
+                  <button
+                    @click="window.switchLanguage('id'); langOpen = false"
+                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-matana-blue"
+                    :class="{'bg-matana-yellow/10 text-matana-blue font-semibold': currentLang === 'id'}"
+                  >
+                    <i class="fas fa-flag mr-2"></i>Bahasa Indonesia
+                  </button>
+                  <button
+                    @click="window.switchLanguage('en'); langOpen = false"
+                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-matana-blue"
+                    :class="{'bg-matana-yellow/10 text-matana-blue font-semibold': currentLang === 'en'}"
+                  >
+                    <i class="fas fa-flag mr-2"></i>English
+                  </button>
+                  <button
+                    @click="window.switchLanguage('zh'); langOpen = false"
+                    class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-matana-blue"
+                    :class="{'bg-matana-yellow/10 text-matana-blue font-semibold': currentLang === 'zh'}"
+                  >
+                    <i class="fas fa-flag mr-2"></i>中文
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -327,7 +395,7 @@
               <button
                 class="nav-link text-gray-700 group-hover:text-matana-blue flex items-center space-x-1 px-4 py-2 focus-ring"
               >
-                <span>Profil</span>
+                <span data-i18n="nav.profile">Profil</span>
                 <svg
                   class="w-4 h-4 transition-transform group-hover:rotate-180"
                   fill="none"
@@ -349,18 +417,21 @@
                   <a
                     href="/profil-matana"
                     class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
+                    data-i18n="nav.profile_matana"
                   >
                     Profil Matana
                   </a>
                   <a
                     href="/manajemen"
                     class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
+                    data-i18n="nav.management"
                   >
                     Manajemen
                   </a>
                   <a
                     href="/mitra"
                     class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
+                    data-i18n="nav.partners"
                   >
                     Mitra
                   </a>
@@ -373,7 +444,7 @@
               <button
                 class="nav-link text-gray-700 group-hover:text-matana-blue flex items-center space-x-1 px-4 py-2 focus-ring"
               >
-                <span>Program Studi</span>
+                <span data-i18n="nav.study_programs">Program Studi</span>
                 <svg
                   class="w-4 h-4 transition-transform group-hover:rotate-180"
                   fill="none"
@@ -400,7 +471,7 @@
                       href="#"
                       class="flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                     >
-                      <span class="font-medium"
+                      <span class="font-medium" data-i18n="nav.faculty_business"
                         >Fakultas Bisnis dan Pariwisata</span
                       >
                       <svg
@@ -425,21 +496,25 @@
                         <a
                           href="/manajemen-bisnis"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.business_management"
                           >S1 Manajemen Bisnis</a
                         >
                         <a
                           href="/akuntansi"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.accounting"
                           >S1 Akuntansi</a
                         >
                         <a
                           href="/pariwisata"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.tourism"
                           >S1 Pariwisata</a
                         >
                         <a
                           href="/magister-manajemen""
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.master_management"
                           >Magister Manajemen</a
                         >
                       </div>
@@ -452,7 +527,7 @@
                       href="#"
                       class="flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                     >
-                      <span class="font-medium"
+                      <span class="font-medium" data-i18n="nav.faculty_design"
                         >Fakultas Desain, K3, dan Arsitektur</span
                       >
                       <svg
@@ -476,16 +551,19 @@
                         <a
                           href="/dkv"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.visual_communication"
                           >S1 Desain Komunikasi Visual</a
                         >
                         <a
                           href="/arsitektur"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.architecture"
                           >S1 Arsitektur</a
                         >
                         <a
                           href="/k3"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.k3"
                           >S1 Keselamatan & Kesehatan Kerja(K3)</a
                         >
                       </div>
@@ -498,7 +576,7 @@
                       href="#"
                       class="flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                     >
-                      <span class="font-medium"
+                      <span class="font-medium" data-i18n="nav.faculty_science"
                         >Fakultas Sains, Komputer, dan Matematika</span
                       >
                       <svg
@@ -522,11 +600,13 @@
                         <a
                           href="/statistika"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.data_science"
                           >S1 Data Science</a
                         >
                         <a
                           href="/informatika"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.informatics"
                           >S1 Informatika</a
                         >
                       </div>
@@ -541,6 +621,7 @@
               <a
                 href="https://pmb.matanauniversity.ac.id/"
                 class="nav-link text-gray-700 hover:text-matana-blue px-4 py-2 focus-ring"
+                data-i18n="nav.registration"
               >
                 Pendaftaran
               </a>
@@ -553,6 +634,7 @@
               <a
                 href="{% url 'scholarship' %}"
                 class="nav-link text-gray-700 hover:text-matana-blue px-4 py-2 focus-ring"
+                data-i18n="nav.scholarship"
               >
                 Beasiswa
               </a>
@@ -563,7 +645,7 @@
               <button
                 class="nav-link text-gray-700 group-hover:text-matana-blue flex items-center space-x-1 px-4 py-2 focus-ring"
               >
-                <span>Kemahasiswaan</span>
+                <span data-i18n="nav.student_affairs">Kemahasiswaan</span>
                 <svg
                   class="w-4 h-4 transition-transform group-hover:rotate-180"
                   fill="none"
@@ -587,28 +669,28 @@
                     class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                   >
                     <i class="fas fa-users text-matana-yellow"></i>
-                    <span>Unit Kegiatan Mahasiswa</span>
+                    <span data-i18n="nav.student_activities">Unit Kegiatan Mahasiswa</span>
                   </a>
                   <a
                     href="/student-exchange"
                     class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                   >
                     <i class="fas fa-globe-americas text-matana-yellow"></i>
-                    <span>Student Exchange</span>
+                    <span data-i18n="nav.student_exchange">Student Exchange</span>
                   </a>
                   <a
                     href="https://siakad.matanauniversity.ac.id/siakad/home"
                     class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                   >
                     <i class="fas fa-graduation-cap text-matana-yellow"></i>
-                    <span>Sistem Informasi Akademik</span>
+                    <span data-i18n="nav.academic_system">Sistem Informasi Akademik</span>
                   </a>
                   <a
                     href="https://docs.google.com/forms/d/e/1FAIpQLScWjOyAO2f4UYFMf9b4lPZDtXXXpq6xz6XxiEeh2wE9j1H1KQ/viewform"
                     class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                   >
                     <i class="fas fa-user-graduate text-matana-yellow"></i>
-                    <span>Alumni</span>
+                    <span data-i18n="nav.alumni">Alumni</span>
                   </a>
                 </div>
               </div>
@@ -619,7 +701,7 @@
               <button
                 class="nav-link text-gray-700 group-hover:text-matana-blue flex items-center space-x-1 px-4 py-2 focus-ring"
               >
-                <span>Lembaga</span>
+                <span data-i18n="nav.institutions">Lembaga</span>
                 <svg
                   class="w-4 h-4 transition-transform group-hover:rotate-180"
                   fill="none"
@@ -646,7 +728,7 @@
                       href="#"
                       class="flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                     >
-                      <span class="font-medium">Lembaga</span>
+                      <span class="font-medium" data-i18n="nav.institutions">Lembaga</span>
                       <svg
                         class="w-4 h-4"
                         fill="none"
@@ -669,11 +751,13 @@
                         <a
                           href="/lppm"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.lppm"
                           >LPPM</a
                         >
                         <a
                           href="/lpm"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.lpm"
                           >LPM</a
                         >
                       </div>
@@ -686,7 +770,7 @@
                       href="#"
                       class="flex items-center justify-between w-full px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                     >
-                      <span class="font-medium">Biro Inovasi Pembelajaran</span>
+                      <span class="font-medium" data-i18n="nav.learning_innovation">Biro Inovasi Pembelajaran</span>
                       <svg
                         class="w-4 h-4"
                         fill="none"
@@ -709,11 +793,13 @@
                         <a
                           href="/mku"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.mku"
                           >MKU</a
                         >
                         <a
                           href="/mbkm"
                           class="block px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg"
+                          data-i18n="nav.mbkm"
                           >MBKM</a
                         >
                       </div>
@@ -728,7 +814,7 @@
               <button
                 class="nav-link text-gray-700 group-hover:text-matana-blue flex items-center space-x-1 px-4 py-2 focus-ring"
               >
-                <span>Media</span>
+                <span data-i18n="nav.media">Media</span>
                 <svg
                   class="w-4 h-4 transition-transform group-hover:rotate-180"
                   fill="none"
@@ -752,21 +838,21 @@
                     class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                   >
                     <i class="far fa-newspaper text-matana-yellow"></i>
-                    <span>Matana News</span>
+                    <span data-i18n="nav.matana_news">Matana News</span>
                   </a>
                   <a
                     href="https://www.youtube.com/@creativeproductionmatana"
                     class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                   >
                     <i class="fas fa-microphone-alt text-matana-yellow"></i>
-                    <span>Matana Podcast</span>
+                    <span data-i18n="nav.matana_podcast">Matana Podcast</span>
                   </a>
                   <a
                     href="https://www.youtube.com/channel/UCSTCRIr8NaFwD-5PSer4lZA/playlists"
                     class="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-50 hover:text-matana-blue rounded-lg transition-all"
                   >
                     <i class="fab fa-youtube text-matana-yellow"></i>
-                    <span>Matana Youtube</span>
+                    <span data-i18n="nav.matana_youtube">Matana Youtube</span>
                   </a>
                 </div>
               </div>
@@ -778,6 +864,7 @@
                 href="https://recruitment-new.talenta.co/matana-university-0"
                 target="_blank"
                 class="nav-link text-gray-700 hover:text-matana-blue px-4 py-2 focus-ring"
+                data-i18n="nav.career"
               >
                 Karir
               </a>
@@ -875,6 +962,73 @@
           @click.away="mobileMenuOpen = false"
         >
           <div class="p-6">
+            <!-- Language Switcher Mobile -->
+            <div 
+              x-data="{ 
+                langOpen: false,
+                currentLang: 'id',
+                languages: {
+                  'id': 'Bahasa Indonesia',
+                  'en': 'English',
+                  'zh': '中文'
+                },
+                init() {
+                  this.currentLang = window.getCurrentLanguage ? window.getCurrentLanguage() : 'id';
+                  window.addEventListener('languageChanged', (e) => {
+                    this.currentLang = e.detail.language;
+                  });
+                }
+              }"
+              class="border-b border-gray-200 pb-6 mb-6"
+            >
+              <button
+                @click="langOpen = !langOpen"
+                class="flex items-center justify-between w-full"
+              >
+                <span class="text-lg font-semibold text-gray-900">
+                  <i class="fas fa-globe mr-2"></i>
+                  <span x-text="languages[currentLang]"></span>
+                </span>
+                <svg
+                  class="w-5 h-5 transform transition-transform"
+                  :class="{'rotate-180': langOpen}"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
+                </svg>
+              </button>
+              <div x-show="langOpen" class="mt-4 ml-4 space-y-3">
+                <button
+                  @click="window.switchLanguage('id'); langOpen = false"
+                  class="w-full text-left block text-gray-600 hover:text-matana-blue py-2"
+                  :class="{'text-matana-blue font-semibold': currentLang === 'id'}"
+                >
+                  <i class="fas fa-flag mr-2"></i>Bahasa Indonesia
+                </button>
+                <button
+                  @click="window.switchLanguage('en'); langOpen = false"
+                  class="w-full text-left block text-gray-600 hover:text-matana-blue py-2"
+                  :class="{'text-matana-blue font-semibold': currentLang === 'en'}"
+                >
+                  <i class="fas fa-flag mr-2"></i>English
+                </button>
+                <button
+                  @click="window.switchLanguage('zh'); langOpen = false"
+                  class="w-full text-left block text-gray-600 hover:text-matana-blue py-2"
+                  :class="{'text-matana-blue font-semibold': currentLang === 'zh'}"
+                >
+                  <i class="fas fa-flag mr-2"></i>中文
+                </button>
+              </div>
+            </div>
+
             <!-- Mobile Menu Items -->
             <nav class="space-y-6">
               <!-- Profil Section -->
@@ -886,7 +1040,7 @@
                   @click="open = !open"
                   class="flex items-center justify-between w-full"
                 >
-                  <span class="text-lg font-semibold text-gray-900"
+                  <span class="text-lg font-semibold text-gray-900" data-i18n="nav.profile"
                     >Profil</span
                   >
                   <svg
@@ -908,16 +1062,19 @@
                   <a
                     href="/profil-matana"
                     class="block text-gray-600 hover:text-matana-blue"
+                    data-i18n="nav.profile_matana"
                     >Profil Matana</a
                   >
                   <a
                     href="/manajemen"
                     class="block text-gray-600 hover:text-matana-blue"
+                    data-i18n="nav.management"
                     >Manajemen</a
                   >
                   <a
                     href="/mitra"
                     class="block text-gray-600 hover:text-matana-blue"
+                    data-i18n="nav.partners"
                     >Mitra</a
                   >
                 </div>
@@ -932,7 +1089,7 @@
                   @click="open = !open"
                   class="flex items-center justify-between w-full"
                 >
-                  <span class="text-lg font-semibold text-gray-900"
+                  <span class="text-lg font-semibold text-gray-900" data-i18n="nav.study_programs"
                     >Program Studi</span
                   >
                   <svg
@@ -1095,6 +1252,7 @@
               <a
                 href="/pendaftaran"
                 class="block text-lg font-semibold text-gray-900 hover:text-matana-blue"
+                data-i18n="nav.registration"
               >
                 Pendaftaran
               </a>
@@ -1102,6 +1260,7 @@
               <a
                 href="/beasiswa"
                 class="block text-lg font-semibold text-gray-900 hover:text-matana-blue"
+                data-i18n="nav.scholarship"
               >
                 Beasiswa
               </a>
