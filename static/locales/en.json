@@ -53,5 +53,45 @@
     "whatsapp": "WhatsApp",
     "email": "Email",
     "address": "Address"
+  },
+  "whatsapp": {
+    "greeting": "Hello, need help? Let's chat now!",
+    "close": "Close"
+  },
+  "home": {
+    "why_matana": "Why Matana University?",
+    "latest_updates": "Latest Updates",
+    "view_all": "View All",
+    "read_more": "Read More"
+  },
+  "scholarship": {
+    "register_now": "Register Now",
+    "register_opportunity": "Don't miss the opportunity to get an educational scholarship at Matana University. Register now and make your dreams come true!",
+    "start_registration": "Start Registration"
+  },
+  "siak": {
+    "title": "Academic Information System(SIAK)"
+  },
+  "news": {
+    "latest_news": "Latest News",
+    "view_all_news": "View All News",
+    "no_news": "No News Yet",
+    "no_news_description": "Latest news and articles will be available soon. Please visit this page again."
+  },
+  "lppm": {
+    "title": "Research and Community Service Institute",
+    "news_description": "Latest developments and innovations from the Research and Community Service Institute",
+    "view_all_news": "View All LPPM News"
+  },
+  "lpm": {
+    "news_description": "Latest developments and innovations from the Quality Assurance Institute",
+    "view_all_news": "View All LPM News"
+  },
+  "mbkm": {
+    "view_all_news": "View All MBKM News",
+    "no_news_description": "Latest news and articles from the MBKM program will be available soon. Please visit this page again."
+  },
+  "mku": {
+    "view_all_news": "View All MKU News"
   }
 }

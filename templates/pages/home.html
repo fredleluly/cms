@@ -434,7 +434,7 @@
     <div class="relative z-10 max-w-3xl w-full py-5 px-6 md:px-10 bg-white/80 backdrop-blur-sm rounded-2xl shadow-soft">
         <div class="flex flex-col items-center justify-center mb-6">
             <div class="w-16 h-1 bg-matana-yellow rounded-full mb-6"></div>
-            <h2 class="text-3xl md:text-4xl font-bold text-matana-blue mb-2 text-center">Mengapa Matana University?</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-matana-blue mb-2 text-center" data-i18n="home.why_matana">Mengapa Matana University?</h2>
             <!-- <p class="text-gray-600 text-center">Keunggulan yang membuat kami berbeda</p> -->
         </div>
         
@@ -643,9 +643,9 @@ blocks['berita_terbaru'] = berita_terbaru -->
         <!-- News Grid (Modified to 3x3 grid without YouTube) -->
         <div class="mx-auto max-w-5xl">
             <div class="flex items-center justify-between mb-2">
-                <h3 class="text-base font-semibold text-matana-blue">Latest Updates</h3>
+                <h3 class="text-base font-semibold text-matana-blue" data-i18n="home.latest_updates">Latest Updates</h3>
                 <a href="{% url 'news' %}" class="text-sm text-matana-blue hover:text-matana-yellow transition-colors flex items-center gap-0.5">
-                    View All
+                    <span data-i18n="home.view_all">View All</span>
                     <svg class="w-2 h-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                     </svg>
@@ -696,7 +696,7 @@ blocks['berita_terbaru'] = berita_terbaru -->
                         <!-- Link -->
                         <div class="pt-1 border-t border-gray-50">
                             <a href="{{ berita.get_absolute_url }}" class="inline-flex items-center text-sm font-medium text-matana-blue hover:text-matana-yellow">
-                                Read More
+                                <span data-i18n="home.read_more">Read More</span>
                                 <svg class="w-2 h-2 ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
                                 </svg>
