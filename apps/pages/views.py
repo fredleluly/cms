@@ -1340,8 +1340,16 @@ def create_default_profile_page_manajemen():
         },
         {
             'identifier': 'tujuan_section',
-            'title': 'Tujuan',
-            'description': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuansoft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.\n\nKarena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan, spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiiki budaya research dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan.\n\nProses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis-penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan bukan menghafal konten buku-teks. Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat mereka pergunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera saat mereka lulus.\n\nProses dalam mengintegrasikan tridharma Perguruan Tinggi mampu dilakukan, karena ditopang secara integratif oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat serta Pusat Pendidikan Vokasi.\n\nDalam proses pembelajaran apabila mahasiswa belum mampu mencapai prestasi yang diharapkan setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk dibantu, dibimbing dan diarahkan agar mahasiswa mampu mengatasi kendala yang mengganggu capaian pembelajarannya, serta penguatan motivasi mahasiswa sehingga dapat mengejar ketertinggalannya.\n\nBagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan di dorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia dan kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang special dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan anda. Kami menyambut anda dalam keluarga besar Universitas Matana',
+            'title': {
+                'id': 'Tujuan',
+                'en': 'Objectives',
+                'zh': '目标'
+            },
+            'description': {
+                'id': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuansoft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.\n\nKarena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan, spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiiki budaya research dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan.\n\nProses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis-penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan bukan menghafal konten buku-teks. Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat mereka pergunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera saat mereka lulus.\n\nProses dalam mengintegrasikan tridharma Perguruan Tinggi mampu dilakukan, karena ditopang secara integratif oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat serta Pusat Pendidikan Vokasi.\n\nDalam proses pembelajaran apabila mahasiswa belum mampu mencapai prestasi yang diharapkan setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk dibantu, dibimbing dan diarahkan agar mahasiswa mampu mengatasi kendala yang mengganggu capaian pembelajarannya, serta penguatan motivasi mahasiswa sehingga dapat mengejar ketertinggalannya.\n\nBagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan di dorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia dan kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang special dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan anda. Kami menyambut anda dalam keluarga besar Universitas Matana',
+                'en': 'Matana University began operations in August 2014, located at Matana University Tower with 10 Study Programs. Matana University educates future business executives and leaders in various fields of knowledge, with a balanced emphasis on academic knowledge, soft skills development, and holistic character formation of students, so that Matana University graduates are scholars who master specific knowledge and skills and have INTEGRITY, which is the integration of beliefs, thoughts, words and actions; and STEWARDSHIP to fulfill commitments in the search, development, use of time and assets entrusted by God with full responsibility and integrity to serve others; and MUTUAL RESPECT towards stakeholders in the spirit of integrity and service.\n\nTherefore, all student academic experiences are focused on actualizing learning capacity, namely intellectual, social, entrepreneurial, and spiritual capacity. Matana graduates are educated and skilled individuals because in addition to having a research and scientific culture, they are also balanced with moral values and obedience to God.\n\nEvidence-driven learning process is a special characteristic of Matana University, where students and lecturers collaborate in research-based teaching and learning (RBTL) to construct knowledge and skills rather than memorizing textbook content. The learning process at Matana University not only develops academic abilities. Students are also equipped with competency certificates for specific skills during their studies, so they can use them to work while studying or make it easier for graduates to obtain jobs immediately upon graduation.\n\nThe process of integrating the three pillars of Higher Education can be carried out because it is integratively supported by the Center for Learning System Development, the Center for Scientific Studies, the Center for Development of Science and Utilization of Science and Technology, the Center for Community Development and Empowerment, and the Center for Vocational Education.\n\nIn the learning process, if students are unable to achieve the expected performance each semester, they will be assisted professionally by the Counseling and Guidance Center to be helped, guided and directed so that students can overcome obstacles that interfere with their learning achievements, as well as strengthen student motivation so they can catch up with their lag.\n\nFor Matana University, students are potential individuals and social assets that must be developed and encouraged to become people with integrity, service, and respect for humanity. We value each individual who joins Matana University as a special person who deserves the best. Come join the right place for your future. We welcome you to the Matana University family',
+                'zh': '玛塔那大学于2014年8月开始运营，位于玛塔那大学塔，拥有10个学习计划。玛塔那大学培养未来的商业高管和各个知识领域的领导者，平衡强调学术知识、软技能发展和学生的全面品格塑造，使玛塔那大学的毕业生成为掌握特定知识和技能并具有诚信（信念、思想、言语和行动的融合）、管理（以完全的责任和诚信履行上帝委托的时间和资产的搜索、开发、使用承诺以服务他人）以及相互尊重（本着诚信和服务精神对待利益相关者）的学者。\n\n因此，所有学生的学术经历都专注于实现学习能力，即智力、社交、创业和精神能力。玛塔那的毕业生是受过教育和技能熟练的人，因为除了具有研究和科学文化外，还平衡了道德价值观和对上帝的服从。\n\n基于证据的学习过程是玛塔那大学的特殊特征，学生和讲师在基于研究的教学和学习（RBTL）中合作构建知识和技能，而不是记忆教科书内容。玛塔那大学的学习过程不仅发展学术能力。学生还在学习期间配备特定技能的能力证书，以便他们可以在学习期间工作或使毕业生在毕业后立即获得工作更容易。\n\n整合高等教育三大支柱的过程可以进行，因为它得到学习系统发展中心、科学研究中心、科学发展和科技利用中心、社区发展和赋权中心以及职业教育中心的综合支持。\n\n在学习过程中，如果学生无法达到每学期的预期表现，他们将得到咨询和指导中心的专业帮助、指导和指导，以便学生能够克服干扰其学习成就的障碍，并加强学生的动力，以便他们能够赶上滞后。\n\n对于玛塔那大学，学生是必须培养和鼓励成为具有诚信、服务和尊重人性的人的潜在个体和社会资产。我们重视每一位加入玛塔那大学的人作为值得拥有最好的特殊人物。来加入您未来的正确地方。我们欢迎您加入玛塔那大学大家庭'
+            },
             'order': 4
         },
         {
@@ -1571,8 +1579,16 @@ def create_default_profile_page_manajemens2():
         },
         {
             'identifier': 'tujuan_section',
-            'title': 'Tujuan',
-            'description': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuansoft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.\n\nKarena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan, spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiiki budaya research dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan.\n\nProses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis-penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan bukan menghafal konten buku-teks. Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat mereka pergunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera saat mereka lulus.\n\nProses dalam mengintegrasikan tridharma Perguruan Tinggi mampu dilakukan, karena ditopang secara integratif oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat serta Pusat Pendidikan Vokasi.\n\nDalam proses pembelajaran apabila mahasiswa belum mampu mencapai prestasi yang diharapkan setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk dibantu, dibimbing dan diarahkan agar mahasiswa mampu mengatasi kendala yang mengganggu capaian pembelajarannya, serta penguatan motivasi mahasiswa sehingga dapat mengejar ketertinggalannya.\n\nBagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan di dorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia dan kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang special dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan anda. Kami menyambut anda dalam keluarga besar Universitas Matana',
+            'title': {
+                'id': 'Tujuan',
+                'en': 'Objectives',
+                'zh': '目标'
+            },
+            'description': {
+                'id': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuansoft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.\n\nKarena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan, spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiiki budaya research dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan.\n\nProses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis-penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan bukan menghafal konten buku-teks. Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat mereka pergunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera saat mereka lulus.\n\nProses dalam mengintegrasikan tridharma Perguruan Tinggi mampu dilakukan, karena ditopang secara integratif oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat serta Pusat Pendidikan Vokasi.\n\nDalam proses pembelajaran apabila mahasiswa belum mampu mencapai prestasi yang diharapkan setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk dibantu, dibimbing dan diarahkan agar mahasiswa mampu mengatasi kendala yang mengganggu capaian pembelajarannya, serta penguatan motivasi mahasiswa sehingga dapat mengejar ketertinggalannya.\n\nBagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan di dorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia dan kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang special dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan anda. Kami menyambut anda dalam keluarga besar Universitas Matana',
+                'en': 'Matana University began operations in August 2014, located at Matana University Tower with 10 Study Programs. Matana University educates future business executives and leaders in various fields of knowledge, with a balanced emphasis on academic knowledge, soft skills development, and holistic character formation of students, so that Matana University graduates are scholars who master specific knowledge and skills and have INTEGRITY, which is the integration of beliefs, thoughts, words and actions; and STEWARDSHIP to fulfill commitments in the search, development, use of time and assets entrusted by God with full responsibility and integrity to serve others; and MUTUAL RESPECT towards stakeholders in the spirit of integrity and service.\n\nTherefore, all student academic experiences are focused on actualizing learning capacity, namely intellectual, social, entrepreneurial, and spiritual capacity. Matana graduates are educated and skilled individuals because in addition to having a research and scientific culture, they are also balanced with moral values and obedience to God.\n\nEvidence-driven learning process is a special characteristic of Matana University, where students and lecturers collaborate in research-based teaching and learning (RBTL) to construct knowledge and skills rather than memorizing textbook content. The learning process at Matana University not only develops academic abilities. Students are also equipped with competency certificates for specific skills during their studies, so they can use them to work while studying or make it easier for graduates to obtain jobs immediately upon graduation.\n\nThe process of integrating the three pillars of Higher Education can be carried out because it is integratively supported by the Center for Learning System Development, the Center for Scientific Studies, the Center for Development of Science and Utilization of Science and Technology, the Center for Community Development and Empowerment, and the Center for Vocational Education.\n\nIn the learning process, if students are unable to achieve the expected performance each semester, they will be assisted professionally by the Counseling and Guidance Center to be helped, guided and directed so that students can overcome obstacles that interfere with their learning achievements, as well as strengthen student motivation so they can catch up with their lag.\n\nFor Matana University, students are potential individuals and social assets that must be developed and encouraged to become people with integrity, service, and respect for humanity. We value each individual who joins Matana University as a special person who deserves the best. Come join the right place for your future. We welcome you to the Matana University family',
+                'zh': '玛塔那大学于2014年8月开始运营，位于玛塔那大学塔，拥有10个学习计划。玛塔那大学培养未来的商业高管和各个知识领域的领导者，平衡强调学术知识、软技能发展和学生的全面品格塑造，使玛塔那大学的毕业生成为掌握特定知识和技能并具有诚信（信念、思想、言语和行动的融合）、管理（以完全的责任和诚信履行上帝委托的时间和资产的搜索、开发、使用承诺以服务他人）以及相互尊重（本着诚信和服务精神对待利益相关者）的学者。\n\n因此，所有学生的学术经历都专注于实现学习能力，即智力、社交、创业和精神能力。玛塔那的毕业生是受过教育和技能熟练的人，因为除了具有研究和科学文化外，还平衡了道德价值观和对上帝的服从。\n\n基于证据的学习过程是玛塔那大学的特殊特征，学生和讲师在基于研究的教学和学习（RBTL）中合作构建知识和技能，而不是记忆教科书内容。玛塔那大学的学习过程不仅发展学术能力。学生还在学习期间配备特定技能的能力证书，以便他们可以在学习期间工作或使毕业生在毕业后立即获得工作更容易。\n\n整合高等教育三大支柱的过程可以进行，因为它得到学习系统发展中心、科学研究中心、科学发展和科技利用中心、社区发展和赋权中心以及职业教育中心的综合支持。\n\n在学习过程中，如果学生无法达到每学期的预期表现，他们将得到咨询和指导中心的专业帮助、指导和指导，以便学生能够克服干扰其学习成就的障碍，并加强学生的动力，以便他们能够赶上滞后。\n\n对于玛塔那大学，学生是必须培养和鼓励成为具有诚信、服务和尊重人性的人的潜在个体和社会资产。我们重视每一位加入玛塔那大学的人作为值得拥有最好的特殊人物。来加入您未来的正确地方。我们欢迎您加入玛塔那大学大家庭'
+            },
             'order': 4
         },
         {
@@ -1813,8 +1829,16 @@ def create_default_profile_page_akuntansi():
         },
         {
             'identifier': 'tujuan_section',
-            'title': 'Tujuan',
-            'description': '1. Menghasilkan Sarjana Akuntansi yang memiliki kompetensi dalam bidang keahlian: audit, perpajakan, dan digital akuntansi yang penuh kasih, berintegritas, profesional, inovatif, berjiwa enterpreuner dan mampu bersaing serta berkiprah dalam dunia bisnis nasional dan internasional.\n2. Menghasilkan Sarjana Akuntansi yang mampu dan terlatih dalam melaksanakan penelitian serta implementasi melalui publikasi untuk kemajuan ilmu pengetahuan dan teknologi di bidang audit, perpajakan, dan digital akuntansi dalam meningkatkan kualitas kehidupan masyarakat.\n3. Menghasilkan Sarjana Akuntansi yang mampu menerapkan pengabdian kepada masyarakat sebagai aktualisasi dan penerapan ilmu pengetahuan dalam bidang audit, perpajakan, dan digital akuntansi sebagai bentuk kepedulian atas kehidupan masyarakat yang berkelanjutan.\n4. Menghasilkan lulusan Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang berjiwa entrepreneur dan mampu mengintegrasikan kesadaran akan Ketuhanan, kemanusiaan, kenegarawanan, dan lingkungan.\n5. Memperkuat dan menyebarluaskan karya ilmiah akuntansi kepada masyarakat dalam bidang audit, perpajakan, dan digital akuntansi yang bercirikan nilai lokal, nasional dan internasional.',
+            'title': {
+                'id': 'Tujuan',
+                'en': 'Objectives',
+                'zh': '目标'
+            },
+            'description': {
+                'id': '1. Menghasilkan Sarjana Akuntansi yang memiliki kompetensi dalam bidang keahlian: audit, perpajakan, dan digital akuntansi yang penuh kasih, berintegritas, profesional, inovatif, berjiwa enterpreuner dan mampu bersaing serta berkiprah dalam dunia bisnis nasional dan internasional.\n2. Menghasilkan Sarjana Akuntansi yang mampu dan terlatih dalam melaksanakan penelitian serta implementasi melalui publikasi untuk kemajuan ilmu pengetahuan dan teknologi di bidang audit, perpajakan, dan digital akuntansi dalam meningkatkan kualitas kehidupan masyarakat.\n3. Menghasilkan Sarjana Akuntansi yang mampu menerapkan pengabdian kepada masyarakat sebagai aktualisasi dan penerapan ilmu pengetahuan dalam bidang audit, perpajakan, dan digital akuntansi sebagai bentuk kepedulian atas kehidupan masyarakat yang berkelanjutan.\n4. Menghasilkan lulusan Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang berjiwa entrepreneur dan mampu mengintegrasikan kesadaran akan Ketuhanan, kemanusiaan, kenegarawanan, dan lingkungan.\n5. Memperkuat dan menyebarluaskan karya ilmiah akuntansi kepada masyarakat dalam bidang audit, perpajakan, dan digital akuntansi yang bercirikan nilai lokal, nasional dan internasional.',
+                'en': '1. Produce Accounting graduates who are competent in fields of expertise: auditing, taxation, and digital accounting who are compassionate, have integrity, professional, innovative, entrepreneurial spirit and able to compete and contribute in the national and international business world.\n2. Produce Accounting graduates who are capable and trained in conducting research and implementation through publications for the advancement of science and technology in auditing, taxation, and digital accounting in improving the quality of community life.\n3. Produce Accounting graduates who are able to apply community service as an actualization and application of knowledge in auditing, taxation, and digital accounting as a form of concern for sustainable community life.\n4. Produce Accounting graduates in auditing, taxation, and digital accounting who have an entrepreneurial spirit and are able to integrate awareness of Divinity, humanity, statesmanship, and the environment.\n5. Strengthen and disseminate accounting scientific works to the community in auditing, taxation, and digital accounting characterized by local, national and international values.',
+                'zh': '1. 培养在审计、税务和数字会计专业领域具有能力、富有同情心、诚信、专业、创新、具有企业家精神并能够在国内和国际商业世界中竞争和贡献的会计学毕业生。\n2. 培养能够通过出版物进行研究和实施，以促进审计、税务和数字会计领域的科学技术进步，提高社区生活质量的会计学毕业生。\n3. 培养能够将社区服务应用为审计、税务和数字会计知识的实现和应用，作为对可持续社区生活的关注形式的会计学毕业生。\n4. 培养在审计、税务和数字会计领域具有企业家精神并能够整合神性、人性、治国方略和环境意识的会计学毕业生。\n5. 加强和传播具有地方、国家和国际价值特征的审计、税务和数字会计领域的会计学术作品。'
+            },
             'order': 4
         },
         {
@@ -1977,8 +2001,16 @@ def create_default_profile_page_hospitality():
         },
         {
             'identifier': 'tujuan_section',
-            'title': 'Tujuan',
-            'description': 'Mendidik dan mempersiapkan lulusan program studi hospitaliti dan pariwisata yang penuh kasih, berintegritas, profesional, dan ahli di bidangnya, berjiwa enterpreneur dan mampu bersaing dan berkiprah dalam dunia bisnis nasional dan internasional. Melaksanakan penelitian dan pengabdian kepada masyarakat melalui publikasi untuk kemajuan ilmu pengetahuan di bidang hotel management, event management, food production management, dan pariwisata dalam memajukan kualitas kehidupan sebagai bentuk kepedulian dalam masyarakat yang berkelanjutan.',
+            'title': {
+                'id': 'Tujuan',
+                'en': 'Objectives',
+                'zh': '目标'
+            },
+            'description': {
+                'id': 'Mendidik dan mempersiapkan lulusan program studi hospitaliti dan pariwisata yang penuh kasih, berintegritas, profesional, dan ahli di bidangnya, berjiwa enterpreneur dan mampu bersaing dan berkiprah dalam dunia bisnis nasional dan internasional. Melaksanakan penelitian dan pengabdian kepada masyarakat melalui publikasi untuk kemajuan ilmu pengetahuan di bidang hotel management, event management, food production management, dan pariwisata dalam memajukan kualitas kehidupan sebagai bentuk kepedulian dalam masyarakat yang berkelanjutan.',
+                'en': 'Educate and prepare graduates of hospitality and tourism study programs who are compassionate, have integrity, professional, and experts in their field, have an entrepreneurial spirit and are able to compete and contribute in the national and international business world. Conduct research and community service through publications for the advancement of knowledge in hotel management, event management, food production management, and tourism in advancing the quality of life as a form of concern for sustainable society.',
+                'zh': '教育和培养具有同情心、诚信、专业和专业领域专家、具有企业家精神并能够在国内和国际商业世界中竞争和贡献的酒店和旅游学习计划毕业生。通过出版物进行研究和社区服务，以促进酒店管理、活动管理、食品生产管理和旅游业知识的进步，提高生活质量，作为对可持续社会的关注形式。'
+            },
             'order': 4
         },
         {
@@ -2136,8 +2168,16 @@ def create_default_profile_page_fisika_medis():
         },
         {
             'identifier': 'tujuan_section',
-            'title': 'Tujuan',
-            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+            'title': {
+                'id': 'Tujuan',
+                'en': 'Objectives',
+                'zh': '目标'
+            },
+            'description': {
+                'id': 'Program Studi Fisika Medis bertujuan menghasilkan lulusan yang kompeten dalam bidang fisika medis dan radiologi, mampu melakukan penelitian inovatif, serta berkontribusi dalam pelayanan kesehatan masyarakat dengan mengedepankan nilai-nilai profesionalisme, integritas, dan kepedulian terhadap lingkungan.',
+                'en': 'The Medical Physics Study Program aims to produce graduates who are competent in the field of medical physics and radiology, capable of conducting innovative research, and contributing to public health services by prioritizing values of professionalism, integrity, and environmental concern.',
+                'zh': '医学物理学习计划旨在培养在医学物理和放射学领域有能力、能够进行创新研究并通过优先考虑专业精神、诚信和环境关怀的价值观为公共卫生服务做出贡献的毕业生。'
+            },
             'order': 4
         },
         {
@@ -2283,8 +2323,16 @@ def create_default_profile_page_teknik_informatika():
         },
         {
             'identifier': 'tujuan_section',
-            'title': 'Tujuan',
-            'description': 'Terbentuknya lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih. Terbentuknya lulusan yang memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang komputer sains untuk sektor kesehatan yang berjiwa kewirausahaan. Terbentuknya lulusan yang memiliki kepedulian untuk kehidupan berkelanjutan..',
+            'title': {
+                'id': 'Tujuan',
+                'en': 'Objectives',
+                'zh': '目标'
+            },
+            'description': {
+                'id': 'Terbentuknya lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih. Terbentuknya lulusan yang memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang komputer sains untuk sektor kesehatan yang berjiwa kewirausahaan. Terbentuknya lulusan yang memiliki kepedulian untuk kehidupan berkelanjutan..',
+                'en': 'Develop graduates who have leadership spirit and are dedicated to ethical, responsible behavior based on compassionate service. Develop graduates who have research, creative, and innovative abilities in computer science for the health sector with an entrepreneurial spirit. Develop graduates who have concern for sustainable living.',
+                'zh': '培养具有领导精神并致力于基于富有同情心的服务的道德、负责任行为的毕业生。培养在健康部门计算机科学领域具有研究、创造和创新能力并具有企业家精神的毕业生。培养对可持续生活有关注的毕业生。'
+            },
             'order': 4
         },
         {
@@ -2437,8 +2485,16 @@ def create_default_profile_page_statistika():
         },
         {
             'identifier': 'tujuan_section',
-            'title': 'Tujuan',
-            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'title': {
+                'id': 'Tujuan',
+                'en': 'Objectives',
+                'zh': '目标'
+            },
+            'description': {
+                'id': 'Program Studi Statistika bertujuan menghasilkan lulusan yang kompeten dalam analisis data dan statistika terapan, mampu berpikir kritis dan analitis, serta memiliki kemampuan untuk menerapkan metode statistik dalam berbagai bidang seperti bisnis, kesehatan, dan penelitian dengan menjunjung tinggi nilai integritas dan profesionalisme.',
+                'en': 'The Statistics Study Program aims to produce graduates who are competent in data analysis and applied statistics, capable of critical and analytical thinking, and have the ability to apply statistical methods in various fields such as business, health, and research while upholding values of integrity and professionalism.',
+                'zh': '统计学学习计划旨在培养在数据分析和应用统计领域有能力、能够进行批判性和分析性思考，并能够在商业、健康和研究等各个领域应用统计方法，同时坚持诚信和专业精神价值观的毕业生。'
+            },
             'order': 4
         },
         {
@@ -2628,8 +2684,16 @@ def create_default_profile_page_dkv():
         },
         {
             'identifier': 'tujuan_section',
-            'title': 'Tujuan',
-            'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            'title': {
+                'id': 'Tujuan',
+                'en': 'Objectives',
+                'zh': '目标'
+            },
+            'description': {
+                'id': 'Program Studi Desain Komunikasi Visual bertujuan menghasilkan lulusan yang kreatif, inovatif, dan profesional dalam bidang desain grafis, branding, dan komunikasi visual, mampu mengembangkan solusi desain yang efektif dan estetis, serta berkomitmen pada nilai-nilai etika, integritas, dan kepedulian terhadap perkembangan industri kreatif.',
+                'en': 'The Visual Communication Design Study Program aims to produce graduates who are creative, innovative, and professional in graphic design, branding, and visual communication, capable of developing effective and aesthetic design solutions, and committed to values of ethics, integrity, and concern for creative industry development.',
+                'zh': '视觉传达设计学习计划旨在培养在平面设计、品牌推广和视觉传达领域具有创造力、创新性和专业性的毕业生，能够开发有效和美观的设计解决方案，并致力于道德、诚信和对创意产业发展的关注价值观。'
+            },
             'order': 4
         },
         {
@@ -2786,8 +2850,16 @@ def create_default_profile_page_arsitektur():
         },
         {
             'identifier': 'tujuan_section',
-            'title': 'Tujuan',
-            'description': "a.\tMendidik dan mempersiapkan lulusan yang penuh kasih, berintegritas. profesional, inovatif dan ahli di bidang perencanaan & perancangan Arsitektur, berjiwa kewiraushaan yang mampu bersaing dan berkiprah dalam dunia bisnis nasional serta internasional.\nb.\tMelaksanakan penelitian dan upaya lainnya untuk kemajuan ilmu pengetahuan, teknologi,  kesenian dan kebudayaan yang terkait dengan Arsitektur yang dapat memajukan kualitas kehidupan masyarakat.\nc.\tMelaksanakan Pengabdian Kepada Masyarakat (PKM) sebagai bentuk aktualisasi ilmu dan pengetahuan di tengah-tengahmasyarakat.",
+            'title': {
+                'id': 'Tujuan',
+                'en': 'Objectives',
+                'zh': '目标'
+            },
+            'description': {
+                'id': "a.\tMendidik dan mempersiapkan lulusan yang penuh kasih, berintegritas. profesional, inovatif dan ahli di bidang perencanaan & perancangan Arsitektur, berjiwa kewiraushaan yang mampu bersaing dan berkiprah dalam dunia bisnis nasional serta internasional.\nb.\tMelaksanakan penelitian dan upaya lainnya untuk kemajuan ilmu pengetahuan, teknologi,  kesenian dan kebudayaan yang terkait dengan Arsitektur yang dapat memajukan kualitas kehidupan masyarakat.\nc.\tMelaksanakan Pengabdian Kepada Masyarakat (PKM) sebagai bentuk aktualisasi ilmu dan pengetahuan di tengah-tengahmasyarakat.",
+                'en': "a.\tEducate and prepare graduates who are compassionate, have integrity, professional, innovative and experts in architectural planning & design, with an entrepreneurial spirit capable of competing and contributing in the national and international business world.\nb.\tConduct research and other efforts for the advancement of science, technology, art and culture related to Architecture that can advance the quality of community life.\nc.\tImplement Community Service (PKM) as a form of actualization of science and knowledge in the community.",
+                'zh': "a.\t教育和培养具有同情心、诚信、专业、创新和建筑规划与设计领域专家、具有企业家精神并能够在国内和国际商业世界中竞争和贡献的毕业生。\nb.\t进行研究和其他努力，以促进与建筑相关的科学、技术、艺术和文化的进步，从而提高社区生活质量。\nc.\t实施社区服务（PKM）作为在社区中实现科学和知识的形式。"
+            },
             'order': 4
         },
         {
@@ -2975,8 +3047,16 @@ def create_default_profile_page_k3():
         },
         {
             'identifier': 'tujuan_section',
-            'title': 'Tujuan',
-            'description': "1.\tMendidik dan mempersiapkan lulusan program studi K3 yang penuh kasih, berintegritas, profesional, inovatif dan ahli di bidangnya, berjiwa Entrepreneur dan mampu bersaing dan berkiprah dalam dunia bisnis nasional dan internasional.\n\n2.\tMelaksanakan penelitian dan implementasi keilmuan K3 melalui publikasi untuk operasional dan kewirausahaan dalam memajukan kualitas kehidupan masyarakat.\n\n3.\tMelaksanakan pengabdian kepada masyarakat sesui kebutuhan sebagai aktualisasi penerapan ilmu keselamatan dan kesehatan kerja, operasional dan kewirausahaan sebagai bentuk kepedulian atas kehidupan masyarakat yang berkelanjutan",
+            'title': {
+                'id': 'Tujuan',
+                'en': 'Objectives',
+                'zh': '目标'
+            },
+            'description': {
+                'id': "1.\tMendidik dan mempersiapkan lulusan program studi K3 yang penuh kasih, berintegritas, profesional, inovatif dan ahli di bidangnya, berjiwa Entrepreneur dan mampu bersaing dan berkiprah dalam dunia bisnis nasional dan internasional.\n\n2.\tMelaksanakan penelitian dan implementasi keilmuan K3 melalui publikasi untuk operasional dan kewirausahaan dalam memajukan kualitas kehidupan masyarakat.\n\n3.\tMelaksanakan pengabdian kepada masyarakat sesui kebutuhan sebagai aktualisasi penerapan ilmu keselamatan dan kesehatan kerja, operasional dan kewirausahaan sebagai bentuk kepedulian atas kehidupan masyarakat yang berkelanjutan",
+                'en': "1.\tEducate and prepare graduates of the Occupational Health and Safety (OHS) study program who are compassionate, have integrity, professional, innovative and experts in their field, have an entrepreneurial spirit and are able to compete and contribute in the national and international business world.\n\n2.\tConduct research and implementation of OHS knowledge through publications for operations and entrepreneurship in advancing the quality of community life.\n\n3.\tImplement community service as needed as an actualization of the application of occupational health and safety knowledge, operations and entrepreneurship as a form of concern for sustainable community life",
+                'zh': "1.\t教育和培养具有同情心、诚信、专业、创新和专业领域专家、具有企业家精神并能够在国内和国际商业世界中竞争和贡献的职业健康与安全（OHS）学习计划毕业生。\n\n2.\t通过出版物进行OHS知识的研究和实施，以促进运营和创业，提高社区生活质量。\n\n3.\t根据需要实施社区服务，作为应用职业健康与安全知识、运营和创业的实现形式，作为对可持续社区生活的关注"
+            },
             'order': 4
         },
         {
