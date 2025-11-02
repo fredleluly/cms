@@ -71,5 +71,27 @@
   },
   "siak": {
     "title": "Sistem Informasi Akademik(SIAK)"
+  },
+  "news": {
+    "latest_news": "Berita Terbaru",
+    "view_all_news": "Lihat Semua Berita",
+    "no_news": "Belum Ada Berita",
+    "no_news_description": "Berita dan artikel terbaru akan segera hadir. Silakan kunjungi kembali halaman ini."
+  },
+  "lppm": {
+    "title": "Lembaga Penelitian dan Pengabdian Masyarakat",
+    "news_description": "Perkembangan dan inovasi terbaru dari Lembaga Penelitian dan Pengabdian Masyarakat",
+    "view_all_news": "Lihat Semua Berita LPPM"
+  },
+  "lpm": {
+    "news_description": "Perkembangan dan inovasi terbaru dari Lembaga Penjamin Mutu",
+    "view_all_news": "Lihat Semua Berita LPM"
+  },
+  "mbkm": {
+    "view_all_news": "Lihat Semua Berita MBKM",
+    "no_news_description": "Berita dan artikel terbaru dari program MBKM akan segera hadir. Silakan kunjungi kembali halaman ini."
+  },
+  "mku": {
+    "view_all_news": "Lihat Semua Berita MKU"
   }
 }
