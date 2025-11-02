@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>i18n Test - Matana University</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: #101d38;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .language-switcher {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .language-switcher button {
+            padding: 10px 20px;
+            border: 2px solid #101d38;
+            background: white;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .language-switcher button.active {
+            background: #ffb140;
+            border-color: #ffb140;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section h2 {
+            color: #101d38;
+            border-bottom: 2px solid #ffb140;
+            padding-bottom: 10px;
+        }
+        .test-item {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 15px;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .test-item:last-child {
+            border-bottom: none;
+        }
+        .key {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        .current-lang {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #ffb140;
+            border-radius: 20px;
+            font-weight: bold;
+            color: #101d38;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Matana University - i18n Translation Test</h1>
+        <p>Current Language: <span class="current-lang" id="currentLang">ID</span></p>
+    </div>
+
+    <div class="language-switcher">
+        <button onclick="switchLanguage('id')" id="btn-id" class="active">Bahasa Indonesia</button>
+        <button onclick="switchLanguage('en')" id="btn-en">English</button>
+        <button onclick="switchLanguage('zh')" id="btn-zh">中文</button>
+    </div>
+
+    <!-- Navigation Test -->
+    <div class="test-section">
+        <h2>Navigation Keys</h2>
+        <div class="test-item">
+            <div class="key">nav.profile</div>
+            <div data-i18n="nav.profile">Profil</div>
+        </div>
+        <div class="test-item">
+            <div class="key">nav.study_programs</div>
+            <div data-i18n="nav.study_programs">Program Studi</div>
+        </div>
+        <div class="test-item">
+            <div class="key">nav.faculty_business</div>
+            <div data-i18n="nav.faculty_business">Fakultas Bisnis dan Pariwisata</div>
+        </div>
+        <div class="test-item">
+            <div class="key">nav.scholarship</div>
+            <div data-i18n="nav.scholarship">Beasiswa</div>
+        </div>
+        <div class="test-item">
+            <div class="key">nav.student_affairs</div>
+            <div data-i18n="nav.student_affairs">Kemahasiswaan</div>
+        </div>
+    </div>
+
+    <!-- Footer Test -->
+    <div class="test-section">
+        <h2>Footer Keys</h2>
+        <div class="test-item">
+            <div class="key">footer.campus_services</div>
+            <div data-i18n="footer.campus_services">Layanan Kampus</div>
+        </div>
+        <div class="test-item">
+            <div class="key">footer.research</div>
+            <div data-i18n="footer.research">Penelitian</div>
+        </div>
+        <div class="test-item">
+            <div class="key">footer.connect_with_us</div>
+            <div data-i18n="footer.connect_with_us">Connect With Us</div>
+        </div>
+    </div>
+
+    <!-- Home Page Test -->
+    <div class="test-section">
+        <h2>Home Page Keys</h2>
+        <div class="test-item">
+            <div class="key">home.why_matana</div>
+            <div data-i18n="home.why_matana">Mengapa Matana University?</div>
+        </div>
+        <div class="test-item">
+            <div class="key">home.latest_updates</div>
+            <div data-i18n="home.latest_updates">Latest Updates</div>
+        </div>
+        <div class="test-item">
+            <div class="key">home.read_more</div>
+            <div data-i18n="home.read_more">Read More</div>
+        </div>
+    </div>
+
+    <!-- Scholarship Test -->
+    <div class="test-section">
+        <h2>Scholarship Keys</h2>
+        <div class="test-item">
+            <div class="key">scholarship.register_now</div>
+            <div data-i18n="scholarship.register_now">Daftar Sekarang</div>
+        </div>
+        <div class="test-item">
+            <div class="key">scholarship.start_registration</div>
+            <div data-i18n="scholarship.start_registration">Mulai Pendaftaran</div>
+        </div>
+    </div>
+
+    <!-- News Test -->
+    <div class="test-section">
+        <h2>News Keys</h2>
+        <div class="test-item">
+            <div class="key">news.latest_news</div>
+            <div data-i18n="news.latest_news">Berita Terbaru</div>
+        </div>
+        <div class="test-item">
+            <div class="key">news.no_news</div>
+            <div data-i18n="news.no_news">Belum Ada Berita</div>
+        </div>
+    </div>
+
+    <!-- WhatsApp Test -->
+    <div class="test-section">
+        <h2>WhatsApp Keys</h2>
+        <div class="test-item">
+            <div class="key">whatsapp.greeting</div>
+            <div data-i18n="whatsapp.greeting">Halo, butuh bantuan? Yuk chat sekarang!</div>
+        </div>
+    </div>
+
+    <!-- Load i18n script from the actual project -->
+    <script src="../static/js/i18n-init.js"></script>
+    <script>
+        function switchLanguage(lang) {
+            window.switchLanguage(lang);
+            
+            // Update button states
+            document.querySelectorAll('.language-switcher button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById('btn-' + lang).classList.add('active');
+            
+            // Update current language display
+            const langNames = {
+                'id': 'Bahasa Indonesia',
+                'en': 'English', 
+                'zh': '中文'
+            };
+            document.getElementById('currentLang').textContent = langNames[lang];
+        }
+
+        // Update on language change
+        window.addEventListener('languageChanged', (e) => {
+            console.log('Language changed to:', e.detail.language);
+        });
+    </script>
+</body>
+</html>
