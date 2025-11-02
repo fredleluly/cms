@@ -93,5 +93,26 @@
   },
   "mku": {
     "view_all_news": "查看所有MKU新闻"
+  },
+  "prodi": {
+    "register_now": "立即注册",
+    "learn_more": "了解更多",
+    "mission": "使命",
+    "program_goals": "项目目标",
+    "concentration": "专业方向",
+    "curriculum": "课程",
+    "career_opportunities": "职业机会",
+    "read_more": "阅读更多",
+    "start_academic_journey": "开始您的学术之旅",
+    "join_program": "加入学习计划",
+    "join_program_description": "在玛塔纳大学。实现您的梦想，通过优质教育获得光明的未来。",
+    "join_community": "加入我们的学术社区，成为积极变革的一部分！"
+  },
+  "partners": {
+    "title": "合作伙伴",
+    "subtitle": "与领先机构合作，提供最佳学习体验"
+  },
+  "profile": {
+    "history": "历史"
   }
 }

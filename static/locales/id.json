@@ -93,5 +93,26 @@
   },
   "mku": {
     "view_all_news": "Lihat Semua Berita MKU"
+  },
+  "prodi": {
+    "register_now": "Daftar Sekarang",
+    "learn_more": "Pelajari Lebih Lanjut",
+    "mission": "Misi",
+    "program_goals": "Tujuan Program",
+    "concentration": "Konsentrasi",
+    "curriculum": "Kurikulum",
+    "career_opportunities": "Peluang Karir",
+    "read_more": "Baca Selengkapnya",
+    "start_academic_journey": "Mulai Perjalanan Akademik Anda",
+    "join_program": "Bergabunglah dengan Program Studi",
+    "join_program_description": "di Matana University. Wujudkan impian Anda dan raih masa depan yang cemerlang dengan pendidikan berkualitas.",
+    "join_community": "Bergabunglah dengan komunitas akademik kami dan jadilah bagian dari perubahan positif!"
+  },
+  "partners": {
+    "title": "Mitra Kerja Sama",
+    "subtitle": "Berkolaborasi dengan berbagai institusi terkemuka untuk memberikan pengalaman pembelajaran terbaik"
+  },
+  "profile": {
+    "history": "Sejarah"
   }
 }

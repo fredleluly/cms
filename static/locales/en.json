@@ -93,5 +93,26 @@
   },
   "mku": {
     "view_all_news": "View All MKU News"
+  },
+  "prodi": {
+    "register_now": "Register Now",
+    "learn_more": "Learn More",
+    "mission": "Mission",
+    "program_goals": "Program Goals",
+    "concentration": "Concentration",
+    "curriculum": "Curriculum",
+    "career_opportunities": "Career Opportunities",
+    "read_more": "Read More",
+    "start_academic_journey": "Start Your Academic Journey",
+    "join_program": "Join the Study Program",
+    "join_program_description": "at Matana University. Make your dreams come true and achieve a bright future with quality education.",
+    "join_community": "Join our academic community and be part of positive change!"
+  },
+  "partners": {
+    "title": "Partnership Cooperation",
+    "subtitle": "Collaborating with leading institutions to provide the best learning experience"
+  },
+  "profile": {
+    "history": "History"
   }
 }
