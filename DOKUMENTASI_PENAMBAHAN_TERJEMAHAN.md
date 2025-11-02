@@ -179,6 +179,18 @@ Struktur untuk setiap field teks:
 - Field non-teks (gambar, URL) tetap string biasa
 - Array items: setiap item di-translate individual
 - HTML tags bisa digunakan di description (gunakan `<br>` untuk line break)
+- **Template Fallback:** Pastikan template menggunakan filter `|i18n_content:'id'` untuk menampilkan fallback bahasa Indonesia ketika JavaScript disabled
+
+**Contoh Template yang Benar:**
+```html
+<!-- BENAR: Menggunakan i18n_content filter untuk fallback -->
+<h3 data-i18n-content="tujuan_section.title">{{ blocks.tujuan_section.title|i18n_content:'id' }}</h3>
+<div data-i18n-html="tujuan_section.description">{{ blocks.tujuan_section.description|i18n_content:'id'|safe|linebreaksbr }}</div>
+
+<!-- SALAH: Tidak menggunakan filter, akan tampilkan dictionary object -->
+<h3 data-i18n-content="tujuan_section.title">{{ blocks.tujuan_section.title }}</h3>
+<div data-i18n-html="tujuan_section.description">{{ blocks.tujuan_section.description|safe|linebreaksbr }}</div>
+```
 
 **Langkah 3: Simpan dan Test**
 

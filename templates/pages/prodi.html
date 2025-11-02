@@ -562,8 +562,8 @@
                 class="tab-content"
             >
                 <div class="prose prose-lg mx-auto bg-white p-8 rounded-xl shadow-sm max-w-5xl">
-                    <h3 class="text-2xl font-bold text-matana-blue mb-6" data-i18n-content="tujuan_section.title">{{ blocks.tujuan_section.title }}</h3>
-                    <div data-i18n-html="tujuan_section.description">{{ blocks.tujuan_section.description|safe|linebreaksbr }}</div>
+                    <h3 class="text-2xl font-bold text-matana-blue mb-6" data-i18n-content="tujuan_section.title">{{ blocks.tujuan_section.title|i18n_content:'id' }}</h3>
+                    <div data-i18n-html="tujuan_section.description">{{ blocks.tujuan_section.description|i18n_content:'id'|linebreaksbr|safe }}</div>
                 </div>
             </div>
 
