@@ -94,12 +94,14 @@ Line 565-566:
 ```html
 <h3 class="text-2xl font-bold text-matana-blue mb-6" 
     data-i18n-content="tujuan_section.title">
-    {{ blocks.tujuan_section.title }}
+    {{ blocks.tujuan_section.title|i18n_content:'id' }}
 </h3>
 <div data-i18n-html="tujuan_section.description">
-    {{ blocks.tujuan_section.description|safe|linebreaksbr }}
+    {{ blocks.tujuan_section.description|i18n_content:'id'|safe|linebreaksbr }}
 </div>
 ```
+
+**Catatan Penting:** Filter `|i18n_content:'id'` diperlukan untuk mengekstrak teks Bahasa Indonesia dari dictionary multilingual. Tanpa filter ini, template akan menampilkan dictionary object (`{'id': '...', 'en': '...', 'zh': '...'}`) ketika JavaScript disabled, bukan teks yang sebenarnya.
 
 ## Catatan Khusus
 
