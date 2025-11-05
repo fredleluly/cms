@@ -113,7 +113,12 @@
   },
   "partners": {
     "title": "Mitra Kerja Sama",
-    "subtitle": "Berkolaborasi dengan berbagai institusi terkemuka untuk memberikan pengalaman pembelajaran terbaik"
+    "subtitle": "Berkolaborasi dengan berbagai institusi terkemuka untuk memberikan pengalaman pembelajaran terbaik",
+    "hospital": "Rumah Sakit",
+    "hotel": "Hotel",
+    "institution": "Institusi",
+    "university": "Universitas",
+    "bank": "Bank"
   },
   "profile": {
     "history": "Sejarah",
@@ -130,14 +135,5 @@
     },
     "rektorat": "Rektorat",
     "deans": "Dekan"
-  },
-  "partners": {
-    "title": "Mitra Kerja Sama",
-    "subtitle": "Berkolaborasi dengan berbagai institusi terkemuka untuk memberikan pengalaman pembelajaran terbaik",
-    "hospital": "Rumah Sakit",
-    "hotel": "Hotel",
-    "institution": "Institusi",
-    "university": "Universitas",
-    "bank": "Bank"
   }
 }

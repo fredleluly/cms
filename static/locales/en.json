@@ -113,7 +113,12 @@
   },
   "partners": {
     "title": "Partnership Cooperation",
-    "subtitle": "Collaborating with leading institutions to provide the best learning experience"
+    "subtitle": "Collaborating with leading institutions to provide the best learning experience",
+    "hospital": "Hospitals",
+    "hotel": "Hotels",
+    "institution": "Institutions",
+    "university": "Universities",
+    "bank": "Banks"
   },
   "profile": {
     "history": "History",
@@ -130,14 +135,5 @@
     },
     "rektorat": "Rectorate",
     "deans": "Deans"
-  },
-  "partners": {
-    "title": "Partnership Cooperation",
-    "subtitle": "Collaborating with leading institutions to provide the best learning experience",
-    "hospital": "Hospitals",
-    "hotel": "Hotels",
-    "institution": "Institutions",
-    "university": "Universities",
-    "bank": "Banks"
   }
 }

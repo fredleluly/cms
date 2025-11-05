@@ -113,7 +113,12 @@
   },
   "partners": {
     "title": "合作伙伴",
-    "subtitle": "与领先机构合作，提供最佳学习体验"
+    "subtitle": "与领先机构合作，提供最佳学习体验",
+    "hospital": "医院",
+    "hotel": "酒店",
+    "institution": "机构",
+    "university": "大学",
+    "bank": "银行"
   },
   "profile": {
     "history": "历史",
@@ -130,14 +135,5 @@
     },
     "rektorat": "校长办公室",
     "deans": "院长"
-  },
-  "partners": {
-    "title": "合作伙伴",
-    "subtitle": "与领先机构合作，提供最佳学习体验",
-    "hospital": "医院",
-    "hotel": "酒店",
-    "institution": "机构",
-    "university": "大学",
-    "bank": "银行"
   }
 }
