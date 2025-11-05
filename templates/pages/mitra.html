@@ -240,3 +240,11 @@
     </div>
 </section>
 {% endblock %}
+
+{% block extra_js %}
+<script>
+    // Make blocks available to JavaScript for i18n content switching
+    window.pageBlocks = {{ blocks_json|safe }};
+</script>
+<script src="{% static 'js/i18n-content.js' %}"></script>
+{% endblock %}

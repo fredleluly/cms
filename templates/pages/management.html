@@ -439,6 +439,11 @@
 {% block extra_js %}
 <script src="{% static 'js/i18n-blocks.js' %}"></script>
 <script>
+    // Make blocks available to JavaScript for i18n content switching
+    window.pageBlocks = {{ blocks_json|safe }};
+</script>
+<script src="{% static 'js/i18n-content.js' %}"></script>
+<script>
     const modal = document.getElementById('personModal');
     const modalImage = document.getElementById('modalImage');
     const modalName = document.getElementById('modalName');
