@@ -294,7 +294,14 @@
             <div class="vision-card p-8 md:p-10 lg:p-12 rounded-2xl text-white">
                 <div class="relative z-10">
                     <div class="text-2xl font-bold mb-4 md:mb-6" data-i18n-content="visi_misi_section.items.0.title">{{ blocks.visi_misi_section.items.0.title }}</div>
+                    {% if blocks.visi_misi_section.items.0.description|has_translations %}
+                    <p class="text-white/90 leading-relaxed" 
+                       data-block-html-id="{{ blocks.visi_misi_section.items.0.description.id|escape_html_attr }}"
+                       data-block-html-en="{{ blocks.visi_misi_section.items.0.description.en|escape_html_attr }}"
+                       data-block-html-zh="{{ blocks.visi_misi_section.items.0.description.zh|escape_html_attr }}">{{ blocks.visi_misi_section.items.0.description.id }}</p>
+                    {% else %}
                     <p class="text-white/90 leading-relaxed" data-i18n-content="visi_misi_section.items.0.description">{{ blocks.visi_misi_section.items.0.description }}</p>
+                    {% endif %}
                 </div>
             </div>
 
@@ -302,7 +309,14 @@
                 <div class="text-2xl font-bold mb-6 md:mb-8" data-i18n-content="visi_misi_section.items.1.title">{{ blocks.visi_misi_section.items.1.title }}</div>
                 <div class="space-y-6 md:space-y-8">
                     <div class="flex items-start space-x-4">
+                        {% if blocks.visi_misi_section.items.1.description|has_translations %}
+                        <p class="ml-4 text-gray-600" 
+                           data-block-html-id="{{ blocks.visi_misi_section.items.1.description.id|linebreaksbr|escape_html_attr }}"
+                           data-block-html-en="{{ blocks.visi_misi_section.items.1.description.en|linebreaksbr|escape_html_attr }}"
+                           data-block-html-zh="{{ blocks.visi_misi_section.items.1.description.zh|linebreaksbr|escape_html_attr }}">{{ blocks.visi_misi_section.items.1.description.id | linebreaksbr }}</p>
+                        {% else %}
                         <p class="ml-4 text-gray-600" data-i18n-content="visi_misi_section.items.1.description">{{ blocks.visi_misi_section.items.1.description | linebreaksbr }}</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -316,7 +330,14 @@
     <div class="container mx-auto ">
         <h2 class="text-3xl font-bold text-center mb-16 section-title" data-i18n-content="sejarah_section.title">{{ blocks.sejarah_section.title }}</h2>
             <div class="container max-w-6xl mx-auto">
+                {% if blocks.sejarah_section.description|has_translations %}
+                <p class="text-gray-600 leading-relaxed text-lg"
+                   data-block-html-id="{{ blocks.sejarah_section.description.id|linebreaksbr|safe|escape_html_attr }}"
+                   data-block-html-en="{{ blocks.sejarah_section.description.en|linebreaksbr|safe|escape_html_attr }}"
+                   data-block-html-zh="{{ blocks.sejarah_section.description.zh|linebreaksbr|safe|escape_html_attr }}">{{ blocks.sejarah_section.description.id|safe|linebreaksbr }}</p>
+                {% else %}
                 <p class="text-gray-600 leading-relaxed text-lg" data-i18n-content="sejarah_section.description">{{ blocks.sejarah_section.description|safe|linebreaksbr }}</p>
+                {% endif %}
             </div>
     </div>
 </section>
@@ -414,10 +435,8 @@
 
 {% endblock %}
 
+{% endblock %}
+
 {% block extra_js %}
-<script>
-    // Make blocks available to JavaScript for i18n content switching
-    window.pageBlocks = {{ blocks_json|safe }};
-</script>
-<script src="{% static 'js/i18n-content.js' %}"></script>
+<script src="{% static 'js/i18n-blocks.js' %}"></script>
 {% endblock %} 

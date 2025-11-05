@@ -563,7 +563,13 @@
             >
                 <div class="prose prose-lg mx-auto bg-white p-8 rounded-xl shadow-sm max-w-5xl">
                     <h3 class="text-2xl font-bold text-matana-blue mb-6" data-i18n-content="tujuan_section.title">{{ blocks.tujuan_section.title|i18n_content:'id' }}</h3>
+                    {% if blocks.tujuan_section.description|has_translations %}
+                    <div data-block-html-id="{{ blocks.tujuan_section.description.id|linebreaksbr|safe|escape_html_attr }}"
+                         data-block-html-en="{{ blocks.tujuan_section.description.en|linebreaksbr|safe|escape_html_attr }}"
+                         data-block-html-zh="{{ blocks.tujuan_section.description.zh|linebreaksbr|safe|escape_html_attr }}">{{ blocks.tujuan_section.description.id|linebreaksbr|safe }}</div>
+                    {% else %}
                     <div data-i18n-html="tujuan_section.description">{{ blocks.tujuan_section.description|i18n_content:'id'|linebreaksbr|safe }}</div>
+                    {% endif %}
                 </div>
             </div>
 
@@ -777,6 +783,7 @@
     // Using server-side JSON serialization for security
     window.pageBlocks = {{ blocks_json|safe }};
 </script>
+<script src="{% static 'js/i18n-blocks.js' %}"></script>
 <script src="{% static 'js/i18n-content.js' %}"></script>
 <script>
     // Split helper specifically for mission items in visi_misi_section
