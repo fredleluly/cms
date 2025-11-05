@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load image_optimizer %}
+{% load i18n_filters %}
 
 {% load static %}
 {% block title %}Mitra - Matana University{% endblock %}
@@ -246,5 +247,6 @@
     // Make blocks available to JavaScript for i18n content switching
     window.pageBlocks = {{ blocks_json|safe }};
 </script>
+<script src="{% static 'js/i18n-blocks.js' %}"></script>
 <script src="{% static 'js/i18n-content.js' %}"></script>
 {% endblock %}
