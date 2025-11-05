@@ -360,8 +360,8 @@
 <!-- Hero Section -->
 <section class="hero-section">
     <div class="section-container">
-        <h1 class="hero-title">{{ blocks.hero_section.title }}</h1>
-        <p class="hero-subtitle">{{ blocks.hero_section.subtitle }}</p>
+        <h1 class="hero-title" data-i18n-content="hero_section.title">{{ blocks.hero_section.title }}</h1>
+        <p class="hero-subtitle" data-i18n-content="hero_section.subtitle">{{ blocks.hero_section.subtitle }}</p>
     </div>
 </section>
 
@@ -392,7 +392,7 @@
 <!-- Rektorat Section -->
 <section class="py-16">
     <div class="section-container">
-        <h1 class="section-title">{{ blocks.rektorat_section.title }}</h2>
+        <h1 class="section-title" data-i18n-content="rektorat_section.title">{{ blocks.rektorat_section.title }}</h2>
         <div class="management-grid">
             {% for item in blocks.rektorat_section.items %}
             <div class="management-card" 
@@ -414,7 +414,7 @@
 <!-- Dekan Section -->
 <section class="py-16 bg-gray-50">
     <div class="section-container">
-        <h2 class="section-title">{{ blocks.dekan_section.title }}</h1>
+        <h2 class="section-title" data-i18n-content="dekan_section.title">{{ blocks.dekan_section.title }}</h1>
         <div class="management-grid">
             {% for item in blocks.dekan_section.items %}
             <div class="management-card"

@@ -113,9 +113,27 @@
   },
   "partners": {
     "title": "合作伙伴",
-    "subtitle": "与领先机构合作，提供最佳学习体验"
+    "subtitle": "与领先机构合作，提供最佳学习体验",
+    "hospital": "医院",
+    "hotel": "酒店",
+    "institution": "机构",
+    "university": "大学",
+    "bank": "银行"
   },
   "profile": {
-    "history": "历史"
+    "history": "历史",
+    "vision": "愿景",
+    "mission": "使命",
+    "vision_mission": "愿景与使命",
+    "facilities": "设施",
+    "excellence": "卓越"
+  },
+  "management": {
+    "hero": {
+      "title": "管理层",
+      "subtitle": "玛塔纳大学领导层"
+    },
+    "rektorat": "校长办公室",
+    "deans": "院长"
   }
 }

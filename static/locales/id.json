@@ -113,9 +113,27 @@
   },
   "partners": {
     "title": "Mitra Kerja Sama",
-    "subtitle": "Berkolaborasi dengan berbagai institusi terkemuka untuk memberikan pengalaman pembelajaran terbaik"
+    "subtitle": "Berkolaborasi dengan berbagai institusi terkemuka untuk memberikan pengalaman pembelajaran terbaik",
+    "hospital": "Rumah Sakit",
+    "hotel": "Hotel",
+    "institution": "Institusi",
+    "university": "Universitas",
+    "bank": "Bank"
   },
   "profile": {
-    "history": "Sejarah"
+    "history": "Sejarah",
+    "vision": "Visi",
+    "mission": "Misi",
+    "vision_mission": "Visi & Misi",
+    "facilities": "Fasilitas",
+    "excellence": "Keunggulan"
+  },
+  "management": {
+    "hero": {
+      "title": "Manajemen",
+      "subtitle": "Kepemimpinan Matana University"
+    },
+    "rektorat": "Rektorat",
+    "deans": "Dekan"
   }
 }
