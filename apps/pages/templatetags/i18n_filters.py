@@ -153,3 +153,42 @@ def i18n_safe(content_dict, language='id'):
     if isinstance(result, str):
         return mark_safe(result)
     return result
+
+
+@register.filter(name='has_translations')
+def has_translations(block_content):
+    """
+    Check if a block content dict contains translations.
+    Returns True if the content has 'id', 'en', and 'zh' keys (translations object).
+    
+    Usage:
+        {% if block|has_translations %}
+            ... render with data attributes ...
+        {% else %}
+            ... render normally ...
+        {% endif %}
+    """
+    if not isinstance(block_content, dict):
+        return False
+    
+    # Check if this is a translations object with all three languages
+    return all(lang in block_content for lang in ['id', 'en', 'zh'])
+
+
+@register.filter(name='escape_html_attr')
+def escape_html_attr(value):
+    """
+    Escape HTML content for use in data attributes.
+    Handles quotes and other special characters safely.
+    
+    Usage:
+        data-content="{{ html_content|escape_html_attr }}"
+    """
+    if not value:
+        return ''
+    
+    import html
+    # Convert to string if not already
+    value_str = str(value)
+    # Escape for HTML attributes (handles quotes, <, >, &)
+    return html.escape(value_str, quote=True)
