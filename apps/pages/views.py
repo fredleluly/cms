@@ -1217,172 +1217,168 @@ def create_default_profile_page():
     )
     
     default_blocks = [
-        {
-            'identifier': 'hero_section',
-            'title': {
-                'id': 'Profil Matana University',
-                'en': 'Matana University Profile',
-                'zh': 'Matana大学简介'
-            },
-            'subtitle': {
-                'id': 'World Class Learning Experience',
-                'en': 'World Class Learning Experience',
-                'zh': '世界级学习体验'
-            },
-            'background_image': '/static/images/campus-aerial.jpg',
-            'order': 1
+    {
+        'identifier': 'hero_section',
+        'title': {
+            'id': 'Profil Matana University',
+            'en': 'Matana University Profile',
+            'zh': 'Matana大学简介'
         },
-        {
-            'identifier': 'visi_misi_section',
-            'background_image': '/static/images/Gedung.jpg',
-            'title': {
-                'id': 'Visi & Misi',
-                'en': 'Vision & Mission',
-                'zh': '愿景与使命'
-            },
-            'items': [
-                {
-                    'title': 'Visi',
-                    'description': {
-                        'id': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.',
-                        'en': 'To become a trusted and leading university in academics and professionalism with national and international perspectives, playing a role in improving the quality of faith, knowledge and technology, which is a gift from God, for human intelligence and welfare and a better and sustainable life.',
-                        'zh': '成为在学术和专业方面值得信赖和领先的大学，具有国内和国际视野，在提高信仰、知识和技术质量方面发挥作用，这是上帝的恩赐，为人类智慧和福祉以及更美好和可持续的生活。'
-                    }
-                },
-                {
-                    'title': 'Misi',
-                    'description': {
-                        'id': "a. Terbentuknya lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih;\nb.Terciptanya lulusan yang memiliki kemampuan penelitian, kreativitas, inovasi, dan berjiwa kewirausahaan;\nc. Terbentuknya generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan.",
-                        'en': "a. Forming graduates who have a leadership spirit and are dedicated to ethical and responsible behavior based on loving service;\nb. Creating graduates who have research capabilities, creativity, innovation, and an entrepreneurial spirit;\nc. Forming the next generation who have concern for sustainable living.",
-                        'zh': "a. 培养具有领导精神并致力于基于爱心服务的道德和负责任行为的毕业生；\nb. 培养具有研究能力、创造力、创新精神和企业家精神的毕业生；\nc. 培养关心可持续生活的下一代。"
-                    }
+        'subtitle': {
+            'id': 'World Class Learning Experience',
+            'en': 'World Class Learning Experience',
+            'zh': '世界级学习体验'
+        },
+        'background_image': '/static/images/campus-aerial.jpg',
+        'order': 1
+    },
+    {
+        'identifier': 'visi_misi_section',
+        'background_image': '/static/images/Gedung.jpg',
+        'title': {
+            'id': 'Visi & Misi',
+            'en': 'Vision & Mission',
+            'zh': '愿景与使命'
+        },
+        'items': [
+            {
+                'title': 'Visi',
+                'description': {
+                    'id': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.',
+                    'en': 'To become a trusted and leading university in academics and professionalism with national and international perspectives, playing a role in improving the quality of faith, knowledge and technology, which is a gift from God, for human intelligence and welfare and a better and sustainable life.',
+                    'zh': '成为在学术和专业方面值得信赖和领先的大学，具有国内和国际视野，在提高信仰、知识和技术质量方面发挥作用，这是上帝的恩赐，为人类智慧和福祉以及更美好和可持续的生活。'
                 }
-            ],
-            'order': 2
+            },
+            {
+                'title': 'Misi',
+                'description': {
+                    'id': "a. Terbentuknya lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih;\nb.Terciptanya lulusan yang memiliki kemampuan penelitian, kreativitas, inovasi, dan berjiwa kewirausahaan;\nc. Terbentuknya generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan.",
+                    'en': "a. Forming graduates who have a leadership spirit and are dedicated to ethical and responsible behavior based on loving service;\nb. Creating graduates who have research capabilities, creativity, innovation, and an entrepreneurial spirit;\nc. Forming the next generation who have concern for sustainable living.",
+                    'zh': "a. 培养具有领导精神并致力于基于爱心服务的道德和负责任行为的毕业生；\nb. 培养具有研究能力、创造力、创新精神和企业家精神的毕业生；\nc. 培养关心可持续生活的下一代。"
+                }
+            }
+        ],
+        'order': 2
+    },
+    {
+        'identifier': 'sejarah_section',
+        'title': {
+            'id': 'Sejarah',
+            'en': 'History',
+            'zh': '历史'
         },
-        {
-            'identifier': 'sejarah_section',
-            'title': {
-                'id': 'Sejarah',
-                'en': 'History',
-                'zh': '历史'
-            },
-            'description': {
-                'id': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuansoft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.\n\nKarena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan, spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiiki budaya research dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan.\n\nProses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis-penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan bukan menghafal konten buku-teks. Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat mereka pergunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera saat mereka lulus.\n\nProses dalam mengintegrasikan tridharma Perguruan Tinggi mampu dilakukan, karena ditopang secara integratif oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat serta Pusat Pendidikan Vokasi.\n\nDalam proses pembelajaran apabila mahasiswa belum mampu mencapai prestasi yang diharapkan setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk dibantu, dibimbing dan diarahkan agar mahasiswa mampu mengatasi kendala yang mengganggu capaian pembelajarannya, serta penguatan motivasi mahasiswa sehingga dapat mengejar ketertinggalannya.\n\nBagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan di dorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia dan kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang special dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan anda. Kami menyambut anda dalam keluarga besar Universitas Matana',
-                'en': 'Matana University started operations in August 2014, located in Matana University Tower with 10 Study Programs. Matana University educates future business executives and leaders in various fields of study, with balanced emphasis on academic knowledge, soft skills development, and comprehensive character formation, so that Matana University graduates are scholars who master specific knowledge and skills and have INTEGRITY, which is the integration of belief, thought, word and action; and STEWARDSHIP to fulfill commitments in the search, development, use of time and assets entrusted by God with full responsibility and integrity to serve others; and RESPECT for stakeholders in the spirit of integrity and service.\n\nTherefore, all student academic experiences are focused on actualizing learning capacity, namely intellectual, social, entrepreneurial, and spiritual capacity. Matana graduates are educated and skilled individuals because in addition to having a research and scientific culture, they are also balanced with moral values and obedience to God.\n\nThe evidence-driven learning process is a special characteristic of Matana University, where students and lecturers will collaborate in research-based teaching and learning (RBTL) to construct knowledge and skills rather than memorizing textbook content. The learning process at Matana University not only develops academic abilities. Students are also equipped with competency certificates for certain skills during their studies, so they can use them to work while studying or make it easier for graduates to obtain jobs immediately after graduation.\n\nThe process of integrating the tri dharma of Higher Education can be carried out because it is integratively supported by the Learning System Development Center, Scientific Study Center, Science Development and Utilization of Science and Technology Center, Community Development and Empowerment Center, and Vocational Education Center.\n\nIn the learning process, if students are unable to achieve the expected achievements each semester, they will be professionally assisted by the Guidance and Counseling Center to be helped, guided and directed so that students can overcome obstacles that interfere with their learning achievements, as well as strengthening student motivation so they can catch up.\n\nFor Matana University, students are potential individuals and social assets that must be developed and encouraged to become people with integrity, serving, and respecting humans and humanity. We value every individual who joins Matana University as a special person who deserves the best. Join us in the right place for your future. We welcome you to the Matana University family.',
-                'zh': 'Matana大学于2014年8月开始运营，位于Matana大学大厦，拥有10个学习项目。Matana大学培养各个学科领域的未来商业高管和领导者，平衡强调学术知识、软技能发展和全面的品格培养，因此Matana大学的毕业生是掌握特定知识和技能的学者，具有诚信（INTEGRITY），即信仰、思想、言语和行动的统一；以及管理（STEWARDSHIP），以完全的责任感和诚信履行上帝委托的时间和资产的寻找、发展和使用的承诺，为他人服务；以及在诚信和服务精神中尊重（RESPECT）利益相关者。\n\n因此，所有学生的学术经历都集中在实现学习能力，即智力、社交、创业和精神能力。Matana毕业生是受过教育和技能的人，因为除了拥有研究和科学文化外，他们还平衡了道德价值观和对上帝的服从。\n\n基于证据的学习过程是Matana大学的特殊特征，学生和讲师将在基于研究的教学和学习（RBTL）中合作，以构建知识和技能，而不是记忆教科书内容。Matana大学的学习过程不仅发展学术能力。学生还在学习期间获得某些技能的能力证书，因此他们可以在学习期间工作或使毕业生在毕业后立即获得工作变得更容易。\n\n整合高等教育三大使命的过程可以进行，因为它得到了学习系统发展中心、科学研究中心、科学发展和科学技术利用中心、社区发展和赋权中心以及职业教育中心的综合支持。\n\n在学习过程中，如果学生无法达到每学期的预期成就，他们将得到指导和咨询中心的专业帮助，以帮助、指导和指导学生克服干扰其学习成就的障碍，并加强学生的动力，以便他们可以赶上。\n\n对于Matana大学来说，学生是潜在的个人和社会资产，必须培养和鼓励他们成为有诚信、服务和尊重人类和人性的人。我们珍视每一位加入Matana大学的人，认为他们是特别的人，值得拥有最好的。加入我们，为您的未来找到合适的地方。我们欢迎您加入Matana大学大家庭。'
-            'title': 'Sejarah',
-            'description': {
-                'id': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuansoft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.\n\nKarena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan, spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiiki budaya research dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan.\n\nProses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis-penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan bukan menghafal konten buku-teks. Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat mereka pergunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera saat mereka lulus.\n\nProses dalam mengintegrasikan tridharma Perguruan Tinggi mampu dilakukan, karena ditopang secara integratif oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat serta Pusat Pendidikan Vokasi.\n\nDalam proses pembelajaran apabila mahasiswa belum mampu mencapai prestasi yang diharapkan setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk dibantu, dibimbing dan diarahkan agar mahasiswa mampu mengatasi kendala yang mengganggu capaian pembelajarannya, serta penguatan motivasi mahasiswa sehingga dapat mengejar ketertinggalannya.\n\nBagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan di dorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia dan kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang special dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan anda. Kami menyambut anda dalam keluarga besar Universitas Matana',
-                'en': 'Matana University began operations in August 2014, located at Matana University Tower with 10 Study Programs. Matana University educates future business executives and leaders in various fields of science, with a balanced emphasis on academic knowledge, soft skills development, and holistic character building, so that Matana University graduates master specific knowledge and skills and possess INTEGRITY - the integration of beliefs, thoughts, words and actions; STEWARDSHIP - fulfilling commitments in searching, developing, and using time and assets entrusted by God responsibly and with integrity to serve others; and RESPECT for stakeholders in the spirit of integrity and service.\n\nTherefore, the entire student academic experience is focused on actualizing learning capacity: intellectual, social, entrepreneurial, and spiritual capacity. Matana graduates are educated and skilled individuals who, in addition to having a research and scientific culture, are also balanced with moral values and obedience to God.\n\nEvidence-driven learning is a special characteristic of Matana University, where students and lecturers collaborate in research-based teaching and learning (RBTL) to construct knowledge and skills rather than memorizing textbook content. The learning process at Matana University not only develops academic abilities. Students are also equipped with specific skill competency certificates during their studies, which they can use to work while studying or make it easier for graduates to get jobs immediately upon graduation.\n\nThe process of integrating the tri dharma of Higher Education can be carried out because it is supported integratively by the Learning System Development Center, Scientific Study Center, Science and Technology Development and Utilization Center, Community Development and Empowerment Center, and Vocational Education Center.\n\nIn the learning process, if students have not been able to achieve the expected achievements each semester, they will be assisted professionally by the Guidance and Counseling Center to be helped, guided and directed so that students can overcome obstacles that interfere with their learning achievements, as well as strengthening student motivation so they can catch up.\n\nFor Matana University, students are potential individuals and social assets who must be developed and encouraged to become people of integrity, service, and respect for humanity. We value every individual who joins Matana University as someone special and deserving of the best. Join the right place for your future. We welcome you to the Matana University family.',
-                'zh': '玛塔纳大学于2014年8月开始运营，位于玛塔纳大学塔，拥有10个学习计划。玛塔纳大学在各个科学领域培养未来的商业高管和领导者，平衡强调学术知识、软技能发展和全面的品格建设，使玛塔纳大学毕业生掌握特定的知识和技能，并具有诚信（INTEGRITY）- 信念、思想、言语和行动的整合；管理（STEWARDSHIP）- 负责任地履行在寻找、发展和使用上帝委托的时间和资产方面的承诺，以诚信服务他人；以及尊重（RESPECT）利益相关者的诚信和服务精神。\n\n因此，整个学生学术经验专注于实现学习能力：智力、社会、创业和精神能力。玛塔纳毕业生是受过教育和熟练的个人，除了具有研究和科学文化外，还平衡了道德价值观和对上帝的服从。\n\n基于证据的学习是玛塔纳大学的特殊特征，学生和讲师在基于研究的教学和学习（RBTL）中合作，构建知识和技能，而不是记忆教科书内容。玛塔纳大学的学习过程不仅发展学术能力。学生在学习期间还配备了特定的技能能力证书，他们可以在学习期间使用这些证书工作，或使毕业生在毕业后立即找到工作更容易。\n\n整合高等教育三达摩的过程可以进行，因为它得到学习系统发展中心、科学研究中心、科技发展和利用中心、社区发展和赋权中心以及职业教育中心的综合支持。\n\n在学习过程中，如果学生每学期未能达到预期成就，他们将得到指导和咨询中心的专业帮助，以帮助、指导和引导学生克服干扰其学习成就的障碍，以及加强学生动力，使他们能够赶上。\n\n对于玛塔纳大学，学生是潜在的个人和社会资产，必须被发展和鼓励成为诚信、服务和尊重人性的人。我们重视每一个加入玛塔纳大学的人作为特殊的人，值得拥有最好的。加入适合您未来的地方。我们欢迎您加入玛塔纳大学家庭。'
-            },
-            'order': 4
+        'description': {
+            'id': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuansoft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.\n\nKarena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan, spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiiki budaya research dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan.\n\nProses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis-penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan bukan menghafal konten buku-teks. Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat mereka pergunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera saat mereka lulus.\n\nProses dalam mengintegrasikan tridharma Perguruan Tinggi mampu dilakukan, karena ditopang secara integratif oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat serta Pusat Pendidikan Vokasi.\n\nDalam proses pembelajaran apabila mahasiswa belum mampu mencapai prestasi yang diharapkan setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk dibantu, dibimbing dan diarahkan agar mahasiswa mampu mengatasi kendala yang mengganggu capaian pembelajarannya, serta penguatan motivasi mahasiswa sehingga dapat mengejar ketertinggalannya.\n\nBagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan di dorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia dan kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang special dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan anda. Kami menyambut anda dalam keluarga besar Universitas Matana',
+            'en': 'Matana University started operations in August 2014, located in Matana University Tower with 10 Study Programs. Matana University educates future business executives and leaders in various fields of study, with balanced emphasis on academic knowledge, soft skills development, and comprehensive character formation, so that Matana University graduates are scholars who master specific knowledge and skills and have INTEGRITY, which is the integration of belief, thought, word and action; and STEWARDSHIP to fulfill commitments in the search, development, use of time and assets entrusted by God with full responsibility and integrity to serve others; and RESPECT for stakeholders in the spirit of integrity and service.\n\nTherefore, all student academic experiences are focused on actualizing learning capacity, namely intellectual, social, entrepreneurial, and spiritual capacity. Matana graduates are educated and skilled individuals because in addition to having a research and scientific culture, they are also balanced with moral values and obedience to God.\n\nThe evidence-driven learning process is a special characteristic of Matana University, where students and lecturers will collaborate in research-based teaching and learning (RBTL) to construct knowledge and skills rather than memorizing textbook content. The learning process at Matana University not only develops academic abilities. Students are also equipped with competency certificates for certain skills during their studies, so they can use them to work while studying or make it easier for graduates to obtain jobs immediately after graduation.\n\nThe process of integrating the tri dharma of Higher Education can be carried out because it is integratively supported by the Learning System Development Center, Scientific Study Center, Science Development and Utilization of Science and Technology Center, Community Development and Empowerment Center, and Vocational Education Center.\n\nIn the learning process, if students are unable to achieve the expected achievements each semester, they will be professionally assisted by the Guidance and Counseling Center to be helped, guided and directed so that students can overcome obstacles that interfere with their learning achievements, as well as strengthening student motivation so they can catch up.\n\nFor Matana University, students are potential individuals and social assets that must be developed and encouraged to become people with integrity, serving, and respecting humans and humanity. We value every individual who joins Matana University as a special person who deserves the best. Join us in the right place for your future. We welcome you to the Matana University family.',
+            'zh': 'Matana大学于2014年8月开始运营，位于Matana大学大厦，拥有10个学习项目。Matana大学培养各个学科领域的未来商业高管和领导者，平衡强调学术知识、软技能发展和全面的品格培养，因此Matana大学的毕业生是掌握特定知识和技能的学者，具有诚信（INTEGRITY），即信仰、思想、言语和行动的统一；以及管理（STEWARDSHIP），以完全的责任感和诚信履行上帝委托的时间和资产的寻找、发展和使用的承诺，为他人服务；以及在诚信和服务精神中尊重（RESPECT）利益相关者。\n\n因此，所有学生的学术经历都集中在实现学习能力，即智力、社交、创业和精神能力。Matana毕业生是受过教育和技能的人，因为除了拥有研究和科学文化外，他们还平衡了道德价值观和对上帝的服从。\n\n基于证据的学习过程是Matana大学的特殊特征，学生和讲师将在基于研究的教学和学习（RBTL）中合作，以构建知识和技能，而不是记忆教科书内容。Matana大学的学习过程不仅发展学术能力。学生还在学习期间获得某些技能的能力证书，因此他们可以在学习期间工作或使毕业生在毕业后立即获得工作变得更容易。\n\n整合高等教育三大使命的过程可以进行，因为它得到了学习系统发展中心、科学研究中心、科学发展和科学技术利用中心、社区发展和赋权中心以及职业教育中心的综合支持。\n\n在学习过程中，如果学生无法达到每学期的预期成就，他们将得到指导和咨询中心的专业帮助，以帮助、指导和指导学生克服干扰其学习成就的障碍，并加强学生的动力，以便他们可以赶上。\n\n对于Matana大学来说，学生是潜在的个人和社会资产，必须培养和鼓励他们成为有诚信、服务和尊重人类和人性的人。我们珍视每一位加入Matana大学的人，认为他们是特别的人，值得拥有最好的。加入我们，为您的未来找到合适的地方。我们欢迎您加入Matana大学大家庭。'
         },
-        {
-            'identifier': 'keunggulan_section',
-            'title': {
-                'id': 'Keunggulan Matana',
-                'en': 'Matana Excellence',
-                'zh': 'Matana优势'
-            },
-            'items': [
-                {
-                    'title': {
-                        'id': 'Menerapkan kurikulum akademik yang mendukung lulusan siap berkompetisi di dunia kerja',
-                        'en': 'Implementing academic curriculum that supports graduates to compete in the workforce',
-                        'zh': '实施支持毕业生在职场竞争的学术课程'
-                    }
-                },
-                {
-                    'title': {
-                        'id': 'Dosen yang profesional dan berprestasi di dalam dan luar negeri',
-                        'en': 'Professional and accomplished lecturers at home and abroad',
-                        'zh': '国内外专业和有成就的讲师'
-                    }
-                },
-                {
-                    'title': {
-                        'id': 'Unit Kegiatan Mahasiswa (UKM) yang berprestasi di nasional dan internasional',
-                        'en': 'Student Activity Units (UKM) with national and international achievements',
-                        'zh': '在国内和国际上取得成就的学生活动单位（UKM）'
-                    }
-                },
-                {
-                    'title': {
-                        'id': 'Memiliki fasilitas yang mendukung praktik setiap program studi',
-                        'en': 'Having facilities that support the practice of each study program',
-                        'zh': '拥有支持每个学习项目实践的设施'
-                    }
-                },
-                {
-                    'title': {
-                        'id': 'Memiliki program Student Exchange (pertukaran mahasiswa) ke universitas ternama di Asia dan Eropa',
-                        'en': 'Having Student Exchange programs to renowned universities in Asia and Europe',
-                        'zh': '拥有前往亚洲和欧洲著名大学的学生交换项目'
-                    }
-                },
-                {
-                    'title': {
-                        'id': 'Kesempatan berkarir di jajaran mitra bisnis Matana University',
-                        'en': 'Career opportunities in Matana University business partners',
-                        'zh': 'Matana大学商业合作伙伴的职业机会'
-                    }
-                },
-                {
-                    'title': {
-                        'id': 'Lokasi kampus strategis, berlokasi di sentra bisnis Gading Serpong',
-                        'en': 'Strategic campus location in Gading Serpong business center',
-                        'zh': '位于Gading Serpong商业中心的战略校园位置'
-                    }
-                },
-            ],
-            'order': 5
-        },   {
-            'identifier': 'fasilitas_section',
-            'title': {
-                'id': 'Fasilitas Matana',
-                'en': 'Matana Facilities',
-                'zh': 'Matana设施'
-            },
-            'items': [
-                {
-                    'title': {
-                        'id': 'Lab Akutansi',
-                        'en': 'Accounting Lab',
-                        'zh': '会计实验室'
-                    },
-                    'image': '/static/images/fas1.jpg',
-                },
-                {
-                    'title': {
-                        'id': 'Lab iMac',
-                        'en': 'iMac Lab',
-                        'zh': 'iMac实验室'
-                    },
-                    'image': '/static/images/fas2.jpg',
-                },
-                {
-                    'title': {
-                        'id': 'Lab Mobile Game',
-                        'en': 'Mobile Game Lab',
-                        'zh': '移动游戏实验室'
-                    },
-                    'image': '/static/images/fas3.jpg',
-                },
-                {
-                    'title': {
-                        'id': 'Lab Statistika',
-                        'en': 'Statistics Lab',
-                        'zh': '统计实验室'
-                    },
-                    'image': '/static/images/fas1.jpg',
-                },
-            ],
-         
-            'order': 6
+        'order': 4
+    },
+    {
+        'identifier': 'keunggulan_section',
+        'title': {
+            'id': 'Keunggulan Matana',
+            'en': 'Matana Excellence',
+            'zh': 'Matana优势'
         },
-    ]
+        'items': [
+            {
+                'title': {
+                    'id': 'Menerapkan kurikulum akademik yang mendukung lulusan siap berkompetisi di dunia kerja',
+                    'en': 'Implementing academic curriculum that supports graduates to compete in the workforce',
+                    'zh': '实施支持毕业生在职场竞争的学术课程'
+                }
+            },
+            {
+                'title': {
+                    'id': 'Dosen yang profesional dan berprestasi di dalam dan luar negeri',
+                    'en': 'Professional and accomplished lecturers at home and abroad',
+                    'zh': '国内外专业和有成就的讲师'
+                }
+            },
+            {
+                'title': {
+                    'id': 'Unit Kegiatan Mahasiswa (UKM) yang berprestasi di nasional dan internasional',
+                    'en': 'Student Activity Units (UKM) with national and international achievements',
+                    'zh': '在国内和国际上取得成就的学生活动单位（UKM）'
+                }
+            },
+            {
+                'title': {
+                    'id': 'Memiliki fasilitas yang mendukung praktik setiap program studi',
+                    'en': 'Having facilities that support the practice of each study program',
+                    'zh': '拥有支持每个学习项目实践的设施'
+                }
+            },
+            {
+                'title': {
+                    'id': 'Memiliki program Student Exchange (pertukaran mahasiswa) ke universitas ternama di Asia dan Eropa',
+                    'en': 'Having Student Exchange programs to renowned universities in Asia and Europe',
+                    'zh': '拥有前往亚洲和欧洲著名大学的学生交换项目'
+                }
+            },
+            {
+                'title': {
+                    'id': 'Kesempatan berkarir di jajaran mitra bisnis Matana University',
+                    'en': 'Career opportunities in Matana University business partners',
+                    'zh': 'Matana大学商业合作伙伴的职业机会'
+                }
+            },
+            {
+                'title': {
+                    'id': 'Lokasi kampus strategis, berlokasi di sentra bisnis Gading Serpong',
+                    'en': 'Strategic campus location in Gading Serpong business center',
+                    'zh': '位于Gading Serpong商业中心的战略校园位置'
+                }
+            },
+        ],
+        'order': 5
+    },
+    {
+        'identifier': 'fasilitas_section',
+        'title': {
+            'id': 'Fasilitas Matana',
+            'en': 'Matana Facilities',
+            'zh': 'Matana设施'
+        },
+        'items': [
+            {
+                'title': {
+                    'id': 'Lab Akutansi',
+                    'en': 'Accounting Lab',
+                    'zh': '会计实验室'
+                },
+                'image': '/static/images/fas1.jpg',
+            },
+            {
+                'title': {
+                    'id': 'Lab iMac',
+                    'en': 'iMac Lab',
+                    'zh': 'iMac实验室'
+                },
+                'image': '/static/images/fas2.jpg',
+            },
+            {
+                'title': {
+                    'id': 'Lab Mobile Game',
+                    'en': 'Mobile Game Lab',
+                    'zh': '移动游戏实验室'
+                },
+                'image': '/static/images/fas3.jpg',
+            },
+            {
+                'title': {
+                    'id': 'Lab Statistika',
+                    'en': 'Statistics Lab',
+                    'zh': '统计实验室'
+                },
+                'image': '/static/images/fas1.jpg',
+            },
+        ],
+        'order': 6
+    },
+]
+
     
     create_standardized_blocks(profile_page, default_blocks)
     return profile_page
@@ -3672,7 +3668,7 @@ def registration_submit(request):
         }
         
         # Save to database (implement your model)
-        registration = Registration.objects.create(**data)
+        registration = registration.objects.create(**data)
         
         # Send confirmation email
         context = {
@@ -4113,149 +4109,149 @@ def create_default_management_page():
     )
     
     default_blocks = [
-        {
-            'identifier': 'hero_section',
-            'title': {
-                'id': 'Manajemen Matana University',
-                'en': 'Matana University Management',
-                'zh': 'Matana大学管理层'
-            },
-            'subtitle': {
-                'id': 'Kepemimpinan yang Berdedikasi untuk Pendidikan Berkualitas',
-                'en': 'Dedicated Leadership for Quality Education',
-                'zh': '致力于优质教育的领导层'
-            },
-            'background_image': '/static/images/campus-aerial.jpg',
-            'order': 1
+    {
+        'identifier': 'hero_section',
+        'title': {
+            'id': 'Manajemen Matana University',
+            'en': 'Matana University Management',
+            'zh': 'Matana大学管理层'
         },
-        {
-            'identifier': 'rektorat_section',
-            'title': {
-                'id': 'Rektorat & Ketua Lembaga',
-                'en': 'Rectorate & Institute Heads',
-                'zh': '校长办公室和机构负责人'
-            },
-            'items': [
-                {
+        'subtitle': {
+            'id': 'Kepemimpinan yang Berdedikasi untuk Pendidikan Berkualitas',
+            'en': 'Dedicated Leadership for Quality Education',
+            'zh': '致力于优质教育的领导层'
+        },
+        'background_image': '/static/images/campus-aerial.jpg',
+        'order': 1
+    },
+    {
+        'identifier': 'rektorat_section',
+        'title': {
+            'id': 'Rektorat & Ketua Lembaga',
+            'en': 'Rectorate & Institute Heads',
+            'zh': '校长办公室和机构负责人'
+        },
+        'items': [
+            {
                 "image": "/static/images/manajemen/r1.jpg",
                 "title": "Dr. Melitina Tecolau, S.E, M.M, CFP, CHCP-A",
                 "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-                },
-                {
+            },
+            {
                 "image": "/static/images/manajemen/r2.jpg",
                 "title": "Dr. rer. nat. Gregoria Illya, M.Sc",
                 "description": {
                     "id": "Dr. rer.nat. Gregoria Illya, peneliti dalam bidang fisika material, fisika komputasi, dan biofisika memperoleh gelar sarjana Fisika dari Universitas Katolik Parahyangan, dan kemudian mendapatkan gelar Master of Engineering Mathematics dari Universitas Twente, Belanda dengan beasiswa dari VNO NCW. Gelar Doktor diperoleh dari Universitas Potsdam Germany dengan disertasi berjudul Bilayer Material Properties From Dissipative Particle Dynamics Simulations yang dilaksanakan pada dan dibiayai penuh oleh Max Planck Institute for Colloids and Interfaces, Jerman.\n\nSetelah menyelesaikan studi doktor, beliau mengambil program Postdoctoral di Max Planck Institute for Polymer Research, Jerman dan menghasilkan publikasi di jurnal internasional bereputasi (Q1) Nature dengan judul: Aggregation and vesiculation of membrane proteins by curvature-mediated interactions. Pada tahun 2006 beliau mendapatkan beasiswa untuk mengikuti program Boulder School for Condensed Matter and Materials Physics di University of Colorado Boulder USA. Program Postdoctoral selanjutnya yang ditempuh oleh beliau adalah di Theoretical Physical Chemistry Department, Technische Universitaet Darmstadt, Jerman dan kemudian di Theoretical Physics Department, Justus-Liebig Universitaet Giessen, Jerman. Beliau pernah menjadi pembicara tamu di International Conference on Materials for Advanced Technologies Singapore pada tahun 2015, 2017 dan 2019 dan pada tahun 2017 beliau terpilih sebagai dosen berprestasi peringkat 1 dari Kopertis IV.",
                     "en": "Dr. rer.nat. Gregoria Illya, a researcher in the fields of materials physics, computational physics, and biophysics, obtained her Bachelor's degree in Physics from Parahyangan Catholic University, and then received a Master of Engineering Mathematics degree from the University of Twente, the Netherlands with a scholarship from VNO NCW. Her Doctoral degree was obtained from the University of Potsdam Germany with a dissertation entitled Bilayer Material Properties From Dissipative Particle Dynamics Simulations which was carried out at and fully funded by the Max Planck Institute for Colloids and Interfaces, Germany.\n\nAfter completing her doctoral studies, she undertook a Postdoctoral program at the Max Planck Institute for Polymer Research, Germany and produced a publication in the reputable international journal (Q1) Nature entitled: Aggregation and vesiculation of membrane proteins by curvature-mediated interactions. In 2006 she received a scholarship to attend the Boulder School for Condensed Matter and Materials Physics program at the University of Colorado Boulder USA. Her next Postdoctoral program was at the Theoretical Physical Chemistry Department, Technische Universitaet Darmstadt, Germany and then at the Theoretical Physics Department, Justus-Liebig Universitaet Giessen, Germany. She has been a guest speaker at the International Conference on Materials for Advanced Technologies Singapore in 2015, 2017 and 2019 and in 2017 she was selected as the top lecturer ranked 1 from Kopertis IV.",
-                    "zh": "Gregoria Illya博士是材料物理、计算物理和生物物理领域的研究员，她从帕拉希扬甘天主教大学获得物理学学士学位，然后从荷兰特温特大学获得工程数学硕士学位，并获得VNO NCW奖学金。她的博士学位是从德国波茨坦大学获得的，论文题为"从耗散粒子动力学模拟的双层材料特性"，该研究在德国马克斯·普朗克胶体和界面研究所进行并获得全额资助。\n\n完成博士学习后，她在德国马克斯·普朗克聚合物研究所进行博士后项目，并在著名的国际期刊（Q1）Nature上发表了题为"曲率介导相互作用的膜蛋白聚集和囊泡化"的出版物。2006年，她获得奖学金参加美国科罗拉多大学博尔德分校的凝聚态物质和材料物理学院项目。她的下一个博士后项目是在德国达姆施塔特工业大学理论物理化学系，然后在德国吉森大学理论物理系。她曾于2015年、2017年和2019年在新加坡先进技术材料国际会议上担任嘉宾演讲者，并于2017年被选为Kopertis IV排名第一的优秀讲师。"
+                    "zh": "Gregoria Illya博士是材料物理、计算物理和生物物理领域的研究员，她从帕拉希扬甘天主教大学获得物理学学士学位，然后从荷兰特温特大学获得工程数学硕士学位，并获得VNO NCW奖学金。她的博士学位是从德国波茨坦大学获得的，论文题为\"从耗散粒子动力学模拟的双层材料特性\"，该研究在德国马克斯·普朗克胶体和界面研究所进行并获得全额资助。\n\n完成博士学习后，她在德国马克斯·普朗克聚合物研究所进行博士后项目，并在著名的国际期刊（Q1）Nature上发表了题为\"曲率介导相互作用的膜蛋白聚集和囊泡化\"的出版物。2006年，她获得奖学金参加美国科罗拉多大学博尔德分校的凝聚态物质和材料物理学院项目。她的下一个博士后项目是在德国达姆施塔特工业大学理论物理化学系，然后在德国吉森大学理论物理系。她曾于2015年、2017年和2019年在新加坡先进技术材料国际会议上担任嘉宾演讲者，并于2017年被选为Kopertis IV排名第一的优秀讲师。"
                 }
-                },
-                {
-                "image": "/static/images/manajemen/r3.jpg", 
+            },
+            {
+                "image": "/static/images/manajemen/r3.jpg",
                 "title": "Dr. Bernardus Wishman S. Siregar, S.E., M.E.",
                 "description": "Dr. Bernardus Wishman S. Siregar, S.E., M.E. adalah seorang profesional yang memiliki pengalaman dalam bidang keuangan dan manajemen. Beliau telah menyelesaikan studi doktor di Universitas Katolik Parahyangan dengan disertasi berjudul \"Analisis Pengaruh Kebijakan Moneter dan Fiskal Terhadap Kinerja Perbankan Syariah di Indonesia\". Beliau juga memiliki pengalaman sebagai dosen di Universitas Katolik Parahyangan dan Universitas Matana, serta sebagai pengajar di Universitas Matana. Beliau juga aktif dalam kegiatan akademik dan penelitian, serta memiliki publikasi di jurnal internasional bereputasi."
-                },
-                {
+            },
+            {
                 "image": "/static/images/manajemen/r4.jpg",
                 "title": "Dr. Lulu Setiawati, S.E., M.Bus., D.Th., CFP, CSA",
                 "description": "Dr. Lulu Setiawati, S.E., M.Bus, CFP, CSA telah berkarir di dunia pendidikan di Indonesia sejak 2002. Sebelum berkarir di dunia pendidikan, beliau telah berkarir secara professional di Australia dan Taiwan di berbagai industri. Gelar S.E. diperoleh dari Universitas Kristen Petra dalam bidang Manajemen, selanjutnya beliau mendapatkan gelar M.Bus in Finance dari RMIT, Melbourne.\n\nTahun 2017 beliau mendapatkan gelar Doktor dari Universitas Katolik Widya Mandala dalam bidang Manajemen Stratejik. Tahun 2009 beliau bergabung di UPH Surabaya sebagai dosen Keuangan dan ditunjuk sebagai Ketua Program Studi Akuntansi sejak tahun 2009 hingga tahun 2013.\n\nTahun 2014 selain sebagai dosen, beliau ditunjuk sebagai Manajer Keuangan dan tahun 2015 hingga tahun 2017 beliau juga menjabat sebagai Wakil Rektor bidang keuangan dan administrasi UPH Surabaya. Program pendidikan profesi juga telah beliau tempuh, Beliau telah mendapatkan gelar CFP sebagai perencana keuangan pada tahun 2016 dan pada tahun 2017 beliau mendapatkan gelar CSA sebagai Analis Efek."
-                },
-                {
+            },
+            {
                 "image": "/static/images/manajemen/r5.jpg",
                 "title": "Wijil Nugroho,S.E.,MBA.",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-                },
-                {
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et..."
+            },
+            {
                 "image": "/static/images/manajemen/r6.jpg",
                 "title": "Baltasar Serilus Sanggu Dedu., S.Kep., M.Sc",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-                },
-                {
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
+            },
+            {
                 "image": "/static/images/manajemen/r7.jpg",
                 "title": "Dr. Kalfin, S.Mat., M.Mat",
-                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-                }
-              
-            ],
-            'order': 2
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
+            }
+        ],
+        'order': 2
+    },
+    {
+        'identifier': 'dekan_section',
+        'title': {
+            'id': 'Dekan & Ketua Program Studi',
+            'en': 'Deans & Program Heads',
+            'zh': '院长和项目负责人'
         },
-        {
-            'identifier': 'dekan_section',
-            'title': {
-                'id': 'Dekan & Ketua Program Studi',
-                'en': 'Deans & Program Heads',
-                'zh': '院长和项目负责人'
+        'items': [
+            {
+                "image": "/static/images/manajemen/d1.jpg",
+                "title": "Dr. M. Rachman Mulyandi, S.E, MBA.",
+                "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit..."
             },
-     "items": [
-    {
-      "image": "/static/images/manajemen/d1.jpg",
-      "title": "Dr. M. Rachman Mulyandi, s.E, MBA.",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/d2.jpg",
-      "title": "Dr. Ir. Danang Harito Wibowo, M.T., IAI",
-      "description": "Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana."
-    },
-    {
-      "image": "/static/images/manajemen/d3.jpg",
-      "title": "PRYA ARTHA WIDJAYA, S.T., M.I.T.",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/d4.jpg",
-      "title": "Ririsma Sihombing, S.E., M.E.",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/d5.jpg",
-      "title": "Yuka Dian Narendra, S.Sn, M.Hum.",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/d6.jpg",
-      "title": "Dr. Ir. Danang Harito Wibowo, M.T., IAI",
-      "description": "Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional yang menyelesaikan pendidikan jenjang S1 – Sarjana Arsitektur (1991) di prodi Arsitektur Universitas Parahyangan, Bandung. Mengikuti Pendidikan lanjut (non gelar – 2011) di Institut Teknologi Bandung. Kemudian menyelesaikan pendidikan jenjang S2 Magister (2012) serta S3 Doktoral (2024) di prodi Arsitektur, Universitas Parahyangan, Bandung. Dengan jam terbang lebih dari 29 tahun sebagai Arsitek profesional, beragam perencanaan dan perancangan bangunan, kawasan dan interior telah dilakukannya (gedung Apartemen, Kantor, Hotel, Café & Resto, Klinik, Hunian dll). Tidak sedikit pula menulis artikel ilmiah hasil penelitian yang telah dilakukan. Menjadikan Dr. Ir. Danang H. Wibowo, M.T., IAI memiliki kualifikasi yang lengkap sebagai Arsitek profesional sekaligus dosen pengajar. Tahun 2009, mulai mengajar sebagai dosen Studio Perancangan Arsitektur 1 – 5 dan beberapa mata kuliah lainnya di Unikom, Bandung. Di tahun 2011 hingga awal 2015, aktif mengajar mata kuliah Studio Perancangan Arsitektur 1 – 6 dan Teknologi Bangunan 1 – 3 di Universitas Pancasila, Jakarta. Di pertengahan tahun 2015 hingga kini, menjadi dosen pengajar tetap (mengajar beberapa mata kuliah utama) dan ketua program studi Arsitektur Universitas Matana."
-    },
-    {
-      "image": "/static/images/manajemen/d7.jpg",
-      "title": "Triandi Pradana S.Tr.Par., M.Par",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/d8.jpg",
-      "title": "Ary Budi Warsito, S.Kom., M.Kom.",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/d9.jpg",
-      "title": "JOSUA TIMOTIUS MANIK, S.Pd., M.Si.",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/d10.jpg",
-      "title": "Jacob Steve Seleky., S.Si, M.Si, M.A",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/d11.jpg",
-      "title": "Florencia Irena Lawita, S.E., M.Ak.,  M.M., Cert. DA.",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/d12.jpg",
-      "title": "Fifit Eka Furi Astutik., S.KM., M.Kes",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-    {
-      "image": "/static/images/manajemen/d13.jpg",
-      "title": "Dr. Anton PW. Nomleni, S.E, M.M.",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer sed facilisis nunc. Donec eget orci tortor. Ut efficitur egestas quam, nec aliquet urna euismod et. Nunc maximus nisl dui, id pellentesque felis facilisis quis. Aliquam rutrum pellentesque metus, et cursus nibh imperdiet in. Suspendisse risus diam, pretium id accumsan non, interdum vel sapien. Nullam sed metus nec mauris pretium molestie at sed libero. Duis eget vehicula dui, id convallis mi. Integer elementum cursus lectus, vel consectetur nibh volutpat sed. In iaculis libero est, at tempor augue porttitor non. Suspendisse a nunc rhoncus mauris sagittis auctor et eget massa. Aenean rutrum urna sit amet laoreet blandit."
-    },
-  ],
-            'order': 3
-        }
-    ]
+            {
+                "image": "/static/images/manajemen/d2.jpg",
+                "title": "Dr. Ir. Danang Harito Wibowo, M.T., IAI",
+                "description": "Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional..."
+            },
+            {
+                "image": "/static/images/manajemen/d3.jpg",
+                "title": "PRYA ARTHA WIDJAYA, S.T., M.I.T.",
+                "description": "Lorem ipsum dolor sit amet..."
+            },
+            {
+                "image": "/static/images/manajemen/d4.jpg",
+                "title": "Ririsma Sihombing, S.E., M.E.",
+                "description": "Lorem ipsum dolor sit amet..."
+            },
+            {
+                "image": "/static/images/manajemen/d5.jpg",
+                "title": "Yuka Dian Narendra, S.Sn, M.Hum.",
+                "description": "Lorem ipsum dolor sit amet..."
+            },
+            {
+                "image": "/static/images/manajemen/d6.jpg",
+                "title": "Dr. Ir. Danang Harito Wibowo, M.T., IAI",
+                "description": "Dr. Ir. Danang Harito Wibowo, M.T., IAI adalah seorang arsitek profesional..."
+            },
+            {
+                "image": "/static/images/manajemen/d7.jpg",
+                "title": "Triandi Pradana S.Tr.Par., M.Par",
+                "description": "Lorem ipsum dolor sit amet..."
+            },
+            {
+                "image": "/static/images/manajemen/d8.jpg",
+                "title": "Ary Budi Warsito, S.Kom., M.Kom.",
+                "description": "Lorem ipsum dolor sit amet..."
+            },
+            {
+                "image": "/static/images/manajemen/d9.jpg",
+                "title": "JOSUA TIMOTIUS MANIK, S.Pd., M.Si.",
+                "description": "Lorem ipsum dolor sit amet..."
+            },
+            {
+                "image": "/static/images/manajemen/d10.jpg",
+                "title": "Jacob Steve Seleky., S.Si, M.Si, M.A",
+                "description": "Lorem ipsum dolor sit amet..."
+            },
+            {
+                "image": "/static/images/manajemen/d11.jpg",
+                "title": "Florencia Irena Lawita, S.E., M.Ak.,  M.M., Cert. DA.",
+                "description": "Lorem ipsum dolor sit amet..."
+            },
+            {
+                "image": "/static/images/manajemen/d12.jpg",
+                "title": "Fifit Eka Furi Astutik., S.KM., M.Kes",
+                "description": "Lorem ipsum dolor sit amet..."
+            },
+            {
+                "image": "/static/images/manajemen/d13.jpg",
+                "title": "Dr. Anton PW. Nomleni, S.E, M.M.",
+                "description": "Lorem ipsum dolor sit amet..."
+            }
+        ],
+        'order': 3
+    }
+]
+
     
     create_standardized_blocks(management_page, default_blocks)
     return management_page
@@ -4945,6 +4941,7 @@ def git_pull_page_view(request):
     """
     return render(request, 'admin/git_pull.html')
 
+
 @superuser_required
 def git_pull_view(request):
     """
@@ -4952,16 +4949,16 @@ def git_pull_view(request):
     Hanya bisa diakses oleh superuser.
     """
     if request.method != 'POST':
-        return JsonResponse({'success': False, 'error': 'Method not allowed. Use POST.'}, status=405)
+        return JsonResponse({'success': False, 'error': 'Only POST method is allowed'}, status=405)
 
     try:
         # Jalankan git pull di direktori BASE_DIR project Django
         process = subprocess.run(
             ['git', 'pull'],
-            cwd=settings.BASE_DIR,  # Penting: cwd=BASE_DIR
+            cwd=settings.BASE_DIR,  # Jalankan di root project
             capture_output=True,
             text=True,
-            check=False  # Jangan raise exception jika return code != 0, kita handle sendiri
+            check=False
         )
 
         output = process.stdout
@@ -4970,26 +4967,29 @@ def git_pull_view(request):
 
         if return_code == 0:
             log_message = f"Git pull berhasil dijalankan oleh user {request.user.username}:\nOutput:\n{output}"
-            logger.info(log_message) # Log info jika berhasil
+            logger.info(log_message)
             return JsonResponse({
                 'success': True,
                 'message': 'Git pull berhasil!',
-                'output': output,
-                'error': error_output
+                'output': output.strip(),
+                'error_output': error_output.strip()
             })
         else:
-            error_message = f"Git pull GAGAL dijalankan oleh user {request.user.username}:\nReturn Code: {return_code}\nOutput:\n{output}\nError Output:\n{error_output}"
-            logger.error(error_message) # Log error jika gagal
+            error_message = (
+                f"Git pull GAGAL dijalankan oleh user {request.user.username}:\n"
+                f"Return Code: {return_code}\nOutput:\n{output}\nError Output:\n{error_output}"
+            )
+            logger.error(error_message)
             return JsonResponse({
                 'success': False,
                 'error': 'Git pull gagal!',
-                'output': output,
-                'error_output': error_output
-            }, status=500) # Status 500 untuk error server
+                'output': output.strip(),
+                'error_output': error_output.strip()
+            }, status=500)
 
     except Exception as e:
         error_message = f"Error saat menjalankan git pull oleh user {request.user.username}: {str(e)}"
-        logger.exception(error_message) # Log exception lengkap
+        logger.exception(error_message)
         return JsonResponse({
             'success': False,
             'error': f'Terjadi kesalahan server: {str(e)}'
@@ -5048,6 +5048,51 @@ def create_default_lpm_page():
             'order': 2
         }
     ]
+    
+    create_standardized_blocks(lpm_page, default_blocks)
+    return lpm_page
+
+def get_related_articles(category_slug, limit=3):
+    """
+    Get related articles based on category slug
+    """
+    try:
+        # Get articles from the last 6 months
+        six_months_ago = timezone.now() - timedelta(days=180)
+        
+        # Base queryset with optimized loading
+        articles = Article.objects.select_related(
+            'category',
+            'created_by'
+        ).filter(
+            status='published',
+            created_at__gte=six_months_ago
+        )
+        
+        # Get articles with matching category or content
+        related = articles.filter(
+            Q(category__slug__icontains=category_slug) |
+            Q(tags__name__icontains=category_slug) |
+            Q(title__icontains=category_slug) |
+            Q(content__icontains=category_slug)
+        ).distinct()
+        
+        # If not enough related articles, get latest articles
+        if related.count() < limit:
+            additional_needed = limit - related.count()
+            latest = articles.exclude(
+                id__in=related.values_list('id', flat=True)
+            ).order_by('-created_at')[:additional_needed]
+            
+            # Combine querysets
+            related = (related | latest).distinct()
+        
+        return related.order_by('-created_at')[:limit]
+        
+    except Exception as e:
+        logger.exception(f"Error getting related articles: {str(e)}")
+        # Return latest published articles as fallback
+        return Article.objects.filter(status='published')[:limit]
     
     create_standardized_blocks(lpm_page, default_blocks)
     return lpm_page
