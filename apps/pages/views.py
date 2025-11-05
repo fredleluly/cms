@@ -468,7 +468,11 @@ def create_default_mitra_page():
     default_blocks = [
         {
             'identifier': 'hospital_section',
-            'title': 'Hospital',
+            'title': {
+                'id': 'Hospital',
+                'en': 'Hospitals',
+                'zh': '医院'
+            },
                  'items': [
                 {
                     'title': 'Rumah Sakit PUSB',
@@ -495,7 +499,11 @@ def create_default_mitra_page():
         },
         {
             'identifier': 'hotel_section',
-            'title': 'Hotel',
+            'title': {
+                'id': 'Hotel',
+                'en': 'Hotels',
+                'zh': '酒店'
+            },
             'items': [
             
                 {
@@ -554,7 +562,11 @@ def create_default_mitra_page():
             'order': 2
         },{
             'identifier': 'institusi_section',
-            'title': 'Institusi & Perusahaan',
+            'title': {
+                'id': 'Institusi & Perusahaan',
+                'en': 'Institutions & Companies',
+                'zh': '机构和公司'
+            },
             'items': [
                 {
                     'title': 'PT. Paramount Group',
@@ -629,7 +641,11 @@ def create_default_mitra_page():
             'order': 3
         },{
             'identifier': 'universitas_section',
-            'title': 'Universitas',
+            'title': {
+                'id': 'Universitas',
+                'en': 'Universities',
+                'zh': '大学'
+            },
             'items': [
                 {
                     'title': 'Universitas Indonesia',
@@ -683,7 +699,11 @@ def create_default_mitra_page():
             'order': 4
         },{
             'identifier': 'bank_section',
-            'title': 'Bank',
+            'title': {
+                'id': 'Bank',
+                'en': 'Banks',
+                'zh': '银行'
+            },
             'items': [
                 {
                     'title': 'BANK BNI',
@@ -732,7 +752,9 @@ def mitra_view(request):
     context = {
         'page': mitra_page,
         'meta': mitra_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
+        'blocks': blocks,
+        'blocks_json': json.dumps(blocks),
+        'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }  # Simplified - just send all blocks
     }
     
     return render(request, 'pages/mitra.html', context)
@@ -1197,78 +1219,166 @@ def create_default_profile_page():
     default_blocks = [
         {
             'identifier': 'hero_section',
-            'title': 'Profil Matana University',
-            'subtitle': 'World Class Learning Experience',
+            'title': {
+                'id': 'Profil Matana University',
+                'en': 'Matana University Profile',
+                'zh': 'Matana大学简介'
+            },
+            'subtitle': {
+                'id': 'World Class Learning Experience',
+                'en': 'World Class Learning Experience',
+                'zh': '世界级学习体验'
+            },
             'background_image': '/static/images/campus-aerial.jpg',
             'order': 1
         },
         {
             'identifier': 'visi_misi_section',
             'background_image': '/static/images/Gedung.jpg',
-            'title': 'Visi & Misi',
+            'title': {
+                'id': 'Visi & Misi',
+                'en': 'Vision & Mission',
+                'zh': '愿景与使命'
+            },
             'items': [
                 {
-                    'title': 'Visi',
-                    'description': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.'
+                    'title': {
+                        'id': 'Visi',
+                        'en': 'Vision',
+                        'zh': '愿景'
+                    },
+                    'description': {
+                        'id': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.',
+                        'en': 'To become a trusted and leading Higher Education institution in academics and professionalism with national and international perspectives, playing a role in improving the quality of faith, science and technology, which are gifts from God, for the intelligence and welfare of mankind and a better and sustainable life.',
+                        'zh': '成为一所在学术和专业领域受信赖且领先的高等教育机构，具有国家和国际视野，致力于提高信仰、科学和技术的质量，这些都是上帝的恩赐，为人类的智慧和福祉以及更美好和可持续的生活做出贡献。'
+                    }
                 },
                 {
-                    'title': 'Misi',
-                    'description': "a. Terbentuknya lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih;\nb.Terciptanya lulusan yang memiliki kemampuan penelitian, kreativitas, inovasi, dan berjiwa kewirausahaan;\nc. Terbentuknya generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan."
+                    'title': {
+                        'id': 'Misi',
+                        'en': 'Mission',
+                        'zh': '使命'
+                    },
+                    'description': {
+                        'id': "a. Terbentuknya lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih;\nb.Terciptanya lulusan yang memiliki kemampuan penelitian, kreativitas, inovasi, dan berjiwa kewirausahaan;\nc. Terbentuknya generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan.",
+                        'en': "a. To develop graduates with leadership spirit and dedication to ethical behavior, responsible based on loving service;\nb. To create graduates with research capabilities, creativity, innovation, and entrepreneurial spirit;\nc. To develop future generations with concern for sustainable living.",
+                        'zh': "a. 培养具有领导精神和道德行为的毕业生，基于爱心服务的责任感；\nb. 培养具有研究能力、创造力、创新精神和企业家精神的毕业生；\nc. 培养关注可持续生活的下一代。"
+                    }
                 }
             ],
             'order': 2
         },
         {
             'identifier': 'sejarah_section',
-            'title': 'Sejarah',
-            'description': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuansoft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.\n\nKarena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan, spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiiki budaya research dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan.\n\nProses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis-penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan bukan menghafal konten buku-teks. Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat mereka pergunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera saat mereka lulus.\n\nProses dalam mengintegrasikan tridharma Perguruan Tinggi mampu dilakukan, karena ditopang secara integratif oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat serta Pusat Pendidikan Vokasi.\n\nDalam proses pembelajaran apabila mahasiswa belum mampu mencapai prestasi yang diharapkan setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk dibantu, dibimbing dan diarahkan agar mahasiswa mampu mengatasi kendala yang mengganggu capaian pembelajarannya, serta penguatan motivasi mahasiswa sehingga dapat mengejar ketertinggalannya.\n\nBagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan di dorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia dan kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang special dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan anda. Kami menyambut anda dalam keluarga besar Universitas Matana',
+            'title': {
+                'id': 'Sejarah',
+                'en': 'History',
+                'zh': '历史'
+            },
+            'description': {
+                'id': 'Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuansoft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.\n\nKarena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan, spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiiki budaya research dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan.\n\nProses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis-penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan bukan menghafal konten buku-teks. Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat mereka pergunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera saat mereka lulus.\n\nProses dalam mengintegrasikan tridharma Perguruan Tinggi mampu dilakukan, karena ditopang secara integratif oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat serta Pusat Pendidikan Vokasi.\n\nDalam proses pembelajaran apabila mahasiswa belum mampu mencapai prestasi yang diharapkan setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk dibantu, dibimbing dan diarahkan agar mahasiswa mampu mengatasi kendala yang mengganggu capaian pembelajarannya, serta penguatan motivasi mahasiswa sehingga dapat mengejar ketertinggalannya.\n\nBagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan di dorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia dan kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang special dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan anda. Kami menyambut anda dalam keluarga besar Universitas Matana',
+                'en': 'Matana University started operations in August 2014, located in Matana University Tower with 10 Study Programs. Matana University educates future business executives and leaders in various fields of study, with balanced emphasis on academic knowledge, soft skills development, and comprehensive character formation, so that Matana University graduates are scholars who master specific knowledge and skills and have INTEGRITY, which is the integration of belief, thought, word and action; and STEWARDSHIP to fulfill commitments in the search, development, use of time and assets entrusted by God with full responsibility and integrity to serve others; and RESPECT for stakeholders in the spirit of integrity and service.\n\nTherefore, all student academic experiences are focused on actualizing learning capacity, namely intellectual, social, entrepreneurial, and spiritual capacity. Matana graduates are educated and skilled individuals because in addition to having a research and scientific culture, they are also balanced with moral values and obedience to God.\n\nThe evidence-driven learning process is a special characteristic of Matana University, where students and lecturers will collaborate in research-based teaching and learning (RBTL) to construct knowledge and skills rather than memorizing textbook content. The learning process at Matana University not only develops academic abilities. Students are also equipped with competency certificates for certain skills during their studies, so they can use them to work while studying or make it easier for graduates to obtain jobs immediately after graduation.\n\nThe process of integrating the tri dharma of Higher Education can be carried out because it is integratively supported by the Learning System Development Center, Scientific Study Center, Science Development and Utilization of Science and Technology Center, Community Development and Empowerment Center, and Vocational Education Center.\n\nIn the learning process, if students are unable to achieve the expected achievements each semester, they will be professionally assisted by the Guidance and Counseling Center to be helped, guided and directed so that students can overcome obstacles that interfere with their learning achievements, as well as strengthening student motivation so they can catch up.\n\nFor Matana University, students are potential individuals and social assets that must be developed and encouraged to become people with integrity, serving, and respecting humans and humanity. We value every individual who joins Matana University as a special person who deserves the best. Join us in the right place for your future. We welcome you to the Matana University family.',
+                'zh': 'Matana大学于2014年8月开始运营，位于Matana大学大厦，拥有10个学习项目。Matana大学培养各个学科领域的未来商业高管和领导者，平衡强调学术知识、软技能发展和全面的品格培养，因此Matana大学的毕业生是掌握特定知识和技能的学者，具有诚信（INTEGRITY），即信仰、思想、言语和行动的统一；以及管理（STEWARDSHIP），以完全的责任感和诚信履行上帝委托的时间和资产的寻找、发展和使用的承诺，为他人服务；以及在诚信和服务精神中尊重（RESPECT）利益相关者。\n\n因此，所有学生的学术经历都集中在实现学习能力，即智力、社交、创业和精神能力。Matana毕业生是受过教育和技能的人，因为除了拥有研究和科学文化外，他们还平衡了道德价值观和对上帝的服从。\n\n基于证据的学习过程是Matana大学的特殊特征，学生和讲师将在基于研究的教学和学习（RBTL）中合作，以构建知识和技能，而不是记忆教科书内容。Matana大学的学习过程不仅发展学术能力。学生还在学习期间获得某些技能的能力证书，因此他们可以在学习期间工作或使毕业生在毕业后立即获得工作变得更容易。\n\n整合高等教育三大使命的过程可以进行，因为它得到了学习系统发展中心、科学研究中心、科学发展和科学技术利用中心、社区发展和赋权中心以及职业教育中心的综合支持。\n\n在学习过程中，如果学生无法达到每学期的预期成就，他们将得到指导和咨询中心的专业帮助，以帮助、指导和指导学生克服干扰其学习成就的障碍，并加强学生的动力，以便他们可以赶上。\n\n对于Matana大学来说，学生是潜在的个人和社会资产，必须培养和鼓励他们成为有诚信、服务和尊重人类和人性的人。我们珍视每一位加入Matana大学的人，认为他们是特别的人，值得拥有最好的。加入我们，为您的未来找到合适的地方。我们欢迎您加入Matana大学大家庭。'
+            },
             'order': 4
         },
         {
             'identifier': 'keunggulan_section',
-            'title': 'Keunggulan Matana',
+            'title': {
+                'id': 'Keunggulan Matana',
+                'en': 'Matana Excellence',
+                'zh': 'Matana优势'
+            },
             'items': [
                 {
-                    'title': 'Menerapkan kurikulum akademik yang mendukung lulusan siap berkompetisi di dunia kerja',
+                    'title': {
+                        'id': 'Menerapkan kurikulum akademik yang mendukung lulusan siap berkompetisi di dunia kerja',
+                        'en': 'Implementing academic curriculum that supports graduates to compete in the workforce',
+                        'zh': '实施支持毕业生在职场竞争的学术课程'
+                    }
                 },
                 {
-                    'title': 'Dosen yang profesional dan berprestasi di dalam dan luar negeri',
+                    'title': {
+                        'id': 'Dosen yang profesional dan berprestasi di dalam dan luar negeri',
+                        'en': 'Professional and accomplished lecturers at home and abroad',
+                        'zh': '国内外专业和有成就的讲师'
+                    }
                 },
                 {
-                    'title': 'Unit Kegiatan Mahasiswa (UKM) yang berprestasi di nasional dan internasional',
+                    'title': {
+                        'id': 'Unit Kegiatan Mahasiswa (UKM) yang berprestasi di nasional dan internasional',
+                        'en': 'Student Activity Units (UKM) with national and international achievements',
+                        'zh': '在国内和国际上取得成就的学生活动单位（UKM）'
+                    }
                 },
                 {
-                    'title': 'Memiliki fasilitas yang mendkung praktik setiap program studi',
+                    'title': {
+                        'id': 'Memiliki fasilitas yang mendkung praktik setiap program studi',
+                        'en': 'Having facilities that support the practice of each study program',
+                        'zh': '拥有支持每个学习项目实践的设施'
+                    }
                 },
                 {
-                    'title': 'Memiliki program Student Exchange (pertukaran mahasiswa) ke universitas ternama di Asia dan Eropa',
+                    'title': {
+                        'id': 'Memiliki program Student Exchange (pertukaran mahasiswa) ke universitas ternama di Asia dan Eropa',
+                        'en': 'Having Student Exchange programs to renowned universities in Asia and Europe',
+                        'zh': '拥有前往亚洲和欧洲著名大学的学生交换项目'
+                    }
                 },
                 {
-                    'title': 'Kesempatan berkarir di jajaran mitra bisnis Matana University',
+                    'title': {
+                        'id': 'Kesempatan berkarir di jajaran mitra bisnis Matana University',
+                        'en': 'Career opportunities in Matana University business partners',
+                        'zh': 'Matana大学商业合作伙伴的职业机会'
+                    }
                 },
                 {
-                    'title': 'Lokasi kampus strategis, berlokasi di sentra bisnis Gading Serpong',
+                    'title': {
+                        'id': 'Lokasi kampus strategis, berlokasi di sentra bisnis Gading Serpong',
+                        'en': 'Strategic campus location in Gading Serpong business center',
+                        'zh': '位于Gading Serpong商业中心的战略校园位置'
+                    }
                 },
             ],
             'order': 5
         },   {
             'identifier': 'fasilitas_section',
-            'title': 'Fasilitas Matana',
+            'title': {
+                'id': 'Fasilitas Matana',
+                'en': 'Matana Facilities',
+                'zh': 'Matana设施'
+            },
             'items': [
                 {
-                    'title': 'Lab Akutansi',
+                    'title': {
+                        'id': 'Lab Akutansi',
+                        'en': 'Accounting Lab',
+                        'zh': '会计实验室'
+                    },
                     'image': '/static/images/fas1.jpg',
                 },
                 {
-                    'title': 'Lab iMac',
+                    'title': {
+                        'id': 'Lab iMac',
+                        'en': 'iMac Lab',
+                        'zh': 'iMac实验室'
+                    },
                     'image': '/static/images/fas2.jpg',
                 },
                 {
-                    'title': 'Lab Mobile Game',
+                    'title': {
+                        'id': 'Lab Mobile Game',
+                        'en': 'Mobile Game Lab',
+                        'zh': '移动游戏实验室'
+                    },
                     'image': '/static/images/fas3.jpg',
                 },
                 {
-                    'title': 'Lab Statistika',
+                    'title': {
+                        'id': 'Lab Statistika',
+                        'en': 'Statistics Lab',
+                        'zh': '统计实验室'
+                    },
                     'image': '/static/images/fas1.jpg',
                 },
             ],
@@ -3143,6 +3253,7 @@ def profile_view(request):
         'page': profile_page,
         'meta': profile_page.metadata,
         'blocks': blocks,
+        'blocks_json': json.dumps(blocks),
         'blocks_popup': {
             i.identifier: i.content 
             for i in Page.objects.get(
@@ -4007,14 +4118,26 @@ def create_default_management_page():
     default_blocks = [
         {
             'identifier': 'hero_section',
-            'title': 'Manajemen Matana University',
-            'subtitle': 'Kepemimpinan yang Berdedikasi untuk Pendidikan Berkualitas',
+            'title': {
+                'id': 'Manajemen Matana University',
+                'en': 'Matana University Management',
+                'zh': 'Matana大学管理层'
+            },
+            'subtitle': {
+                'id': 'Kepemimpinan yang Berdedikasi untuk Pendidikan Berkualitas',
+                'en': 'Dedicated Leadership for Quality Education',
+                'zh': '致力于优质教育的领导层'
+            },
             'background_image': '/static/images/campus-aerial.jpg',
             'order': 1
         },
         {
             'identifier': 'rektorat_section',
-            'title': 'Rektorat & Ketua Lembaga',
+            'title': {
+                'id': 'Rektorat & Ketua Lembaga',
+                'en': 'Rectorate & Institute Heads',
+                'zh': '校长办公室和机构负责人'
+            },
             'items': [
                 {
                 "image": "/static/images/manajemen/r1.jpg",
@@ -4057,7 +4180,11 @@ def create_default_management_page():
         },
         {
             'identifier': 'dekan_section',
-            'title': 'Dekan & Ketua Program Studi',
+            'title': {
+                'id': 'Dekan & Ketua Program Studi',
+                'en': 'Deans & Program Heads',
+                'zh': '院长和项目负责人'
+            },
      "items": [
     {
       "image": "/static/images/manajemen/d1.jpg",
@@ -4151,7 +4278,9 @@ def management_view(request):
     context = {
         'page': management_page,
         'meta': management_page.metadata,
-        'blocks': blocks, 'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }
+        'blocks': blocks,
+        'blocks_json': json.dumps(blocks),
+        'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }
     }
     
     return render(request, 'pages/management.html', context)
