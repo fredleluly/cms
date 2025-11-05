@@ -1313,7 +1313,7 @@ def create_default_profile_page():
                 },
                 {
                     'title': {
-                        'id': 'Memiliki fasilitas yang mendkung praktik setiap program studi',
+                        'id': 'Memiliki fasilitas yang mendukung praktik setiap program studi',
                         'en': 'Having facilities that support the practice of each study program',
                         'zh': '拥有支持每个学习项目实践的设施'
                     }
@@ -4932,7 +4932,6 @@ def _perform_backup_in_background(backup_name, exclude_patterns, exclude_dirs, t
         logger.exception(f"Error in background backup process: {str(e)}")
 
 import subprocess
-import json
 from django.http import JsonResponse
 from django.conf import settings
 from .utils import superuser_required  # Decorator superuser_required yang sudah Anda punya
