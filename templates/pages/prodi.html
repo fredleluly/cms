@@ -483,7 +483,14 @@
                 <!-- Floating Card -->
                 <div class="absolute -bottom-6 -right-6 bg-white p-6 rounded-xl shadow-xl max-w-sm">
                     <h3 class="text-xl font-bold text-matana-blue mb-3" data-i18n-content="visi_misi_section.items.0.title">{{ blocks.visi_misi_section.items.0.title }}</h3>
+                    {% if blocks.visi_misi_section.items.0.description|has_translations %}
+                    <p class="text-gray-600" 
+                       data-block-html-id="{{ blocks.visi_misi_section.items.0.description.id|escape_html_attr }}"
+                       data-block-html-en="{{ blocks.visi_misi_section.items.0.description.en|escape_html_attr }}"
+                       data-block-html-zh="{{ blocks.visi_misi_section.items.0.description.zh|escape_html_attr }}">{{ blocks.visi_misi_section.items.0.description.id }}</p>
+                    {% else %}
                     <p class="text-gray-600" data-i18n-content="visi_misi_section.items.0.description">{{ blocks.visi_misi_section.items.0.description }}</p>
+                    {% endif %}
                 </div>
             </div>
 
@@ -496,6 +503,23 @@
 
                 <!-- Missions List - Updated for i18n -->
                 <div class="space-y-4" id="missions-container">
+                    {% if blocks.visi_misi_section.items.1.description|has_translations %}
+                    {% with id_missions=blocks.visi_misi_section.items.1.description.id|split_lines en_missions=blocks.visi_misi_section.items.1.description.en|split_lines zh_missions=blocks.visi_misi_section.items.1.description.zh|split_lines %}
+                    {% for mission in id_missions %}
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="{{ forloop.counter0 }}" 
+                              data-block-html-id="{{ mission|escape_html_attr }}"
+                              data-block-html-en="{{ en_missions|get_index:forloop.counter0|default:mission|escape_html_attr }}"
+                              data-block-html-zh="{{ zh_missions|get_index:forloop.counter0|default:mission|escape_html_attr }}">{{ mission }}</span>
+                    </div>
+                    {% endfor %}
+                    {% endwith %}
+                    {% else %}
                     {% with missions=blocks.visi_misi_section.items.1.description|split_lines %}
                     {% for mission in missions %}
                     <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
@@ -508,6 +532,7 @@
                     </div>
                     {% endfor %}
                     {% endwith %}
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -1432,11 +1432,19 @@ def create_default_profile_page_manajemen():
             'items': [
                 {
                     'title': 'Visi',
-                    'description': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.'
+                    'description': {
+                        'id': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.',
+                        'en': 'To become a trusted and leading university in academics and professionalism with national and international perspectives, playing a role in improving the quality of faith, knowledge and technology, which is a gift from God, for human intelligence and welfare and a better and sustainable life.',
+                        'zh': '成为在学术和专业方面值得信赖和领先的大学，具有国内和国际视野，在提高信仰、知识和技术质量方面发挥作用，这是上帝的恩赐，为人类智慧和福祉以及更美好和可持续的生活。'
+                    }
                 },
                 {
                     'title': 'Misi',
-                    'description': "- Terbentuknya Sarjana Manajemen yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.\n- Terciptanya Sarjana Manajemen yang memiliki kemampuan penelitian, kreativitas, inovasi, dan berjiwa kewirausahaan.\n- Terbentuknya generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan."
+                    'description': {
+                        'id': "- Terbentuknya Sarjana Manajemen yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.\n- Terciptanya Sarjana Manajemen yang memiliki kemampuan penelitian, kreativitas, inovasi, dan berjiwa kewirausahaan.\n- Terbentuknya generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan.",
+                        'en': "- Forming Management graduates who have a leadership spirit and are dedicated to ethical and responsible behavior based on loving service.\n- Creating Management graduates who have research capabilities, creativity, innovation, and an entrepreneurial spirit.\n- Forming the next generation who have concern for sustainable living.",
+                        'zh': "- 培养具有领导精神并致力于基于爱心服务的道德和负责任行为的管理学毕业生。\n- 培养具有研究能力、创造力、创新精神和企业家精神的管理学毕业生。\n- 培养关心可持续生活的下一代。"
+                    }
                 }
             ],
             'order': 2
@@ -1671,11 +1679,19 @@ def create_default_profile_page_manajemens2():
             'items': [
                 {
                     'title': 'Visi',
-                    'description': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.'
+                    'description': {
+                        'id': 'Menjadi Perguruan Tinggi terpercaya dan terkemuka dalam akademik dan profesionalisme yang berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.',
+                        'en': 'To become a trusted and leading university in academics and professionalism with national and international perspectives, playing a role in improving the quality of faith, knowledge and technology, which is a gift from God, for human intelligence and welfare and a better and sustainable life.',
+                        'zh': '成为在学术和专业方面值得信赖和领先的大学，具有国内和国际视野，在提高信仰、知识和技术质量方面发挥作用，这是上帝的恩赐，为人类智慧和福祉以及更美好和可持续的生活。'
+                    }
                 },
                 {
                     'title': 'Misi',
-                    'description': "- Terbentuknya Sarjana Manajemen yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.\n- Terciptanya Sarjana Manajemen yang memiliki kemampuan penelitian, kreativitas, inovasi, dan berjiwa kewirausahaan.\n- Terbentuknya generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan."
+                    'description': {
+                        'id': "- Terbentuknya Sarjana Manajemen yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.\n- Terciptanya Sarjana Manajemen yang memiliki kemampuan penelitian, kreativitas, inovasi, dan berjiwa kewirausahaan.\n- Terbentuknya generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan.",
+                        'en': "- Forming Management graduates who have a leadership spirit and are dedicated to ethical and responsible behavior based on loving service.\n- Creating Management graduates who have research capabilities, creativity, innovation, and an entrepreneurial spirit.\n- Forming the next generation who have concern for sustainable living.",
+                        'zh': "- 培养具有领导精神并致力于基于爱心服务的道德和负责任行为的管理学毕业生。\n- 培养具有研究能力、创造力、创新精神和企业家精神的管理学毕业生。\n- 培养关心可持续生活的下一代。"
+                    }
                 }
             ],
             'order': 2
