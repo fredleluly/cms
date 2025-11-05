@@ -116,6 +116,28 @@
     "subtitle": "Collaborating with leading institutions to provide the best learning experience"
   },
   "profile": {
-    "history": "History"
+    "history": "History",
+    "vision": "Vision",
+    "mission": "Mission",
+    "vision_mission": "Vision & Mission",
+    "facilities": "Facilities",
+    "excellence": "Excellence"
+  },
+  "management": {
+    "hero": {
+      "title": "Management",
+      "subtitle": "Matana University Leadership"
+    },
+    "rektorat": "Rectorate",
+    "deans": "Deans"
+  },
+  "partners": {
+    "title": "Partnership Cooperation",
+    "subtitle": "Collaborating with leading institutions to provide the best learning experience",
+    "hospital": "Hospitals",
+    "hotel": "Hotels",
+    "institution": "Institutions",
+    "university": "Universities",
+    "bank": "Banks"
   }
 }

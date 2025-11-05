@@ -293,16 +293,16 @@
         <div class="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-20 mb-16">
             <div class="vision-card p-8 md:p-10 lg:p-12 rounded-2xl text-white">
                 <div class="relative z-10">
-                    <div class="text-2xl font-bold mb-4 md:mb-6">{{ blocks.visi_misi_section.items.0.title }}</div>
-                    <p class="text-white/90 leading-relaxed">{{ blocks.visi_misi_section.items.0.description }}</p>
+                    <div class="text-2xl font-bold mb-4 md:mb-6" data-i18n-content="visi_misi_section.items.0.title">{{ blocks.visi_misi_section.items.0.title }}</div>
+                    <p class="text-white/90 leading-relaxed" data-i18n-content="visi_misi_section.items.0.description">{{ blocks.visi_misi_section.items.0.description }}</p>
                 </div>
             </div>
 
             <div class="space-y-8">
-                <div class="text-2xl font-bold mb-6 md:mb-8">{{ blocks.visi_misi_section.items.1.title }}</div>
+                <div class="text-2xl font-bold mb-6 md:mb-8" data-i18n-content="visi_misi_section.items.1.title">{{ blocks.visi_misi_section.items.1.title }}</div>
                 <div class="space-y-6 md:space-y-8">
                     <div class="flex items-start space-x-4">
-                        <p class="ml-4 text-gray-600">{{ blocks.visi_misi_section.items.1.description | linebreaksbr }}</p>
+                        <p class="ml-4 text-gray-600" data-i18n-content="visi_misi_section.items.1.description">{{ blocks.visi_misi_section.items.1.description | linebreaksbr }}</p>
                     </div>
                 </div>
             </div>
@@ -314,9 +314,9 @@
 <!-- Sejarah -->
 <section class="py-20 bg-gray-50">
     <div class="container mx-auto ">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ blocks.sejarah_section.title }}</h2>
+        <h2 class="text-3xl font-bold text-center mb-16 section-title" data-i18n-content="sejarah_section.title">{{ blocks.sejarah_section.title }}</h2>
             <div class="container max-w-6xl mx-auto">
-                <p class="text-gray-600 leading-relaxed text-lg">{{ blocks.sejarah_section.description|safe|linebreaksbr }}</p>
+                <p class="text-gray-600 leading-relaxed text-lg" data-i18n-content="sejarah_section.description">{{ blocks.sejarah_section.description|safe|linebreaksbr }}</p>
             </div>
     </div>
 </section>
@@ -340,7 +340,7 @@
 <!-- Keunggulan section -->
 <section class="py-20">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ blocks.keunggulan_section.title }}</h2>
+        <h2 class="text-3xl font-bold text-center mb-16 section-title" data-i18n-content="keunggulan_section.title">{{ blocks.keunggulan_section.title }}</h2>
         
         <div class="max-w-4xl mx-auto space-y-6">
             {% for item in blocks.keunggulan_section.items %}
@@ -349,7 +349,7 @@
                     <i class="fas fa-check-circle text-xl"></i>
                 </div>
                 <div class="flex-1">
-                    <p class="text-gray-700 text-lg">{{ item.title }}</p>
+                    <p class="text-gray-700 text-lg" data-i18n-content="keunggulan_section.items.{{ forloop.counter0 }}.title">{{ item.title }}</p>
                 </div>
             </div>
             {% endfor %}
@@ -360,7 +360,7 @@
 <!-- Fasilitas -->
 <section class="py-20 bg-gray-50">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ blocks.fasilitas_section.title }}</h2>
+        <h2 class="text-3xl font-bold text-center mb-16 section-title" data-i18n-content="fasilitas_section.title">{{ blocks.fasilitas_section.title }}</h2>
         
         <div class="relative overflow-hidden">
             <div class="facility-slider" x-data="{ scrollPosition: 0 }">
@@ -378,7 +378,7 @@
                             </div>
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500">
                                 <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-                                    <h3 class="text-lg sm:text-xl font-bold text-white">{{ item.title }}</h3>
+                                    <h3 class="text-lg sm:text-xl font-bold text-white" data-i18n-content="fasilitas_section.items.{{ forloop.counter0 }}.title">{{ item.title }}</h3>
                                 </div>
                             </div>
                         </div>
