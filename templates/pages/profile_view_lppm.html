@@ -325,16 +325,29 @@
     <div class="section-container">
         <!-- <h1 class="hero-title">{{ blocks.hero_section.title }}</h1>
         <p class="hero-subtitle">{{ blocks.hero_section.subtitle }}</p> -->
-        <h1 class="hero-title" data-i18n="lppm.title">Lembaga Penelitian dan Pengabdian Masyarakat</h1>
-        <p class="hero-subtitle" data-i18n="lppm.title">Lembaga Penelitian dan Pengabdian Masyarakat Matana University</p>
+        <h1 class="hero-title"
+            data-block-html-id="Lembaga Penelitian dan Pengabdian Masyarakat"
+            data-block-html-en="Research and Community Service Agency"
+            data-block-html-zh="研究与社区服务机构">
+            Lembaga Penelitian dan Pengabdian Masyarakat
+        </h1>
+        <p class="hero-subtitle"
+           data-block-html-id="Lembaga Penelitian dan Pengabdian Masyarakat Matana University"
+           data-block-html-en="Matana University Research and Community Service Agency"
+           data-block-html-zh="玛塔纳大学研究与社区服务机构">
+            Lembaga Penelitian dan Pengabdian Masyarakat Matana University
+        </p>
     </div>
 </section>
 
 <!-- Documents Section -->
 <section class="documents-section">
     <div class="section-container">
-        <a href="https://drive.google.com/drive/folders/1CBHdeP5J_TeeoqwbcIZgvz8BsT3V9dJD?usp=sharing" target="_blank" class="documents-button">
-            <i class="fas fa-file-alt"></i>Dokumen LPPM
+        <a href="https://drive.google.com/drive/folders/1CBHdeP5J_TeeoqwbcIZgvz8BsT3V9dJD?usp=sharing" target="_blank" class="documents-button"
+           data-block-html-id="Dokumen LPPM"
+           data-block-html-en="LPPM Documents"
+           data-block-html-zh="LPPM 文件">
+            <i class="fas fa-file-alt"></i><span>Dokumen LPPM</span>
         </a>
     </div>
 </section>
@@ -356,12 +369,18 @@
         <!-- Section Header -->
         <div class="text-center mb-16">
             <div class="inline-block relative">
-                <span class="inline-block relative text-blue-600 font-semibold tracking-wider uppercase text-sm mb-2 animate-[pulse_4s_ease-in-out_infinite]">
+                <span class="inline-block relative text-blue-600 font-semibold tracking-wider uppercase text-sm mb-2 animate-[pulse_4s_ease-in-out_infinite]"
+                      data-block-html-id="Informasi Terkini"
+                      data-block-html-en="Latest Updates"
+                      data-block-html-zh="最新信息">
                     Informasi Terkini
                 </span>
                 <div class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-12 h-1 bg-yellow-400 rounded-full"></div>
             </div>
-            <h2 class="mt-4 text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl" data-i18n="news.latest_news">
+            <h2 class="mt-4 text-4xl font-extrabold text-gray-900 tracking-tight sm:text-5xl"
+                data-block-html-id="Berita Terbaru"
+                data-block-html-en="Latest News"
+                data-block-html-zh="最新消息">
                 Berita Terbaru
             </h2>
             <p class="mt-6 max-w-2xl mx-auto text-xl text-gray-500 leading-relaxed" data-i18n="lppm.news_description">
@@ -404,8 +423,11 @@
                     </p>
                     <div class="flex items-center justify-between">
                         <a href="{% url 'article_detail' article.slug %}" 
-                           class="inline-flex items-center text-matana-blue font-medium hover:text-blue-700">
-                            Baca Selengkapnya
+                           class="inline-flex items-center text-matana-blue font-medium hover:text-blue-700"
+                           data-block-html-id="Baca Selengkapnya"
+                           data-block-html-en="Read More"
+                           data-block-html-zh="阅读更多">
+                            <span>Baca Selengkapnya</span>
                             <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                             </svg>
@@ -452,4 +474,8 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/i18n-blocks.js' %}?v=20241105005"></script>
 {% endblock %}

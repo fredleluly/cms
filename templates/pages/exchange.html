@@ -259,8 +259,18 @@
 <!-- Hero Section -->
 <section class="hero-section">
     <div class="section-container">
-        <h1 class="hero-title">{{ blocks.hero_section.title }}</h1>
-        <p class="hero-subtitle">{{ blocks.hero_section.subtitle }}</p>
+        <h1 class="hero-title"
+            data-block-html-id="{{ blocks.hero_section.title|default:'Student Exchange Program' }}"
+            data-block-html-en="Student Exchange Program"
+            data-block-html-zh="学生交流项目">
+            {{ blocks.hero_section.title|default:'Student Exchange Program' }}
+        </h1>
+        <p class="hero-subtitle"
+           data-block-html-id="{{ blocks.hero_section.subtitle|default:'Perluas Wawasan Global Anda Melalui Program Pertukaran Pelajar' }}"
+           data-block-html-en="Expand Your Global Perspective Through Student Exchange Programs"
+           data-block-html-zh="通过学生交流项目拓展您的全球视野">
+            {{ blocks.hero_section.subtitle|default:'Perluas Wawasan Global Anda Melalui Program Pertukaran Pelajar' }}
+        </p>
     </div>
 </section>
 
@@ -268,8 +278,18 @@
 <section class="py-16 bg-gradient-to-b from-white to-gray-50">
     <div class="section-container">
         <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-matana-blue mb-4">{{ blocks.video_section.title }}</h2>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto">{{ blocks.video_section.subtitle }}</p>
+            <h2 class="text-4xl font-bold text-matana-blue mb-4"
+                data-block-html-id="{{ blocks.video_section.title|default:'Student Exchange Experience' }}"
+                data-block-html-en="Student Exchange Experience"
+                data-block-html-zh="学生交流体验">
+                {{ blocks.video_section.title|default:'Student Exchange Experience' }}
+            </h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto"
+               data-block-html-id="{{ blocks.video_section.subtitle|default:'Saksikan pengalaman mahasiswa kami dalam program pertukaran' }}"
+               data-block-html-en="Watch our students' experiences in exchange programs"
+               data-block-html-zh="观看我们学生在交流项目中的体验">
+                {{ blocks.video_section.subtitle|default:'Saksikan pengalaman mahasiswa kami dalam program pertukaran' }}
+            </p>
         </div>
 
         <!-- YouTube Video Player -->
@@ -312,7 +332,12 @@
 
                 <!-- Video Description -->
                 <div class="px-6 py-4 bg-gray-50">
-                    <p class="text-base text-gray-700">Experience the global perspective and cultural exchange through our international student exchange programs</p>
+                    <p class="text-base text-gray-700"
+                       data-block-html-id="Rasakan perspektif global dan pertukaran budaya melalui program pertukaran pelajar internasional kami"
+                       data-block-html-en="Experience the global perspective and cultural exchange through our international student exchange programs"
+                       data-block-html-zh="通过我们的国际学生交流项目体验全球视角和文化交流">
+                        Rasakan perspektif global dan pertukaran budaya melalui program pertukaran pelajar internasional kami
+                    </p>
                 </div>
             </div>
         </div>
@@ -324,10 +349,20 @@
 <section class="py-16">
     <div class="section-container">
         {% if blocks.asia_section.title %}
-        <h2 class="section-title">{{ blocks.asia_section.title }}</h2>
+        <h2 class="section-title"
+            data-block-html-id="{{ blocks.asia_section.title }}"
+            data-block-html-en="Partner Universities in Asia"
+            data-block-html-zh="亚洲合作大学">
+            {{ blocks.asia_section.title }}
+        </h2>
         {% endif %}
         {% if blocks.asia_section.description %}
-        <p class="section-description">{{ blocks.asia_section.description }}</p>
+        <p class="section-description"
+           data-block-html-id="{{ blocks.asia_section.description }}"
+           data-block-html-en="Our partner universities in the Asian region"
+           data-block-html-zh="我们在亚洲地区的合作大学">
+            {{ blocks.asia_section.description }}
+        </p>
         {% endif %}
         {% if blocks.asia_section.items %}
         <div class="exchange-grid">
@@ -464,4 +499,8 @@
         });
     });
 </script>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/i18n-blocks.js' %}?v=20241105004"></script>
 {% endblock %} 

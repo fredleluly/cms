@@ -183,16 +183,36 @@
 <!-- Hero Section -->
 <section class="hero-section">
     <div class="section-container">
-        <h1 class="hero-title">{{ blocks.hero_section.title }}</h1>
-        <p class="hero-subtitle">{{ blocks.hero_section.subtitle }}</p>
+        <h1 class="hero-title"
+            data-block-html-id="{{ blocks.hero_section.title|default:'Unit Kegiatan Mahasiswa' }}"
+            data-block-html-en="Student Activity Units"
+            data-block-html-zh="学生活动单位">
+            {{ blocks.hero_section.title|default:'Unit Kegiatan Mahasiswa' }}
+        </h1>
+        <p class="hero-subtitle"
+           data-block-html-id="{{ blocks.hero_section.subtitle|default:'Wadah Pengembangan Bakat, Minat, dan Kreativitas Mahasiswa' }}"
+           data-block-html-en="A Platform for Developing Student Talents, Interests, and Creativity"
+           data-block-html-zh="培养学生才能、兴趣和创造力的平台">
+            {{ blocks.hero_section.subtitle|default:'Wadah Pengembangan Bakat, Minat, dan Kreativitas Mahasiswa' }}
+        </p>
     </div>
 </section>
 
 <!-- UKM Olahraga Section -->
 <section class="py-16">
     <div class="section-container">
-        <h2 class="section-title">{{ blocks.olahraga_section.title }}</h2>
-        <p class="section-description">{{ blocks.olahraga_section.description }}</p>
+        <h2 class="section-title"
+            data-block-html-id="{{ blocks.olahraga_section.title|default:'Unit Kegiatan Mahasiswa' }}"
+            data-block-html-en="Student Activity Units"
+            data-block-html-zh="学生活动单位">
+            {{ blocks.olahraga_section.title|default:'Unit Kegiatan Mahasiswa' }}
+        </h2>
+        <p class="section-description"
+           data-block-html-id="{{ blocks.olahraga_section.description|default:'Berbagai unit kegiatan untuk mengembangkan potensi mahasiswa' }}"
+           data-block-html-en="Various activity units to develop student potential"
+           data-block-html-zh="各种活动单位以培养学生潜力">
+            {{ blocks.olahraga_section.description|default:'Berbagai unit kegiatan untuk mengembangkan potensi mahasiswa' }}
+        </p>
         <div class="ukm-grid">
             {% for item in blocks.olahraga_section.items %}
             <div class="ukm-card">
@@ -203,7 +223,12 @@
                     loading="lazy"
                 >
                 <div class="ukm-overlay">
-                    <h3 class="ukm-title">{{ item.title }}</h3>
+                    <h3 class="ukm-title"
+                        data-block-html-id="{{ item.title }}"
+                        data-block-html-en="{{ item.title }}"
+                        data-block-html-zh="{{ item.title }}">
+                        {{ item.title }}
+                    </h3>
                 </div>
             </div>
             {% endfor %}
@@ -211,4 +236,8 @@
     </div>
 </section>
 
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/i18n-blocks.js' %}?v=20241105004"></script>
 {% endblock %} 

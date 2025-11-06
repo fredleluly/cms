@@ -1,276 +1,272 @@
 {% extends "base.html" %}
+{% load static %}
 {% load image_optimizer %}
 {% load i18n_filters %}
 
-{% load static %}
-{% block title %}Profil - Matana University{% endblock %}
-
-{% block extra_css %}
+{% block style %}
 <style>
-    /* Base Styles */
-    :root {
-        --primary-color: #004AAD;
-        --secondary-color: #FFB140;
-        --text-dark: #1a1a1a;
-        --text-light: #666666;
-        --mobile-padding: clamp(1rem, 5vw, 2rem);
-    }
+  /* Base Styles */
+  :root {
+      --primary-color: #004AAD;
+      --secondary-color: #FFB140;
+      --text-dark: #1a1a1a;
+      --text-light: #666666;
+      --mobile-padding: clamp(1rem, 5vw, 2rem);
+  }
 
-    /* Enhanced Responsive Typography */
-    @media (max-width: 768px) {
-        h1 { 
-            font-size: clamp(1.75rem, 4vw, 2.5rem); 
-            line-height: 1.2;
-        }
-        h2 { 
-            font-size: clamp(1.35rem, 3.5vw, 2rem);
-            line-height: 1.3;
-        }
-        h3 { 
-            font-size: clamp(1.15rem, 2.5vw, 1.5rem);
-            line-height: 1.4;
-        }
-        p { 
-            font-size: clamp(0.95rem, 2vw, 1.125rem);
-            line-height: 1.6;
-        }
-    }
+  /* Enhanced Responsive Typography */
+  @media (max-width: 768px) {
+      h1 {
+          font-size: clamp(1.75rem, 4vw, 2.5rem);
+          line-height: 1.2;
+      }
+      h2 {
+          font-size: clamp(1.35rem, 3.5vw, 2rem);
+          line-height: 1.3;
+      }
+      h3 {
+          font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+          line-height: 1.4;
+      }
+      p {
+          font-size: clamp(0.95rem, 2vw, 1.125rem);
+          line-height: 1.6;
+      }
+  }
 
-    /* Hero Section with Responsive Height */
-    .hero-section {
-        background: linear-gradient(rgba(16, 29, 56, 0.95), rgba(16, 29, 56, 0.95)),
-                    url('{% static "images/campus-aerial.jpg" %}') center/cover;
-        min-height: min(60vh, 400px);
-        display: flex;
-        align-items: center;
-        padding: clamp(2rem, 5vh, 4rem) 0;
-    }
+  /* Hero Section with Responsive Height */
+  .hero-section {
+      background: linear-gradient(rgba(16, 29, 56, 0.95), rgba(16, 29, 56, 0.95)),
+                  url('{% static "images/campus-aerial.jpg" %}') center/cover;
+      min-height: min(60vh, 400px);
+      display: flex;
+      align-items: center;
+      padding: clamp(2rem, 5vh, 4rem) 0;
+  }
 
-    /* Section Title with Responsive Spacing */
-    .section-title {
-        margin-bottom: clamp(1.5rem, 4vw, 3rem);
-    }
+  /* Section Title with Responsive Spacing */
+  .section-title {
+      margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  }
 
-    .section-title::after {
-        content: '';
-        display: block;
-        width: min(80px, 20%);
-        height: 4px;
-        background: var(--secondary-color);
-        margin: clamp(0.75rem, 2vw, 1rem) auto;
-        border-radius: 2px;
-    }
+  .section-title::after {
+      content: '';
+      display: block;
+      width: min(80px, 20%);
+      height: 4px;
+      background: var(--secondary-color);
+      margin: clamp(0.75rem, 2vw, 1rem) auto;
+      border-radius: 2px;
+  }
 
-    /* Vision Card with Improved Responsiveness */
-    .vision-card {
-        background: linear-gradient(135deg, var(--primary-color), #003880);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        position: relative;
-        overflow: hidden;
-        padding: var(--mobile-padding);
-        border-radius: clamp(0.5rem, 2vw, 1rem);
-    }
+  /* Vision Card with Improved Responsiveness */
+  .vision-card {
+      background: linear-gradient(135deg, var(--primary-color), #003880);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      padding: var(--mobile-padding);
+      border-radius: clamp(0.5rem, 2vw, 1rem);
+  }
 
-    .vision-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.828-1.415 1.415L51.8 0h2.827zM5.373 0l-.83.828L5.96 2.243 8.2 0H5.374zM48.97 0l3.657 3.657-1.414 1.414L46.143 0h2.828zM11.03 0L7.372 3.657 8.787 5.07 13.857 0H11.03zm32.284 0L49.8 6.485 48.384 7.9l-7.9-7.9h2.83zM16.686 0L10.2 6.485 11.616 7.9l7.9-7.9h-2.83zM22.344 0L13.858 8.485 15.272 9.9l7.9-7.9h-.828zm5.656 0L19.515 8.485 17.343 10.657 28 0h-2.83zM32.657 0L26.172 6.485 24 8.657 34.657 0h-2zM44.97 0L34.314 10.657 32.142 12.828 42.8 2.172 44.213 0h.757zm-5.654.172L50.485 11.343 48.314 13.515 37.657 2.858 39.316.172zm-14.97 0L40.485 16.343l-2.172 2.172-9.9-9.9 1.415-1.414L33.8 3.23 29.844.172h-5.5zm-8.31.828L40.485 26.343 38.313 28.515 3.642 1z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-    }
+  .vision-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l.83.828-1.415 1.415L51.8 0h2.827zM5.373 0l-.83.828L5.96 2.243 8.2 0H5.374zM48.97 0l3.657 3.657-1.414 1.414L46.143 0h2.828zM11.03 0L7.372 3.657 8.787 5.07 13.857 0H11.03zm32.284 0L49.8 6.485 48.384 7.9l-7.9-7.9h2.83zM16.686 0L10.2 6.485 11.616 7.9l7.9-7.9h-2.83zM22.344 0L13.858 8.485 15.272 9.9l7.9-7.9h-.828zm5.656 0L19.515 8.485 17.343 10.657 28 0h-2.83zM32.657 0L26.172 6.485 24 8.657 34.657 0h-2zM44.97 0L34.314 10.657 32.142 12.828 42.8 2.172 44.213 0h.757zm-5.654.172L50.485 11.343 48.314 13.515 37.657 2.858 39.316.172zm-14.97 0L40.485 16.343l-2.172 2.172-9.9-9.9 1.415-1.414L33.8 3.23 29.844.172h-5.5zm-8.31.828L40.485 26.343 38.313 28.515 3.642 1z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
 
-    @media (hover: hover) {
-        .vision-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-    }
+  @media (hover: hover) {
+      .vision-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+  }
 
-    /* Timeline with Responsive Spacing */
-    .timeline {
-        position: relative;
-        padding-left: clamp(2rem, 5vw, 3rem);
-    }
+  /* Timeline with Responsive Spacing */
+  .timeline {
+      position: relative;
+      padding-left: clamp(2rem, 5vw, 3rem);
+  }
 
-    .timeline::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 4px;
-        background: #E5E7EB;
-    }
+  .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 4px;
+      background: #E5E7EB;
+  }
 
-    .timeline-item {
-        position: relative;
-        margin-bottom: clamp(2rem, 5vw, 4rem);
-        padding-left: clamp(1rem, 3vw, 2rem);
-    }
+  .timeline-item {
+      position: relative;
+      margin-bottom: clamp(2rem, 5vw, 4rem);
+      padding-left: clamp(1rem, 3vw, 2rem);
+  }
 
-    .timeline-item::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: clamp(16px, 4vw, 20px);
-        height: clamp(16px, 4vw, 20px);
-        background: var(--secondary-color);
-        border-radius: 50%;
-        transform: translateX(-50%);
-    }
+  .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: clamp(16px, 4vw, 20px);
+      height: clamp(16px, 4vw, 20px);
+      background: var(--secondary-color);
+      border-radius: 50%;
+      transform: translateX(-50%);
+  }
 
-    /* Facility Cards with Responsive Grid */
-    .facility-card {
-        overflow: hidden;
-        border-radius: clamp(0.5rem, 2vw, 1rem);
-        transition: all 0.3s ease;
-        height: 100%;
-    }
+  /* Facility Cards with Responsive Grid */
+  .facility-card {
+      overflow: hidden;
+      border-radius: clamp(0.5rem, 2vw, 1rem);
+      transition: all 0.3s ease;
+      height: 100%;
+  }
 
-    .facility-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-    }
+  .facility-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+  }
 
-    @media (hover: hover) {
-        .facility-card:hover {
-            transform: translateY(-5px);
-        }
+  @media (hover: hover) {
+      .facility-card:hover {
+          transform: translateY(-5px);
+      }
 
-        .facility-card:hover img {
-            transform: scale(1.1);
-        }
-    }
+      .facility-card:hover img {
+          transform: scale(1.1);
+      }
+  }
 
-    /* Responsive Grid Layouts */
-    .form-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-        gap: clamp(1rem, 3vw, 2rem);
-    }
+  /* Responsive Grid Layouts */
+  .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+      gap: clamp(1rem, 3vw, 2rem);
+  }
 
-    /* Responsive Container */
-    .container {
-        width: 100%;
-        max-width: 1280px;
-        margin: 0 auto;
-        padding: 0 var(--mobile-padding);
-    }
+  /* Responsive Container */
+  .container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 var(--mobile-padding);
+  }
 
-    /* Responsive Sections */
-    section {
-        padding: clamp(3rem, 8vw, 5rem) 0;
-    }
+  /* Responsive Sections */
+  section {
+      padding: clamp(3rem, 8vw, 5rem) 0;
+  }
 
-    /* Responsive Images */
-    img {
-        max-width: 100%;
-        height: auto;
-    }
+  /* Responsive Images */
+  img {
+      max-width: 100%;
+      height: auto;
+  }
 
-    /* Touch Device Optimizations */
-    @media (hover: none) {
-        .vision-card,
-        .facility-card {
-            transform: none !important;
-        }
-    }
+  /* Touch Device Optimizations */
+  @media (hover: none) {
+      .vision-card,
+      .facility-card {
+          transform: none !important;
+      }
+  }
 
-    /* Improved Mobile Navigation */
-    @media (max-width: 768px) {
-        .timeline::before {
-            left: 1rem;
-        }
+  /* Improved Mobile Navigation */
+  @media (max-width: 768px) {
+      .timeline::before {
+          left: 1rem;
+      }
 
-        .timeline-item {
-            padding-left: 2rem;
-        }
+      .timeline-item {
+          padding-left: 2rem;
+      }
 
-        .timeline-item::before {
-            left: 1rem;
-        }
-    }
+      .timeline-item::before {
+          left: 1rem;
+      }
+  }
 
-    /* Print Styles */
-    @media print {
-        .vision-card {
-            break-inside: avoid;
-            background: #fff !important;
-            color: #000 !important;
-        }
+  /* Print Styles */
+  @media print {
+      .vision-card {
+          break-inside: avoid;
+          background: #fff !important;
+          color: #000 !important;
+      }
 
-        .timeline::before {
-            display: none;
-        }
-    }
+      .timeline::before {
+          display: none;
+      }
+  }
 
-    /* Improved Vision Card Mobile Styles */
-    @media (max-width: 768px) {
-        .vision-card {
-            margin: 0 var(--mobile-padding);
-        }
-    }
+  /* Improved Vision Card Mobile Styles */
+  @media (max-width: 768px) {
+      .vision-card {
+          margin: 0 var(--mobile-padding);
+      }
+  }
 
-    /* Enhanced Mobile Grid Layouts */
-    @media (max-width: 768px) {
-        .grid {
-            grid-template-columns: 1fr !important;
-            gap: 1.5rem !important;
-        }
+  /* Enhanced Mobile Grid Layouts */
+  @media (max-width: 768px) {
+      .grid {
+          grid-template-columns: 1fr !important;
+          gap: 1.5rem !important;
+      }
 
-        section {
-            padding: clamp(2rem, 6vw, 4rem) 0;
-        }
+      section {
+          padding: clamp(2rem, 6vw, 4rem) 0;
+      }
 
-        .container {
-            padding: 0 var(--mobile-padding);
-        }
-    }
+      .container {
+          padding: 0 var(--mobile-padding);
+      }
+  }
 
-    /* Improved Facility Slider for Mobile */
-    @media (max-width: 768px) {
-        .facility-slider {
-            margin: 0 calc(-1 * var(--mobile-padding));
-            padding: 0 var(--mobile-padding);
-        }
+  /* Improved Facility Slider for Mobile */
+  @media (max-width: 768px) {
+      .facility-slider {
+          margin: 0 calc(-1 * var(--mobile-padding));
+          padding: 0 var(--mobile-padding);
+      }
 
-        .facility-slider .flex-none {
-            width: 85vw;
-            max-width: 300px;
-        }
+      .facility-slider .flex-none {
+          width: 85vw;
+          max-width: 300px;
+      }
 
-        .animate-scroll {
-            animation-duration: 20s;
-        }
-    }
+      .animate-scroll {
+          animation-duration: 20s;
+      }
+  }
 
-    /* Better Touch Interactions */
-    @media (hover: none) {
-        .facility-slider .group:active {
-            transform: scale(0.98);
-        }
-    }
+  /* Better Touch Interactions */
+  @media (hover: none) {
+      .facility-slider .group:active {
+          transform: scale(0.98);
+      }
+  }
 
-    /* Improved Keunggulan Section for Mobile */
-    @media (max-width: 768px) {
-        .space-y-6 > * {
-            margin-top: 1rem;
-            margin-bottom: 1rem;
-        }
+  /* Improved Keunggulan Section for Mobile */
+  @media (max-width: 768px) {
+      .space-y-6 > * {
+          margin-top: 1rem;
+          margin-bottom: 1rem;
+      }
 
-        .flex.items-start.space-x-4 {
-            padding: 0.75rem;
-        }
-    }
+      .flex.items-start.space-x-4 {
+          padding: 0.75rem;
+      }
+  }
 </style>
-{% endblock %}
-
-
+{% endblock style %}
 
 {% block content %}
 <!-- Hero Section -->
@@ -283,161 +279,318 @@
 
 <!-- Vision & Mission -->
 <section class="py-20">
-    <div class="container mx-auto px-4 min-h-screen flex flex-col justify-center items-center">
-        <img 
-            src="{{ blocks.visi_misi_section.background_image | default:'/default-image.webp' }}" 
-            alt="{{ item.title }}"
-            class="w-[80%] md:w-[70%] lg:w-full h-auto max-h-[80vh] mx-auto rounded-lg shadow-lg object-cover mb-12 md:mb-16 lg:mb-20"
-            loading="lazy"
-        />
-    
-        <div class="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-20 mb-16">
-            <div class="vision-card p-8 md:p-10 lg:p-12 rounded-2xl text-white">
-                <div class="relative z-10">
-                    <div class="text-2xl font-bold mb-4 md:mb-6" data-i18n-content="visi_misi_section.items.0.title">{{ blocks.visi_misi_section.items.0.title }}</div>
-                    {% if blocks.visi_misi_section.items.0.description|has_translations %}
-                    <p class="text-white/90 leading-relaxed" 
-                       data-block-html-id="{{ blocks.visi_misi_section.items.0.description.id|escape_html_attr }}"
-                       data-block-html-en="{{ blocks.visi_misi_section.items.0.description.en|escape_html_attr }}"
-                       data-block-html-zh="{{ blocks.visi_misi_section.items.0.description.zh|escape_html_attr }}">{{ blocks.visi_misi_section.items.0.description.id }}</p>
-                    {% else %}
-                    <p class="text-white/90 leading-relaxed" data-i18n-content="visi_misi_section.items.0.description">{{ blocks.visi_misi_section.items.0.description }}</p>
-                    {% endif %}
-                </div>
-            </div>
+  <div
+    class="container mx-auto px-4 min-h-screen flex flex-col justify-center items-center"
+  >
+    <img
+      src="{{ blocks.visi_misi_section.background_image | default:'/default-image.webp' }}"
+      alt="{{ item.title }}"
+      class="w-[80%] md:w-[70%] lg:w-full h-auto max-h-[80vh] mx-auto rounded-lg shadow-lg object-cover mb-12 md:mb-16 lg:mb-20"
+      loading="lazy"
+    />
 
-            <div class="space-y-8">
-                <div class="text-2xl font-bold mb-6 md:mb-8" data-i18n-content="visi_misi_section.items.1.title">{{ blocks.visi_misi_section.items.1.title }}</div>
-                <div class="space-y-6 md:space-y-8">
-                    <div class="flex items-start space-x-4">
-                        {% if blocks.visi_misi_section.items.1.description|has_translations %}
-                        <p class="ml-4 text-gray-600" 
-                           data-block-html-id="{{ blocks.visi_misi_section.items.1.description.id|linebreaksbr|escape_html_attr }}"
-                           data-block-html-en="{{ blocks.visi_misi_section.items.1.description.en|linebreaksbr|escape_html_attr }}"
-                           data-block-html-zh="{{ blocks.visi_misi_section.items.1.description.zh|linebreaksbr|escape_html_attr }}">{{ blocks.visi_misi_section.items.1.description.id | linebreaksbr }}</p>
-                        {% else %}
-                        <p class="ml-4 text-gray-600" data-i18n-content="visi_misi_section.items.1.description">{{ blocks.visi_misi_section.items.1.description | linebreaksbr }}</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
+    <div class="grid md:grid-cols-2 gap-12 md:gap-16 lg:gap-20 mb-16">
+      <div class="vision-card p-8 md:p-10 lg:p-12 rounded-2xl text-white">
+        <div class="relative z-10">
+          <div
+            class="text-2xl font-bold mb-4 md:mb-6"
+            data-i18n-content="visi_misi_section.items.0.title"
+          >
+            {{ blocks.visi_misi_section.items.0.title }}
+          </div>
+          {% if blocks.visi_misi_section.items.0.description|has_translations %}
+          <p
+            class="text-white/90 leading-relaxed"
+            data-block-html-id="{{ blocks.visi_misi_section.items.0.description.id|escape_html_attr }}"
+            data-block-html-en="{{ blocks.visi_misi_section.items.0.description.en|escape_html_attr }}"
+            data-block-html-zh="{{ blocks.visi_misi_section.items.0.description.zh|escape_html_attr }}"
+          >
+            {{ blocks.visi_misi_section.items.0.description.id }}
+          </p>
+          {% else %}
+          <p
+            class="text-white/90 leading-relaxed"
+            data-i18n-content="visi_misi_section.items.0.description"
+          >
+            {{ blocks.visi_misi_section.items.0.description }}
+          </p>
+          {% endif %}
         </div>
-    </div>
-</section>
+      </div>
 
+      <div class="space-y-8">
+        <div
+          class="text-2xl font-bold mb-6 md:mb-8"
+          data-i18n-content="visi_misi_section.items.1.title"
+        >
+          {{ blocks.visi_misi_section.items.1.title }}
+        </div>
+        <div class="space-y-6 md:space-y-8">
+          <div class="flex items-start space-x-4">
+           {% if blocks.visi_misi_section.items.1.description|has_translations %}
+            <p
+              class="ml-4 text-gray-600"
+              data-block-html-id="{{ blocks.visi_misi_section.items.1.description.id|linebreaksbr|escape_html_attr }}"
+              data-block-html-en="{{ blocks.visi_misi_section.items.1.description.en|linebreaksbr|escape_html_attr }}"
+              data-block-html-zh="{{ blocks.visi_misi_section.items.1.description.zh|linebreaksbr|escape_html_attr }}"
+            >
+              {{ blocks.visi_misi_section.items.1.description.id | linebreaksbr
+              }}
+            </p>
+            {% else %}
+            <p
+              class="ml-4 text-gray-600"
+              data-i18n-content="visi_misi_section.items.1.description"
+            >
+              {{ blocks.visi_misi_section.items.1.description | linebreaksbr }}
+            </p>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- Sejarah -->
 <section class="py-20 bg-gray-50">
-    <div class="container mx-auto ">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title" data-i18n-content="sejarah_section.title">{{ blocks.sejarah_section.title }}</h2>
-            <div class="container max-w-6xl mx-auto">
-                {% if blocks.sejarah_section.description|has_translations %}
-                <p class="text-gray-600 leading-relaxed text-lg"
-                   data-block-html-id="{{ blocks.sejarah_section.description.id|linebreaksbr|safe|escape_html_attr }}"
-                   data-block-html-en="{{ blocks.sejarah_section.description.en|linebreaksbr|safe|escape_html_attr }}"
-                   data-block-html-zh="{{ blocks.sejarah_section.description.zh|linebreaksbr|safe|escape_html_attr }}">{{ blocks.sejarah_section.description.id|safe|linebreaksbr }}</p>
-                {% else %}
-                <p class="text-gray-600 leading-relaxed text-lg" data-i18n-content="sejarah_section.description">{{ blocks.sejarah_section.description|safe|linebreaksbr }}</p>
-                {% endif %}
-            </div>
-    </div>
-</section>
+  <div class="container mx-auto ">
+    {% if blocks.sejarah_section.title|has_translations %}
+    <h2
+      class="text-3xl font-bold text-center mb-16 section-title"
+      data-i18n-content="sejarah_section.title"
+    >
+      {{ blocks.sejarah_section.title }}
+    </h2>
+    {% else %}
+    <h2
+      class="text-3xl font-bold text-center mb-16 section-title"
+      data-block-html-id="Sejarah"
+      data-block-html-en="History"
+      data-block-html-zh="校史"
+    >
+      {{ blocks.sejarah_section.title }}
+    </h2>
+    {% endif %}
+    <div class="container max-w-6xl mx-auto">
+      {% if blocks.sejarah_section.description|has_translations %}
+      <p
+        class="text-gray-600 leading-relaxed text-lg"
+        data-block-html-id="{{ blocks.sejarah_section.description.id|linebreaksbr|safe|escape_html_attr }}"
+        data-block-html-en="{{ blocks.sejarah_section.description.en|linebreaksbr|safe|escape_html_attr }}"
+        data-block-html-zh="{{ blocks.sejarah_section.description.zh|linebreaksbr|safe|escape_html_attr }}"
+      >
+        {{ blocks.sejarah_section.description.id|safe|linebreaksbr }}
+      </p>
+      {% else %}
+      <p
+        class="text-gray-600 leading-relaxed text-lg"
+        data-block-html-id="Universitas Matana mulai beroperasi pada bulan Agustus 2014, berlokasi di Matana University Tower dengan 10 Program Studi. Universitas Matana mendidik calon-calon eksekutif bisnis dan pemimpin masa depan dalam berbagai bidang ilmu, dengan memberi penekanan yang seimbang antara pengetahuan akademik, pengembangan kemampuan soft skills dan pembentukan karakter mahasiswa yang bersifat menyeluruh, sehingga lulusan Universitas Matana adalah sarjana yang menguasai pengetahuan dan keterampilan tertentu dan memiliki INTEGRITAS (INTEGRITY) yaitu keterpaduan antara keyakinan, pemikiran, kata dan tindakan; dan PENATALAYANAN (STEWARDSHIP) untuk memenuhi komitmen dalam pencarian, pengembangan, penggunaan waktu dan aset yang dipercayakan Tuhan dengan penuh tanggung jawab dan integritas untuk melayani sesama; serta SALING MENGHARGAI (RESPECT) terhadap pemangku kepentingan dalam semangat integritas dan pelayanan.
 
-<!-- Keunggulan -->
-<!-- <section class="py-20">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ blocks.keunggulan_section.title }}</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-            {% for item in blocks.keunggulan_section.items %}
-            <div class="bg-white p-8 rounded-xl shadow-sm hover:shadow-lg transition-shadow">
-                <img src="{% optimized_image item.image  %}" alt="{{ item.title }}" class="w-full h-48 object-cover rounded-lg mb-6">
-                <h3 class="text-xl font-bold mb-4">{{ item.title }}</h3>
-                <p class="text-gray-600">{{ item.description }}</p>
-            </div>
-            {% endfor %}
-        </div>
+Karena itu, seluruh pengalaman akademik mahasiswa difokuskan bagi aktualisasi kapasitas belajar yaitu kapasitas intelektual, sosial, entreprenurial, dan spiritual. Sarjana Matana adalah manusia terdidik dan terampil karena selain memiliki budaya riset dan keilmuan, juga seimbang dengan nilai moral dan ketaatan kepada Tuhan. Proses pembelajaran yang evidence-driven adalah karakteristik khusus Universitas Matana, dimana mahasiswa dan dosen akan berkolaborasi dalam pembelajaran berbasis penelitian atau research-based-teaching and learning (RBTL) untuk mengkonstruksi pengetahuan dan keterampilan, bukan sekadar menghafal konten buku teks.
+
+Proses pembelajaran di Universitas Matana tidak hanya mengembangkan kemampuan akademik. Mahasiswa juga dibekali dengan sertifikat kompetensi keterampilan tertentu selama masa kuliah berlangsung, sehingga dapat digunakan untuk bekerja sambil kuliah atau memudahkan lulusan memperoleh pekerjaan segera setelah lulus. Integrasi tridharma Perguruan Tinggi ditopang secara menyeluruh oleh Pusat Pengembangan Sistem Pembelajaran, Pusat Studi Keilmuan, Pusat Pengembangan Ilmu dan Pemanfaatan IPTEKS, Pusat Pengembangan dan Pemberdayaan Masyarakat, serta Pusat Pendidikan Vokasi.
+
+Apabila mahasiswa belum mampu mencapai prestasi yang diharapkan pada setiap semester, mereka akan dibantu secara profesional oleh Pusat Bimbingan dan Konseling untuk mengatasi kendala pembelajaran serta memperkuat motivasi agar dapat mengejar ketertinggalan. Bagi Universitas Matana, mahasiswa adalah insan potensial dan aset sosial yang harus dikembangkan dan didorong menjadi manusia yang berintegritas, melayani, dan menghargai manusia serta kemanusiaan. Kami menghargai setiap individu yang bergabung di Universitas Matana sebagai pribadi yang istimewa dan layak mendapatkan yang terbaik. Mari bergabung ke tempat yang tepat demi masa depan Anda. Kami menyambut Anda dalam keluarga besar Universitas Matana."
+        data-block-html-en="Matana University began operating in August 2014, located at Matana University Tower with 10 study programs. Matana University educates future business executives and leaders across various disciplines, emphasizing a balanced development of academic knowledge, soft skills, and holistic character formation. Graduates of Matana University master specific knowledge and skills and embody INTEGRITY — unity of belief, thought, word, and action — and STEWARDSHIP — a commitment to seeking, developing, and using time and entrusted resources responsibly to serve others — as well as RESPECT for stakeholders in a spirit of integrity and service.
+
+Accordingly, the entire academic experience is focused on actualizing students’ learning capacities: intellectual, social, entrepreneurial, and spiritual. Matana graduates are educated and skilled individuals, cultivating a culture of research and scholarship balanced with moral values and devotion to God. Evidence-driven learning is a distinctive characteristic of Matana University, where students and lecturers collaborate in research-based teaching and learning (RBTL) to construct knowledge and skills rather than merely memorizing textbook content.
+
+Learning at Matana University not only develops academic abilities. Students are also equipped with competency certificates in specific skills during their studies, enabling them to work while studying or to secure employment soon after graduation. The integration of the university’s three pillars (education, research, and community service) is supported comprehensively by the Center for Learning System Development, Center for Scientific Studies, Center for the Development and Utilization of Science and Technology, Center for Community Development and Empowerment, and the Center for Vocational Education.
+
+If students have not yet achieved the expected performance in a given semester, they will be professionally assisted by the Counseling and Guidance Center to overcome learning challenges and strengthen motivation so they can catch up. For Matana University, students are potential individuals and social assets who must be developed and encouraged to become people of integrity, service, and respect for humanity. We value every individual who joins Matana University as someone special who deserves the best. Join us in the right place for your future. We welcome you to the Matana University family."
+        data-block-html-zh="马塔纳大学自2014年8月开始运营，坐落于马塔纳大学大楼，设有10个本科/研究生专业。学校致力于培养未来的商界管理者和各领域的领袖，强调学术知识、软技能与全人品格的均衡发展。马塔纳毕业生不仅具备专业知识与技能，更以诚信（Integrity，信念、思想、言语与行为的一致）、管家精神（Stewardship，以责任与诚信善用所托付的时间与资源，服务他人）以及彼此尊重（Respect）为核心价值。
+
+因此，学校将全部学习体验聚焦于学习能力的实现：包括智识、社会性、创业精神与灵性。马塔纳毕业生既重视研究与学术文化，也兼顾道德价值与敬虔之心。以证据为基础的学习（evidence‑driven learning）是马塔纳的特色，学生与教师共同开展基于研究的教学与学习（RBTL），在建构知识与能力的过程中，不再只是背诵课本内容。
+
+马塔纳大学的教学不仅提升学术能力，学生在就读期间还可获得特定技能的能力证书，可用于在学期间兼职工作，或帮助毕业后迅速就业。学校以整合方式推进高校三大使命（教学、研究与社会服务），并由学习系统发展中心、学术研究中心、科学与技术开发与应用中心、社区发展与赋能中心以及职业教育中心等单位协同支撑。
+
+若学生在某一学期未达成预期表现，学校的辅导与咨询中心将提供专业协助，帮助解决学习障碍并强化学习动机，以便迎头赶上。对马塔纳大学而言，学生是具有潜能的个体，也是需要培育的社会资产，应被鼓励成为具备诚信、乐于服务且尊重人性的人。我们珍视每一位加入马塔纳的同学，你是独特且值得被成就的。为你的未来选择正确的地方，欢迎加入马塔纳大学大家庭。"
+      >
+        {{ blocks.sejarah_section.description|safe|linebreaksbr }}
+      </p>
+      {% endif %}
     </div>
-</section> -->
+  </div>
+</section>
 
 <!-- Keunggulan section -->
 <section class="py-20">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title" data-i18n-content="keunggulan_section.title">{{ blocks.keunggulan_section.title }}</h2>
-        
-        <div class="max-w-4xl mx-auto space-y-6">
-            {% for item in blocks.keunggulan_section.items %}
-            <div class="flex items-start space-x-4 hover:bg-gray-50 rounded-lg transition-colors duration-300">
-                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center text-matana-blue">
-                    <i class="fas fa-check-circle text-xl"></i>
-                </div>
-                <div class="flex-1">
-                    <p class="text-gray-700 text-lg" data-i18n-content="keunggulan_section.items.{{ forloop.counter0 }}.title">{{ item.title }}</p>
-                </div>
-            </div>
-            {% endfor %}
+  <div class="container mx-auto px-4">
+    <h2
+      class="text-3xl font-bold text-center mb-16 section-title"
+      data-block-html-id="Keunggulan Matana"
+      data-block-html-en="Matana Advantages"
+      data-block-html-zh="马塔纳优势"
+    >
+      {{ blocks.keunggulan_section.title }}
+    </h2>
+
+    <style>
+      /* Language visibility helpers for this section */
+      .lang-id, .lang-en, .lang-zh { display: none; }
+      html[lang='id'] .lang-id { display: block; }
+      html[lang='en'] .lang-en { display: block; }
+      html[lang='zh'] .lang-zh { display: block; }
+    </style>
+    <div class="max-w-4xl mx-auto space-y-6">
+      {% for item in blocks.keunggulan_section.items %}
+      <div class="flex items-start space-x-4 hover:bg-gray-50 rounded-lg transition-colors duration-300">
+        <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center text-matana-blue">
+          <i class="fas fa-check-circle text-xl"></i>
         </div>
+        <div class="flex-1">
+          {% if item.title.en or item.title.zh %}
+          <p class="text-gray-700 text-lg"
+             data-adv-index="{{ forloop.counter0 }}"
+             data-adv-id="{{ item.title.id|escape_html_attr }}"
+             data-adv-en="{{ item.title.en|escape_html_attr }}"
+             data-adv-zh="{{ item.title.zh|escape_html_attr }}">
+             {{ item.title.id }}
+          </p>
+          {% else %}
+          <p class="text-gray-700 text-lg"
+             data-adv-index="{{ forloop.counter0 }}"
+             {% if forloop.counter0 == 0 %}
+             data-adv-en="Implement an academic curriculum that prepares graduates to compete in the job market"
+             data-adv-zh="实施学术课程，培养毕业生具备职场竞争力"
+             {% elif forloop.counter0 == 1 %}
+             data-adv-en="Professional, high-achieving lecturers with national and international experience"
+             data-adv-zh="具有国内外经验的专业优秀师资"
+             {% elif forloop.counter0 == 2 %}
+             data-adv-en="Student activity units (UKM) with achievements at national and international levels"
+             data-adv-zh="学生活动组织（UKM）在国内外屡获佳绩"
+             {% elif forloop.counter0 == 3 %}
+             data-adv-en="Facilities that support practical learning in each study program"
+             data-adv-zh="配备支持各专业实践教学的完善设施"
+             {% elif forloop.counter0 == 4 %}
+             data-adv-en="Student Exchange programs with leading universities in Asia and Europe"
+             data-adv-zh="与亚洲及欧洲知名高校开展学生交换项目"
+             {% elif forloop.counter0 == 5 %}
+             data-adv-en="Career opportunities within Matana University’s business partner network"
+             data-adv-zh="在马塔纳大学合作企业网络中的就业机会"
+             {% elif forloop.counter0 == 6 %}
+             data-adv-en="Strategic campus location in the Gading Serpong business district"
+             data-adv-zh="校园位于 Gading Serpong 商业中心，地理位置优越"
+             {% endif %}
+             data-adv-id="{{ item.title|escape_html_attr }}">
+             {{ item.title }}
+          </p>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
     </div>
+  </div>
 </section>
 
 <!-- Fasilitas -->
 <section class="py-20 bg-gray-50">
-    <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title" data-i18n-content="fasilitas_section.title">{{ blocks.fasilitas_section.title }}</h2>
-        
-        <div class="relative overflow-hidden">
-            <div class="facility-slider" x-data="{ scrollPosition: 0 }">
-                <div class="flex gap-6 animate-scroll">
-                    {% for i in '012'|make_list %}
-                    {% for item in blocks.fasilitas_section.items %}
-                    <div class="flex-none w-[300px] md:w-[300px] sm:w-[200px]">
-                        <div class="group relative overflow-hidden rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300">
-                            <div class="aspect-[4/3] overflow-hidden">
-                                <img 
-                                    src="{% optimized_image item.image  %}" 
-                                    alt="{{ item.title }}"
-                                    class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                                >
-                            </div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500">
-                                <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-                                    <h3 class="text-lg sm:text-xl font-bold text-white" data-i18n-content="fasilitas_section.items.{{ forloop.counter0 }}.title">{{ item.title }}</h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                    {% endfor %}
-                    <!-- Duplicate items for infinite scroll -->
-                   
+  <div class="container mx-auto px-4">
+    <h2
+      class="text-3xl font-bold text-center mb-16 section-title"
+      data-i18n-content="fasilitas_section.title"
+    >
+      {{ blocks.fasilitas_section.title }}
+    </h2>
+
+    <div class="relative overflow-hidden">
+      <div class="facility-slider" x-data="{ scrollPosition: 0 }">
+        <div class="flex gap-6 animate-scroll">
+          {% for i in '012'|make_list %} {% for item in
+          blocks.fasilitas_section.items %}
+          <div class="flex-none w-[300px] md:w-[300px] sm:w-[200px]">
+            <div
+              class="group relative overflow-hidden rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300"
+            >
+              <div class="aspect-[4/3] overflow-hidden">
+                <img
+                  src="{% optimized_image item.image  %}"
+                  alt="{{ item.title }}"
+                  class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                />
+              </div>
+              <div
+                class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500"
+              >
+                <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                  <h3
+                    class="text-lg sm:text-xl font-bold text-white"
+                    data-i18n-content="fasilitas_section.items.{{ forloop.counter0 }}.title"
+                  >
+                    {{ item.title }}
+                  </h3>
                 </div>
+              </div>
             </div>
+          </div>
+          {% endfor %} 
+          <!-- Duplicate items for infinite scroll -->
         </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <style>
-@keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-50%);
-    }
-}
+  @keyframes scroll {
+      0% {
+          transform: translateX(0);
+      }
+      100% {
+          transform: translateX(-50%);
+      }
+  }
 
-.animate-scroll {
-    animation: scroll 30s linear infinite;
-}
+  .animate-scroll {
+      animation: scroll 30s linear infinite;
+  }
 
-.facility-slider:hover .animate-scroll {
-    animation-play-state: paused;
-}
+  .facility-slider:hover .animate-scroll {
+      animation-play-state: paused;
+  }
 </style>
 
-{% endblock %}
-
-{% endblock %}
+{% endblock content %}
 
 {% block extra_js %}
 <script src="{% static 'js/i18n-blocks.js' %}"></script>
-{% endblock %} 
+<script>
+  window.pageBlocks = {{ blocks_json|safe }};
+  // Expose for potential debuggability across pages
+  window.__i18nBlocks = window.pageBlocks;
+  window.__pageKey = 'profile';
+  window.__hasTranslations = true;
+  window.__i18nReady = true;
+  window.__i18nInitializedAt = Date.now();
+  window.__i18nVersion = (window.__i18nVersion || 0) + 1;
+</script>
+<script src="{% static 'js/i18n-content.js' %}"></script>
+<script>
+  // Ensure block translations apply on initial load and after language switch
+  (function() {
+    function applyNow() {
+      if (window.applyBlockTranslations) {
+        window.applyBlockTranslations();
+      }
+      // Update keunggulan items explicitly
+      const lang = (window.i18n && window.i18n.getCurrentLanguage) ? window.i18n.getCurrentLanguage() : (document.documentElement.getAttribute('lang') || 'id');
+      document.querySelectorAll('[data-adv-index]')
+        .forEach(el => {
+          const idTxt = el.getAttribute('data-adv-id') || '';
+          const enTxt = el.getAttribute('data-adv-en') || idTxt;
+          const zhTxt = el.getAttribute('data-adv-zh') || idTxt;
+          if (lang === 'en') el.textContent = enTxt;
+          else if (lang === 'zh') el.textContent = zhTxt;
+          else el.textContent = idTxt;
+        });
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyNow);
+    } else {
+      applyNow();
+    }
+    window.addEventListener('languageChanged', applyNow);
+  })();
+</script>
+{% endblock extra_js %}

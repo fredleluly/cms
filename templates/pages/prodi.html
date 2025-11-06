@@ -489,7 +489,77 @@
                        data-block-html-en="{{ blocks.visi_misi_section.items.0.description.en|escape_html_attr }}"
                        data-block-html-zh="{{ blocks.visi_misi_section.items.0.description.zh|escape_html_attr }}">{{ blocks.visi_misi_section.items.0.description.id }}</p>
                     {% else %}
-                    <p class="text-gray-600" data-i18n-content="visi_misi_section.items.0.description">{{ blocks.visi_misi_section.items.0.description }}</p>
+                    {% if prodi_category == 'manajemen' or prodi_category == 'manajemens2' %}
+                    <p class="text-gray-600"
+                       data-block-html-id="Menjadi Program Studi Manajemen dalam bidang keuangan, pemasaran, SDM, operasional dan kewirausahaan yang terpercaya dan terkemuka dalam bidang akademik dan profesional serta berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang berkelanjutan."
+                       data-block-html-en="To become a trusted and leading Management Study Program in finance, marketing, human resources, operations and entrepreneurship in academic and professional fields with national and international perspectives, playing a role in improving the quality of faith, knowledge and technology, which is God's gift, for the intelligence and welfare of humanity and sustainable life."
+                       data-block-html-zh="成为值得信赖且领先的管理学项目，涵盖金融、市场营销、人力资源、运营和创业领域，在学术和专业领域具有国内外视野，致力于提高信仰、知识和技术质量，这是上帝的恩赐，以造福人类智慧与福祉，实现可持续生活。">
+                       Menjadi Program Studi Manajemen dalam bidang keuangan, pemasaran, SDM, operasional dan kewirausahaan yang terpercaya dan terkemuka dalam bidang akademik dan profesional serta berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang berkelanjutan.
+                    </p>
+                    {% elif prodi_category == 'informatika' %}
+                    <p class="text-gray-600"
+                       data-block-html-id="Menjadi program studi yang terpercaya dan terkemuka dalam bidang komputer sains untuk sektor kesehatan yang berwawasan nasional dan internasional serta berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan."
+                       data-block-html-en="To become a trusted and leading study program in computer science for the health sector with national and international perspectives that plays a role in improving the quality of faith, knowledge and technology, which is God's gift, for the intelligence and welfare of humanity and a better and sustainable life."
+                       data-block-html-zh="成为值得信赖且领先的计算机科学学习项目，服务于医疗保健领域，具有国内外视野，致力于提高信仰、知识和技术质量，这是上帝的恩赐，以造福人类智慧与福祉，实现更美好与可持续的生活。">
+                       Menjadi program studi yang terpercaya dan terkemuka dalam bidang komputer sains untuk sektor kesehatan yang berwawasan nasional dan internasional serta berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.
+                    </p>
+                    {% elif prodi_category == 'statistika' %}
+                    <p class="text-gray-600"
+                       data-block-html-id="Menjadi lembaga pendidikan jenjang Sarjana Statistika yang terpercaya dan terkemuka serta berwawasan nasional dan internasional yang berperan dalam peningkatan ilmu pengetahuan, pembangunan berkelanjutan, dan iman kepercayaan kepada Tuhan."
+                       data-block-html-en="To become a trusted and leading educational institution for Bachelor of Statistics with national and international perspectives that plays a role in advancing knowledge, sustainable development, and faith in God."
+                       data-block-html-zh="成为值得信赖且领先的统计学学士教育机构，具有国内外视野，致力于推进知识进步、可持续发展以及对上帝的信仰。">
+                       Menjadi lembaga pendidikan jenjang Sarjana Statistika yang terpercaya dan terkemuka serta berwawasan nasional dan internasional yang berperan dalam peningkatan ilmu pengetahuan, pembangunan berkelanjutan, dan iman kepercayaan kepada Tuhan.
+                    </p>
+                    {% elif prodi_category == 'dkv' %}
+                    <p class="text-gray-600"
+                       data-block-html-id="Menjadi program studi yang terpercaya dan terkemuka dalam menumbuhkembangkan karakter intelektual seni rupa dan desain yang mandiri, yang senantiasa mengedepankan wawasan keindonesiaan di kancah global, demi berlangsungnya tatanan peradaban, yang merupakan karunia Tuhan untuk kemanusiaan."
+                       data-block-html-en="To become a trusted and leading program in developing the intellectual character of fine arts and design that is independent, always prioritizing Indonesian perspectives on the global stage, for the continuation of civilization, which is God's gift to humanity."
+                       data-block-html-zh="成为值得信赖且领先的项目，培养独立的美术与设计知识分子品格，始终在全球舞台上优先考虑印度尼西亚视角，以延续文明，这是上帝赐予人类的礼物。">
+                       Menjadi program studi yang terpercaya dan terkemuka dalam menumbuhkembangkan karakter intelektual seni rupa dan desain yang mandiri, yang senantiasa mengedepankan wawasan keindonesiaan di kancah global, demi berlangsungnya tatanan peradaban, yang merupakan karunia Tuhan untuk kemanusiaan.
+                    </p>
+                    {% elif prodi_category == 'arsitektur' %}
+                    <p class="text-gray-600"
+                       data-block-html-id="Menjadi Program Studi Arsitektur yang terkemuka dalam akademik dan profesionalisme yang berwawasan Nasional serta Internasional, yang berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, untuk kecerdasan dan kesejahteraan umat manusia serta lingkungan binaan yang berkelanjutan"
+                       data-block-html-en="To become a leading Architecture Study Program in academic and professionalism with National and International perspectives, playing a role in improving the quality of faith, knowledge and technology, for the intelligence and welfare of humanity and sustainable built environment."
+                       data-block-html-zh="成为在学术和专业领域领先的建筑学项目，具有国内外视野，致力于提高信仰、知识和技术质量，以造福人类智慧与福祉，实现可持续的建成环境。">
+                       Menjadi Program Studi Arsitektur yang terkemuka dalam akademik dan profesionalisme yang berwawasan Nasional serta Internasional, yang berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, untuk kecerdasan dan kesejahteraan umat manusia serta lingkungan binaan yang berkelanjutan
+                    </p>
+                    {% elif prodi_category == 'k3' %}
+                    <p class="text-gray-600"
+                       data-block-html-id="Menjadi program studi terkemuka yang menghasilkan sarjana profesional di bidang K3 (S. Kes) dengan keahlian dalam kesehatan, keselamatan kerja, ergonomi, human factor, dan higiene industri yang berwawasan nasional dan internasional dalam ilmu pengetahuan dan teknologi untuk mendukung kecerdasan dan kesejahteraan umat manusia, serta mewujudkan kehidupan yang lebih baik dan berkelanjutan."
+                       data-block-html-en="To become a leading study program producing professional bachelor graduates in Occupational Safety and Health (OHS/K3) with expertise in health, occupational safety, ergonomics, human factors, and industrial hygiene with national and international perspectives in knowledge and technology to support human intelligence and welfare, and realize a better and sustainable life."
+                       data-block-html-zh="成为领先的学习项目，培养在职业健康与安全（K3）领域的专业学士毕业生，具备健康、职业安全、人体工学、人因工程和工业卫生方面的专业知识，在知识与技术方面具有国内外视野，以支持人类智慧与福祉，实现更美好与可持续的生活。">
+                       Menjadi program studi terkemuka yang menghasilkan sarjana profesional di bidang K3 (S. Kes) dengan keahlian dalam kesehatan, keselamatan kerja, ergonomi, human factor, dan higiene industri yang berwawasan nasional dan internasional dalam ilmu pengetahuan dan teknologi untuk mendukung kecerdasan dan kesejahteraan umat manusia, serta mewujudkan kehidupan yang lebih baik dan berkelanjutan.
+                    </p>
+                    {% elif prodi_category == 'hospar' %}
+                    <p class="text-gray-600"
+                       data-block-html-id="Program Studi yang diakui unggul dalam bidang hotel management, event management, food production management, dan pariwisata yang berwawasan nasional dan internasional, serta berjiwa entrepreneur untuk meningkatkan kualitas ilmu dan pengetahuan yang merupakan Karunia Tuhan untuk kesejahteraan umat manusia dengan berorientasi pada industri."
+                       data-block-html-en="A Study Program recognized as excellent in hotel management, event management, food production management, and tourism with national and international perspectives, and entrepreneurial spirit to improve the quality of knowledge and understanding which is God's gift for the welfare of humanity with industry orientation."
+                       data-block-html-zh="在酒店管理、活动管理、餐饮生产管理和旅游领域享有卓越声誉的学习项目，具有国内外视野和企业家精神，以提高知识与理解的质量，这是上帝赐予人类福祉的礼物，以产业为导向。">
+                       Program Studi yang diakui unggul dalam bidang hotel management, event management, food production management, dan pariwisata yang berwawasan nasional dan internasional, serta berjiwa entrepreneur untuk meningkatkan kualitas ilmu dan pengetahuan yang merupakan Karunia Tuhan untuk kesejahteraan umat manusia dengan berorientasi pada industri.
+                    </p>
+                    {% elif prodi_category == 'akuntansi' %}
+                    <p class="text-gray-600"
+                       data-block-html-id="Menjadi Program Studi Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang terpercaya dan terkemuka dalam bidang akademik dan profesional serta berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan Karunia Hikmat Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang berkelanjutan."
+                       data-block-html-en="To become a trusted and leading Accounting Study Program in audit, taxation, and digital accounting in academic and professional fields with national and international perspectives, playing a role in improving the quality of faith, knowledge and technology, which is God's Wise Gift, for the intelligence and welfare of humanity and sustainable life."
+                       data-block-html-zh="成为值得信赖且领先的会计学项目，涵盖审计、税务和数字会计领域，在学术和专业领域具有国内外视野，致力于提高信仰、知识和技术质量，这是上帝的智慧恩赐，以造福人类智慧与福祉，实现可持续生活。">
+                       Menjadi Program Studi Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang terpercaya dan terkemuka dalam bidang akademik dan profesional serta berwawasan nasional dan internasional, berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan Karunia Hikmat Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang berkelanjutan.
+                    </p>
+                    {% elif prodi_category == 'fisika-medis' %}
+                    <p class="text-gray-600"
+                       data-block-html-id="Menjadi program studi yang terpercaya dan terkemuka dalam bidang fisika dan aplikasinya untuk sektor medis yang berwawasan nasional dan internasional serta berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan."
+                       data-block-html-en="To become a trusted and leading study program in physics and its applications for the medical sector with national and international perspectives that plays a role in improving the quality of faith, knowledge and technology, which is God's gift, for the intelligence and welfare of humanity and a better and sustainable life."
+                       data-block-html-zh="成为值得信赖且领先的物理学及其医疗领域应用的学习项目，具有国内外视野，致力于提高信仰、知识和技术质量，这是上帝的恩赐，以造福人类智慧与福祉，实现更美好与可持续的生活。">
+                       Menjadi program studi yang terpercaya dan terkemuka dalam bidang fisika dan aplikasinya untuk sektor medis yang berwawasan nasional dan internasional serta berperan dalam peningkatan kualitas iman kepercayaan, ilmu pengetahuan dan teknologi, yang merupakan karunia Tuhan, untuk kecerdasan dan kesejahteraan umat manusia serta kehidupan yang lebih baik dan berkelanjutan.
+                    </p>
+                    {% else %}
+                    <p class="text-gray-600"
+                       data-block-html-id="{{ blocks.visi_misi_section.items.0.description|escape_html_attr }}"
+                       data-block-html-en="To become a trusted and leading program producing graduates with integrity and professionalism for a better and sustainable life."
+                       data-block-html-zh="成为值得信赖且领先的项目，培养具备诚信与专业精神的毕业生，迈向更美好与可持续的生活。">
+                       {{ blocks.visi_misi_section.items.0.description }}
+                    </p>
+                    {% endif %}
                     {% endif %}
                 </div>
             </div>
@@ -521,6 +591,313 @@
                     {% endwith %}
                     {% else %}
                     {% with missions=blocks.visi_misi_section.items.1.description|split_lines %}
+                    {% if prodi_category == 'manajemen' or prodi_category == 'manajemens2' %}
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="0"
+                              data-block-html-id="Terbentuknya Sarjana Manajemen dalam bidang keuangan, pemasaran, SDM, operasional dan kewirausahaan yang kompeten dan memiliki jiwa kepemimpinan serta berperilaku sesuai dengan norma-norma di masyarakat, bertanggung jawab dengan layanan penuh kasih."
+                              data-block-html-en="To develop Bachelor of Management in finance, marketing, human resources, operations and entrepreneurship who are competent and have leadership spirit and behave according to societal norms, responsible with compassionate service."
+                              data-block-html-zh="培养在金融、市场营销、人力资源、运营和创业领域具有能力和领导精神的管理学士，遵循社会规范行事，以富有同情心的服务承担责任。">Terbentuknya Sarjana Manajemen dalam bidang keuangan, pemasaran, SDM, operasional dan kewirausahaan yang kompeten dan memiliki jiwa kepemimpinan serta berperilaku sesuai dengan norma-norma di masyarakat, bertanggung jawab dengan layanan penuh kasih.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="1"
+                              data-block-html-id="Terciptanya Sarjana Manajemen dalam bidang keuangan, pemasaran, SDM, operasional dan kewirausahaan yang memiliki kompetensi dalam bidang penelitian, dan pengabdian kepada masyarakat kreativitas, inovasi, dan berjiwa kewirausahaan."
+                              data-block-html-en="To create Bachelor of Management in finance, marketing, human resources, operations and entrepreneurship who have competence in research and community service with creativity, innovation, and entrepreneurial spirit."
+                              data-block-html-zh="培养在金融、市场营销、人力资源、运营和创业领域具备研究和社区服务能力的管理学士，具有创造力、创新精神和企业家精神。">Terciptanya Sarjana Manajemen dalam bidang keuangan, pemasaran, SDM, operasional dan kewirausahaan yang memiliki kompetensi dalam bidang penelitian, dan pengabdian kepada masyarakat kreativitas, inovasi, dan berjiwa kewirausahaan.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="2"
+                              data-block-html-id="Terbentuknya generasi penerus yang ahli di bidang management keuangan, pemasaran, SDM, operasional dan kewirausahaan yang memiliki kepedulian untuk kehidupan berkelanjutan di tengah masyarakat."
+                              data-block-html-en="To develop future generations who are experts in financial management, marketing, human resources, operations and entrepreneurship with concern for sustainable living in society."
+                              data-block-html-zh="培养在金融管理、市场营销、人力资源、运营和创业领域具有专业知识的下一代，关心社会中的可持续生活。">Terbentuknya generasi penerus yang ahli di bidang management keuangan, pemasaran, SDM, operasional dan kewirausahaan yang memiliki kepedulian untuk kehidupan berkelanjutan di tengah masyarakat.</span>
+                    </div>
+                    {% elif prodi_category == 'akuntansi' %}
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="0"
+                              data-block-html-id="Terbentuknya Sarjana Akuntansi yang berkualitas dan memiliki kemampuan akademik secara profesional dalam bidang audit, perpajakan, dan digital akuntansi, serta berwawasan nasional maupun internasional."
+                              data-block-html-en="To develop quality Bachelor of Accounting who have professional academic capabilities in audit, taxation, and digital accounting, with national and international perspectives."
+                              data-block-html-zh="培养具有审计、税务和数字会计方面专业学术能力的优质会计学士，具有国内外视野。">Terbentuknya Sarjana Akuntansi yang berkualitas dan memiliki kemampuan akademik secara profesional dalam bidang audit, perpajakan, dan digital akuntansi, serta berwawasan nasional maupun internasional.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="1"
+                              data-block-html-id="Terbentuknya Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang memiliki nilai-nilai Integritas (Integrity) – Penatalayanan (Stewardship) – Respek (Respect), yang berlandaskan iman kepercayaan."
+                              data-block-html-en="To develop Bachelor of Accounting in audit, taxation, and digital accounting who possess the values of Integrity, Stewardship, and Respect, based on faith."
+                              data-block-html-zh="培养在审计、税务和数字会计领域具有诚信、管理和尊重价值观的会计学士，以信仰为基础。">Terbentuknya Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang memiliki nilai-nilai Integritas (Integrity) – Penatalayanan (Stewardship) – Respek (Respect), yang berlandaskan iman kepercayaan.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="2"
+                              data-block-html-id="Terbentuknya Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih."
+                              data-block-html-en="To develop Bachelor of Accounting in audit, taxation, and digital accounting who possess leadership spirit and are dedicated to ethical behavior, responsible with compassionate service."
+                              data-block-html-zh="培养在审计、税务和数字会计领域具有领导精神并致力于道德行为、以富有同情心的服务承担责任的会计学士。">Terbentuknya Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="3"
+                              data-block-html-id="Terciptanya Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang memiliki kompetensi penelitian, kreativitas, inovasi dan menguasai teknologi akuntansi."
+                              data-block-html-en="To create Bachelor of Accounting in audit, taxation, and digital accounting who have research competence, creativity, innovation and mastery of accounting technology."
+                              data-block-html-zh="培养在审计、税务和数字会计领域具有研究能力、创造力、创新精神并掌握会计技术的会计学士。">Terciptanya Sarjana Akuntansi dalam bidang audit, perpajakan, dan digital akuntansi yang memiliki kompetensi penelitian, kreativitas, inovasi dan menguasai teknologi akuntansi.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="4"
+                              data-block-html-id="Terbentuknya generasi penerus menjadi Sarjana Akuntansi yang ahli dalam bidang audit, perpajakan, dan digital akuntansi yang berjiwa entrepreneur serta memiliki kepedulian untuk kehidupan berkelanjutan di masyarakat."
+                              data-block-html-en="To develop future generations to become Bachelor of Accounting experts in audit, taxation, and digital accounting with entrepreneurial spirit and concern for sustainable living in society."
+                              data-block-html-zh="培养成为审计、税务和数字会计领域专家的下一代会计学士，具有企业家精神并关心社会中的可持续生活。">Terbentuknya generasi penerus menjadi Sarjana Akuntansi yang ahli dalam bidang audit, perpajakan, dan digital akuntansi yang berjiwa entrepreneur serta memiliki kepedulian untuk kehidupan berkelanjutan di masyarakat.</span>
+                    </div>
+                    {% elif prodi_category == 'statistika' %}
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="0"
+                              data-block-html-id="Menghasilkan lulusan yang berkualitas sebagai Data Scientist dengan kemampuan pengolahan dan analisis data besar dengan machine learning dan artificial intelligence, serta berwawasan nasional maupun internasional."
+                              data-block-html-en="Producing qualified graduates as Data Scientists with capabilities in processing and analyzing big data with machine learning and artificial intelligence, possessing national and international perspectives."
+                              data-block-html-zh="培养具有机器学习和人工智能大数据处理与分析能力的数据科学家，具有国内外视野的优质毕业生。">Menghasilkan lulusan yang berkualitas sebagai Data Scientist dengan kemampuan pengolahan dan analisis data besar dengan machine learning dan artificial intelligence, serta berwawasan nasional maupun internasional.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="1"
+                              data-block-html-id="Menghasilkan lulusan sebagai Data Scientist yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih."
+                              data-block-html-en="Producing graduates as Data Scientists who possess leadership spirit and are dedicated to ethical behavior, responsible with compassionate service."
+                              data-block-html-zh="培养具有领导精神并致力于道德行为、以富有同情心的服务承担责任的数据科学家毕业生。">Menghasilkan lulusan sebagai Data Scientist yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="2"
+                              data-block-html-id="Menghasilkan lulusan sebagai Data Scientist yang memiliki kompetensi penelitian, kreatif, inovatif dalam pengolahan dan analisis data besar dengan machine learning dan artificial intelligence serta berjiwa entrepreneur dan memiliki kepedulian untuk kehidupan berkelanjutan di masyarakat."
+                              data-block-html-en="Producing graduates as Data Scientists who have research competence, are creative, innovative in big data processing and analysis with machine learning and artificial intelligence, possess entrepreneurial spirit and have concern for sustainable living in society."
+                              data-block-html-zh="培养具有研究能力、在机器学习和人工智能大数据处理与分析方面具有创造力和创新精神的数据科学家毕业生，具有企业家精神并关心社会中的可持续生活。">Menghasilkan lulusan sebagai Data Scientist yang memiliki kompetensi penelitian, kreatif, inovatif dalam pengolahan dan analisis data besar dengan machine learning dan artificial intelligence serta berjiwa entrepreneur dan memiliki kepedulian untuk kehidupan berkelanjutan di masyarakat.</span>
+                    </div>
+                    {% elif prodi_category == 'dkv' %}
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="0"
+                              data-block-html-id="Menghasilkan lulusan yang kompeten di ranah seni rupa dan bersikap kritis, kreatif, inovatif, serta mandiri."
+                              data-block-html-en="To produce graduates who are competent in the realm of fine arts and possess critical, creative, innovative, and independent attitudes."
+                              data-block-html-zh="培养在美术领域具备能力并拥有批判性、创造性、创新性和独立态度的毕业生。">Menghasilkan lulusan yang kompeten di ranah seni rupa dan bersikap kritis, kreatif, inovatif, serta mandiri.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="1"
+                              data-block-html-id="Membentuk individu intelek yang mengedepankan nilai-nilai kemanusiaan dan demokrasi, guna mewujudkan masyarakat yang adil dan makmur di manapun mereka berada."
+                              data-block-html-en="To shape intellectual individuals who prioritize humanitarian values and democracy, in order to realize a just and prosperous society wherever they are."
+                              data-block-html-zh="塑造优先考虑人道主义价值观和民主的知识分子，以实现无论身在何处都公正繁荣的社会。">Membentuk individu intelek yang mengedepankan nilai-nilai kemanusiaan dan demokrasi, guna mewujudkan masyarakat yang adil dan makmur di manapun mereka berada.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="2"
+                              data-block-html-id="Membentuk generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan."
+                              data-block-html-en="To shape future generations who have concern for sustainable living."
+                              data-block-html-zh="塑造关心可持续生活的下一代。">Membentuk generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan.</span>
+                    </div>
+                    {% elif prodi_category == 'hospar' %}
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="0"
+                              data-block-html-id="Terbentuknya sarjana Pariwisata dalam bidang hotel management, event management, food production management, dan pariwisata yang kompeten dan memiliki jiwa entrepreneur, kepemimpinan, serta berperilaku sesuai dengan norma-norma di masyarakat, bertanggung jawab dengan layanan penuh kasih."
+                              data-block-html-en="To develop Bachelor of Tourism in hotel management, event management, food production management, and tourism who are competent and possess entrepreneurial spirit, leadership, and behave according to societal norms, responsible with compassionate service."
+                              data-block-html-zh="培养在酒店管理、活动管理、餐饮生产管理和旅游领域具有能力并拥有企业家精神、领导力的旅游学士，遵循社会规范行事，以富有同情心的服务承担责任。">Terbentuknya sarjana Pariwisata dalam bidang hotel management, event management, food production management, dan pariwisata yang kompeten dan memiliki jiwa entrepreneur, kepemimpinan, serta berperilaku sesuai dengan norma-norma di masyarakat, bertanggung jawab dengan layanan penuh kasih.</span>
+                    </div>
+                    {% elif prodi_category == 'arsitektur' %}
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="0"
+                              data-block-html-id="Menghasilkan lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih."
+                              data-block-html-en="To produce graduates who possess leadership spirit and are dedicated to ethical behavior, responsible based on compassionate service."
+                              data-block-html-zh="培养具有领导精神并致力于道德行为、以富有同情心的服务为基础承担责任的毕业生。">Menghasilkan lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="1"
+                              data-block-html-id="Menghasilkan lulusan yang memiliki kompetensi dalam perencanaan, perancangan dan penelitian, serta kreatif, inovatif dan berjiwa entrepreneur."
+                              data-block-html-en="To produce graduates who have competence in planning, design and research, as well as creative, innovative and possess entrepreneurial spirit."
+                              data-block-html-zh="培养在规划、设计和研究方面具有能力，以及具有创造力、创新精神和企业家精神的毕业生。">Menghasilkan lulusan yang memiliki kompetensi dalam perencanaan, perancangan dan penelitian, serta kreatif, inovatif dan berjiwa entrepreneur.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="2"
+                              data-block-html-id="Menghasilkan generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan."
+                              data-block-html-en="To produce future generations who have concern for sustainable living."
+                              data-block-html-zh="培养关心可持续生活的下一代。">Menghasilkan generasi penerus yang memiliki kepedulian untuk kehidupan berkelanjutan.</span>
+                    </div>
+                    {% elif prodi_category == 'k3' %}
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="0"
+                              data-block-html-id="Menyelenggarakan pendidikan untuk menghasilkan lulusan Keselamatan dan Kesehatan Kerja (K3) yang memiliki jiwa kepemimpinan yang kuat, berdedikasi pada perilaku etis, bertanggung jawab, dan berlandaskan layanan penuh kasih."
+                              data-block-html-en="To organize education to produce Occupational Safety and Health (OHS/K3) graduates who have strong leadership spirit, are dedicated to ethical behavior, responsible, and based on compassionate service."
+                              data-block-html-zh="组织教育以培养具有强大领导精神、致力于道德行为、负责任并以富有同情心的服务为基础的职业健康与安全（K3）毕业生。">Menyelenggarakan pendidikan untuk menghasilkan lulusan Keselamatan dan Kesehatan Kerja (K3) yang memiliki jiwa kepemimpinan yang kuat, berdedikasi pada perilaku etis, bertanggung jawab, dan berlandaskan layanan penuh kasih.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="1"
+                              data-block-html-id="Menyelenggarakan kegiatan penelitian untuk menghasilkan lulusan Keselamatan dan Kesehatan Kerja (K3) yang unggul dalam kemampuan penelitian, kreatifitas, inovasi, dan berjiwa entrepreneur."
+                              data-block-html-en="To conduct research activities to produce Occupational Safety and Health (OHS/K3) graduates who excel in research capability, creativity, innovation, and entrepreneurial spirit."
+                              data-block-html-zh="开展研究活动以培养在研究能力、创造力、创新精神和企业家精神方面表现卓越的职业健康与安全（K3）毕业生。">Menyelenggarakan kegiatan penelitian untuk menghasilkan lulusan Keselamatan dan Kesehatan Kerja (K3) yang unggul dalam kemampuan penelitian, kreatifitas, inovasi, dan berjiwa entrepreneur.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="2"
+                              data-block-html-id="Menyelenggarakan kegiatan pengabdian masyarakat untuk menghasilkan lulusan Keselamatan dan Kesehatan Kerja (K3) yang memiliki kepedulian yang tinggi terhadap kehidupan berkelanjutan."
+                              data-block-html-en="To conduct community service activities to produce Occupational Safety and Health (OHS/K3) graduates who have high concern for sustainable living."
+                              data-block-html-zh="开展社区服务活动以培养对可持续生活具有高度关注的职业健康与安全（K3）毕业生。">Menyelenggarakan kegiatan pengabdian masyarakat untuk menghasilkan lulusan Keselamatan dan Kesehatan Kerja (K3) yang memiliki kepedulian yang tinggi terhadap kehidupan berkelanjutan.</span>
+                    </div>
+                    {% elif prodi_category == 'informatika' %}
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="0"
+                              data-block-html-id="Membentuk lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih"
+                              data-block-html-en="To develop graduates who possess leadership spirit and are dedicated to ethical behavior, responsible based on compassionate service"
+                              data-block-html-zh="培养具有领导精神并致力于道德行为、以富有同情心的服务为基础承担责任的毕业生">Membentuk lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="1"
+                              data-block-html-id="Membentuk lulusan yang memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang komputer sains untuk sektor kesehatan yang berjiwa kewirausahaan"
+                              data-block-html-en="To develop graduates who have research capability, are creative and innovative in computer science for the health sector with entrepreneurial spirit"
+                              data-block-html-zh="培养在计算机科学领域具有研究能力、创造力和创新精神，服务于医疗保健领域并具有企业家精神的毕业生">Membentuk lulusan yang memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang komputer sains untuk sektor kesehatan yang berjiwa kewirausahaan</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="2"
+                              data-block-html-id="Membentuk lulusan yang memiliki kepedulian untuk kehidupan berkelanjutan."
+                              data-block-html-en="To develop graduates who have concern for sustainable living."
+                              data-block-html-zh="培养关心可持续生活的毕业生。">Membentuk lulusan yang memiliki kepedulian untuk kehidupan berkelanjutan.</span>
+                    </div>
+                    {% elif prodi_category == 'fisika-medis' %}
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="0"
+                              data-block-html-id="Menghasilkan lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih."
+                              data-block-html-en="To develop graduates who possess leadership spirit and are dedicated to ethical behavior, responsible based on compassionate service."
+                              data-block-html-zh="培养具有领导精神并致力于道德行为、以富有同情心的服务为基础承担责任的毕业生。">Menghasilkan lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="1"
+                              data-block-html-id="Menghasilkan lulusan yang memiliki kemampuan meneliti, kreatif dan inovatif dalam ilmu fisika dan aplikasinya untuk sektor medis yang berjiwa entrepreneur."
+                              data-block-html-en="To develop graduates who have research capability, are creative and innovative in physics and its applications for the medical sector with entrepreneurial spirit."
+                              data-block-html-zh="培养在物理学及其医疗领域应用方面具有研究能力、创造力和创新精神并具有企业家精神的毕业生。">Menghasilkan lulusan yang memiliki kemampuan meneliti, kreatif dan inovatif dalam ilmu fisika dan aplikasinya untuk sektor medis yang berjiwa entrepreneur.</span>
+                    </div>
+                    <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-5 h-5 text-matana-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                        </div>
+                        <span class="text-gray-700 mission-text" data-mission-index="2"
+                              data-block-html-id="Menghasilkan lulusan yang memiliki kepedulian untuk kehidupan berkelanjutan."
+                              data-block-html-en="To develop graduates who have concern for sustainable living."
+                              data-block-html-zh="培养关心可持续生活的毕业生。">Menghasilkan lulusan yang memiliki kepedulian untuk kehidupan berkelanjutan.</span>
+                    </div>
+                    {% else %}
                     {% for mission in missions %}
                     <div class="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
                         <div class="w-8 h-8 bg-matana-blue/10 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -531,6 +908,7 @@
                         <span class="text-gray-700 mission-text" data-mission-index="{{ forloop.counter0 }}">{{ mission }}</span>
                     </div>
                     {% endfor %}
+                    {% endif %}
                     {% endwith %}
                     {% endif %}
                 </div>
@@ -593,7 +971,29 @@
                          data-block-html-en="{{ blocks.tujuan_section.description.en|linebreaksbr|safe|escape_html_attr }}"
                          data-block-html-zh="{{ blocks.tujuan_section.description.zh|linebreaksbr|safe|escape_html_attr }}">{{ blocks.tujuan_section.description.id|linebreaksbr|safe }}</div>
                     {% else %}
+                    {% if prodi_category == 'hospar' %}
+                    <div data-block-html-id="Program Studi Hospitaliti & Pariwisata bertujuan untuk menghasilkan lulusan yang profesional, beretika, dan kompetitif secara global dalam industri perhotelan dan pariwisata. Program ini menyediakan pengetahuan dan keterampilan komprehensif dalam hotel management, tourism management, event management, dan culinary arts. Lulusan dilengkapi dengan kemampuan kepemimpinan yang kuat, keterampilan komunikasi yang sangat baik, dan pemahaman mendalam tentang keunggulan layanan pelanggan untuk sukses dalam sektor perhotelan dan pariwisata yang dinamis."
+                         data-block-html-en="The Hospitality & Tourism program aims to produce graduates who are professional, ethical, and globally competitive in the hospitality and tourism industry. The program provides comprehensive knowledge and skills in hotel management, tourism management, event management, and culinary arts. Graduates are equipped with strong leadership abilities, excellent communication skills, and a deep understanding of customer service excellence to succeed in the dynamic hospitality and tourism sector."
+                         data-block-html-zh="酒店与旅游项目旨在培养在酒店与旅游业具备专业素养、职业道德和全球竞争力的人才。项目提供酒店管理、旅游管理、活动管理和烹饪艺术方面的全面知识与技能。毕业生具备强大的领导能力、出色的沟通技巧以及对卓越客户服务的深刻理解，以在充满活力的酒店与旅游行业取得成功。">Program Studi Hospitaliti & Pariwisata bertujuan untuk menghasilkan lulusan yang profesional, beretika, dan kompetitif secara global dalam industri perhotelan dan pariwisata. Program ini menyediakan pengetahuan dan keterampilan komprehensif dalam hotel management, tourism management, event management, dan culinary arts. Lulusan dilengkapi dengan kemampuan kepemimpinan yang kuat, keterampilan komunikasi yang sangat baik, dan pemahaman mendalam tentang keunggulan layanan pelanggan untuk sukses dalam sektor perhotelan dan pariwisata yang dinamis.</div>
+                    {% elif prodi_category == 'dkv' %}
+                    <div data-block-html-id="Program Studi Desain Komunikasi Visual bertujuan untuk menghasilkan lulusan yang kreatif dan inovatif yang dapat merancang solusi komunikasi visual untuk berbagai media. Program ini menyediakan pengetahuan komprehensif dalam desain grafis, media digital, desain periklanan, branding, dan komunikasi multimedia. Lulusan dilengkapi dengan pemikiran kreatif yang kuat, keterampilan desain visual, dan kemampuan untuk berkomunikasi secara efektif melalui media visual untuk memenuhi kebutuhan industri kreatif dan era digital."
+                         data-block-html-en="The Visual Communication Design program aims to produce creative and innovative graduates who can design visual communication solutions for various media. The program provides comprehensive knowledge in graphic design, digital media, advertising design, branding, and multimedia communication. Graduates are equipped with strong creative thinking, visual design skills, and the ability to communicate effectively through visual media to meet the needs of the creative industry and digital era."
+                         data-block-html-zh="视觉传达设计项目旨在培养能够为各种媒体设计视觉传达解决方案的创意与创新人才。项目提供平面设计、数字媒体、广告设计、品牌设计和多媒体传播方面的全面知识。毕业生具备强大的创意思维、视觉设计技能以及通过视觉媒体有效沟通的能力，以满足创意产业和数字时代的需求。">Program Studi Desain Komunikasi Visual bertujuan untuk menghasilkan lulusan yang kreatif dan inovatif yang dapat merancang solusi komunikasi visual untuk berbagai media. Program ini menyediakan pengetahuan komprehensif dalam desain grafis, media digital, desain periklanan, branding, dan komunikasi multimedia. Lulusan dilengkapi dengan pemikiran kreatif yang kuat, keterampilan desain visual, dan kemampuan untuk berkomunikasi secara efektif melalui media visual untuk memenuhi kebutuhan industri kreatif dan era digital.</div>
+                    {% elif prodi_category == 'arsitektur' %}
+                    <div data-block-html-id="Program Studi Arsitektur bertujuan untuk menghasilkan lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih. Lulusan diharapkan memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang perencanaan, perancangan dan penelitian serta memiliki jiwa kewirausahaan. Selain itu, lulusan juga diharapkan memiliki kepedulian untuk kehidupan berkelanjutan."
+                         data-block-html-en="The Architecture program aims to produce graduates who possess leadership spirit and are dedicated to ethical behavior, responsible based on compassionate service. Graduates are expected to have research capability, be creative and innovative in planning, design and research, and possess entrepreneurial spirit. Additionally, graduates are also expected to have concern for sustainable living."
+                         data-block-html-zh="建筑学项目旨在培养具有领导精神并致力于道德行为、以富有同情心的服务为基础承担责任的毕业生。毕业生应具备研究能力，在规划、设计和研究方面具有创造力和创新精神，并具有企业家精神。此外，毕业生还应关心可持续生活。">Program Studi Arsitektur bertujuan untuk menghasilkan lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih. Lulusan diharapkan memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang perencanaan, perancangan dan penelitian serta memiliki jiwa kewirausahaan. Selain itu, lulusan juga diharapkan memiliki kepedulian untuk kehidupan berkelanjutan.</div>
+                    {% elif prodi_category == 'informatika' %}
+                    <div data-block-html-id="Program Studi Informatika bertujuan untuk menghasilkan lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih. Lulusan diharapkan memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang komputer sains untuk sektor kesehatan serta memiliki jiwa kewirausahaan. Selain itu, lulusan juga diharapkan memiliki kepedulian untuk kehidupan berkelanjutan."
+                         data-block-html-en="The Informatics program aims to produce graduates who possess leadership spirit and are dedicated to ethical behavior, responsible based on compassionate service. Graduates are expected to have research capability, be creative and innovative in computer science for the health sector, and possess entrepreneurial spirit. Additionally, graduates are also expected to have concern for sustainable living."
+                         data-block-html-zh="信息学项目旨在培养具有领导精神并致力于道德行为、以富有同情心的服务为基础承担责任的毕业生。毕业生应具备研究能力，在计算机科学领域（服务于医疗保健行业）具有创造力和创新精神，并具有企业家精神。此外，毕业生还应关心可持续生活。">Program Studi Informatika bertujuan untuk menghasilkan lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih. Lulusan diharapkan memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang komputer sains untuk sektor kesehatan serta memiliki jiwa kewirausahaan. Selain itu, lulusan juga diharapkan memiliki kepedulian untuk kehidupan berkelanjutan.</div>
+                    {% elif prodi_category == 'fisika-medis' %}
+                    <div data-block-html-id="Program Studi Fisika Medis bertujuan untuk menghasilkan lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih. Lulusan diharapkan memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang fisika dan aplikasinya untuk sektor medis serta memiliki jiwa kewirausahaan. Selain itu, lulusan juga diharapkan memiliki kepedulian untuk kehidupan berkelanjutan."
+                         data-block-html-en="The Medical Physics program aims to produce graduates who possess leadership spirit and are dedicated to ethical behavior, responsible based on compassionate service. Graduates are expected to have research capability, be creative and innovative in physics and its applications for the medical sector, and possess entrepreneurial spirit. Additionally, graduates are also expected to have concern for sustainable living."
+                         data-block-html-zh="医学物理项目旨在培养具有领导精神并致力于道德行为、以富有同情心的服务为基础承担责任的毕业生。毕业生应具备研究能力，在物理学及其医疗领域应用方面具有创造力和创新精神，并具有企业家精神。此外，毕业生还应关心可持续生活。">Program Studi Fisika Medis bertujuan untuk menghasilkan lulusan yang memiliki jiwa kepemimpinan serta berdedikasi pada perilaku etis, bertanggung jawab berlandaskan layanan penuh kasih. Lulusan diharapkan memiliki kemampuan meneliti, kreatif, dan inovatif dalam bidang fisika dan aplikasinya untuk sektor medis serta memiliki jiwa kewirausahaan. Selain itu, lulusan juga diharapkan memiliki kepedulian untuk kehidupan berkelanjutan.</div>
+                    {% else %}
                     <div data-i18n-html="tujuan_section.description">{{ blocks.tujuan_section.description|i18n_content:'id'|linebreaksbr|safe }}</div>
+                    {% endif %}
                     {% endif %}
                 </div>
             </div>
@@ -808,17 +1208,6 @@
     // Using server-side JSON serialization for security
     window.pageBlocks = {{ blocks_json|safe }};
 </script>
-<script src="{% static 'js/i18n-blocks.js' %}"></script>
-<script src="{% static 'js/i18n-content.js' %}"></script>
-<script>
-    // Split helper specifically for mission items in visi_misi_section
-    if (document.querySelector('.visi-misi-description')) {
-        String.prototype.missionSplit = function(separator) {
-            if (typeof this === 'string') {
-                return this.toString().split(separator);
-            }
-            return [];
-        };
-    }
-</script>
+<script src="{% static 'js/i18n-blocks.js' %}?v=20241105002"></script>
+<script src="{% static 'js/i18n-content.js' %}?v=20241105002"></script>
 {% endblock %}

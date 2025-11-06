@@ -28,4 +28,26 @@ def get_index(list_or_dict, index):
             return list_or_dict.get(index)
     except (IndexError, ValueError, KeyError):
         pass
-    return None 
+    return None
+
+@register.filter
+def translate_to_en(value):
+    """
+    Extract English translation from multilingual content.
+    If value is a dict with 'en' key, return that.
+    Otherwise return the value as-is (fallback).
+    """
+    if isinstance(value, dict):
+        return value.get('en', value.get('id', value))
+    return value
+
+@register.filter
+def translate_to_zh(value):
+    """
+    Extract Chinese translation from multilingual content.
+    If value is a dict with 'zh' key, return that.
+    Otherwise return the value as-is (fallback).
+    """
+    if isinstance(value, dict):
+        return value.get('zh', value.get('id', value))
+    return value 
