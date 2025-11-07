@@ -253,41 +253,8 @@ def create_default_homepage():
     return homepage
 
 def profile_view_lpm(request):
-    """View for LPM page with blocks structure"""
-    try:
-        lpm_page = Page.objects.get(
-            slug='lpm',
-            status=Page.PUBLISHED
-        )
-    except Page.DoesNotExist:
-        lpm_page = create_default_lpm_page()
-    
-    # Get or create LPM category
-    lpm_category, created = ArticleCategory.objects.get_or_create(
-        slug='lpm',
-        defaults={'name': 'LPM', 'description': 'Lembaga Penjaminan Mutu'}
-    )
-    
-    # Get latest 3 published articles from LPM category
-    lpm_articles = Article.objects.filter(
-        category=lpm_category, 
-        status='published'
-    ).order_by('-published_at')[:3]
-    
-    # Get content blocks
-    blocks = {}
-    for block in lpm_page.content_blocks.all().order_by('order'):
-        blocks[block.identifier] = block.content
-    
-    context = {
-        'page': lpm_page,
-        'meta': lpm_page.metadata,
-        'blocks': blocks,
-        'articles': lpm_articles,
-        'category': lpm_category,
-    }
-    
-    return render(request, 'pages/profile_view_lpm.html', context)
+    """View for LPM page - redirects to external URL"""
+    return redirect('https://lpm.matanauniversity.ac.id/')
 
 def profile_view_lppm(request):
     # Get or create LPPM category
@@ -1614,20 +1581,16 @@ def profile_view_manajemen(request):
     # Get related articles
     related_articles = get_related_articles('manajemen')
     
+    popup_context = get_popup_context()
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
         'blocks': blocks,
-        'blocks_popup': {
-            i.identifier: i.content 
-            for i in Page.objects.get(
-                slug='popup', 
-                status=Page.PUBLISHED
-            ).content_blocks.all().order_by('order')
-        },
+        'blocks_json': json.dumps(blocks),
         'related_articles': related_articles,
         'prodi_category': 'manajemen'
     }
+    context.update(popup_context)
     
     return render(request, 'pages/prodi.html', context)
 # Prodi FEBIS
@@ -1866,20 +1829,16 @@ def profile_view_manajemens2(request):
     # Get related articles
     related_articles = get_related_articles('manajemens')
     
+    popup_context = get_popup_context()
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
         'blocks': blocks,
-        'blocks_popup': {
-            i.identifier: i.content 
-            for i in Page.objects.get(
-                slug='popup', 
-                status=Page.PUBLISHED
-            ).content_blocks.all().order_by('order')
-        },
+        'blocks_json': json.dumps(blocks),
         'related_articles': related_articles,
         'prodi_category': 'manajemens2'
     }
+    context.update(popup_context)
     
     return render(request, 'pages/prodi.html', context)
 
@@ -2204,20 +2163,16 @@ def profile_view_hospitality(request):
     # Get related articles
     related_articles = get_related_articles('hospar')
     
+    popup_context = get_popup_context()
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
         'blocks': blocks,
-        'blocks_popup': {
-            i.identifier: i.content 
-            for i in Page.objects.get(
-                slug='popup', 
-                status=Page.PUBLISHED
-            ).content_blocks.all().order_by('order')
-        },
+        'blocks_json': json.dumps(blocks),
         'related_articles': related_articles,
         'prodi_category': 'hospar'
     }
+    context.update(popup_context)
     
     return render(request, 'pages/prodi.html', context)
 
@@ -2683,20 +2638,16 @@ def profile_view_informatika(request):
     # Get related articles
     related_articles = get_related_articles('informatika')
     
+    popup_context = get_popup_context()
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
         'blocks': blocks,
-        'blocks_popup': {
-            i.identifier: i.content 
-            for i in Page.objects.get(
-                slug='popup', 
-                status=Page.PUBLISHED
-            ).content_blocks.all().order_by('order')
-        },
+        'blocks_json': json.dumps(blocks),
         'related_articles': related_articles,
         'prodi_category': 'informatika'
     }
+    context.update(popup_context)
     
     return render(request, 'pages/prodi.html', context)
 
@@ -3082,20 +3033,16 @@ def profile_view_arsitektur(request):
     # Get related articles
     related_articles = get_related_articles('arsitektur')
     
+    popup_context = get_popup_context()
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
         'blocks': blocks,
-        'blocks_popup': {
-            i.identifier: i.content 
-            for i in Page.objects.get(
-                slug='popup', 
-                status=Page.PUBLISHED
-            ).content_blocks.all().order_by('order')
-        },
+        'blocks_json': json.dumps(blocks),
         'related_articles': related_articles,
         'prodi_category': 'arsitektur'
     }
+    context.update(popup_context)
     
     return render(request, 'pages/prodi.html', context)
 
@@ -3222,20 +3169,16 @@ def profile_view_k3(request):
     # Get related articles
     related_articles = get_related_articles('k3')
     
+    popup_context = get_popup_context()
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
         'blocks': blocks,
-        'blocks_popup': {
-            i.identifier: i.content 
-            for i in Page.objects.get(
-                slug='popup', 
-                status=Page.PUBLISHED
-            ).content_blocks.all().order_by('order')
-        },
+        'blocks_json': json.dumps(blocks),
         'related_articles': related_articles,
         'prodi_category': 'k3'
     }
+    context.update(popup_context)
     
     return render(request, 'pages/prodi.html', context)
 
@@ -3258,17 +3201,20 @@ def profile_view(request):
     # Get related articles
     related_articles = get_related_articles('profil-matana')
     
+    # Get popup blocks safely
+    try:
+        popup_page = Page.objects.get(slug='popup', status=Page.PUBLISHED)
+    except Page.DoesNotExist:
+        popup_page = create_default_popup()
+
     context = {
         'page': profile_page,
         'meta': profile_page.metadata,
         'blocks': blocks,
         'blocks_json': json.dumps(blocks),
         'blocks_popup': {
-            i.identifier: i.content 
-            for i in Page.objects.get(
-                slug='popup', 
-                status=Page.PUBLISHED
-            ).content_blocks.all().order_by('order')
+            i.identifier: i.content
+            for i in popup_page.content_blocks.all().order_by('order')
         },
         'related_articles': related_articles,
         'prodi_category': 'profil-matana'
@@ -4288,12 +4234,18 @@ def management_view(request):
     for block in management_page.content_blocks.all().order_by('order'):
         blocks[block.identifier] = block.content
     
+    # Get popup blocks safely
+    try:
+        popup_page = Page.objects.get(slug='popup', status=Page.PUBLISHED)
+    except Page.DoesNotExist:
+        popup_page = create_default_popup()
+
     context = {
         'page': management_page,
         'meta': management_page.metadata,
         'blocks': blocks,
         'blocks_json': json.dumps(blocks),
-        'blocks_popup': { i.identifier: i.content for i in Page.objects.get(slug='popup', status=Page.PUBLISHED).content_blocks.all().order_by('order')  }
+        'blocks_popup': { i.identifier: i.content for i in popup_page.content_blocks.all().order_by('order') }
     }
     
     return render(request, 'pages/management.html', context)
@@ -4608,10 +4560,10 @@ def get_related_articles(prodi_slug, limit=3):
             created_at__gte=six_months_ago
         )
         
-        # Get articles with matching category or tags
+        # Get articles with matching category or content/keywords
         related = articles.filter(
             Q(category__slug__icontains=prodi_slug) |
-            Q(tags__name__icontains=prodi_slug) |
+            Q(meta_keywords__icontains=prodi_slug) |
             Q(title__icontains=prodi_slug) |
             Q(content__icontains=prodi_slug)
         ).distinct()
@@ -5085,10 +5037,10 @@ def get_related_articles(category_slug, limit=3):
             created_at__gte=six_months_ago
         )
         
-        # Get articles with matching category or content
+        # Get articles with matching category or content/keywords
         related = articles.filter(
             Q(category__slug__icontains=category_slug) |
-            Q(tags__name__icontains=category_slug) |
+            Q(meta_keywords__icontains=category_slug) |
             Q(title__icontains=category_slug) |
             Q(content__icontains=category_slug)
         ).distinct()
