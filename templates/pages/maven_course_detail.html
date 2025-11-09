@@ -37,7 +37,7 @@ title }}{% endblock %} {% block content %}
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
         <div class="lg:col-span-7 text-white">
           <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
-            {{ course_id|replace_dash|title }}
+            {{ course.title }}
           </h1>
           <p class="text-lg md:text-xl text-white/90 mb-6">
             Master the fundamentals and advanced concepts through hands-on
@@ -54,7 +54,7 @@ title }}{% endblock %} {% block content %}
               class="flex items-center bg-white/10 ring-1 ring-white/20 rounded-lg px-4 py-2 backdrop-blur"
             >
               <i class="fas fa-user-graduate mr-2"></i>
-              <span>Intermediate</span>
+              <span>{{ course.level }}</span>
             </div>
             <div
               class="flex items-center bg-white/10 ring-1 ring-white/20 rounded-lg px-4 py-2 backdrop-blur"
@@ -75,7 +75,7 @@ title }}{% endblock %} {% block content %}
               <div
                 class="h-52 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 opacity-90 flex items-center justify-center text-white text-3xl font-bold"
               >
-                {{ course_id|replace_dash|title|slice:":1" }}
+                {{ course.title|slice:":1" }}
               </div>
               <div class="mt-4 text-white/90 text-sm">
                 Polished learning experience with live support, projects, and
@@ -308,14 +308,24 @@ title }}{% endblock %} {% block content %}
           </div>
         </div>
       </div>
-
-      <form class="p-6 space-y-4" onsubmit="handleRegistration(event)">
+      <form
+        class="p-6 space-y-4"
+        id="mavenCourseForm"
+        onsubmit="handleRegistration(event)"
+      >
+        {% csrf_token %}
+        <input
+          type="hidden"
+          name="course_name"
+          value="{{ course_id|replace_dash|title }}"
+        />
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1"
               >First Name</label
             >
             <input
+              name="first_name"
               type="text"
               required
               placeholder="Enter your first name"
@@ -327,6 +337,7 @@ title }}{% endblock %} {% block content %}
               >Last Name</label
             >
             <input
+              name="last_name"
               type="text"
               required
               placeholder="Enter your last name"
@@ -340,6 +351,7 @@ title }}{% endblock %} {% block content %}
           >
           <input
             type="email"
+            name="email"
             required
             placeholder="your.email@example.com"
             class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors"
@@ -385,6 +397,7 @@ title }}{% endblock %} {% block content %}
             </select>
             <input
               type="tel"
+              name="phone"
               required
               placeholder="8123456789"
               class="w-full px-4 py-2.5 border border-l-0 border-gray-300 rounded-r-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors"
@@ -459,13 +472,32 @@ title }}{% endblock %} {% block content %}
       document.getElementById('registrationModal').classList.add('hidden');
       document.getElementById('registrationModal').classList.remove('flex');
       document.body.style.overflow = '';
-    }
-
-    function handleRegistration(event) {
+    }    function handleRegistration(event) {
       event.preventDefault();
-      // Add your registration logic here
-      alert('Registration submitted!');
-      closeRegistrationModal();
+      const form = event.target;
+      const formData = new FormData(form);
+
+      fetch('{% url "maven_course_register" %}', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'success') {
+          alert('Registration successful!');
+          closeRegistrationModal();
+          form.reset();
+        } else {
+          alert('Error: ' + data.message);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while submitting your registration');
+      });
     }
 
     // Close modal when clicking outside
@@ -521,3 +553,187 @@ title }}{% endblock %} {% block content %}
   </div>
 </div>
 {% endblock %}
+
+<!-- Registration Form -->
+<div id="registration-form" class="bg-white rounded-xl shadow-sm p-6 mb-8">
+  <h3 class="text-2xl font-bold mb-6">Register for this Course</h3>
+  <form
+    id="maven-course-form"
+    method="POST"
+    action="{% url 'maven_course_register' %}"
+    novalidate
+  >
+    {% csrf_token %}
+    <input type="hidden" name="course_name" value="{{ course.title }}" />
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+      <div>
+        <label
+          for="first_name"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >First Name</label
+        >
+        <input
+          type="text"
+          id="first_name"
+          name="first_name"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          pattern=".{2,}"
+          title="First name must be at least 2 characters long"
+          oninvalid="this.setCustomValidity('Please enter a valid first name')"
+          oninput="this.setCustomValidity('')"
+        />
+      </div>
+      <div>
+        <label
+          for="last_name"
+          class="block text-sm font-medium text-gray-700 mb-1"
+          >Last Name</label
+        >
+        <input
+          type="text"
+          id="last_name"
+          name="last_name"
+          required
+          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          pattern=".{2,}"
+          title="Last name must be at least 2 characters long"
+          oninvalid="this.setCustomValidity('Please enter a valid last name')"
+          oninput="this.setCustomValidity('')"
+        />
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <label for="email" class="block text-sm font-medium text-gray-700 mb-1"
+        >Email Address</label
+      >
+      <input
+        type="email"
+        id="email"
+        name="email"
+        required
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+        title="Please enter a valid email address"
+        oninvalid="this.setCustomValidity('Please enter a valid email address')"
+        oninput="this.setCustomValidity('')"
+      />
+    </div>
+
+    <div class="mb-6">
+      <label for="phone" class="block text-sm font-medium text-gray-700 mb-1"
+        >Phone Number</label
+      >
+      <input
+        type="tel"
+        id="phone"
+        name="phone"
+        required
+        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+        pattern="[0-9]{10,}"
+        title="Please enter a valid phone number (minimum 10 digits)"
+        oninvalid="this.setCustomValidity('Please enter a valid phone number')"
+        oninput="this.setCustomValidity('')"
+      />
+    </div>
+
+    <div id="form-messages" class="mb-6 hidden">
+      <div class="text-sm font-medium"></div>
+    </div>
+
+    <button
+      type="submit"
+      class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+    >
+      Register Now
+    </button>
+  </form>
+</div>
+
+<!-- Add JavaScript for form handling -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      const form = document.getElementById('maven-course-form');
+      const messages = document.getElementById('form-messages');
+
+      // Client-side validation
+      function validateForm() {
+          const firstName = document.getElementById('first_name').value.trim();
+          const lastName = document.getElementById('last_name').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const phone = document.getElementById('phone').value.trim();
+
+          let isValid = true;
+          let errorMessage = '';
+
+          if (firstName.length < 2) {
+              errorMessage = 'First name must be at least 2 characters long';
+              isValid = false;
+          } else if (lastName.length < 2) {
+              errorMessage = 'Last name must be at least 2 characters long';
+              isValid = false;
+          } else if (!/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(email)) {
+              errorMessage = 'Please enter a valid email address';
+              isValid = false;
+          } else if (!/^[0-9]{10,}$/.test(phone)) {
+              errorMessage = 'Please enter a valid phone number (minimum 10 digits)';
+              isValid = false;
+          }
+
+          if (!isValid) {
+              messages.classList.remove('hidden');
+              messages.innerHTML = `<div class="p-4 bg-red-100 text-red-700 rounded-lg">${errorMessage}</div>`;
+              return false;
+          }
+
+          return true;
+      }
+
+      form.addEventListener('submit', function(e) {
+          e.preventDefault();
+
+          if (!validateForm()) {
+              return;
+          }
+
+          // Get form data
+          const formData = new FormData(form);
+
+          // Show loading state
+          const submitBtn = form.querySelector('button[type="submit"]');
+          const originalBtnText = submitBtn.innerHTML;
+          submitBtn.disabled = true;
+          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Submitting...';
+
+          // Send the form data
+          fetch('{% url "maven_course_register" %}', {
+              method: 'POST',
+              body: formData,
+              headers: {
+                  'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+              }
+          })
+          .then(response => response.json())
+          .then(data => {
+              messages.classList.remove('hidden');
+              if (data.status === 'success') {
+                  messages.innerHTML = '<div class="p-4 bg-green-100 text-green-700 rounded-lg">' + data.message + '</div>';
+                  form.reset();
+              } else {
+                  messages.innerHTML = '<div class="p-4 bg-red-100 text-red-700 rounded-lg">' + (data.message || 'Registration failed. Please try again.') + '</div>';
+              }
+          })
+          .catch(error => {
+              messages.classList.remove('hidden');
+              messages.innerHTML = '<div class="p-4 bg-red-100 text-red-700 rounded-lg">An error occurred. Please try again later.</div>';
+          })
+          .finally(() => {
+              // Restore button state
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = originalBtnText;
+          });
+      });
+  });
+</script>

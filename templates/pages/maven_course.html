@@ -1,6 +1,20 @@
-{% extends "base.html" %} {% load static %} {% block title %}{{ title }}{%
-endblock %} {% block meta_description %}{{ meta.description }}{% endblock %} {%
-block meta_keywords %}{{ meta.keywords }}{% endblock %} {% block content %}
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block meta_description %}
+{{ meta.description }}
+{% endblock %}
+
+{% block meta_keywords %}
+{{ meta.keywords }}
+{% endblock %}
+
+{% block content %}
 <div class="min-h-screen bg-gradient-to-r from-blue-600 to-purple-600">
   <!-- Hero Section -->
   <div class="container mx-auto px-4 py-16">
@@ -86,152 +100,160 @@ block meta_keywords %}{{ meta.keywords }}{% endblock %} {% block content %}
           Choose from our comprehensive Maven learning tracks
         </p>
       </div>
-
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Course Card 1 -->
+        <!-- Course 1 -->
         <div
           class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
         >
           <div class="relative">
             <div
-              class="bg-gradient-to-r from-blue-600 to-purple-600 h-48 flex items-center justify-center"
+              class="h-48 bg-cover bg-center"
+              style="background-image: url('https://source.unsplash.com/featured/?coding')"
             >
-              <i class="fas fa-paint-brush text-4xl text-white"></i>
+              <div
+                class="absolute inset-0 bg-[#101d38] bg-opacity-60 flex items-center justify-center"
+              >
+                <i class="fas fa-code text-4xl text-white"></i>
+              </div>
             </div>
             <div class="absolute top-4 right-4">
               <span
-                class="bg-blue-600 text-white text-xs px-3 py-1 rounded-full"
+                class="bg-[#101d38] text-white text-xs px-3 py-1 rounded-full"
               >
-                Short Course
+                Beginner
               </span>
             </div>
             <div class="absolute bottom-4 left-4">
               <div class="flex items-center text-white">
                 <i class="fas fa-calendar mr-2"></i>
-                <span class="text-sm">8-29 December 2024</span>
+                <span class="text-sm">9 Dec 2025 - 12 Dec 2025</span>
               </div>
             </div>
           </div>
 
           <div class="p-6">
-            <h3 class="text-xl font-bold mb-4">
-              Build a Professional Brand Identity from Concept to Execution
-            </h3>
+            <h3 class="text-xl font-bold mb-4">Maven Fundamentals</h3>
             <p class="text-gray-600 text-sm mb-6">
-              Participants will learn about branding structure, logo creation,
-              visual guidelines, and brand presentation.
-            </p>
-
-            <div class="flex items-center mb-6">
-              <span class="text-gray-400 line-through">Rp 1.500.000</span>
-              <span class="text-blue-600 font-bold text-xl ml-3"
-                >Rp 1.200.000</span
-              >
-            </div>
-
-            <a
-              href="{% url 'maven_course_detail' 'professional-brand' %}"
-              class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center font-semibold py-3 rounded-lg transition duration-300"
-            >
-              Register Now
-            </a>
-          </div>
-        </div>
-
-        <!-- Course Card 2 -->
-        <div
-          class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
-        >
-          <div class="relative">
-            <div
-              class="bg-gradient-to-r from-green-500 to-teal-400 h-48 flex items-center justify-center"
-            >
-              <i class="fas fa-atom text-4xl text-white"></i>
-            </div>
-            <div class="absolute top-4 right-4">
-              <span
-                class="bg-green-500 text-white text-xs px-3 py-1 rounded-full"
-              >
-                Short Course
-              </span>
-            </div>
-            <div class="absolute bottom-4 left-4">
-              <div class="flex items-center text-white">
-                <i class="fas fa-calendar mr-2"></i>
-                <span class="text-sm">10-31 December 2024</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-6">
-            <h3 class="text-xl font-bold mb-4">
-              Simulasi Monte Carlo untuk Aplikasi Radioterapi dan Dosimetri
-            </h3>
-            <p class="text-gray-600 text-sm mb-6">
-              Participants will learn an introduction to medical physics and the
-              role of simulation in radiotherapy.
+              Learn the basics of Maven including project setup, dependencies,
+              build lifecycle, and plugins.
             </p>
 
             <div class="flex items-center mb-6">
               <span class="text-gray-400 line-through">Rp 2.500.000</span>
-              <span class="text-green-600 font-bold text-xl ml-3"
-                >Rp 2.100.000</span
-              >
-            </div>
-
-            <a
-              href="{% url 'maven_course_detail' 'monte-carlo-simulation' %}"
-              class="block w-full bg-green-500 hover:bg-green-600 text-white text-center font-semibold py-3 rounded-lg transition duration-300"
-            >
-              Register Now
-            </a>
-          </div>
-        </div>
-
-        <!-- Course Card 3 -->
-        <div
-          class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
-        >
-          <div class="relative">
-            <div
-              class="bg-gradient-to-r from-pink-500 to-red-500 h-48 flex items-center justify-center"
-            >
-              <i class="fas fa-lightbulb text-4xl text-white"></i>
-            </div>
-            <div class="absolute top-4 right-4">
-              <span
-                class="bg-yellow-400 text-gray-900 text-xs px-3 py-1 rounded-full"
-              >
-                Short Course
-              </span>
-            </div>
-            <div class="absolute bottom-4 left-4">
-              <div class="flex items-center text-white">
-                <i class="fas fa-calendar mr-2"></i>
-                <span class="text-sm">5-26 January 2025</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="p-6">
-            <h3 class="text-xl font-bold mb-4">
-              Strategic Creative Thinking for Designers & Marketers
-            </h3>
-            <p class="text-gray-600 text-sm mb-6">
-              Participants will learn ideation techniques, problem-solving, and
-              campaign concept development.
-            </p>
-
-            <div class="flex items-center mb-6">
-              <span class="text-gray-400 line-through">Rp 2.000.000</span>
-              <span class="text-yellow-600 font-bold text-xl ml-3"
+              <span class="text-[#101d38] font-bold text-xl ml-3"
                 >Rp 1.700.000</span
               >
             </div>
 
             <a
-              href="{% url 'maven_course_detail' 'creative-thinking' %}"
-              class="block w-full bg-yellow-400 hover:bg-yellow-500 text-gray-900 text-center font-semibold py-3 rounded-lg transition duration-300"
+              href="{% url 'maven_course_detail' 'maven-fundamentals' %}"
+              class="block w-full bg-[#101d38] hover:bg-opacity-90 text-white text-center font-semibold py-3 rounded-lg transition duration-300"
+            >
+              Register Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Course 2 -->
+        <div
+          class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+        >
+          <div class="relative">
+            <div
+              class="h-48 bg-cover bg-center"
+              style="background-image: url('https://source.unsplash.com/featured/?technology')"
+            >
+              <div
+                class="absolute inset-0 bg-[#101d38] bg-opacity-60 flex items-center justify-center"
+              >
+                <i class="fas fa-laptop-code text-4xl text-white"></i>
+              </div>
+            </div>
+            <div class="absolute top-4 right-4">
+              <span
+                class="bg-[#101d38] text-white text-xs px-3 py-1 rounded-full"
+              >
+                Advanced
+              </span>
+            </div>
+            <div class="absolute bottom-4 left-4">
+              <div class="flex items-center text-white">
+                <i class="fas fa-calendar mr-2"></i>
+                <span class="text-sm">16 Dec 2025 - 19 Dec 2025</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-4">Maven Advanced Techniques</h3>
+            <p class="text-gray-600 text-sm mb-6">
+              Master advanced Maven concepts including custom plugins,
+              multi-module projects, and CI/CD integration.
+            </p>
+
+            <div class="flex items-center mb-6">
+              <span class="text-gray-400 line-through">Rp 3.500.000</span>
+              <span class="text-[#101d38] font-bold text-xl ml-3"
+                >Rp 2.800.000</span
+              >
+            </div>
+
+            <a
+              href="{% url 'maven_course_detail' 'maven-advanced' %}"
+              class="block w-full bg-[#101d38] hover:bg-opacity-90 text-white text-center font-semibold py-3 rounded-lg transition duration-300"
+            >
+              Register Now
+            </a>
+          </div>
+        </div>
+
+        <!-- Course 3 -->
+        <div
+          class="bg-white rounded-2xl shadow-xl overflow-hidden transform transition duration-300 hover:-translate-y-2 hover:shadow-2xl"
+        >
+          <div class="relative">
+            <div
+              class="h-48 bg-cover bg-center"
+              style="background-image: url('https://source.unsplash.com/featured/?business')"
+            >
+              <div
+                class="absolute inset-0 bg-[#101d38] bg-opacity-60 flex items-center justify-center"
+              >
+                <i class="fas fa-building text-4xl text-white"></i>
+              </div>
+            </div>
+            <div class="absolute top-4 right-4">
+              <span
+                class="bg-[#101d38] text-white text-xs px-3 py-1 rounded-full"
+              >
+                Enterprise
+              </span>
+            </div>
+            <div class="absolute bottom-4 left-4">
+              <div class="flex items-center text-white">
+                <i class="fas fa-calendar mr-2"></i>
+                <span class="text-sm">6 Jan 2026 - 10 Jan 2026</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-4">Maven for Enterprise</h3>
+            <p class="text-gray-600 text-sm mb-6">
+              Enterprise-grade Maven solutions including repository management,
+              security, and scalability.
+            </p>
+
+            <div class="flex items-center mb-6">
+              <span class="text-gray-400 line-through">Rp 5.000.000</span>
+              <span class="text-[#101d38] font-bold text-xl ml-3"
+                >Rp 4.200.000</span
+              >
+            </div>
+
+            <a
+              href="{% url 'maven_course_detail' 'maven-enterprise' %}"
+              class="block w-full bg-[#101d38] hover:bg-opacity-90 text-white text-center font-semibold py-3 rounded-lg transition duration-300"
             >
               Register Now
             </a>
@@ -242,9 +264,9 @@ block meta_keywords %}{{ meta.keywords }}{% endblock %} {% block content %}
       <!-- Load More -->
       <div class="text-center mt-16">
         <button
-          class="border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white font-semibold px-10 py-4 rounded-lg transition duration-300"
+          class="border-2 border-[#101d38] text-[#101d38] hover:bg-[#101d38] hover:text-white font-semibold px-10 py-4 rounded-lg transition duration-300"
         >
-          Load More
+          View All Courses
         </button>
       </div>
     </div>
@@ -259,7 +281,6 @@ block meta_keywords %}{{ meta.keywords }}{% endblock %} {% block content %}
             Why Choose Matana Maven Courses?
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Feature 1 -->
             <div class="flex items-start">
               <div class="bg-blue-600 text-white rounded-full p-4 mr-4">
                 <i class="fas fa-certificate text-xl"></i>
@@ -271,8 +292,6 @@ block meta_keywords %}{{ meta.keywords }}{% endblock %} {% block content %}
                 </p>
               </div>
             </div>
-
-            <!-- Feature 2 -->
             <div class="flex items-start">
               <div class="bg-green-500 text-white rounded-full p-4 mr-4">
                 <i class="fas fa-users text-xl"></i>
@@ -284,8 +303,6 @@ block meta_keywords %}{{ meta.keywords }}{% endblock %} {% block content %}
                 </p>
               </div>
             </div>
-
-            <!-- Feature 3 -->
             <div class="flex items-start">
               <div class="bg-yellow-400 text-white rounded-full p-4 mr-4">
                 <i class="fas fa-laptop-code text-xl"></i>
@@ -297,8 +314,6 @@ block meta_keywords %}{{ meta.keywords }}{% endblock %} {% block content %}
                 </p>
               </div>
             </div>
-
-            <!-- Feature 4 -->
             <div class="flex items-start">
               <div class="bg-purple-500 text-white rounded-full p-4 mr-4">
                 <i class="fas fa-clock text-xl"></i>
@@ -342,7 +357,7 @@ block meta_keywords %}{{ meta.keywords }}{% endblock %} {% block content %}
     </div>
   </div>
 
-  <!-- CTA Section -->
+  <!-- CTA -->
   <div class="bg-white py-24">
     <div class="container mx-auto px-4 text-center">
       <div class="max-w-3xl mx-auto">
