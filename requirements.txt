@@ -33,3 +33,4 @@ pyyaml
 drf-yasg[validation]
 django-coreapi
 openapi-codec
+requests

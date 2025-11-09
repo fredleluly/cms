@@ -27,7 +27,8 @@ from apps.pages.views import (
     mitra_view, management_view, ukm_view, exchange_view, profile_view_manajemen,
     user_profile_view, logout_view, delete_page, cache_management_view, profile_view_lpm,profile_view_lppm,
     profile_view_mbkm,profile_view_mku,
-    toggle_popup_view
+    toggle_popup_view, maven_course_view, maven_course_detail_view, maven_course_register,
+    api_courses_list, api_course_detail
 )
 from apps.pages.views import *
 from django.contrib.sitemaps.views import sitemap
@@ -106,6 +107,15 @@ urlpatterns = [
     path('student-exchange/', exchange_view, name='exchange'),
     path('dashboard/profile/', user_profile_view, name='user_profile'),
     path('logout/', logout_view, name='logout'),
+    
+    # Maven Course URLs
+    path('maven-courses/', maven_course_view, name='maven_courses'),
+    path('maven-courses/<slug:course_id>/', maven_course_detail_view, name='maven_course_detail'),
+    path('maven-courses/<slug:course_id>/register/', maven_course_register, name='maven_course_register'),
+    
+    # API endpoints (untuk code.gs dan frontend)
+    path('api/courses/', api_courses_list, name='api_courses_list'),
+    path('api/courses/<slug:course_id>/', api_course_detail, name='api_course_detail'),
     # path('secure-files/<str:token>/', secure_file_browser, name='secure_file_browser'),
     # path('secure-files/<str:token>/<path:subpath>', secure_file_browser, name='secure_file_browser'),
     

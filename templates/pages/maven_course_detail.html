@@ -1,536 +1,579 @@
-{% extends "base.html" %} {% load static string_filters %} {% block title %}{{
-title }}{% endblock %} {% block content %}
-<div class="min-h-screen bg-gray-50">
-  <!-- Hero Section -->
-  <div class="relative overflow-hidden">
-    <div aria-hidden="true" class="absolute inset-0">
-      <div
-        class="absolute -top-24 -left-24 h-96 w-96 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-3xl opacity-30"
-      ></div>
-      <div
-        class="absolute -bottom-24 -right-24 h-96 w-96 bg-gradient-to-tr from-indigo-500 to-pink-500 rounded-full blur-3xl opacity-30"
-      ></div>
-      <svg
-        class="absolute inset-0 w-full h-full opacity-10"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <pattern
-            id="grid"
-            width="40"
-            height="40"
-            patternUnits="userSpaceOnUse"
-          >
-            <path
-              d="M 40 0 L 0 0 0 40"
-              fill="none"
-              stroke="white"
-              stroke-width="0.5"
-            />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
-      </svg>
-    </div>
-    <div class="absolute inset-0 bg-slate-900/60"></div>
-    <div class="container mx-auto px-4 py-16 relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-        <div class="lg:col-span-7 text-white">
-          <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
-            {{ course.title }}
-          </h1>
-          <p class="text-lg md:text-xl text-white/90 mb-6">
-            Master the fundamentals and advanced concepts through hands-on
-            learning
-          </p>
-          <div class="flex flex-wrap gap-3 mb-8">
-            <div
-              class="flex items-center bg-white/10 ring-1 ring-white/20 rounded-lg px-4 py-2 backdrop-blur"
-            >
-              <i class="fas fa-clock mr-2"></i>
-              <span>8 Weeks</span>
-            </div>
-            <div
-              class="flex items-center bg-white/10 ring-1 ring-white/20 rounded-lg px-4 py-2 backdrop-blur"
-            >
-              <i class="fas fa-user-graduate mr-2"></i>
-              <span>{{ course.level }}</span>
-            </div>
-            <div
-              class="flex items-center bg-white/10 ring-1 ring-white/20 rounded-lg px-4 py-2 backdrop-blur"
-            >
-              <i class="fas fa-globe mr-2"></i>
-              <span>Online/Offline</span>
-            </div>
-          </div>
-        </div>
-        <div class="lg:col-span-5">
-          <div class="relative mx-auto w-full max-w-md">
-            <div
-              class="absolute -inset-1 bg-gradient-to-br from-blue-500/40 via-purple-500/40 to-pink-500/40 blur-2xl rounded-2xl"
-            ></div>
-            <div
-              class="relative rounded-2xl bg-white/10 backdrop-blur-xl ring-1 ring-white/20 p-6 shadow-xl"
-            >
-              <div
-                class="h-52 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 opacity-90 flex items-center justify-center text-white text-3xl font-bold"
-              >
-                {{ course.title|slice:":1" }}
-              </div>
-              <div class="mt-4 text-white/90 text-sm">
-                Polished learning experience with live support, projects, and
-                certification.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+{% extends 'base.html' %}
+{% load static string_filters %}
+{% block title %}
+  {{ title }}
+{% endblock %}
 
-  <!-- Main Content -->
-  <div class="container mx-auto px-4 py-12">
-    <div class="flex flex-wrap -mx-4">
-      <!-- Left Column - Course Content -->
-      <div class="w-full lg:w-8/12 px-4 mb-8 lg:mb-0">
-        <!-- Course Overview -->
-        <div
-          id="course-overview"
-          class="bg-white rounded-xl shadow-sm mb-8 overflow-hidden"
-        >
-          <div class="p-6">
-            <h2 class="text-2xl font-bold mb-4">Course Description</h2>
-            <p class="text-gray-600 mb-6">
-              This comprehensive course will equip you with the knowledge and
-              skills needed to excel in Maven development. Through practical
-              exercises and real-world examples, you'll learn how to effectively
-              use Maven for build automation and project management.
+{% block content %}
+  <div class="min-h-screen bg-gray-50">
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden">
+      <div aria-hidden="true" class="absolute inset-0">
+        <div class="absolute -top-24 -left-24 h-96 w-96 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full blur-3xl opacity-30"></div>
+        <div class="absolute -bottom-24 -right-24 h-96 w-96 bg-gradient-to-tr from-indigo-500 to-pink-500 rounded-full blur-3xl opacity-30"></div>
+        <svg class="absolute inset-0 w-full h-full opacity-10" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" stroke-width="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" />
+        </svg>
+      </div>
+      <div class="absolute inset-0 bg-slate-900/60"></div>
+      <div class="container mx-auto px-4 py-16 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-7 text-white">
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+              {% if blocks.hero_section.title %}
+                {{ blocks.hero_section.title }}
+              {% else %}
+                {{ course.title }}
+              {% endif %}
+            </h1>
+            <p class="text-lg md:text-xl text-white/90 mb-6">
+              {% if blocks.hero_section.subtitle %}
+                {{ blocks.hero_section.subtitle }}
+              {% else %}
+                Master the fundamentals and advanced concepts through hands-on learning
+              {% endif %}
             </p>
+            <div class="flex flex-wrap gap-3 mb-8">
+              {% if blocks.hero_section.items %}
+                {% for item in blocks.hero_section.items %}
+                  <div class="flex items-center bg-white/10 ring-1 ring-white/20 rounded-lg px-4 py-2 backdrop-blur">
+                    <i class="fas fa-{% if item.title == 'Level' %}
+                        user-graduate
+                      {% elif item.title == 'Duration' %}
+                        clock
+                      {% else %}
+                        globe
+                      {% endif %} mr-2">
 
-            <!-- Course Features -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div class="flex items-start">
-                <div class="flex-shrink-0">
-                  <div
-                    class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white"
-                  >
-                    <i class="fas fa-video"></i>
+                    </i>
+                    <span>{{ item.description }}</span>
                   </div>
+                {% endfor %}
+              {% else %}
+                <div class="flex items-center bg-white/10 ring-1 ring-white/20 rounded-lg px-4 py-2 backdrop-blur">
+                  <i class="fas fa-clock mr-2"></i>
+                  <span>8 Weeks</span>
                 </div>
-                <div class="ml-4">
-                  <h3 class="text-lg font-semibold">HD Video Content</h3>
-                  <p class="text-gray-600">
-                    20+ hours of high-quality video lessons
-                  </p>
+                <div class="flex items-center bg-white/10 ring-1 ring-white/20 rounded-lg px-4 py-2 backdrop-blur">
+                  <i class="fas fa-user-graduate mr-2"></i>
+                  <span>{{ course.level }}</span>
                 </div>
-              </div>
-
-              <div class="flex items-start">
-                <div class="flex-shrink-0">
-                  <div
-                    class="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white"
-                  >
-                    <i class="fas fa-tasks"></i>
-                  </div>
-                </div>
-                <div class="ml-4">
-                  <h3 class="text-lg font-semibold">Practical Exercises</h3>
-                  <p class="text-gray-600">
-                    Real-world projects and assignments
-                  </p>
-                </div>
-              </div>
-
-              <div class="flex items-start">
-                <div class="flex-shrink-0">
-                  <div
-                    class="flex items-center justify-center h-12 w-12 rounded-md bg-yellow-500 text-white"
-                  >
-                    <i class="fas fa-certificate"></i>
-                  </div>
-                </div>
-                <div class="ml-4">
-                  <h3 class="text-lg font-semibold">Certificate</h3>
-                  <p class="text-gray-600">Industry-recognized certification</p>
-                </div>
-              </div>
-
-              <div class="flex items-start">
-                <div class="flex-shrink-0">
-                  <div
-                    class="flex items-center justify-center h-12 w-12 rounded-md bg-purple-500 text-white"
-                  >
-                    <i class="fas fa-comments"></i>
-                  </div>
-                </div>
-                <div class="ml-4">
-                  <h3 class="text-lg font-semibold">Live Support</h3>
-                  <p class="text-gray-600">Direct access to instructors</p>
-                </div>
-              </div>
+              {% endif %}
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Right Column - Course Info & Enrollment -->
-      <div class="w-full lg:w-4/12 px-4">
-        <div class="bg-white rounded-xl shadow-sm p-6 sticky top-6">
-          <div class="mb-6">
-            <div class="mb-4">
-              <span class="text-gray-400 line-through text-lg"
-                >Rp 2.500.000</span
-              >
-              <span class="text-3xl font-bold text-blue-600 ml-2"
-                >Rp 1.700.000</span
-              >
-            </div>
-            <button
-              onclick="openRegistrationModal()"
-              class="w-full bg-blue-600 text-white rounded-lg px-4 py-3 font-semibold hover:bg-blue-700 transition duration-200"
-            >
-              Register Now
-            </button>
-          </div>
-
-          <div class="border-t pt-6">
-            <h3 class="font-semibold text-lg mb-4">This course includes:</h3>
-            <ul class="space-y-3">
-              <li class="flex items-center text-gray-600">
-                <i class="fas fa-play-circle mr-3 text-blue-600"></i>
-                <span>20 hours on-demand video</span>
-              </li>
-              <li class="flex items-center text-gray-600">
-                <i class="fas fa-file-alt mr-3 text-blue-600"></i>
-                <span>15 downloadable resources</span>
-              </li>
-              <li class="flex items-center text-gray-600">
-                <i class="fas fa-infinity mr-3 text-blue-600"></i>
-                <span>Full lifetime access</span>
-              </li>
-              <li class="flex items-center text-gray-600">
-                <i class="fas fa-mobile-alt mr-3 text-blue-600"></i>
-                <span>Access on mobile and desktop</span>
-              </li>
-              <li class="flex items-center text-gray-600">
-                <i class="fas fa-certificate mr-3 text-blue-600"></i>
-                <span>Certificate of completion</span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Share Course -->
-          <div class="border-t mt-6 pt-6">
-            <h3 class="font-semibold text-lg mb-4">Share this course</h3>
-            <div class="flex space-x-4">
-              <a href="#" class="text-gray-400 hover:text-blue-500">
-                <i class="fab fa-facebook fa-lg"></i>
-              </a>
-              <a href="#" class="text-gray-400 hover:text-blue-400">
-                <i class="fab fa-twitter fa-lg"></i>
-              </a>
-              <a href="#" class="text-gray-400 hover:text-blue-600">
-                <i class="fab fa-linkedin fa-lg"></i>
-              </a>
-              <a href="#" class="text-gray-400 hover:text-green-500">
-                <i class="fab fa-whatsapp fa-lg"></i>
-              </a>
+          <div class="lg:col-span-5">
+            <div class="relative mx-auto w-full max-w-md">
+              <div class="absolute -inset-1 bg-gradient-to-br from-blue-500/40 via-purple-500/40 to-pink-500/40 blur-2xl rounded-2xl"></div>
+              <div class="relative rounded-2xl overflow-hidden shadow-xl">
+                {% if blocks.hero_section.background_image %}
+                  <img src="{{ blocks.hero_section.background_image }}" alt="{{ blocks.hero_section.title }}" class="w-full h-64 object-cover" />
+                {% elif blocks.course_image_url %}
+                  <img src="{% if blocks.course_image_url.content %}
+                      {{ blocks.course_image_url.content }}
+                    {% else %}
+                      {{ blocks.course_image_url }}
+                    {% endif %}"
+                    alt="{{ course.title }}"
+                    class="w-full h-64 object-cover" />
+                {% else %}
+                  <div class="h-64 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 opacity-90 flex items-center justify-center text-white text-4xl font-bold">{{ course.title|slice:':1' }}</div>
+                {% endif %}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                <div class="absolute inset-x-0 bottom-0 p-4 text-white">
+                  <p class="text-sm font-medium">Professional Learning Experience</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <!-- Registration Modal -->
-  <div
-    id="registrationModal"
-    class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center z-50 overflow-y-auto pt-16 md:pt-24 pb-8"
-  >
-    <div
-      class="bg-white rounded-xl shadow-xl max-w-xl w-full mx-4 overflow-hidden"
-    >
-      <!-- Banner Image Section -->
-      <div class="relative h-48">
-        <img
-          src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
-          alt="Professional Brand Course"
-          class="w-full h-full object-cover"
-        />
-        <div
-          class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"
-        ></div>
-        <div class="absolute inset-x-0 bottom-0 p-6">
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 py-12">
+      <div class="flex flex-wrap -mx-4">
+        <!-- Left Column - Course Content -->
+        <div class="w-full lg:w-8/12 px-4 mb-8 lg:mb-0">
+          <!-- Course Overview -->
+          <div id="course-overview" class="bg-white rounded-xl shadow-sm mb-8 overflow-hidden">
+            <div class="p-6">
+              <h2 class="text-2xl font-bold mb-4">
+                {% if blocks.course_overview.title %}
+                  {{ blocks.course_overview.title }}
+                {% else %}
+                  Course Description
+                {% endif %}
+              </h2>
+              <p class="text-gray-600 mb-6">
+                {% if blocks.course_overview.description %}
+                  {{ blocks.course_overview.description }}
+                {% else %}
+                  This comprehensive course will equip you with the knowledge and skills needed to excel in Maven development. Through practical exercises and real-world examples, you'll learn how to effectively use Maven for build automation and project management.
+                {% endif %}
+              </p>
+
+              <!-- Course Features -->
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {% if blocks.course_features.items %}
+                  {% for feature in blocks.course_features.items %}
+                    <div class="flex items-start">
+                      <div class="flex-shrink-0">
+                        <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
+                          <i class="fas fa-{% if feature.title == 'Video Content' %}
+                              video
+                            {% elif feature.title == 'Resources' %}
+                              tasks
+                            {% elif feature.title == 'Certificate' %}
+                              certificate
+                            {% elif feature.title == 'Multi-Device' %}
+                              mobile-alt
+                            {% else %}
+                              infinity
+                            {% endif %}">
+
+                          </i>
+                        </div>
+                      </div>
+                      <div class="ml-4">
+                        <h3 class="text-lg font-semibold">{{ feature.title }}</h3>
+                        <p class="text-gray-600">{{ feature.description }}</p>
+                      </div>
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                      <div class="flex items-center justify-center h-12 w-12 rounded-md bg-blue-600 text-white">
+                        <i class="fas fa-video"></i>
+                      </div>
+                    </div>
+                    <div class="ml-4">
+                      <h3 class="text-lg font-semibold">HD Video Content</h3>
+                      <p class="text-gray-600">20+ hours of high-quality video lessons</p>
+                    </div>
+                  </div>
+                  <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                      <div class="flex items-center justify-center h-12 w-12 rounded-md bg-green-500 text-white">
+                        <i class="fas fa-tasks"></i>
+                      </div>
+                    </div>
+                    <div class="ml-4">
+                      <h3 class="text-lg font-semibold">Practical Exercises</h3>
+                      <p class="text-gray-600">Real-world projects and assignments</p>
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - Course Info & Enrollment -->
+        <div class="w-full lg:w-4/12 px-4">
+          <div class="bg-white rounded-xl shadow-sm p-6 sticky top-6">
+            <div class="mb-6">
+              <div class="mb-4">
+                {% if blocks.pricing_section.items %}
+                  {% for item in blocks.pricing_section.items %}
+                    {% if 'Original' in item.title %}
+                      <span class="text-gray-400 line-through text-lg">{{ item.description }}</span>
+                    {% elif 'Current' in item.title %}
+                      <span class="text-3xl font-bold text-blue-600 ml-2">{{ item.description }}</span>
+                    {% endif %}
+                  {% endfor %}
+                {% else %}
+                  <span class="text-gray-400 line-through text-lg">Rp 2.500.000</span>
+                  <span class="text-3xl font-bold text-blue-600 ml-2">Rp 1.700.000</span>
+                {% endif %}
+              </div>
+              <button onclick="openRegistrationModal()" class="w-full bg-blue-600 text-white rounded-lg px-4 py-3 font-semibold hover:bg-blue-700 transition duration-200">Register Now</button>
+            </div>
+
+            <div class="border-t pt-6">
+              <h3 class="font-semibold text-lg mb-4">This course includes:</h3>
+              <ul class="space-y-3">
+                {% if blocks.course_features.items %}
+                  {% for feature in blocks.course_features.items %}
+                    <li class="flex items-center text-gray-600">
+                      <i class="fas fa-{% if 'Video' in feature.title %}
+                          play-circle
+                        {% elif 'Resource' in feature.title %}
+                          file-alt
+                        {% elif 'Lifetime' in feature.title %}
+                          infinity
+                        {% elif 'Multi' in feature.title %}
+                          mobile-alt
+                        {% else %}
+                          certificate
+                        {% endif %} mr-3 text-blue-600">
+
+                      </i>
+                      <span>{{ feature.description }}</span>
+                    </li>
+                  {% endfor %}
+                {% else %}
+                  <li class="flex items-center text-gray-600">
+                    <i class="fas fa-play-circle mr-3 text-blue-600"></i>
+                    <span>20 hours on-demand video</span>
+                  </li>
+                  <li class="flex items-center text-gray-600">
+                    <i class="fas fa-file-alt mr-3 text-blue-600"></i>
+                    <span>15 downloadable resources</span>
+                  </li>
+                {% endif %}
+              </ul>
+            </div>
+
+            <!-- Share Course -->
+            <div class="border-t mt-6 pt-6">
+              <h3 class="font-semibold text-lg mb-4">Share this course</h3>
+              <div class="flex space-x-4">
+                <a href="#" class="text-gray-400 hover:text-blue-500"><i class="fab fa-facebook fa-lg"></i></a>
+                <a href="#" class="text-gray-400 hover:text-blue-400"><i class="fab fa-twitter fa-lg"></i></a>
+                <a href="#" class="text-gray-400 hover:text-blue-600"><i class="fab fa-linkedin fa-lg"></i></a>
+                <a href="#" class="text-gray-400 hover:text-green-500"><i class="fab fa-whatsapp fa-lg"></i></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center z-50 overflow-y-auto pt-16 md:pt-24 pb-8">
+      <div class="bg-white rounded-xl shadow-xl max-w-xl w-full mx-4 overflow-hidden">
+        <!-- Banner Image Section -->
+        <div class="relative h-48">
+          <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Professional Brand Course" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
+          <div class="absolute inset-x-0 bottom-0 p-6">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-2xl font-bold text-white mb-1">Registration Form</h2>
+                <p class="text-white/90 text-sm">{{ course.title }}</p>
+              </div>
+              <button onclick="closeRegistrationModal()" class="text-white hover:text-gray-200 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- Course Summary -->
+        <div class="px-6 py-4 bg-gray-50 border-b">
           <div class="flex items-center justify-between">
             <div>
-              <h2 class="text-2xl font-bold text-white mb-1">
-                Registration Form
-              </h2>
-              <p class="text-white/90 text-sm">
-                {{ course_id|replace_dash|title }}
-              </p>
+              <p class="text-sm text-gray-500">Course Fee</p>
+              <div class="flex items-baseline">
+                <span class="text-lg font-bold text-blue-600">Rp 1.700.000</span>
+                <span class="ml-2 text-sm text-gray-500 line-through">Rp 2.500.000</span>
+              </div>
             </div>
-            <button
-              onclick="closeRegistrationModal()"
-              class="text-white hover:text-gray-200 transition-colors"
-            >
-              <svg
-                class="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                ></path>
+            <div>
+              <p class="text-sm text-gray-500">Schedule</p>
+              <p class="font-medium">9-12 December 2025</p>
+            </div>
+          </div>
+        </div>
+        <form class="p-6 space-y-4" id="mavenCourseForm" onsubmit="handleRegistration(event)">
+          {% csrf_token %}
+          <input type="hidden" name="course_id" value="{{ course_id }}" />
+          <input type="hidden" name="course_name" value="{{ course.title }}" />
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+              <input name="first_name" type="text" required placeholder="Enter your first name" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors" />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+              <input name="last_name" type="text" required placeholder="Enter your last name" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input type="email" name="email" required placeholder="your.email@example.com" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors" />
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+              <select name="gender" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors bg-white">
+                <option value="">Select gender...</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="prefer_not_to_say">Prefer not to say</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+              <input type="date" name="date_of_birth" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors" />
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+            <div class="flex">
+              <select class="px-4 py-2.5 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors bg-gray-50">
+                <option value="+62">+62</option>
+              </select>
+              <input type="tel" name="phone" required placeholder="8123456789" class="w-full px-4 py-2.5 border border-l-0 border-gray-300 rounded-r-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors" />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">City of Residence</label>
+            <select name="city" required class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors bg-white">
+              <option value="">Select your city...</option>
+              <option value="jakarta">Jakarta</option>
+              <option value="tangerang">Tangerang</option>
+              <option value="bekasi">Bekasi</option>
+              <option value="depok">Depok</option>
+              <option value="bogor">Bogor</option>
+            </select>
+          </div>
+
+          <div class="flex items-start space-x-3">
+            <input type="checkbox" required class="mt-0.5 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-600" />
+            <label class="text-sm text-gray-600">
+              I agree to the
+              <a href="#" class="text-blue-600 hover:underline font-medium">Terms and Conditions</a>
+              and acknowledge that I have read the course details
+            </label>
+          </div>
+
+          <div class="pt-4">
+            <button type="submit" id="submitBtn" class="w-full bg-blue-600 text-white rounded-lg px-6 py-3 font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 flex items-center justify-center space-x-2">
+              <span>Submit Registration</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
               </svg>
             </button>
           </div>
-        </div>
+        </form>
       </div>
-      <!-- Course Summary -->
-      <div class="px-6 py-4 bg-gray-50 border-b">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm text-gray-500">Course Fee</p>
-            <div class="flex items-baseline">
-              <span class="text-lg font-bold text-blue-600">Rp 1.700.000</span>
-              <span class="ml-2 text-sm text-gray-500 line-through"
-                >Rp 2.500.000</span
-              >
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-[9999] pointer-events-none"></div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black/50 hidden z-[9998] flex items-center justify-center pointer-events-none">
+      <div class="bg-white rounded-2xl p-8 shadow-2xl text-center">
+        <div class="mb-4">
+          <div class="inline-flex items-center justify-center">
+            <div class="relative w-16 h-16">
+              <div class="absolute inset-0 rounded-full border-4 border-blue-200"></div>
+              <div class="absolute inset-0 rounded-full border-4 border-transparent border-t-blue-600 border-r-blue-600 animate-spin"></div>
             </div>
           </div>
-          <div>
-            <p class="text-sm text-gray-500">Schedule</p>
-            <p class="font-medium">9-12 December 2025</p>
-          </div>
         </div>
+        <p class="text-gray-700 font-medium">Submitting your registration...</p>
+        <p class="text-gray-500 text-sm mt-2">Please wait while we process your data</p>
       </div>
-      <form
-        class="p-6 space-y-4"
-        id="mavenCourseForm"
-        onsubmit="handleRegistration(event)"
-      >
-        {% csrf_token %}
-        <input
-          type="hidden"
-          name="course_name"
-          value="{{ course_id|replace_dash|title }}"
-        />
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >First Name</label
-            >
-            <input
-              name="first_name"
-              type="text"
-              required
-              placeholder="Enter your first name"
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors"
-            />
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Last Name</label
-            >
-            <input
-              name="last_name"
-              type="text"
-              required
-              placeholder="Enter your last name"
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors"
-            />
-          </div>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1"
-            >Email</label
-          >
-          <input
-            type="email"
-            name="email"
-            required
-            placeholder="your.email@example.com"
-            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors"
-          />
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Gender</label
-            >
-            <select
-              required
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors bg-white"
-            >
-              <option value="">Select gender...</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="prefer_not_to_say">Prefer not to say</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1"
-              >Date of Birth</label
-            >
-            <input
-              type="date"
-              required
-              class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1"
-            >Phone Number</label
-          >
-          <div class="flex">
-            <select
-              class="px-4 py-2.5 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors bg-gray-50"
-            >
-              <option value="+62">+62</option>
-            </select>
-            <input
-              type="tel"
-              name="phone"
-              required
-              placeholder="8123456789"
-              class="w-full px-4 py-2.5 border border-l-0 border-gray-300 rounded-r-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors"
-            />
-          </div>
-        </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1"
-            >City of Residence</label
-          >
-          <select
-            required
-            class="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-colors bg-white"
-          >
-            <option value="">Select your city...</option>
-            <option value="jakarta">Jakarta</option>
-            <option value="tangerang">Tangerang</option>
-            <option value="bekasi">Bekasi</option>
-            <option value="depok">Depok</option>
-            <option value="bogor">Bogor</option>
-          </select>
-        </div>
-
-        <div class="flex items-start space-x-3">
-          <input
-            type="checkbox"
-            required
-            class="mt-0.5 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-600"
-          />
-          <label class="text-sm text-gray-600">
-            I agree to the
-            <a href="#" class="text-blue-600 hover:underline font-medium"
-              >Terms and Conditions</a
-            >
-            and acknowledge that I have read the course details
-          </label>
-        </div>
-
-        <div class="pt-4">
-          <button
-            type="submit"
-            class="w-full bg-blue-600 text-white rounded-lg px-6 py-3 font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors duration-200 flex items-center justify-center space-x-2"
-          >
-            <span>Submit Registration</span>
-            <svg
-              class="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
-              ></path>
-            </svg>
-          </button>
-        </div>
-      </form>
     </div>
-  </div>
 
-  <script>
-    function openRegistrationModal() {
-      document.getElementById('registrationModal').classList.remove('hidden');
-      document.getElementById('registrationModal').classList.add('flex');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeRegistrationModal() {
-      document.getElementById('registrationModal').classList.add('hidden');
-      document.getElementById('registrationModal').classList.remove('flex');
-      document.body.style.overflow = '';
-    }    function handleRegistration(event) {
-      event.preventDefault();
-      const form = event.target;
-      const formData = new FormData(form);
-
-      fetch('{% url "maven_course_register" %}', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
-        }
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.status === 'success') {
-          alert('Registration successful!');
-          closeRegistrationModal();
-          form.reset();
-        } else {
-          alert('Error: ' + data.message);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while submitting your registration');
-      });
-    }
-
-    // Close modal when clicking outside
-    document.getElementById('registrationModal').addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeRegistrationModal();
+    <script>
+      // Toast notification system
+      function showToast(message, type = 'success', duration = 5000) {
+        const toastContainer = document.getElementById('toastContainer')
+        const toast = document.createElement('div')
+      
+        const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+        const icon = type === 'success' ? '✓' : type === 'error' ? '✕' : 'ℹ'
+      
+        toast.className = `${bgColor} text-white px-6 py-4 rounded-lg shadow-lg mb-3 flex items-center space-x-3 animate-slide-in pointer-events-auto`
+        toast.innerHTML = `
+                                <span class="text-2xl font-bold">${icon}</span>
+                                <div>
+                                  <p class="font-semibold">${type === 'success' ? 'Success!' : type === 'error' ? 'Error' : 'Info'}</p>
+                                  <p class="text-sm opacity-90">${message}</p>
+                                </div>
+                              `
+      
+        toastContainer.appendChild(toast)
+      
+        setTimeout(() => {
+          toast.classList.add('animate-slide-out')
+          setTimeout(() => toast.remove(), 300)
+        }, duration)
       }
-    });
-  </script>
+      
+      // Add animation styles
+      const style = document.createElement('style')
+      style.textContent = `
+                              @keyframes slideIn {
+                                from {
+                                  transform: translateX(400px);
+                                  opacity: 0;
+                                }
+                                to {
+                                  transform: translateX(0);
+                                  opacity: 1;
+                                }
+                              }
+                              @keyframes slideOut {
+                                from {
+                                  transform: translateX(0);
+                                  opacity: 1;
+                                }
+                                to {
+                                  transform: translateX(400px);
+                                  opacity: 0;
+                                }
+                              }
+                              .animate-slide-in {
+                                animation: slideIn 0.3s ease-out;
+                              }
+                              .animate-slide-out {
+                                animation: slideOut 0.3s ease-in;
+                              }
+                            `
+      document.head.appendChild(style)
+      
+      function openRegistrationModal() {
+        document.getElementById('registrationModal').classList.remove('hidden')
+        document.getElementById('registrationModal').classList.add('flex')
+        document.body.style.overflow = 'hidden'
+      }
+      
+      function closeRegistrationModal() {
+        document.getElementById('registrationModal').classList.add('hidden')
+        document.getElementById('registrationModal').classList.remove('flex')
+        document.body.style.overflow = ''
+      }
+      
+      function showLoadingOverlay(show = true) {
+        const overlay = document.getElementById('loadingOverlay')
+        if (show) {
+          overlay.classList.remove('hidden')
+        } else {
+          overlay.classList.add('hidden')
+        }
+      }
+      
+      function handleRegistration(event) {
+        event.preventDefault()
+        const form = event.target
+        const submitBtn = document.getElementById('submitBtn')
+        const formData = new FormData(form)
+      
+        // Disable button and show loading
+        submitBtn.disabled = true
+        showLoadingOverlay(true)
+      
+        fetch('{% url "maven_course_register" course_id %}', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+          }
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.status === 'success') {
+              showToast('Registration successful! Check your email for confirmation.', 'success', 5000)
+              // Reset form and close modal after a short delay
+              setTimeout(() => {
+                form.reset()
+                closeRegistrationModal()
+              }, 1500)
+            } else {
+              showToast(data.message || 'Registration failed. Please try again.', 'error', 5000)
+            }
+          })
+          .catch((error) => {
+            console.error('Error:', error)
+            showToast('An error occurred while submitting your registration. Please try again.', 'error', 5000)
+          })
+          .finally(() => {
+            // Hide loading and re-enable button
+            showLoadingOverlay(false)
+            submitBtn.disabled = false
+          })
+      }
+      
+      // Close modal when clicking outside
+      document.getElementById('registrationModal').addEventListener('click', function (e) {
+        if (e.target === this) {
+          closeRegistrationModal()
+        }
+      })
+    </script>
 
-  <!-- Instructor Section -->
-  <div class="bg-white border-t">
-    <div class="container mx-auto px-4 py-12">
-      <h2 class="text-2xl font-bold mb-8">Meet Your Instructor</h2>
-      <div class="flex flex-wrap items-center">
-        <div class="w-full md:w-auto mb-6 md:mb-0 md:mr-8">
-          <img
-            src="https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80"
-            alt="Professional instructor"
-            class="w-32 h-32 rounded-full object-cover"
-          />
+    <!-- Instructor Section -->
+    <div class="bg-white border-t">
+      <div class="container mx-auto px-4 py-12">
+        <h2 class="text-2xl font-bold mb-8">
+          {% if blocks.instructor_section.title %}
+            {{ blocks.instructor_section.title }}
+          {% else %}
+            Meet Your Instructor
+          {% endif %}
+        </h2>
+        <div class="flex flex-wrap items-center">
+          {% if blocks.instructor_section.items %}
+            {% for instructor in blocks.instructor_section.items %}
+              <div class="w-full md:w-auto mb-6 md:mb-0 md:mr-8">
+                <img src="{% if instructor.image %}
+                    {{ instructor.image }}
+                  {% else %}
+                    https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80
+                  {% endif %}"
+                  alt="{% if instructor.title %}
+                    {{ instructor.title }}
+                  {% else %}
+                    Professional instructor
+                  {% endif %}"
+                  class="w-32 h-32 rounded-full object-cover" />
+              </div>
+              <div class="flex-1">
+                <h3 class="text-xl font-bold mb-2">{{ instructor.title }}</h3>
+                <p class="text-gray-600 mb-4">{{ instructor.description }}</p>
+              </div>
+            {% endfor %}
+          {% else %}
+            <div class="w-full md:w-auto mb-6 md:mb-0 md:mr-8">
+              <img src="https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" alt="Professional instructor" class="w-32 h-32 rounded-full object-cover" />
+            </div>
+            <div class="flex-1">
+              <h3 class="text-xl font-bold mb-2">Michelle E. Lapian, S.Sn., MM., M.Ds.</h3>
+              <p class="text-gray-600 mb-4">Visual Communication Design practitioner and instructor with over five years of experience. A graduate of Binus University and Trisakti University, specialized in graphic design, branding, typography, and visual communication strategy.</p>
+            </div>
+          {% endif %}
         </div>
-        <div class="flex-1">
-          <h3 class="text-xl font-bold mb-2">
-            Michelle E. Lapian, S.Sn., MM., M.Ds.
-          </h3>
-          <p class="text-gray-600 mb-4">
-            Visual Communication Design practitioner and instructor with over
-            five years of experience. A graduate of Binus University and
-            Trisakti University, specialized in graphic design, branding,
-            typography, and visual communication strategy.
-          </p>
-          <div class="flex space-x-4">
+
+        <!-- Instructor Stats -->
+        {% if blocks.instructor_stats.items %}
+          <div class="mt-6 flex flex-wrap gap-8">
+            {% for stat in blocks.instructor_stats.items %}
+              <div class="flex items-center">
+                <i class="fas fa-{% if 'Rating' in stat.description %}
+                    star
+                  {% elif 'Students' in stat.description %}
+                    user-graduate
+                  {% else %}
+                    play-circle
+                  {% endif %} text-{% if 'Rating' in stat.description %}
+                    yellow
+                  {% elif 'Students' in stat.description %}
+                    blue
+                  {% else %}
+                    green
+                  {% endif %}-400 mr-2">
+
+                </i>
+                <span class="font-semibold">{{ stat.title }}</span>
+                <span class="text-gray-500 ml-1">{{ stat.description }}</span>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="mt-6 flex flex-wrap gap-8">
             <div class="flex items-center">
               <i class="fas fa-star text-yellow-400 mr-2"></i>
               <span class="font-semibold">4.9</span>
@@ -547,193 +590,8 @@ title }}{% endblock %} {% block content %}
               <span class="text-gray-500 ml-1">Courses</span>
             </div>
           </div>
-        </div>
+        {% endif %}
       </div>
     </div>
   </div>
-</div>
 {% endblock %}
-
-<!-- Registration Form -->
-<div id="registration-form" class="bg-white rounded-xl shadow-sm p-6 mb-8">
-  <h3 class="text-2xl font-bold mb-6">Register for this Course</h3>
-  <form
-    id="maven-course-form"
-    method="POST"
-    action="{% url 'maven_course_register' %}"
-    novalidate
-  >
-    {% csrf_token %}
-    <input type="hidden" name="course_name" value="{{ course.title }}" />
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-      <div>
-        <label
-          for="first_name"
-          class="block text-sm font-medium text-gray-700 mb-1"
-          >First Name</label
-        >
-        <input
-          type="text"
-          id="first_name"
-          name="first_name"
-          required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-          pattern=".{2,}"
-          title="First name must be at least 2 characters long"
-          oninvalid="this.setCustomValidity('Please enter a valid first name')"
-          oninput="this.setCustomValidity('')"
-        />
-      </div>
-      <div>
-        <label
-          for="last_name"
-          class="block text-sm font-medium text-gray-700 mb-1"
-          >Last Name</label
-        >
-        <input
-          type="text"
-          id="last_name"
-          name="last_name"
-          required
-          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-          pattern=".{2,}"
-          title="Last name must be at least 2 characters long"
-          oninvalid="this.setCustomValidity('Please enter a valid last name')"
-          oninput="this.setCustomValidity('')"
-        />
-      </div>
-    </div>
-
-    <div class="mb-6">
-      <label for="email" class="block text-sm font-medium text-gray-700 mb-1"
-        >Email Address</label
-      >
-      <input
-        type="email"
-        id="email"
-        name="email"
-        required
-        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-        title="Please enter a valid email address"
-        oninvalid="this.setCustomValidity('Please enter a valid email address')"
-        oninput="this.setCustomValidity('')"
-      />
-    </div>
-
-    <div class="mb-6">
-      <label for="phone" class="block text-sm font-medium text-gray-700 mb-1"
-        >Phone Number</label
-      >
-      <input
-        type="tel"
-        id="phone"
-        name="phone"
-        required
-        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-        pattern="[0-9]{10,}"
-        title="Please enter a valid phone number (minimum 10 digits)"
-        oninvalid="this.setCustomValidity('Please enter a valid phone number')"
-        oninput="this.setCustomValidity('')"
-      />
-    </div>
-
-    <div id="form-messages" class="mb-6 hidden">
-      <div class="text-sm font-medium"></div>
-    </div>
-
-    <button
-      type="submit"
-      class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-semibold py-3 px-6 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
-    >
-      Register Now
-    </button>
-  </form>
-</div>
-
-<!-- Add JavaScript for form handling -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-      const form = document.getElementById('maven-course-form');
-      const messages = document.getElementById('form-messages');
-
-      // Client-side validation
-      function validateForm() {
-          const firstName = document.getElementById('first_name').value.trim();
-          const lastName = document.getElementById('last_name').value.trim();
-          const email = document.getElementById('email').value.trim();
-          const phone = document.getElementById('phone').value.trim();
-
-          let isValid = true;
-          let errorMessage = '';
-
-          if (firstName.length < 2) {
-              errorMessage = 'First name must be at least 2 characters long';
-              isValid = false;
-          } else if (lastName.length < 2) {
-              errorMessage = 'Last name must be at least 2 characters long';
-              isValid = false;
-          } else if (!/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(email)) {
-              errorMessage = 'Please enter a valid email address';
-              isValid = false;
-          } else if (!/^[0-9]{10,}$/.test(phone)) {
-              errorMessage = 'Please enter a valid phone number (minimum 10 digits)';
-              isValid = false;
-          }
-
-          if (!isValid) {
-              messages.classList.remove('hidden');
-              messages.innerHTML = `<div class="p-4 bg-red-100 text-red-700 rounded-lg">${errorMessage}</div>`;
-              return false;
-          }
-
-          return true;
-      }
-
-      form.addEventListener('submit', function(e) {
-          e.preventDefault();
-
-          if (!validateForm()) {
-              return;
-          }
-
-          // Get form data
-          const formData = new FormData(form);
-
-          // Show loading state
-          const submitBtn = form.querySelector('button[type="submit"]');
-          const originalBtnText = submitBtn.innerHTML;
-          submitBtn.disabled = true;
-          submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Submitting...';
-
-          // Send the form data
-          fetch('{% url "maven_course_register" %}', {
-              method: 'POST',
-              body: formData,
-              headers: {
-                  'X-CSRFToken': formData.get('csrfmiddlewaretoken')
-              }
-          })
-          .then(response => response.json())
-          .then(data => {
-              messages.classList.remove('hidden');
-              if (data.status === 'success') {
-                  messages.innerHTML = '<div class="p-4 bg-green-100 text-green-700 rounded-lg">' + data.message + '</div>';
-                  form.reset();
-              } else {
-                  messages.innerHTML = '<div class="p-4 bg-red-100 text-red-700 rounded-lg">' + (data.message || 'Registration failed. Please try again.') + '</div>';
-              }
-          })
-          .catch(error => {
-              messages.classList.remove('hidden');
-              messages.innerHTML = '<div class="p-4 bg-red-100 text-red-700 rounded-lg">An error occurred. Please try again later.</div>';
-          })
-          .finally(() => {
-              // Restore button state
-              submitBtn.disabled = false;
-              submitBtn.innerHTML = originalBtnText;
-          });
-      });
-  });
-</script>

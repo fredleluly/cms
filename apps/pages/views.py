@@ -28,6 +28,8 @@ from django.urls import reverse
 import logging
 from django.db import transaction
 from .models import ProdiAdmin, ProgramStudi
+import requests
+from django.conf import settings
 from django.contrib.auth import logout
 from django.views.decorators.cache import cache_page
 from datetime import timedelta
@@ -5064,3 +5066,539 @@ def get_related_articles(category_slug, limit=3):
     
     create_standardized_blocks(lpm_page, default_blocks)
     return lpm_page
+
+
+# ============================================
+# MAVEN COURSE VIEWS - CRUD Based System
+# ============================================
+
+def get_all_courses():
+    """
+    Get all courses from Pages model where title ends with '_course'
+    Returns list of course pages
+    """
+    courses = Page.objects.filter(
+        title__endswith='_course',
+        status=Page.PUBLISHED
+    ).order_by('created_at')
+    return courses
+
+
+def get_course_by_slug(course_slug):
+    """
+    Get single course by slug
+    """
+    try:
+        course = Page.objects.get(
+            slug=course_slug,
+            title__endswith='_course',
+            status=Page.PUBLISHED
+        )
+        return course
+    except Page.DoesNotExist:
+        return None
+
+
+def get_course_blocks(course):
+    """
+    Get all content blocks for a course page
+    """
+    blocks = {}
+    for block in course.content_blocks.all().order_by('order'):
+        blocks[block.identifier] = block.content
+    return blocks
+
+
+def maven_course_view(request):
+    """
+    View untuk halaman listing Maven courses
+    Query semua pages dengan title berakhiran '_course'
+    """
+    try:
+        courses = get_all_courses()
+        
+        # Format course data for template
+        formatted_courses = []
+        for course_page in courses:
+            blocks = get_course_blocks(course_page)
+            
+            formatted_courses.append({
+                'page': course_page,
+                'slug': course_page.slug,
+                'title': course_page.title.replace('_course', ''),
+                'blocks': blocks,
+                'level': blocks.get('course_level', 'N/A'),
+                'price': blocks.get('course_price', 'N/A'),
+                'price_original': blocks.get('course_price_original', 'N/A'),
+                'description': blocks.get('course_description', 'N/A'),
+                'duration': blocks.get('course_duration', '8 Weeks'),
+                'image_url': blocks.get('course_image_url', 'https://source.unsplash.com/featured/?coding'),
+            })
+        
+        context = {
+            'title': 'Maven Courses - Matana University',
+            'courses': formatted_courses,
+            'meta': {
+                'description': 'Learn Maven build automation and project management with hands-on training from Matana University.',
+                'keywords': 'Maven, Build Automation, Project Management, Training, Course, Development'
+            }
+        }
+    except Exception as e:
+        logger.error(f"Error in maven_course_view: {str(e)}")
+        context = {
+            'title': 'Maven Courses - Matana University',
+            'courses': [],
+            'meta': {
+                'description': 'Learn Maven build automation and project management with hands-on training from Matana University.',
+                'keywords': 'Maven, Build Automation, Project Management, Training, Course, Development'
+            }
+        }
+    
+    return render(request, 'pages/maven_course.html', context)
+
+
+def maven_course_detail_view(request, course_id):
+    """
+    View untuk halaman detail Maven course
+    Query course dari Pages menggunakan course_id sebagai slug
+    
+    Args:
+        course_id: Course slug (e.g., 'maven-fundamentals')
+    """
+    try:
+        course = get_course_by_slug(course_id)
+        
+        if not course:
+            raise Http404(f"Course '{course_id}' not found")
+        
+        # Get course blocks
+        blocks = get_course_blocks(course)
+        
+        # Get popup blocks for modal
+        try:
+            popup_page = Page.objects.get(slug='popup', status=Page.PUBLISHED)
+            popup_blocks = {i.identifier: i.content for i in popup_page.content_blocks.all().order_by('order')}
+        except Page.DoesNotExist:
+            popup_blocks = {}
+        
+        context = {
+            'title': course.title.replace('_course', '') + ' - Matana University',
+            'course': course,
+            'course_id': course_id,
+            'blocks': blocks,
+            'blocks_popup': popup_blocks,
+            'meta': {
+                'description': course.metadata.get('meta_description', 'Maven Course at Matana University'),
+                'keywords': course.metadata.get('meta_keywords', 'Maven, Course, Training')
+            }
+        }
+        
+        return render(request, 'pages/maven_course_detail.html', context)
+        
+    except Http404:
+        raise
+    except Exception as e:
+        logger.error(f"Error in maven_course_detail_view: {str(e)}")
+        raise Http404("Course not found")
+
+
+import requests
+from urllib.parse import urljoin
+
+# ============================================
+# API ENDPOINTS - MAVEN COURSES
+# ============================================
+
+@require_safe
+def api_courses_list(request):
+    """
+    API endpoint untuk get semua courses
+    GET /api/courses/
+    
+    Returns JSON dengan daftar semua course yang dipublikasi
+    Digunakan oleh: code.gs untuk validasi, homepage untuk list
+    """
+    try:
+        courses = get_all_courses()
+        
+        # Helper function untuk extract simple string dari content (handle dict atau string)
+        def get_simple_content(value):
+            """Extract simple string dari content value"""
+            if isinstance(value, dict):
+                # Jika content adalah object, ambil field content atau string representation
+                return value.get('content', str(value))
+            return str(value) if value else ''
+        
+        # Format response untuk code.gs dan frontend
+        courses_data = []
+        for course in courses:
+            blocks = get_course_blocks(course)
+            
+            course_data = {
+                'id': course.slug,
+                'title': course.title.replace('_course', ''),
+                'name': course.title.replace('_course', ''),
+                'level': get_simple_content(blocks.get('course_level', '')),
+                'price': get_simple_content(blocks.get('course_price', '')),
+                'price_original': get_simple_content(blocks.get('course_price_original', '')),
+                'duration': get_simple_content(blocks.get('course_duration', '')),
+                'description': get_simple_content(blocks.get('course_description', '')),
+                'image_url': get_simple_content(blocks.get('course_image_url', 'https://source.unsplash.com/featured/?coding')),
+                'slug': course.slug,
+                'created_at': course.created_at.isoformat() if course.created_at else None,
+                'updated_at': course.updated_at.isoformat() if course.updated_at else None,
+            }
+            courses_data.append(course_data)
+        
+        return JsonResponse({
+            'status': 'success',
+            'data': courses_data,
+            'count': len(courses_data),
+            'timestamp': timezone.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in api_courses_list: {str(e)}")
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
+
+
+@require_safe
+def api_course_detail(request, course_id):
+    """
+    API endpoint untuk get detail course tertentu
+    GET /api/courses/{course_id}/
+    
+    Args:
+        course_id: Course slug
+    
+    Returns JSON dengan detail lengkap course
+    """
+    try:
+        course = get_course_by_slug(course_id)
+        
+        if not course:
+            return JsonResponse({
+                'status': 'error',
+                'message': f'Course "{course_id}" not found'
+            }, status=404)
+        
+        # Helper function untuk extract simple string dari content
+        def get_simple_content(value):
+            """Extract simple string dari content value"""
+            if isinstance(value, dict):
+                return value.get('content', str(value))
+            return str(value) if value else ''
+        
+        blocks = get_course_blocks(course)
+        
+        course_data = {
+            'id': course.slug,
+            'title': course.title.replace('_course', ''),
+            'name': course.title.replace('_course', ''),
+            'level': get_simple_content(blocks.get('course_level', '')),
+            'price': get_simple_content(blocks.get('course_price', '')),
+            'price_original': get_simple_content(blocks.get('course_price_original', '')),
+            'duration': get_simple_content(blocks.get('course_duration', '')),
+            'description': get_simple_content(blocks.get('course_description', '')),
+            'image_url': get_simple_content(blocks.get('course_image_url', 'https://source.unsplash.com/featured/?coding')),
+            'slug': course.slug,
+            'created_at': course.created_at.isoformat() if course.created_at else None,
+            'updated_at': course.updated_at.isoformat() if course.updated_at else None,
+            'blocks': blocks  # Include full blocks for detailed view
+        }
+        
+        return JsonResponse({
+            'status': 'success',
+            'data': course_data,
+            'timestamp': timezone.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in api_course_detail: {str(e)}")
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=500)
+
+
+# ============================================
+# GOOGLE APPS SCRIPT CONFIGURATION
+# ============================================
+
+GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyZJR8UZ0UOsnSLCTPe-NifwASW_BSyJGZOqU9CFPxtewL9H1LRvOU5Axc62eGH5wI/exec'
+
+APPS_SCRIPT_TIMEOUT = 10  # seconds
+
+# NOTE: All course data is now dynamic and stored in Pages model
+# API endpoints available:
+# - /api/courses/ - Get all courses (for code.gs and homepage)
+# - /api/courses/{course_id}/ - Get single course detail
+# code.gs will query these endpoints instead of having hardcoded COURSES dict
+
+
+@require_POST
+def maven_course_register(request, course_id=None):
+    """
+    Handle Maven course registration form submission
+    - Validates registration data
+    - Sends to Google Sheets via Apps Script
+    - Sends confirmation emails
+    
+    Args:
+        request: Django request object
+        course_id: Course ID from URL parameter
+    """
+    try:
+        # Get form data
+        first_name = request.POST.get('first_name', '').strip()
+        last_name = request.POST.get('last_name', '').strip()
+        email = request.POST.get('email', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        # Use course_id from URL if not in POST data
+        form_course_id = request.POST.get('course_id', '').strip()
+        course_id = form_course_id or course_id
+        course_name = request.POST.get('course_name', '').strip()
+        city = request.POST.get('city', '').strip()
+        gender = request.POST.get('gender', '').strip()
+        date_of_birth = request.POST.get('date_of_birth', '').strip()
+        
+        # Validation
+        errors = {}
+        
+        if not first_name or len(first_name) < 2:
+            errors['first_name'] = 'Nama depan harus minimal 2 karakter'
+        
+        if not last_name or len(last_name) < 2:
+            errors['last_name'] = 'Nama belakang harus minimal 2 karakter'
+        
+        if not email or '@' not in email:
+            errors['email'] = 'Email tidak valid'
+        
+        if not phone or len(phone) < 10:
+            errors['phone'] = 'Nomor telepon harus minimal 10 digit'
+        
+        if not course_name:
+            errors['course_name'] = 'Nama kursus harus diisi'
+        
+        # Validate course_id if provided - query from Pages model
+        if course_id:
+            try:
+                course = get_course_by_slug(course_id)
+                if not course:
+                    errors['course_id'] = 'Kursus tidak valid'
+            except Exception as e:
+                errors['course_id'] = f'Error validating course: {str(e)}'
+        
+        if errors:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Validasi gagal',
+                'errors': errors
+            }, status=400)
+        
+        # Prepare registration data
+        registration_data = {
+            'first_name': first_name,
+            'last_name': last_name,
+            'email': email,
+            'phone': phone,
+            'course_id': course_id,
+            'course_name': course_name,
+            'city': city,
+            'gender': gender,
+            'date_of_birth': date_of_birth,
+            'registered_at': timezone.now().strftime('%d-%m-%Y %H:%M:%S')
+        }
+        
+        # Send to Google Sheets via Apps Script
+        sheets_response = send_to_google_sheets(registration_data)
+        
+        if not sheets_response['success']:
+            logger.warning(f"Failed to send to Google Sheets: {sheets_response.get('error', 'Unknown error')}")
+            # Lanjutkan meski Google Sheets gagal - jangan gagalkan registrasi
+        
+        # Send confirmation email to user
+        send_registration_confirmation_email(registration_data)
+        
+        # Send notification email to admin
+        send_admin_notification_email(registration_data)
+        
+        # Log registration
+        logger.info(f"Maven Course Registration: {first_name} {last_name} ({email}) - {course_name}")
+        
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Registrasi berhasil! Terima kasih telah mendaftar. Kami akan menghubungi Anda segera.'
+        })
+    
+    except Exception as e:
+        logger.exception(f"Error processing Maven course registration: {str(e)}")
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Terjadi kesalahan saat memproses registrasi. Silakan coba lagi.'
+        }, status=500)
+
+
+def send_to_google_sheets(registration_data):
+    """
+    Send registration data to Google Sheets via Apps Script
+    """
+    try:
+        payload = {
+            'first_name': registration_data['first_name'],
+            'last_name': registration_data['last_name'],
+            'email': registration_data['email'],
+            'phone': registration_data['phone'],
+            'course_id': registration_data['course_id'],
+            'course_name': registration_data['course_name'],
+            'city': registration_data.get('city', ''),
+            'gender': registration_data.get('gender', ''),
+            'date_of_birth': registration_data.get('date_of_birth', ''),
+        }
+        
+        # Log request details for debugging
+        logger.info(f"🔵 [MAVEN REGISTRATION] Sending to Google Apps Script")
+        logger.info(f"URL: {GOOGLE_APPS_SCRIPT_URL}")
+        logger.info(f"Payload: {payload}")
+        
+        # Send POST request to Apps Script
+        response = requests.post(
+            GOOGLE_APPS_SCRIPT_URL,
+            json=payload,
+            timeout=APPS_SCRIPT_TIMEOUT,
+            headers={'Content-Type': 'application/json'}
+        )
+        
+        logger.info(f"Response Status Code: {response.status_code}")
+        logger.info(f"Response Headers: {dict(response.headers)}")
+        logger.info(f"Response Text (first 500 chars): {response.text[:500]}")
+        
+        # Check if response is valid
+        if response.status_code >= 400:
+            logger.error(f"❌ HTTP Error {response.status_code}: {response.text}")
+            return {'success': False, 'error': f'HTTP {response.status_code}'}
+        
+        # Try to parse JSON response
+        try:
+            response_data = response.json()
+            logger.info(f"✅ Response JSON parsed successfully: {response_data}")
+            
+            if response_data.get('status') == 'success':
+                logger.info(f"✅ Successfully sent registration to Google Sheets!")
+                logger.info(f"Registration ID: {response_data.get('registrationId')}")
+                logger.info(f"Row Number: {response_data.get('rowNumber')}")
+                return {'success': True, 'data': response_data}
+            else:
+                error_msg = response_data.get('message', 'Unknown error')
+                error_code = response_data.get('code', 'UNKNOWN')
+                logger.error(f"❌ Apps Script Error [{error_code}]: {error_msg}")
+                return {'success': False, 'error': error_msg}
+        
+        except ValueError as json_err:
+            # Response is not JSON - likely HTML error page from Apps Script
+            logger.error(f"❌ Invalid JSON response from Apps Script")
+            logger.error(f"Response is not JSON. First 200 chars: {response.text[:200]}")
+            logger.error(f"JSON parsing error: {str(json_err)}")
+            
+            # Check if it's HTML error
+            if response.text.startswith('<!DOCTYPE'):
+                logger.error(f"❌ Received HTML error page (likely Apps Script execution error)")
+                logger.error(f"Full error page: {response.text}")
+                return {'success': False, 'error': 'Apps Script error - check deployment'}
+            
+            return {'success': False, 'error': 'Invalid response format - not JSON'}
+    
+    except requests.exceptions.Timeout as timeout_err:
+        logger.error(f"❌ Timeout sending to Google Sheets after {APPS_SCRIPT_TIMEOUT}s")
+        logger.exception(f"Timeout details: {str(timeout_err)}")
+        return {'success': False, 'error': 'Request timeout'}
+    
+    except requests.exceptions.ConnectionError as conn_err:
+        logger.error(f"❌ Connection error sending to Google Sheets")
+        logger.exception(f"Connection details: {str(conn_err)}")
+        return {'success': False, 'error': 'Connection error'}
+    
+    except requests.exceptions.RequestException as req_err:
+        logger.error(f"❌ Request error sending to Google Sheets")
+        logger.exception(f"Request error details: {str(req_err)}")
+        return {'success': False, 'error': str(req_err)}
+    
+    except Exception as unexpected_err:
+        logger.error(f"❌ Unexpected error sending to Google Sheets")
+        logger.exception(f"Unexpected error: {str(unexpected_err)}")
+        return {'success': False, 'error': str(unexpected_err)}
+
+
+def send_registration_confirmation_email(registration_data):
+    """
+    Send confirmation email to registrant
+    """
+    try:
+        subject = f"Course Registration Confirmation - {registration_data['course_name']}"
+        html_message = f"""
+        <h2>Thank You for Registering!</h2>
+        <p>Dear {registration_data['first_name']} {registration_data['last_name']},</p>
+        
+        <p>Your registration for the course <strong>{registration_data['course_name']}</strong> has been received.</p>
+        
+        <h3>Registration Details:</h3>
+        <ul>
+            <li><strong>Name:</strong> {registration_data['first_name']} {registration_data['last_name']}</li>
+            <li><strong>Email:</strong> {registration_data['email']}</li>
+            <li><strong>Phone:</strong> {registration_data['phone']}</li>
+            <li><strong>Course:</strong> {registration_data['course_name']}</li>
+            <li><strong>Registered:</strong> {registration_data['registered_at']}</li>
+        </ul>
+        
+        <p>We will contact you shortly with course details and next steps.</p>
+        
+        <p>Best regards,<br/>Matana University Maven Training Team</p>
+        """
+        
+        send_mail(
+            subject=subject,
+            message=f"Thank you for registering for {registration_data['course_name']}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[registration_data['email']],
+            html_message=html_message,
+            fail_silently=True,
+        )
+    
+    except Exception as e:
+        logger.warning(f"Failed to send registration confirmation email: {str(e)}")
+
+
+def send_admin_notification_email(registration_data):
+    """
+    Send admin notification email
+    """
+    try:
+        admin_email = settings.ADMINS[0][1] if settings.ADMINS else None
+        
+        if not admin_email:
+            return
+        
+        admin_subject = f"New Maven Course Registration - {registration_data['course_name']}"
+        admin_message = f"""
+        New registration received for Maven course:
+        
+        Name: {registration_data['first_name']} {registration_data['last_name']}
+        Email: {registration_data['email']}
+        Phone: {registration_data['phone']}
+        Course: {registration_data['course_name']}
+        Registered: {registration_data['registered_at']}
+        """
+        
+        send_mail(
+            subject=admin_subject,
+            message=admin_message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[admin_email],
+            fail_silently=True,
+        )
+    
+    except Exception as e:
+        logger.warning(f"Failed to send admin notification: {str(e)}")
