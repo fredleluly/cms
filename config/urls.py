@@ -82,7 +82,7 @@ urlpatterns = [
     path('test-404/', test_404, name='test_404'),
     path('lib/', include('apps.media.urls')),
     path('pedoman-akademik/', PedomanAkademikView.as_view(), name='pedoman_akademik'),
-    path('kalender-akademik/', KalenderAkademikView.as_view(), name='kalender_akademik'),
+    #path('kalender-akademik/', KalenderAkademikView.as_view(), name='kalender_akademik'),
     path('dashboard/pages/<slug:slug>/edit/', page_edit_view, name='page_edit'),
     path('dashboard/pages/', page_list_view, name='page_list'),
     path('dashboard/pages/<slug:slug>/delete/', delete_page, name='delete_page'),
