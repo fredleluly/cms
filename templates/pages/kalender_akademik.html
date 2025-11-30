@@ -19,7 +19,7 @@
 
     </div>
 
-    <div>
+    {% comment %} <div>
         <h2 class="text-2xl font-semibold mb-4">Kalender Akademik Program Magister</h2>
         <iframe src="{% static 'images/kalender-magister.pdf' %}" 
                 width="100%" 
@@ -28,6 +28,6 @@
             This browser does not support PDFs. Please download the PDF to view it: 
             <a href="{% static 'images/kalender-magister.pdf' %}">Download PDF</a>
         </iframe>
-    </div>
+    </div>{% endcomment %}
 </div>
 {% endblock %} 
