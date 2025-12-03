@@ -2,7 +2,6 @@
 {% load image_optimizer %}
 
 {% load static %}
-{% load i18n_filters %}
 {% block title %}Profil - Matana University{% endblock %}
 
 {% block extra_css %}
@@ -341,19 +340,26 @@
 <!-- Keunggulan section -->
 <section class="py-20">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ blocks.keunggulan_section.title }}</h2>
+        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ blocks.keunggulan_section.title|default:"Keunggulan Matana" }}</h2>
         
         <div class="max-w-4xl mx-auto space-y-6">
-            {% for item in blocks.keunggulan_section.items %}
-            <div class="flex items-start space-x-4 hover:bg-gray-50 rounded-lg transition-colors duration-300">
-                <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center text-matana-blue">
-                    <i class="fas fa-check-circle text-xl"></i>
+            {% if blocks.keunggulan_section.items %}
+                {% for item in blocks.keunggulan_section.items %}
+                <div class="flex items-start space-x-4 hover:bg-gray-50 rounded-lg transition-colors duration-300">
+                    <div class="flex-shrink-0 w-8 h-8 flex items-center justify-center text-matana-blue">
+                        <i class="fas fa-check-circle text-xl"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-gray-700 text-lg">{{ item.title }}</p>
+                    </div>
                 </div>
-                <div class="flex-1">
-                    <p class="text-gray-700 text-lg">{{ item.title }}</p>
+                {% endfor %}
+            {% else %}
+                <!-- Fallback jika tidak ada items -->
+                <div class="text-center text-gray-500">
+                    <p>Informasi keunggulan akan segera diperbarui.</p>
                 </div>
-            </div>
-            {% endfor %}
+            {% endif %}
         </div>
     </div>
 </section>
@@ -361,31 +367,60 @@
 <!-- Fasilitas -->
 <section class="py-20 bg-gray-50">
     <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ blocks.fasilitas_section.title }}</h2>
+        <h2 class="text-3xl font-bold text-center mb-16 section-title">{{ blocks.fasilitas_section.title|default:"Fasilitas Matana" }}</h2>
         
         <div class="relative overflow-hidden">
             <div class="facility-slider" x-data="{ scrollPosition: 0 }">
                 <div class="flex gap-6 animate-scroll">
-                    {% for i in '012'|make_list %}
-                    {% for item in blocks.fasilitas_section.items %}
-                    <div class="flex-none w-[300px] md:w-[300px] sm:w-[200px]">
-                        <div class="group relative overflow-hidden rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300">
-                            <div class="aspect-[4/3] overflow-hidden">
-                                <img 
-                                    src="{% optimized_image item.image  %}" 
-                                    alt="{{ item.title }}"
-                                    class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                                >
-                            </div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500">
-                                <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-                                    <h3 class="text-lg sm:text-xl font-bold text-white">{{ item.title }}</h3>
+                    {% if blocks.fasilitas_section.items %}
+                        {% for i in '012'|make_list %}
+                        {% for item in blocks.fasilitas_section.items %}
+                        <div class="flex-none w-[300px] md:w-[300px] sm:w-[200px]">
+                            <div class="group relative overflow-hidden rounded-xl bg-white shadow-md hover:shadow-xl transition-all duration-300">
+                                <div class="aspect-[4/3] overflow-hidden bg-gray-200">
+                                    {% if item.image %}
+                                    <img 
+                                        src="{% optimized_image item.image  %}" 
+                                        alt="{{ item.title|default:'Fasilitas' }}"
+                                        class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                                        onerror="this.style.display='none'; this.parentElement.classList.add('flex', 'items-center', 'justify-center'); this.parentElement.innerHTML='<svg class=\'w-16 h-16 text-gray-400\' fill=\'none\' stroke=\'currentColor\' viewBox=\'0 0 24 24\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z\'></path></svg>';"
+                                    >
+                                    {% else %}
+                                    <div class="w-full h-full flex items-center justify-center">
+                                        <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                        </svg>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-500">
+                                    <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                                        <h3 class="text-lg sm:text-xl font-bold text-white">{{ item.title|default:"Fasilitas" }}</h3>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    {% endfor %}
-                    {% endfor %}
+                        {% endfor %}
+                        {% endfor %}
+                    {% else %}
+                        <!-- Fallback: Tampilkan placeholder jika tidak ada items -->
+                        {% for i in '0123'|make_list %}
+                        <div class="flex-none w-[300px] md:w-[300px] sm:w-[200px]">
+                            <div class="group relative overflow-hidden rounded-xl bg-white shadow-md">
+                                <div class="aspect-[4/3] overflow-hidden bg-gray-200 flex items-center justify-center">
+                                    <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                </div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                                    <div class="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                                        <h3 class="text-lg sm:text-xl font-bold text-white">Fasilitas</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
                     <!-- Duplicate items for infinite scroll -->
                    
                 </div>
