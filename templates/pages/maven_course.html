@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load image_optimizer %}
 
 {% block title %}
   Maven Courses - Matana University
@@ -21,7 +22,7 @@
         <div class="w-full lg:w-1/2 px-4 mb-12 lg:mb-0">
           <div class="text-white">
             <!-- Brand -->
-            <img src="{% static 'images/Logo Maven Putih Kuning.png' %}" alt="Maven Ventura Logo" class="h-12" />
+            <img src="{% optimized_image 'images/Logo Maven Putih Kuning.png' %}" alt="Maven Ventura Logo" class="h-12" />
             <p class="text-gray-300 mb-8">Practical Learning, Real Impact.</p>
 
             <h1 class="text-5xl lg:text-6xl font-bold mb-8 leading-tight">
